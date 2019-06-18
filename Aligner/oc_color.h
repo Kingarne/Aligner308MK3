@@ -1,0 +1,282 @@
+#pragma once
+/*
+ * This file contains a list of colors that can be used
+ * in any C/C++ program.  These samples mix red, green and
+ * blue together to achieve a color that closely matches its
+ * name.
+*/
+
+/*
+ * Colors for OCX Users
+ */
+#define ocColorAliceBlue                      RGB(240, 248, 255)
+#define ocColorAntiqueWhite                   RGB(250, 235, 215)
+#define ocColorAquamarine                     RGB(127, 255, 212)
+#define ocColorAzure                          RGB(240, 255, 255)
+#define ocColorBeige                          RGB(245, 245, 220)
+#define ocColorBisque                         RGB(255, 228, 196)
+#define ocColorBlack                          RGB(  0,   0,   0)
+#define ocColorBlanchedAlmond                 RGB(255, 235, 205)
+#define ocColorBlue                           RGB(  0,   0, 255)
+#define ocColorBlueViolet                     RGB(138,  43, 226)
+#define ocColorBrown                          RGB(165,  42,  42)
+#define ocColorBurlywood                      RGB(222, 184, 135)
+#define ocColorCadetBlue                      RGB( 95, 158, 160)
+#define ocColorChartreuse                     RGB(127, 255,   0)
+#define ocColorChocolate                      RGB(210, 105,  30)
+#define ocColorCoral                          RGB(255, 127,  80)
+#define ocColorCornflowerBlue                 RGB(100, 149, 237)
+#define ocColorCornsilk                       RGB(255, 248, 220)
+#define ocColorCyan                           RGB(  0, 255, 255)
+#define ocColorDarkGoldenrod                  RGB(184, 134,  11)
+#define ocColorDarkGreen                      RGB(  0, 100,   0)
+#define ocColorDarkKhaki                      RGB(189, 183, 107)
+#define ocColorDarkOliveGreen                 RGB( 85, 107,  47)
+#define ocColorDarkOrange                     RGB(255, 140,   0)
+#define ocColorDarkOrchid                     RGB(153,  50, 204)
+#define ocColorDarkSalmon                     RGB(233, 150, 122)
+#define ocColorDarkSeaGreen                   RGB(143, 188, 143)
+#define ocColorDarkSlateBlue                  RGB( 72,  61, 139)
+#define ocColorDarkSlateGray                  RGB( 47,  79,  79)
+#define ocColorDarkTurquoise                  RGB(  0, 206, 209)
+#define ocColorDarkViolet                     RGB(148,   0, 211)
+#define ocColorDeepPink                       RGB(255,  20, 147)
+#define ocColorDeepSkyBlue                    RGB(  0, 191, 255)
+#define ocColorDodgerBlue                     RGB( 30, 144, 255)
+#define ocColorFirebrick                      RGB(178,  34,  34)
+#define ocColorFloralWhite                    RGB(255, 250, 240)
+#define ocColorForestGreen                    RGB( 34, 139,  34)
+#define ocColorGainsboro                      RGB(220, 220, 220)
+#define ocColorGhostWhite                     RGB(248, 248, 255)
+#define ocColorGold                           RGB(255, 215,   0)
+#define ocColorGoldenrod                      RGB(218, 165,  32)
+#define ocColorGray                           RGB(190, 190, 190)
+#define ocColorGray0                          RGB(  0,   0,   0)
+#define ocColorGray1                          RGB(  3,   3,   3)
+#define ocColorGray2                          RGB(  5,   5,   5)
+#define ocColorGray3                          RGB(  8,   8,   8)
+#define ocColorGray4                          RGB( 10,  10,  10)
+#define ocColorGray5                          RGB( 13,  13,  13)
+#define ocColorGray6                          RGB( 15,  15,  15)
+#define ocColorGray7                          RGB( 18,  18,  18)
+#define ocColorGray8                          RGB( 20,  20,  20)
+#define ocColorGray9                          RGB( 23,  23,  23)
+#define ocColorGray10                         RGB( 26,  26,  26)
+#define ocColorGray11                         RGB( 28,  28,  28)
+#define ocColorGray12                         RGB( 31,  31,  31)
+#define ocColorGray13                         RGB( 33,  33,  33)
+#define ocColorGray14                         RGB( 36,  36,  36)
+#define ocColorGray15                         RGB( 38,  38,  38)
+#define ocColorGray16                         RGB( 41,  41,  41)
+#define ocColorGray17                         RGB( 43,  43,  43)
+#define ocColorGray18                         RGB( 46,  46,  46)
+#define ocColorGray19                         RGB( 48,  48,  48)
+#define ocColorGray20                         RGB( 51,  51,  51)
+#define ocColorGray21                         RGB( 54,  54,  54)
+#define ocColorGray22                         RGB( 56,  56,  56)
+#define ocColorGray23                         RGB( 59,  59,  59)
+#define ocColorGray24                         RGB( 61,  61,  61)
+#define ocColorGray25                         RGB( 64,  64,  64)
+#define ocColorGray26                         RGB( 66,  66,  66)
+#define ocColorGray27                         RGB( 69,  69,  69)
+#define ocColorGray28                         RGB( 71,  71,  71)
+#define ocColorGray29                         RGB( 74,  74,  74)
+#define ocColorGray30                         RGB( 77,  77,  77)
+#define ocColorGray31                         RGB( 79,  79,  79)
+#define ocColorGray32                         RGB( 82,  82,  82)
+#define ocColorGray33                         RGB( 84,  84,  84)
+#define ocColorGray34                         RGB( 87,  87,  87)
+#define ocColorGray35                         RGB( 89,  89,  89)
+#define ocColorGray36                         RGB( 92,  92,  92)
+#define ocColorGray37                         RGB( 94,  94,  94)
+#define ocColorGray38                         RGB( 97,  97,  97)
+#define ocColorGray39                         RGB( 99,  99,  99)
+#define ocColorGray40                         RGB(102, 102, 102)
+#define ocColorGray41                         RGB(105, 105, 105)
+#define ocColorGray42                         RGB(107, 107, 107)
+#define ocColorGray43                         RGB(110, 110, 110)
+#define ocColorGray44                         RGB(112, 112, 112)
+#define ocColorGray45                         RGB(115, 115, 115)
+#define ocColorGray46                         RGB(117, 117, 117)
+#define ocColorGray47                         RGB(120, 120, 120)
+#define ocColorGray48                         RGB(122, 122, 122)
+#define ocColorGray49                         RGB(125, 125, 125)
+#define ocColorGray50                         RGB(127, 127, 127)
+#define ocColorGray51                         RGB(130, 130, 130)
+#define ocColorGray52                         RGB(133, 133, 133)
+#define ocColorGray53                         RGB(135, 135, 135)
+#define ocColorGray54                         RGB(138, 138, 138)
+#define ocColorGray55                         RGB(140, 140, 140)
+#define ocColorGray56                         RGB(143, 143, 143)
+#define ocColorGray57                         RGB(145, 145, 145)
+#define ocColorGray58                         RGB(148, 148, 148)
+#define ocColorGray59                         RGB(150, 150, 150)
+#define ocColorGray60                         RGB(153, 153, 153)
+#define ocColorGray61                         RGB(156, 156, 156)
+#define ocColorGray62                         RGB(158, 158, 158)
+#define ocColorGray63                         RGB(161, 161, 161)
+#define ocColorGray64                         RGB(163, 163, 163)
+#define ocColorGray65                         RGB(166, 166, 166)
+#define ocColorGray66                         RGB(168, 168, 168)
+#define ocColorGray67                         RGB(171, 171, 171)
+#define ocColorGray68                         RGB(173, 173, 173)
+#define ocColorGray69                         RGB(176, 176, 176)
+#define ocColorGray70                         RGB(179, 179, 179)
+#define ocColorGray71                         RGB(181, 181, 181)
+#define ocColorGray72                         RGB(184, 184, 184)
+#define ocColorGray73                         RGB(186, 186, 186)
+#define ocColorGray74                         RGB(189, 189, 189)
+#define ocColorGray75                         RGB(191, 191, 191)
+#define ocColorGray76                         RGB(194, 194, 194)
+#define ocColorGray77                         RGB(196, 196, 196)
+#define ocColorGray78                         RGB(199, 199, 199)
+#define ocColorGray79                         RGB(201, 201, 201)
+#define ocColorGray80                         RGB(204, 204, 204)
+#define ocColorGray81                         RGB(207, 207, 207)
+#define ocColorGray82                         RGB(209, 209, 209)
+#define ocColorGray83                         RGB(212, 212, 212)
+#define ocColorGray84                         RGB(214, 214, 214)
+#define ocColorGray85                         RGB(217, 217, 217)
+#define ocColorGray86                         RGB(219, 219, 219)
+#define ocColorGray87                         RGB(222, 222, 222)
+#define ocColorGray88                         RGB(224, 224, 224)
+#define ocColorGray89                         RGB(227, 227, 227)
+#define ocColorGray90                         RGB(229, 229, 229)
+#define ocColorGray91                         RGB(232, 232, 232)
+#define ocColorGray92                         RGB(235, 235, 235)
+#define ocColorGray93                         RGB(237, 237, 237)
+#define ocColorGray94                         RGB(240, 240, 240)
+#define ocColorGray95                         RGB(242, 242, 242)
+#define ocColorGray96                         RGB(245, 245, 245)
+#define ocColorGray97                         RGB(247, 247, 247)
+#define ocColorGray98                         RGB(250, 250, 250)
+#define ocColorGray99                         RGB(252, 252, 252)
+#define ocColorGreen                          RGB(  0, 255,   0)
+#define ocColorGreenYellow                    RGB(173, 255,  47)
+#define ocColorHoneydew                       RGB(240, 255, 240)
+#define ocColorHotPink                        RGB(255, 105, 180)
+#define ocColorIndianRed                      RGB(205,  92,  92)
+#define ocColorIvory                          RGB(255, 255, 240)
+#define ocColorKhaki                          RGB(240, 230, 140)
+#define ocColorLavender                       RGB(230, 230, 250)
+#define ocColorLavenderBlush                  RGB(255, 240, 245)
+#define ocColorLawnGreen                      RGB(124, 252,   0)
+#define ocColorLemonChiffon                   RGB(255, 250, 205)
+#define ocColorLightBlue                      RGB(173, 216, 230)
+#define ocColorLightCoral                     RGB(240, 128, 128)
+#define ocColorLightCyan                      RGB(224, 255, 255)
+#define ocColorLightGoldenrod                 RGB(238, 221, 130)
+#define ocColorLightGoldenrodYellow           RGB(250, 250, 210)
+#define ocColorLightGray                      RGB(211, 211, 211)
+#define ocColorLightPink                      RGB(255, 182, 193)
+#define ocColorLightSalmon                    RGB(255, 160, 122)
+#define ocColorLightSeaGreen                  RGB( 32, 178, 170)
+#define ocColorLightSkyBlue                   RGB(135, 206, 250)
+#define ocColorLightSlateBlue                 RGB(132, 112, 255)
+#define ocColorLightSlateGray                 RGB(119, 136, 153)
+#define ocColorLightSteelBlue                 RGB(176, 196, 222)
+#define ocColorLightYellow                    RGB(255, 255, 224)
+#define ocColorLimeGreen                      RGB( 50, 205,  50)
+#define ocColorLinen                          RGB(250, 240, 230)
+#define ocColorMagenta                        RGB(255,   0, 255)
+#define ocColorMaroon                         RGB(176,  48,  96)
+#define ocColorMediumAquamarine               RGB(102, 205, 170)
+#define ocColorMediumBlue                     RGB(  0,   0, 205)
+#define ocColorMediumOrchid                   RGB(186,  85, 211)
+#define ocColorMediumPurple                   RGB(147, 112, 219)
+#define ocColorMediumSeaGreen                 RGB( 60, 179, 113)
+#define ocColorMediumSlateBlue                RGB(123, 104, 238)
+#define ocColorMediumSpringGreen              RGB(  0, 250, 154)
+#define ocColorMediumTurquoise                RGB( 72, 209, 204)
+#define ocColorMediumVioletRed                RGB(199,  21, 133)
+#define ocColorMidnightBlue                   RGB( 25,  25, 112)
+#define ocColorMintCream                      RGB(245, 255, 250)
+#define ocColorMistyRose                      RGB(255, 228, 225)
+#define ocColorMoccasin                       RGB(255, 228, 181)
+#define ocColorNavajoWhite                    RGB(255, 222, 173)
+#define ocColorNavyBlue                       RGB(  0,   0, 128)
+#define ocColorOldLace                        RGB(253, 245, 230)
+#define ocColorOliveDrab                      RGB(107, 142,  35)
+#define ocColorOrange                         RGB(255, 165,   0)
+#define ocColorOrangeRed                      RGB(255,  69,   0)
+#define ocColorOrchid                         RGB(218, 112, 214)
+#define ocColorPaleGoldenrod                  RGB(238, 232, 170)
+#define ocColorPaleGreen                      RGB(152, 251, 152)
+#define ocColorPaleTurquoise                  RGB(175, 238, 238)
+#define ocColorPaleVioletRed                  RGB(219, 112, 147)
+#define ocColorPapayaWhip                     RGB(255, 239, 213)
+#define ocColorPeachPuff                      RGB(255, 218, 185)
+#define ocColorPeru                           RGB(205, 133,  63)
+#define ocColorPink                           RGB(255, 192, 203)
+#define ocColorPlum                           RGB(221, 160, 221)
+#define ocColorPowderBlue                     RGB(176, 224, 230)
+#define ocColorPurple                         RGB(160,  32, 240)
+#define ocColorRed                            RGB(255,   0,   0)
+#define ocColorRosyBrown                      RGB(188, 143, 143)
+#define ocColorRoyalBlue                      RGB( 65, 105, 225)
+#define ocColorSaddleBrown                    RGB(139,  69,  19)
+#define ocColorSalmon                         RGB(250, 128, 114)
+#define ocColorSandyBrown                     RGB(244, 164,  96)
+#define ocColorSeaGreen                       RGB( 46, 139,  87)
+#define ocColorSeashell                       RGB(255, 245, 238)
+#define ocColorSienna                         RGB(160,  82,  45)
+#define ocColorSkyBlue                        RGB(135, 206, 235)
+#define ocColorSlateBlue                      RGB(106,  90, 205)
+#define ocColorSlateGray                      RGB(112, 128, 144)
+#define ocColorSnow                           RGB(255, 250, 250)
+#define ocColorSpringGreen                    RGB(  0, 255, 127)
+#define ocColorSteelBlue                      RGB( 70, 130, 180)
+#define ocColorTan                            RGB(210, 180, 140)
+#define ocColorThistle                        RGB(216, 191, 216)
+#define ocColorTomato                         RGB(255,  99,  71)
+#define ocColorTurquoise                      RGB( 64, 224, 208)
+#define ocColorViolet                         RGB(238, 130, 238)
+#define ocColorVioletRed                      RGB(208,  32, 144)
+#define ocColorWheat                          RGB(245, 222, 179)
+#define ocColorWhite                          RGB(255, 255, 255)
+#define ocColorYellow                         RGB(255, 255,   0)
+#define ocColorYellowGreen                    RGB(154, 205,  50)
+
+#define NO_OF_COLORS  8
+OLE_COLOR defaultColors[NO_OF_COLORS] =
+{
+  ocColorBlack,
+  ocColorBlue,
+  ocColorCyan,
+  ocColorRed,
+  ocColorGreen,
+  ocColorViolet,
+  ocColorBrown,
+  ocColorOrange
+};           
+
+#define NO_OF_POINT_SHAPES  15
+ShapeConstants defaultPointShapes[NO_OF_POINT_SHAPES] =
+{
+  oc2dShapeDot,
+  oc2dShapeBox,
+  oc2dShapeTriangle,
+  oc2dShapeDiamond,
+  oc2dShapeStar,
+  oc2dShapeInvertTriangle,
+  oc2dShapeDiagonalCross,
+  oc2dShapeSquare,  
+  oc2dShapeCross,
+  oc2dShapeCircle,
+  oc2dShapeOpenTriangle,
+  oc2dShapeOpenDiamond,
+  oc2dShapeOpenInvertTriangle,
+  oc2dShapeVerticalLine,
+  oc2dShapeHorizontalLine
+};
+
+#define NO_OF_LINE_PATTERNS 6
+LinePatternConstants defaultLinePatterns[NO_OF_LINE_PATTERNS] =
+{
+  oc2dLineSolid,
+  oc2dLineLongDash,
+  oc2dLineDotted,
+  oc2dLineShortDash,
+  oc2dLineLongShortLongDash,
+  oc2dLineDashDot
+};

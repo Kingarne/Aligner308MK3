@@ -1,0 +1,1058 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="A308Pro Debug|Win32">
+      <Configuration>A308Pro Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="A308Pro Release|Win32">
+      <Configuration>A308Pro Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="A308Pro|Win32">
+      <Configuration>A308Pro</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Aligner 202 Debug|Win32">
+      <Configuration>Aligner 202 Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Aligner 202 Release|Win32">
+      <Configuration>Aligner 202 Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Aligner 308 Debug|Win32">
+      <Configuration>Aligner 308 Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Aligner 308 Release|Win32">
+      <Configuration>Aligner 308 Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Aligner202 Debug|Win32">
+      <Configuration>Aligner202 Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>Aligner</ProjectName>
+    <ProjectGuid>{9A570571-46B0-45F4-99B7-161E58D5030B}</ProjectGuid>
+    <RootNamespace>Aligner</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">..\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">../Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">..\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">..\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">..\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='A308Pro Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='A308Pro Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='A308Pro Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='A308Pro Release|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">true</LinkIncremental>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(VC_ADO);$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">$(VC_ADO);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>BUILD_ALIGNER_202;_DEBUG;NO_ALIGNER_IP_CHECK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>winmm.lib;odbc32.lib;odbccp32.lib;gdiplus.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)Aligner 202.exe</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)Aligner 202.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>BUILD_ALIGNER_202;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>version.lib;winmm.lib;odbc32.lib;odbccp32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)Aligner 202.exe</OutputFile>
+      <AddModuleNamesToAssembly>%(AddModuleNamesToAssembly)</AddModuleNamesToAssembly>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)Aligner 202.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/Zm200 /MP6 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>BUILD_ALIGNER_308;_DEBUG;NO_ALIGNER_IP_CHECK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>winmm.lib;../Debug/AlignerReport.lib;odbc32.lib;odbccp32.lib;iphlpapi.lib;gdiplus.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)Aligner 308.exe</OutputFile>
+      <AdditionalLibraryDirectories>C:\Program\Delade filer\Business Objects\3.0\managed;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)Aligner 308.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>
+      </MapFileName>
+      <MapExports>true</MapExports>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>BUILD_ALIGNER_308;NO_ALIGNER_IP_CHECK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>winmm.lib;../Release/AlignerReport.lib;odbc32.lib;odbccp32.lib;iphlpapi.lib;kernel32.lib;gdiplus.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)Aligner 308.exe</OutputFile>
+      <AddModuleNamesToAssembly>%(AddModuleNamesToAssembly)</AddModuleNamesToAssembly>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)Aligner 308.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <AdditionalIncludeDirectories>..\MPAP_SyncDrive;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>BUILD_ALIGNER_308;NO_ALIGNER_IP_CHECK;_DEBUG;NO_DAU_SIMULATION_PRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>winmm.lib;../Debug/AlignerReport.lib;odbc32.lib;odbccp32.lib;iphlpapi.lib;kernel32.lib;../MPAP_SyncDrive/QuaDLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)Aligner 308.exe</OutputFile>
+      <AddModuleNamesToAssembly>%(AddModuleNamesToAssembly)</AddModuleNamesToAssembly>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)Aligner 308.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>BUILD_ALIGNER_308;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='A308Pro Release|Win32'">
+    <Link>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>BUILD_ALIGNER_202;_DEBUG;NO_ALIGNER_IP_CHECK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>winmm.lib;../Debug/AlignerReport.lib;odbc32.lib;odbccp32.lib;iphlpapi.lib;gdiplus.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)Aligner 308.exe</OutputFile>
+      <AdditionalLibraryDirectories>C:\Program\ComponentOne Studio\Chart8\Lib;C:\Program\Delade filer\Business Objects\3.0\managed;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)Aligner 308.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>
+      </MapFileName>
+      <MapExports>true</MapExports>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AzAlignNoteDlg.cpp" />
+    <ClCompile Include="CalibInfo.cpp" />
+    <ClCompile Include="ColorStatic.cpp" />
+    <ClCompile Include="ColorStatusBar.cpp" />
+    <ClCompile Include="ComSettingsDlg.cpp" />
+    <ClCompile Include="ConfigGrid.cpp" />
+    <ClCompile Include="CryptoUtil.cpp" />
+    <ClCompile Include="DAOComThr.cpp" />
+    <ClCompile Include="DBInterface.cpp" />
+    <ClCompile Include="DebugDlg.cpp" />
+    <ClCompile Include="DebugGrid.cpp" />
+    <ClCompile Include="FTD2Api.cpp" />
+    <ClCompile Include="GainCalibrationPage6.cpp" />
+    <ClCompile Include="GridCell.cpp" />
+    <ClCompile Include="GridCellBase.cpp" />
+    <ClCompile Include="GridCtrl.cpp" />
+    <ClCompile Include="GridDropTarget.cpp" />
+    <ClCompile Include="InfoDlg.cpp" />
+    <ClCompile Include="InPlaceEdit.cpp" />
+    <ClCompile Include="Registry.cpp" />
+    <ClCompile Include="SecrRegistry.cpp" />
+    <ClCompile Include="SensorSimulDlg.cpp" />
+    <ClCompile Include="SetupHDLCGyroDlg.cpp" />
+    <ClCompile Include="SetupUARTGyroDlg.cpp" />
+    <ClCompile Include="SimulDlg.cpp" />
+    <ClCompile Include="Singleton.cpp" />
+    <ClCompile Include="Splash.cpp" />
+    <ClCompile Include="TheoAdapterCalibration.cpp" />
+    <ClCompile Include="TheoAdapterCalibrationPage0.cpp" />
+    <ClCompile Include="TheoAdapterCalibrationPage1.cpp" />
+    <ClCompile Include="TheoAdapterCalibrationPage2.cpp" />
+    <ClCompile Include="TheoAdapterCalibrationPage3.cpp" />
+    <ClCompile Include="TheoAdapterCalibrationPageFinish.cpp" />
+    <ClCompile Include="TheoAdapterCalibrationPageSpace.cpp" />
+    <ClCompile Include="TheoAdapterCalibrationPageStart.cpp" />
+    <ClCompile Include="tinystr.cpp" />
+    <ClCompile Include="tinyxml.cpp" />
+    <ClCompile Include="tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxmlparser.cpp" />
+    <ClCompile Include="TitleTip.cpp" />
+    <ClCompile Include="XMLHandler.cpp" />
+    <ClCompile Include="AdapterCalibration.cpp" />
+    <ClCompile Include="AdapterCalibrationPage0.cpp" />
+    <ClCompile Include="AdapterCalibrationPage1.cpp" />
+    <ClCompile Include="AdapterCalibrationPage10.cpp" />
+    <ClCompile Include="AdapterCalibrationPage2.cpp" />
+    <ClCompile Include="AdapterCalibrationPage3.cpp" />
+    <ClCompile Include="AdapterCalibrationPage4.cpp" />
+    <ClCompile Include="AdapterCalibrationPage6.cpp" />
+    <ClCompile Include="AdapterCalibrationPage7.cpp" />
+    <ClCompile Include="AdapterCalibrationPage8.cpp" />
+    <ClCompile Include="AdapterCalibrationPage9.cpp" />
+    <ClCompile Include="CalibrationSheet.cpp" />
+    <ClCompile Include="CreatePolynomial.cpp" />
+    <ClCompile Include="DAUCalibrationPage0.cpp" />
+    <ClCompile Include="DAUCalibrationPage1.cpp" />
+    <ClCompile Include="DAUCalibrationPage2.cpp" />
+    <ClCompile Include="DAUCalibrationPage3.cpp" />
+    <ClCompile Include="DAUCalibrationPage4.cpp" />
+    <ClCompile Include="DAUCalibrationPage5.cpp" />
+    <ClCompile Include="DAUCalibrationPage6.cpp" />
+    <ClCompile Include="DAUCalibrationPage7.cpp" />
+    <ClCompile Include="DAUCalibrationWizard.cpp" />
+    <ClCompile Include="GainAzimuthCalibration.cpp" />
+    <ClCompile Include="GainCalibrationPage0.cpp" />
+    <ClCompile Include="GainCalibrationPage1.cpp" />
+    <ClCompile Include="GainCalibrationPage2.cpp" />
+    <ClCompile Include="GainCalibrationPage3.cpp" />
+    <ClCompile Include="GainCalibrationPage4.cpp" />
+    <ClCompile Include="GainCalibrationPage5.cpp" />
+    <ClCompile Include="Hasp.cpp" />
+    <ClCompile Include="LeastSquare.cpp" />
+    <ClCompile Include="TiltCalibrationPage0.cpp" />
+    <ClCompile Include="TiltCalibrationPage1.cpp" />
+    <ClCompile Include="TiltCalibrationPage2.cpp" />
+    <ClCompile Include="TiltCalibrationPage3.cpp" />
+    <ClCompile Include="TiltCalibrationPage4.cpp" />
+    <ClCompile Include="TiltOffsetCalibration.cpp" />
+    <ClCompile Include="DataCompensator.cpp" />
+    <ClCompile Include="DataRecepient.cpp" />
+    <ClCompile Include="DAU.cpp" />
+    <ClCompile Include="DAUData.cpp" />
+    <ClCompile Include="DAUSimulationDialog.cpp" />
+    <ClCompile Include="Digital.cpp" />
+    <ClCompile Include="lib_crc.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="MainBoard.cpp" />
+    <ClCompile Include="Name.cpp" />
+    <ClCompile Include="NominalAzimuth.cpp" />
+    <ClCompile Include="Sensor.cpp" />
+    <ClCompile Include="SerialNumber.cpp" />
+    <ClCompile Include="SerialPort.cpp" />
+    <ClCompile Include="Syncro.cpp" />
+    <ClCompile Include="Type.cpp" />
+    <ClCompile Include="Database.cpp" />
+    <ClCompile Include="History.cpp" />
+    <ClCompile Include="AlignmentWizard.cpp" />
+    <ClCompile Include="AlignVerBenchMarkPage1.cpp" />
+    <ClCompile Include="AlignVerBenchMarkPage2.cpp" />
+    <ClCompile Include="AlignVerHorizonPage1.cpp" />
+    <ClCompile Include="AlignVerHorizonPage2.cpp" />
+    <ClCompile Include="AzimuthAlignPage1.cpp" />
+    <ClCompile Include="AzimuthAlignWizard.cpp" />
+    <ClCompile Include="AzimuthVerificationWizard.cpp" />
+    <ClCompile Include="GunAdapterTiltCheckDlg.cpp" />
+    <ClCompile Include="GyroPerformanceTestPage1.cpp" />
+    <ClCompile Include="GyroPerformanceTestPage2.cpp" />
+    <ClCompile Include="GyroPerformanceTestWizard.cpp" />
+    <ClCompile Include="PresentDialog.cpp" />
+    <ClCompile Include="ResultTable.cpp" />
+    <ClCompile Include="Setup.cpp" />
+    <ClCompile Include="SetupAxesDlg.cpp" />
+    <ClCompile Include="SetupAxesDlgA202.cpp" />
+    <ClCompile Include="SetupDriftDlg.cpp" />
+    <ClCompile Include="SetupFoundationMeasureDlg.cpp" />
+    <ClCompile Include="SetupLiveDataGraphDlg.cpp" />
+    <ClCompile Include="SetupMeasureDlg.cpp" />
+    <ClCompile Include="SetupSpecGBDlg.cpp" />
+    <ClCompile Include="SetupTestPlaneDlg.cpp" />
+    <ClCompile Include="TiltAlignmentPage1.cpp" />
+    <ClCompile Include="TiltAlignmentPage2.cpp" />
+    <ClCompile Include="TiltAlignmentWizard.cpp" />
+    <ClCompile Include="TiltFlatnessFoundationTestPage1.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TiltFlatnessFoundationTestPage2.cpp" />
+    <ClCompile Include="TiltFlatnessFoundationTestPage3.cpp" />
+    <ClCompile Include="TiltFlatnessTestPage1.cpp" />
+    <ClCompile Include="TiltFlatnessTestPage2.cpp" />
+    <ClCompile Include="TiltFlatnessTestPage3.cpp" />
+    <ClCompile Include="TiltFlatnessTestWizard.cpp" />
+    <ClCompile Include="TiltVerificationWizard.cpp" />
+    <ClCompile Include="AcquDriver.cpp" />
+    <ClCompile Include="ASound.cpp" />
+    <ClCompile Include="Filter.cpp" />
+    <ClCompile Include="Measure.cpp" />
+    <ClCompile Include="TimeCheck.cpp" />
+    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="Aligner.cpp">
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">true</MinimalRebuild>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">true</MinimalRebuild>
+    </ClCompile>
+    <ClCompile Include="AlignerControls.cpp" />
+    <ClCompile Include="AlignerDoc.cpp" />
+    <ClCompile Include="AlignerView.cpp" />
+    <ClCompile Include="GraphFileManager.cpp" />
+    <ClCompile Include="GraphView.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">Disabled</Optimization>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">
+      </PrecompiledHeader>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">Disabled</Optimization>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">
+      </PrecompiledHeader>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">Disabled</Optimization>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="LiveDataView.cpp" />
+    <ClCompile Include="LiveDataViewA202.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Network.cpp" />
+    <ClCompile Include="ProgressWnd.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SystemConfigurationView.cpp" />
+    <ClCompile Include="DAUSetupDialog.cpp" />
+    <ClCompile Include="DigitalProperties.cpp" />
+    <ClCompile Include="PortSetup.cpp" />
+    <ClCompile Include="SelectDAUDialog.cpp" />
+    <ClCompile Include="SensorAlignmentPage.cpp" />
+    <ClCompile Include="SensorAlignmentSheet.cpp" />
+    <ClCompile Include="SensorSheet.cpp" />
+    <ClCompile Include="SyncroProperties.cpp" />
+    <ClCompile Include="SyncroSheet.cpp" />
+    <ClCompile Include="SystemSetup.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AzAlignNoteDlg.h" />
+    <ClInclude Include="ColorStatic.h" />
+    <ClInclude Include="ComSettingsDlg.h" />
+    <ClInclude Include="ConfigGrid.h" />
+    <ClInclude Include="DBInterface.h" />
+    <ClInclude Include="DebugDlg.h" />
+    <ClInclude Include="DebugGrid.h" />
+    <ClInclude Include="FTD2Api.h" />
+    <ClInclude Include="GainCalibrationPage6.h" />
+    <ClInclude Include="GridCell.h" />
+    <ClInclude Include="GridCellBase.h" />
+    <ClInclude Include="GridCtrl.h" />
+    <ClInclude Include="GridDropTarget.h" />
+    <ClInclude Include="InfoDlg.h" />
+    <ClInclude Include="InPlaceEdit.h" />
+    <ClInclude Include="MemDC.h" />
+    <ClInclude Include="SecrRegistry.h" />
+    <ClInclude Include="SensorSimulDlg.h" />
+    <ClInclude Include="SetupHDLCGyroDlg.h" />
+    <ClInclude Include="SetupUARTGyroDlg.h" />
+    <ClInclude Include="SimulDlg.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Splash.h" />
+    <ClInclude Include="AdapterCalibration.h" />
+    <ClInclude Include="AdapterCalibrationPage0.h" />
+    <ClInclude Include="AdapterCalibrationPage1.h" />
+    <ClInclude Include="AdapterCalibrationPage10.h" />
+    <ClInclude Include="AdapterCalibrationPage2.h" />
+    <ClInclude Include="AdapterCalibrationPage3.h" />
+    <ClInclude Include="AdapterCalibrationPage4.h" />
+    <ClInclude Include="AdapterCalibrationPage6.h" />
+    <ClInclude Include="AdapterCalibrationPage7.h" />
+    <ClInclude Include="AdapterCalibrationPage8.h" />
+    <ClInclude Include="AdapterCalibrationPage9.h" />
+    <ClInclude Include="AlignVerBenchMarkPage2.h" />
+    <ClInclude Include="CalibrationSheet.h" />
+    <ClInclude Include="CreatePolynomial.h" />
+    <ClInclude Include="DAUCalibrationPage0.h" />
+    <ClInclude Include="DAUCalibrationPage1.h" />
+    <ClInclude Include="DAUCalibrationPage2.h" />
+    <ClInclude Include="DAUCalibrationPage3.h" />
+    <ClInclude Include="DAUCalibrationPage4.h" />
+    <ClInclude Include="DAUCalibrationPage5.h" />
+    <ClInclude Include="DAUCalibrationPage6.h" />
+    <ClInclude Include="DAUCalibrationPage7.h" />
+    <ClInclude Include="DAUCalibrationWizard.h" />
+    <ClInclude Include="GainAzimuthCalibration.h" />
+    <ClInclude Include="GainCalibrationPage0.h" />
+    <ClInclude Include="GainCalibrationPage1.h" />
+    <ClInclude Include="GainCalibrationPage2.h" />
+    <ClInclude Include="GainCalibrationPage3.h" />
+    <ClInclude Include="GainCalibrationPage4.h" />
+    <ClInclude Include="GainCalibrationPage5.h" />
+    <ClInclude Include="LeastSquare.h" />
+    <ClInclude Include="TheoAdapterCalibration.h" />
+    <ClInclude Include="TheoAdapterCalibrationPage0.h" />
+    <ClInclude Include="TheoAdapterCalibrationPage1.h" />
+    <ClInclude Include="TheoAdapterCalibrationPage2.h" />
+    <ClInclude Include="TheoAdapterCalibrationPage3.h" />
+    <ClInclude Include="TheoAdapterCalibrationPageFinish.h" />
+    <ClInclude Include="TheoAdapterCalibrationPageSpace.h" />
+    <ClInclude Include="TheoAdapterCalibrationPageStart.h" />
+    <ClInclude Include="TiltCalibrationPage0.h" />
+    <ClInclude Include="TiltCalibrationPage1.h" />
+    <ClInclude Include="TiltCalibrationPage2.h" />
+    <ClInclude Include="TiltCalibrationPage3.h" />
+    <ClInclude Include="TiltCalibrationPage4.h" />
+    <ClInclude Include="TiltOffsetCalibration.h" />
+    <ClInclude Include="Aligner.h" />
+    <ClInclude Include="AlignerControls.h" />
+    <ClInclude Include="AlignerDoc.h" />
+    <ClInclude Include="AlignerView.h" />
+    <ClInclude Include="GraphFileManager.h" />
+    <ClInclude Include="GraphView.h" />
+    <ClInclude Include="Hasp.h" />
+    <ClInclude Include="LiveDataView.h" />
+    <ClInclude Include="LiveDataViewA202.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="ProgressWnd.h" />
+    <CustomBuild Include="Resource.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">Generating map file for help compiler...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">echo // Generated Help Map file.  Used by Aligner.HHP. &gt; "hlp\HTMLDefines.h"
+echo. &gt; "hlp\HTMLDefines.h"
+echo // Commands (ID_* and IDM_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h ID_,HID_,0x10000 IDM_,HIDM_,0x10000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Prompts (IDP_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDP_,HIDP_,0x30000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Resources (IDR_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDR_,HIDR_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Dialogs (IDD_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDD_,HIDD_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Frame Controls (IDW_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">hlp\HTMLDefines.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">Generating map file for help compiler...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">echo // Generated Help Map file.  Used by Aligner.HHP. &gt; "hlp\HTMLDefines.h"
+echo. &gt; "hlp\HTMLDefines.h"
+echo // Commands (ID_* and IDM_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h ID_,HID_,0x10000 IDM_,HIDM_,0x10000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Prompts (IDP_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDP_,HIDP_,0x30000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Resources (IDR_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDR_,HIDR_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Dialogs (IDD_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDD_,HIDD_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Frame Controls (IDW_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">hlp\HTMLDefines.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">Generating map file for help compiler...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">echo // Generated Help Map file.  Used by Aligner.HHP. &gt; "hlp\HTMLDefines.h"
+echo. &gt; "hlp\HTMLDefines.h"
+echo // Commands (ID_* and IDM_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h ID_,HID_,0x10000 IDM_,HIDM_,0x10000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Prompts (IDP_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDP_,HIDP_,0x30000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Resources (IDR_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDR_,HIDR_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Dialogs (IDD_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDD_,HIDD_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Frame Controls (IDW_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">hlp\HTMLDefines.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">Generating map file for help compiler...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">echo // Generated Help Map file.  Used by Aligner.HHP. &gt; "hlp\HTMLDefines.h"
+echo. &gt; "hlp\HTMLDefines.h"
+echo // Commands (ID_* and IDM_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h ID_,HID_,0x10000 IDM_,HIDM_,0x10000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Prompts (IDP_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDP_,HIDP_,0x30000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Resources (IDR_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDR_,HIDR_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Dialogs (IDD_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDD_,HIDD_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Frame Controls (IDW_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">hlp\HTMLDefines.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">Generating map file for help compiler...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">echo // Generated Help Map file.  Used by Aligner.HHP. &gt; "hlp\HTMLDefines.h"
+echo. &gt; "hlp\HTMLDefines.h"
+echo // Commands (ID_* and IDM_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h ID_,HID_,0x10000 IDM_,HIDM_,0x10000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Prompts (IDP_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDP_,HIDP_,0x30000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Resources (IDR_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDR_,HIDR_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Dialogs (IDD_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDD_,HIDD_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Frame Controls (IDW_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">hlp\HTMLDefines.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">Generating map file for help compiler...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">echo // Generated Help Map file.  Used by Aligner.HHP. &gt; "hlp\HTMLDefines.h"
+echo. &gt; "hlp\HTMLDefines.h"
+echo // Commands (ID_* and IDM_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h ID_,HID_,0x10000 IDM_,HIDM_,0x10000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Prompts (IDP_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDP_,HIDP_,0x30000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Resources (IDR_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDR_,HIDR_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Dialogs (IDD_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h IDD_,HIDD_,0x20000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+echo. &gt;&gt; "hlp\HTMLDefines.h"
+echo // Frame Controls (IDW_*) &gt;&gt; "hlp\HTMLDefines.h"
+makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\HTMLDefines.h"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">hlp\HTMLDefines.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SystemConfigurationView.h" />
+    <ClInclude Include="UserMessages.h" />
+    <ClInclude Include="DAUSetupDialog.h" />
+    <ClInclude Include="DigitalProperties.h" />
+    <ClInclude Include="PortSetup.h" />
+    <ClInclude Include="SelectDAUDialog.h" />
+    <ClInclude Include="SensorAlignmentPage.h" />
+    <ClInclude Include="SensorAlignmentSheet.h" />
+    <ClInclude Include="SensorSheet.h" />
+    <ClInclude Include="SyncroProperties.h" />
+    <ClInclude Include="SyncroSheet.h" />
+    <ClInclude Include="SystemSetup.h" />
+    <ClInclude Include="AlignmentWizard.h" />
+    <ClInclude Include="AlignVerBenchMarkPage1.h" />
+    <ClInclude Include="AlignVerHorizonPage1.h" />
+    <ClInclude Include="AlignVerHorizonPage2.h" />
+    <ClInclude Include="AzimuthAlignPage1.h" />
+    <ClInclude Include="AzimuthAlignWizard.h" />
+    <ClInclude Include="AzimuthVerificationWizard.h" />
+    <ClInclude Include="GunAdapterTiltCheckDlg.h" />
+    <ClInclude Include="GyroPerformanceTestPage1.h" />
+    <ClInclude Include="GyroPerformanceTestPage2.h" />
+    <ClInclude Include="GyroPerformanceTestWizard.h" />
+    <ClInclude Include="oc_color.h" />
+    <ClInclude Include="PresentDialog.h" />
+    <ClInclude Include="ResultTable.h" />
+    <ClInclude Include="Setup.h" />
+    <ClInclude Include="SetupAxesDlg.h" />
+    <ClInclude Include="SetupAxesDlgA202.h" />
+    <ClInclude Include="SetupDriftDlg.h" />
+    <ClInclude Include="SetupFoundationMeasureDlg.h" />
+    <ClInclude Include="SetupLiveDataGraphDlg.h" />
+    <ClInclude Include="SetupMeasureDlg.h" />
+    <ClInclude Include="SetupSpecGBDlg.h" />
+    <ClInclude Include="SetupTestPlaneDlg.h" />
+    <ClInclude Include="TiltAlignmentPage1.h" />
+    <ClInclude Include="TiltAlignmentPage2.h" />
+    <ClInclude Include="TiltAlignmentWizard.h" />
+    <ClInclude Include="TiltFlatnessFoundationTestPage1.h" />
+    <ClInclude Include="TiltFlatnessFoundationTestPage2.h" />
+    <ClInclude Include="TiltFlatnessFoundationTestPage3.h" />
+    <ClInclude Include="TiltFlatnessTestPage1.h" />
+    <ClInclude Include="TiltFlatnessTestPage2.h" />
+    <ClInclude Include="TiltFlatnessTestPage3.h" />
+    <ClInclude Include="TiltFlatnessTestWizard.h" />
+    <ClInclude Include="TiltVerificationWizard.h" />
+    <ClInclude Include="DataRecepient.h" />
+    <ClInclude Include="DAU.h" />
+    <ClInclude Include="DAUData.h" />
+    <ClInclude Include="DAUSimulationDialog.h" />
+    <ClInclude Include="Digital.h" />
+    <ClInclude Include="MainBoard.h" />
+    <ClInclude Include="Name.h" />
+    <ClInclude Include="NominalAzimuth.h" />
+    <ClInclude Include="Sensor.h" />
+    <ClInclude Include="SerialNumber.h" />
+    <ClInclude Include="SerialPort.h" />
+    <ClInclude Include="Syncro.h" />
+    <ClInclude Include="Type.h" />
+    <ClInclude Include="Database.h" />
+    <ClInclude Include="History.h" />
+    <ClInclude Include="AcquDriver.h" />
+    <ClInclude Include="ASound.h" />
+    <ClInclude Include="Defines.h" />
+    <ClInclude Include="Filter.h" />
+    <ClInclude Include="GlobalData.h" />
+    <ClInclude Include="Measure.h" />
+    <ClInclude Include="TimeCheck.h" />
+    <ClInclude Include="Util.h" />
+    <ClInclude Include="..\MPAP_SyncDrive\QuaDef.h" />
+    <ClInclude Include="..\MPAP_SyncDrive\QuaDLL.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\A202Splash.bmp" />
+    <None Include="res\adapter_1.bmp" />
+    <None Include="res\adapter_2.bmp" />
+    <None Include="res\adapter_3.bmp" />
+    <None Include="res\adapter_4.bmp" />
+    <None Include="res\adapter_5.bmp" />
+    <None Include="res\adapter_6.bmp" />
+    <None Include="res\Aligner.ico" />
+    <None Include="res\Aligner.rc2" />
+    <None Include="res\Aligner308splash.bmp" />
+    <None Include="res\AlignerDoc.ico" />
+    <None Include="res\gain_1.bmp" />
+    <None Include="res\gain_2.bmp" />
+    <None Include="res\gain_3.bmp" />
+    <None Include="res\gain_4.bmp" />
+    <None Include="res\gain_5.bmp" />
+    <None Include="res\offset_1.bmp" />
+    <None Include="res\offset_2.bmp" />
+    <None Include="res\offset_3.bmp" />
+    <None Include="res\offset_4.bmp" />
+    <None Include="res\Toolbar.bmp" />
+    <None Include="hlp\Aligner.hhc" />
+    <None Include="hlp\Aligner.hhk" />
+    <CustomBuild Include="hlp\Aligner.hhp">
+      <FileType>Document</FileType>
+      <Message Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">Making help file...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">start /wait hhc "hlp\Aligner.hhp"
+if not exist "hlp\Aligner.chm" goto :HelpError
+copy "hlp\Aligner.chm" "$(OutDir)Aligner.chm"
+goto :HelpDone
+:HelpError
+echo hlp\Aligner.hhp(1) : error:Problem encountered creating help file
+echo.
+:HelpDone
+echo.
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">hlp\HTMLDefines.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='A308Pro|Win32'">$(OutDir)$(ProjectName).chm;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">Making help file...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">start /wait hhc "hlp\Aligner.hhp"
+if not exist "hlp\Aligner.chm" goto :HelpError
+copy "hlp\Aligner.chm" "$(OutDir)Aligner.chm"
+goto :HelpDone
+:HelpError
+echo hlp\Aligner.hhp(1) : error:Problem encountered creating help file
+echo.
+:HelpDone
+echo.
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">hlp\HTMLDefines.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">$(OutDir)$(ProjectName).chm;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">Making help file...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">start /wait hhc "hlp\Aligner.hhp"
+if not exist "hlp\Aligner.chm" goto :HelpError
+copy "hlp\Aligner.chm" "$(OutDir)Aligner.chm"
+goto :HelpDone
+:HelpError
+echo hlp\Aligner.hhp(1) : error:Problem encountered creating help file
+echo.
+:HelpDone
+echo.
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">hlp\HTMLDefines.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Release|Win32'">$(OutDir)$(ProjectName).chm;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">Making help file...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">start /wait hhc "hlp\Aligner.hhp"
+if not exist "hlp\Aligner.chm" goto :HelpError
+copy "hlp\Aligner.chm" "$(OutDir)Aligner.chm"
+goto :HelpDone
+:HelpError
+echo hlp\Aligner.hhp(1) : error:Problem encountered creating help file
+echo.
+:HelpDone
+echo.
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">hlp\HTMLDefines.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(OutDir)$(ProjectName).chm;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">Making help file...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">start /wait hhc "hlp\Aligner.hhp"
+if not exist "hlp\Aligner.chm" goto :HelpError
+copy "hlp\Aligner.chm" "$(OutDir)Aligner.chm"
+goto :HelpDone
+:HelpError
+echo hlp\Aligner.hhp(1) : error:Problem encountered creating help file
+echo.
+:HelpDone
+echo.
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">hlp\HTMLDefines.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">$(OutDir)$(ProjectName).chm;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">Making help file...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">start /wait hhc "hlp\Aligner.hhp"
+if not exist "hlp\Aligner.chm" goto :HelpError
+copy "hlp\Aligner.chm" "$(OutDir)Aligner.chm"
+goto :HelpDone
+:HelpError
+echo hlp\Aligner.hhp(1) : error:Problem encountered creating help file
+echo.
+:HelpDone
+echo.
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">hlp\HTMLDefines.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(OutDir)$(ProjectName).chm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="hlp\Images\Bullet.gif" />
+    <None Include="Adapter.rpt" />
+    <None Include="AzimuthAlignError.rpt" />
+    <None Include="AzimuthVerificationBenchmark.rpt" />
+    <None Include="AzimuthVerificationGyrostab.rpt" />
+    <None Include="Calibration.rpt" />
+    <None Include="CommonFlatAzimuth.rpt" />
+    <None Include="CommonFlatTilt.rpt" />
+    <None Include="Copy of AzimuthAlignError.rpt" />
+    <None Include="DAUCalibration.rpt" />
+    <None Include="GunAdapterCalibration.rpt" />
+    <None Include="GyroPerformance.rpt" />
+    <None Include="HorizonAbsoluteMode.rpt" />
+    <None Include="HorizonRelativeMode.rpt" />
+    <None Include="Images.rpt" />
+    <None Include="LiveDataA202Errors.rpt" />
+    <None Include="LiveGraphErrors.rpt" />
+    <None Include="MainReport.rpt" />
+    <None Include="MainReportA202.rpt" />
+    <None Include="MReport.rpt" />
+    <None Include="Platform.rpt" />
+    <None Include="ScaleAzFixtureCalibration.rpt" />
+    <None Include="SensorCalibration.rpt" />
+    <None Include="SensorPolynomial.rpt" />
+    <None Include="Tilt-Flatness.rpt" />
+    <None Include="Tilt-FlatnessFo.rpt" />
+    <None Include="TiltAlignErrors.rpt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\Aligner.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Aligner.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="Aligner.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

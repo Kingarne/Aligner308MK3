@@ -1,0 +1,56 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Aligner", "Aligner2003.vcproj", "{9A570571-46B0-45F4-99B7-161E58D5030B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup308", "..\Setup308\Setup308.vdproj", "{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Aligner 202 Debug = Aligner 202 Debug
+		Aligner 202 Release = Aligner 202 Release
+		Aligner 308 Debug = Aligner 308 Debug
+		Aligner 308 Release = Aligner 308 Release
+		Aligner202 Debug = Aligner202 Debug
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 202 Debug.ActiveCfg = Aligner 202 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 202 Debug.Build.0 = Aligner 202 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 202 Release.ActiveCfg = Aligner 202 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 202 Release.Build.0 = Aligner 202 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 308 Debug.ActiveCfg = Aligner 308 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 308 Debug.Build.0 = Aligner 308 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 308 Release.ActiveCfg = Aligner 308 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 308 Release.Build.0 = Aligner 308 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner202 Debug.ActiveCfg = Aligner 308 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner202 Debug.Build.0 = Aligner 308 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Debug.ActiveCfg = Aligner 308 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Debug.Build.0 = Aligner 308 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Release.ActiveCfg = Aligner 308 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Release.Build.0 = Aligner 308 Release|Win32
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner 202 Debug.ActiveCfg = Aligner202 Debug
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner 202 Debug.Build.0 = Aligner202 Debug
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner 202 Release.ActiveCfg = Release
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner 202 Release.Build.0 = Release
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner 308 Debug.ActiveCfg = Aligner202 Debug
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner 308 Debug.Build.0 = Aligner202 Debug
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner 308 Release.ActiveCfg = Release
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner 308 Release.Build.0 = Release
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner202 Debug.ActiveCfg = Aligner202 Debug
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Aligner202 Debug.Build.0 = Aligner202 Debug
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Debug.ActiveCfg = Debug
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Debug.Build.0 = Debug
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Release.ActiveCfg = Release
+		{6F8B55D1-9F2F-4C3F-BD13-7B8D19899D8D}.Release.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

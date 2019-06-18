@@ -1,0 +1,86 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Aligner", "Aligner\Aligner2008.vcxproj", "{9A570571-46B0-45F4-99B7-161E58D5030B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlignerReport", "AlignerReport\AlignerReport.vcxproj", "{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AddDSN", "AddDSN\AddDSN.vcxproj", "{E72793F2-D1DC-4F7A-A63D-1F230B07567C}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup308", "Setup308\Setup308.vdproj", "{458440B3-C51A-4E14-9157-7C39A345918B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Aligner 202 Debug|Win32 = Aligner 202 Debug|Win32
+		Aligner 202 Release|Win32 = Aligner 202 Release|Win32
+		Aligner 308 Debug|Win32 = Aligner 308 Debug|Win32
+		Aligner 308 Release|Win32 = Aligner 308 Release|Win32
+		Aligner202 Debug|Win32 = Aligner202 Debug|Win32
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 202 Debug|Win32.ActiveCfg = Aligner 202 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 202 Debug|Win32.Build.0 = Aligner 202 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 202 Release|Win32.ActiveCfg = Aligner 202 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 202 Release|Win32.Build.0 = Aligner 202 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 308 Debug|Win32.ActiveCfg = Aligner 308 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 308 Debug|Win32.Build.0 = Aligner 308 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 308 Release|Win32.ActiveCfg = Aligner 308 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner 308 Release|Win32.Build.0 = Aligner 308 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner202 Debug|Win32.ActiveCfg = Aligner202 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Aligner202 Debug|Win32.Build.0 = Aligner202 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Debug|Win32.ActiveCfg = Aligner202 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Debug|Win32.Build.0 = Aligner202 Debug|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Release|Win32.ActiveCfg = Aligner 308 Release|Win32
+		{9A570571-46B0-45F4-99B7-161E58D5030B}.Release|Win32.Build.0 = Aligner 308 Release|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner 202 Debug|Win32.ActiveCfg = Debug|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner 202 Debug|Win32.Build.0 = Debug|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner 202 Release|Win32.ActiveCfg = Release|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner 202 Release|Win32.Build.0 = Release|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner 308 Debug|Win32.ActiveCfg = Debug|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner 308 Debug|Win32.Build.0 = Debug|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner 308 Release|Win32.ActiveCfg = Release|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner 308 Release|Win32.Build.0 = Release|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner202 Debug|Win32.ActiveCfg = Aligner202 Debug|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Aligner202 Debug|Win32.Build.0 = Aligner202 Debug|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Debug|Win32.Build.0 = Debug|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Release|Win32.ActiveCfg = Release|Win32
+		{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}.Release|Win32.Build.0 = Release|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner 202 Debug|Win32.ActiveCfg = Debug|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner 202 Debug|Win32.Build.0 = Debug|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner 202 Release|Win32.ActiveCfg = Release|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner 202 Release|Win32.Build.0 = Release|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner 308 Debug|Win32.ActiveCfg = Debug|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner 308 Debug|Win32.Build.0 = Debug|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner 308 Release|Win32.ActiveCfg = Release|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner 308 Release|Win32.Build.0 = Release|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner202 Debug|Win32.ActiveCfg = Aligner202 Debug|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Aligner202 Debug|Win32.Build.0 = Aligner202 Debug|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Debug|Win32.Build.0 = Debug|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Release|Win32.ActiveCfg = Release|Win32
+		{E72793F2-D1DC-4F7A-A63D-1F230B07567C}.Release|Win32.Build.0 = Release|Win32
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Debug|Win32.ActiveCfg = Aligner202 Debug
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Debug|Win32.Build.0 = Aligner202 Debug
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Release|Win32.ActiveCfg = Release
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Release|Win32.Build.0 = Release
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 308 Debug|Win32.ActiveCfg = Debug
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 308 Release|Win32.ActiveCfg = Release
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner202 Debug|Win32.ActiveCfg = Aligner202 Debug
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner202 Debug|Win32.Build.0 = Aligner202 Debug
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Debug|Win32.ActiveCfg = Debug
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Debug|Win32.Build.0 = Debug
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Release|Win32.ActiveCfg = Release
+		{458440B3-C51A-4E14-9157-7C39A345918B}.Release|Win32.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {161FBC81-86FE-4D7E-AF1D-1D8EFC993064}
+	EndGlobalSection
+EndGlobal

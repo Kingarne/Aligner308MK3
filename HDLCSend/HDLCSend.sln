@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HDLCSend", "HDLCSend.vcproj", "{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		A308Pro = A308Pro
+		A308Pro Debug = A308Pro Debug
+		A308Pro Release = A308Pro Release
+		Aligner202 Debug = Aligner202 Debug
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.A308Pro.ActiveCfg = Release|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.A308Pro.Build.0 = Release|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.A308Pro Debug.ActiveCfg = Debug|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.A308Pro Debug.Build.0 = Debug|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.A308Pro Release.ActiveCfg = Release|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.A308Pro Release.Build.0 = Release|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.Aligner202 Debug.ActiveCfg = Debug|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.Aligner202 Debug.Build.0 = Debug|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.Debug.ActiveCfg = Debug|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.Debug.Build.0 = Debug|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.Release.ActiveCfg = Release|Win32
+		{0D05AD3E-9EB0-44AE-B5DE-B1AC265F1E22}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

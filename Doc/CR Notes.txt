@@ -1,0 +1,8 @@
+Resolution
+Use one of the two following options to resolve this issue:
+•For Crystal Report XI the .NET 1.1 Framework needs to be installed. For an ASP.NET application, you will need to configure the application directory in IIS to use ASP.NET version 1.1.4322. For Windows Forms applications if you are using a COM language to reference the .NET components you will need to create a configuration file to force your application to use the .NET 1.1 framework. This is discussed at: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnnetdep/html/sidexsidenet.asp
+•Upgrade to Crystal Reports XI Release 2 which uses the .NET 2.0 framework. Consult with your system administrator or manager before doing this.
+this second bullet gives the impression that R2 solves the problem.  I installed the server msi and I still get the problem.  Am I misunderstanding the second bullet, or did I not apply R2 correctly?
+
+
+B6W60-01CS200-00G8U82-OUMO

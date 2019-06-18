@@ -1,0 +1,316 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#include ""res\\SerialSend.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\SerialSend.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About SerialSend"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "SerialSend Version 1.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2004",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "OK",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_SERIALSEND_DIALOG DIALOGEX 0, 0, 320, 246
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "SerialSend"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "String to Send",IDC_STATIC,7,7,306,182
+    EDITTEXT        IDC_EDIT1,16,18,289,163,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    COMBOBOX        IDC_COMBO1,17,218,48,73,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "COM Port",IDC_STATIC,7,208,128,28
+    PUSHBUTTON      "Settings...",IDC_COM_SETTINGS_BUTTON,76,218,50,14
+    COMBOBOX        IDC_COMBO2,146,218,48,80,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Frequency",IDC_STATIC,139,208,64,28
+    PUSHBUTTON      "Apply",IDC_APPLY_BUTTON,208,218,50,14
+    CONTROL         "Parse as hexcode",IDC_HEX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,193,73,10
+    PUSHBUTTON      "DAU",IDC_DAU_BUTTON,266,194,47,11
+    CONTROL         "Add <CR><LF>",IDC_ADD_STOP_CHAR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,85,194,69,10
+    PUSHBUTTON      "CamCtrl...",IDC_CAM_CTRL_BUTTON,215,194,50,11
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,2
+ PRODUCTVERSION 1,0,0,2
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "TODO: <Company name>"
+            VALUE "FileDescription", "TODO: <File description>"
+            VALUE "FileVersion", "1.0.0.2"
+            VALUE "InternalName", "SerialSend.exe"
+            VALUE "LegalCopyright", "TODO: (c) <Company name>.  All rights reserved."
+            VALUE "OriginalFilename", "SerialSend.exe"
+            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductVersion", "1.0.0.2"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_SERIALSEND_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 241
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_SERIALSEND_DIALOG DLGINIT
+BEGIN
+    IDC_COMBO2, 0x403, 5, 0
+0x2031, 0x7a48, "\000" 
+    IDC_COMBO2, 0x403, 5, 0
+0x2032, 0x7a48, "\000" 
+    IDC_COMBO2, 0x403, 5, 0
+0x2035, 0x7a48, "\000" 
+    IDC_COMBO2, 0x403, 6, 0
+0x3031, 0x4820, 0x007a, 
+    IDC_COMBO2, 0x403, 8, 0
+0x3033, 0x352e, 0x4820, 0x007a, 
+    IDC_COMBO2, 0x403, 7, 0
+0x3031, 0x2030, 0x7a48, "\000" 
+    IDC_COMBO2, 0x403, 6, 0
+0x3032, 0x4830, 0x007a, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_ABOUTBOX            "&About SerialSend..."
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Swedish (Sweden) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_SVE)
+LANGUAGE LANG_SWEDISH, SUBLANG_SWEDISH
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DAU_DIALOG DIALOGEX 0, 0, 404, 282
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "DAU"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,347,261,50,14
+    PUSHBUTTON      "Send",IDC_SEND_BUTTON,7,263,44,12
+    EDITTEXT        IDC_PROT_ROLL,51,188,40,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PROT_PITCH,167,188,40,12,ES_AUTOHSCROLL
+    CONTROL         "Auto (Sin)",IDC_ROLL_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,51,202,48,10
+    CONTROL         "Auto (sin)",IDC_PITCH_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,167,203,47,10
+    LTEXT           "Max Ang.",IDC_STATIC,18,219,32,8
+    EDITTEXT        IDC_MAX_ROLL_ANG,51,217,26,12,ES_AUTOHSCROLL
+    LTEXT           "Per. Time",IDC_STATIC,15,244,31,8
+    EDITTEXT        IDC_ROLL_STEP,51,243,26,12,ES_AUTOHSCROLL
+    LTEXT           "Max Ang.",IDC_STATIC,131,219,32,8
+    EDITTEXT        IDC_MAX_PITCH_ANG,165,217,26,12,ES_AUTOHSCROLL
+    LTEXT           "Per. Time",IDC_STATIC,129,244,31,8
+    EDITTEXT        IDC_PITCH_STEP,165,243,26,12,ES_AUTOHSCROLL
+    GROUPBOX        "Roll",IDC_STATIC,7,177,107,84
+    GROUPBOX        "Pitch",IDC_STATIC,119,178,107,81
+    COMBOBOX        IDC_COMBO1,233,191,72,63,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Type",IDC_STATIC,235,181,17,8
+    LTEXT           "Ang. Center",IDC_STATIC,9,232,40,8
+    EDITTEXT        IDC_ROLL_CENTER,51,230,26,12,ES_AUTOHSCROLL
+    LTEXT           "Ang. Center",IDC_STATIC,124,232,40,8
+    EDITTEXT        IDC_PITCH_CENTER,165,230,26,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_NOICE_PITCH,196,243,26,12,ES_AUTOHSCROLL
+    LTEXT           "Noice",IDC_STATIC,198,233,18,8
+    EDITTEXT        IDC_NOICE_ROLL,82,243,26,12,ES_AUTOHSCROLL
+    LTEXT           "Noice",IDC_STATIC,84,233,18,8
+    CONTROL         "Animate",IDC_ANIM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,9,167,42,10
+    PUSHBUTTON      "Induce CRC Error",IDC_CRC_ERR_BUTTON,336,190,61,12
+END
+
+IDD_CAM_CTRL_DIALOG DIALOGEX 0, 0, 340, 164
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,283,143,50,14
+    PUSHBUTTON      "Send Ack",IDC_ACK_BUTTON,7,130,50,14
+    CONTROL         "",IDC_COM_INFO,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,7,326,118
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DAU_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 397
+        BOTTOMMARGIN, 275
+    END
+
+    IDD_CAM_CTRL_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 333
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 157
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Swedish (Sweden) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#include "res\SerialSend.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

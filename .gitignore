@@ -60,6 +60,7 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
+*.tlog
 
 # Visual Studio profiler
 *.psess
@@ -147,3 +148,5 @@ $RECYCLE.BIN/
 
 _NCrunch*
 
+/Aligner/Aligner 308 Debug
+/Aligner/Aligner 308 Release

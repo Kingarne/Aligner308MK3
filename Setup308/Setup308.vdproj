@@ -21,43 +21,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0E9CE4759745448F9E25ED342107AB91"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_12E40B551F1A4494ACACD1B171B98794"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2CA97DC35DF84707B16F56EBDC8E51F7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_3DE6808564FE481EA2BE637CB27C975D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_40F5B06B7A4D4248B9C58A54003CFD44"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5964E9C9666744979850F0D85165DE08"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5A6CE9DD076746AE98E1C761D1C50D5D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -75,13 +45,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_659BDAD73ED64310AD4A40E04A204790"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6DBDDA1B0BB54C6FB9783DA2F3F82388"
+        "MsmKey" = "8:_6C27AB3047684979BF0FE5A78C3414BF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -99,43 +63,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8FB160EA34904409B6B462B66B03CF70"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9524D6D4767F4D089797C22C9D28CC73"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_AB044ABFBF1246CB817ABBA9D5416627"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_ACDEAE73C43A45D78B7014862AA32785"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B3E1E2A20C0648BBAB260C07B5B6641D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B4B00BBC87F94F8E823E26C98B06040E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BD160DB826DF4386AFE2320293E56398"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -147,50 +75,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CB2A4D77E0464498A754245FC3BA3223"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D06983BE19AF45A386CAA400BD57D351"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D55B4A2F4B9E4258A8E6B7AF5A4B8052"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D8572E4B320E41DABEFF27456D62FE62"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DBC5B6B1657841DCAEFFAA38341990B3"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E16C65ADED694A7A9C826848840CBA0B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E28CDF6580AE48D69B1433E06774BC54"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_CACAB86DF7A082496F9D0F994FAA9290"
+        "OwnerKey" = "8:_6C27AB3047684979BF0FE5A78C3414BF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DBC5B6B1657841DCAEFFAA38341990B3"
+        "OwnerKey" = "8:_6C27AB3047684979BF0FE5A78C3414BF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_CACAB86DF7A082496F9D0F994FAA9290"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -356,26 +254,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E9CE4759745448F9E25ED342107AB91"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\AzimuthAlignError.rpt"
-            "TargetName" = "8:AzimuthAlignError.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12E40B551F1A4494ACACD1B171B98794"
             {
             "SourcePath" = "8:..\\Aligner\\Supplement\\A308DBM.exe"
@@ -396,92 +274,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2CA97DC35DF84707B16F56EBDC8E51F7"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\AzimuthVerificationGyrostab.rpt"
-            "TargetName" = "8:AzimuthVerificationGyrostab.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3DE6808564FE481EA2BE637CB27C975D"
             {
             "SourcePath" = "8:..\\Aligner\\Supplement\\Aligner308Template.mdb"
             "TargetName" = "8:Aligner308Template.mdb"
             "Tag" = "8:"
             "Folder" = "8:_1F2DB66C15604113B3F3E17712BA6EE9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_40F5B06B7A4D4248B9C58A54003CFD44"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\SensorValidationTest.rpt"
-            "TargetName" = "8:SensorValidationTest.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5964E9C9666744979850F0D85165DE08"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\CommonFlatAzimuth.rpt"
-            "TargetName" = "8:CommonFlatAzimuth.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5A6CE9DD076746AE98E1C761D1C50D5D"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\MainReportA202.rpt"
-            "TargetName" = "8:MainReportA202.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -536,26 +334,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6DBDDA1B0BB54C6FB9783DA2F3F82388"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\Tilt-Flatness.rpt"
-            "TargetName" = "8:Tilt-Flatness.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_751CB77F729940F0A2F00D763A90558B"
             {
             "SourcePath" = "8:..\\release\\Aligner 308.exe"
@@ -596,86 +374,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8FB160EA34904409B6B462B66B03CF70"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\HorizonAbsoluteMode.rpt"
-            "TargetName" = "8:HorizonAbsoluteMode.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9524D6D4767F4D089797C22C9D28CC73"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\LiveDataA202Errors.rpt"
-            "TargetName" = "8:LiveDataA202Errors.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AB044ABFBF1246CB817ABBA9D5416627"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\Calibration.rpt"
-            "TargetName" = "8:Calibration.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ACDEAE73C43A45D78B7014862AA32785"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\HorizonRelativeMode.rpt"
-            "TargetName" = "8:HorizonRelativeMode.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B3E1E2A20C0648BBAB260C07B5B6641D"
             {
             "SourcePath" = "8:..\\Aligner\\res\\SchillLogo.jpg"
@@ -693,46 +391,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B4B00BBC87F94F8E823E26C98B06040E"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\TiltAlignErrors.rpt"
-            "TargetName" = "8:TiltAlignErrors.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BD160DB826DF4386AFE2320293E56398"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\AzimuthVerificationBenchmark.rpt"
-            "TargetName" = "8:AzimuthVerificationBenchmark.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
@@ -756,12 +414,23 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB2A4D77E0464498A754245FC3BA3223"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CACAB86DF7A082496F9D0F994FAA9290"
             {
-            "SourcePath" = "8:..\\Aligner\\Reports\\GyroPerformance.rpt"
-            "TargetName" = "8:GyroPerformance.rpt"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_CACAB86DF7A082496F9D0F994FAA9290"
+                    {
+                    "Name" = "8:System.Net.Http.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Net.Http.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
+            "Folder" = "8:_1F2DB66C15604113B3F3E17712BA6EE9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -773,87 +442,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D06983BE19AF45A386CAA400BD57D351"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\MReport.rpt"
-            "TargetName" = "8:MReport.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D55B4A2F4B9E4258A8E6B7AF5A4B8052"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\Tilt-FlatnessFo.rpt"
-            "TargetName" = "8:Tilt-FlatnessFo.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D8572E4B320E41DABEFF27456D62FE62"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\CommonFlatTilt.rpt"
-            "TargetName" = "8:CommonFlatTilt.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E28CDF6580AE48D69B1433E06774BC54"
-            {
-            "SourcePath" = "8:..\\Aligner\\Reports\\LiveGraphErrors.rpt"
-            "TargetName" = "8:LiveGraphErrors.rpt"
-            "Tag" = "8:"
-            "Folder" = "8:_67C1C7AE07814F619B8200008DE60542"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
         }
@@ -956,10 +545,10 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Aligner 308 MK2"
-        "ProductCode" = "8:{AE051F00-4E63-49DD-81EF-EBF4CA118726}"
-        "PackageCode" = "8:{2F1DB523-CD51-444B-B6F5-5C2AD107EDD3}"
-        "UpgradeCode" = "8:{B0FCF6E1-589F-4D83-A8DC-1A173B36C23A}"
+        "ProductName" = "8:Aligner 308 MK3"
+        "ProductCode" = "8:{C14909B9-9B37-4B46-AE8D-02B7BD380179}"
+        "PackageCode" = "8:{85A16CA8-2B23-4F93-82A8-91191356876B}"
+        "UpgradeCode" = "8:{F67D46D5-197E-4356-A560-DEE7633D41A3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -969,11 +558,11 @@
         "Manufacturer" = "8:Schill Reglerteknik AB"
         "ARPHELPTELEPHONE" = "8:++46 8 752 90 10"
         "ARPHELPLINK" = "8:http://www.schill.now.se/"
-        "Title" = "8:Aligner 308 Setup"
+        "Title" = "8:Aligner 308 MK3 Setup"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Schill Reglerteknik AB"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Schill Aligner 308 Ship Alignment System"
+        "ARPCOMMENTS" = "8:Schill Aligner 308 MK3 Ship Alignment System"
         "ARPURLINFOABOUT" = "8:http://www.schill.now.se/"
         "ARPPRODUCTICON" = "8:_79C57FF30FBE459EA0B4B880A5597414"
         "ARPIconIndex" = "3:0"
@@ -990,106 +579,6 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_16E06B344DF74CEDB57EE7C3BDBB3EFA"
-                    {
-                    "Name" = "8:Software"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E971965C363F4F3EA2C31B72E318B2C9"
-                            {
-                            "Name" = "8:Microsoft"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B5505DE1C9D54BA68D4F97FF7F1E736C"
-                                    {
-                                    "Name" = "8:Jet"
-                                    "Condition" = "8:"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "DeleteAtUninstall" = "11:FALSE"
-                                    "Transitive" = "11:FALSE"
-                                        "Keys"
-                                        {
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_5912EED1236A4509B03597C25B32310F"
-                                            {
-                                            "Name" = "8:4.0"
-                                            "Condition" = "8:"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "DeleteAtUninstall" = "11:FALSE"
-                                            "Transitive" = "11:FALSE"
-                                                "Keys"
-                                                {
-                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_37CA57CB826840779E2D32BD219DC304"
-                                                    {
-                                                    "Name" = "8:Engines"
-                                                    "Condition" = "8:"
-                                                    "AlwaysCreate" = "11:FALSE"
-                                                    "DeleteAtUninstall" = "11:FALSE"
-                                                    "Transitive" = "11:FALSE"
-                                                        "Keys"
-                                                        {
-                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B6E9910AD2CF490786777C35895454A6"
-                                                            {
-                                                            "Name" = "8:Jet 4.0"
-                                                            "Condition" = "8:"
-                                                            "AlwaysCreate" = "11:FALSE"
-                                                            "DeleteAtUninstall" = "11:FALSE"
-                                                            "Transitive" = "11:FALSE"
-                                                                "Keys"
-                                                                {
-                                                                }
-                                                                "Values"
-                                                                {
-                                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_8DBB73454C66475B845C8AE76FC6415F"
-                                                                    {
-                                                                    "Name" = "8:UserCommitSync"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
-                                                                    "ValueTypes" = "3:1"
-                                                                    "Value" = "8:Yes"
-                                                                    }
-                                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_F60CF90B3AAA4E1E815088E49A92F827"
-                                                                    {
-                                                                    "Name" = "8:ImplicitCommitSync"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
-                                                                    "ValueTypes" = "3:1"
-                                                                    "Value" = "8:Yes"
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        "Values"
-                                                        {
-                                                        }
-                                                    }
-                                                }
-                                                "Values"
-                                                {
-                                                }
-                                            }
-                                        }
-                                        "Values"
-                                        {
-                                        }
-                                    }
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                 }
             }
             "HKCU"
@@ -2528,612 +2017,12 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_659BDAD73ED64310AD4A40E04A204790"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:C:\\Program Files (x86)\\Common Files\\Merge Modules\\CrystalReports11_5_maps.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_DBC5B6B1657841DCAEFFAA38341990B3"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:C:\\Program Files (x86)\\Common Files\\Merge Modules\\CrystalReports11_5_NET_2005.msm"
-                "Properties"
-                {
-                    "InstallACT"
-                    {
-                    "Name" = "8:InstallACT"
-                    "DisplayName" = "8:InstallACT"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for PC databases. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallBTRIEVE"
-                    {
-                    "Name" = "8:InstallBTRIEVE"
-                    "DisplayName" = "8:InstallBTRIEVE"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Pervasive databases. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCDO32"
-                    {
-                    "Name" = "8:InstallCDO32"
-                    "DisplayName" = "8:InstallCDO32"
-                    "Description" = "8:Property to determine whether to install the Crystal Data Object database driver. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCRDB_ADO"
-                    {
-                    "Name" = "8:InstallCRDB_ADO"
-                    "DisplayName" = "8:InstallCRDB_ADO"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Microsoft ActiveX Data Objects. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCRDB_ADOPLUS"
-                    {
-                    "Name" = "8:InstallCRDB_ADOPLUS"
-                    "DisplayName" = "8:InstallCRDB_ADOPLUS"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Microsoft ADO.NET. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCRDB_CDO"
-                    {
-                    "Name" = "8:InstallCRDB_CDO"
-                    "DisplayName" = "8:InstallCRDB_CDO"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Crystal Data Object. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCRDB_COM"
-                    {
-                    "Name" = "8:InstallCRDB_COM"
-                    "DisplayName" = "8:InstallCRDB_COM"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for COM data provider. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCRDB_DATASET"
-                    {
-                    "Name" = "8:InstallCRDB_DATASET"
-                    "DisplayName" = "8:InstallCRDB_DATASET"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for DataSet provider. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCRDB_ODBC"
-                    {
-                    "Name" = "8:InstallCRDB_ODBC"
-                    "DisplayName" = "8:InstallCRDB_ODBC"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for ODBC. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCRDB_ORACLE"
-                    {
-                    "Name" = "8:InstallCRDB_ORACLE"
-                    "DisplayName" = "8:InstallCRDB_ORACLE"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Oracle. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallCRDB_QUERY"
-                    {
-                    "Name" = "8:InstallCRDB_QUERY"
-                    "DisplayName" = "8:InstallCRDB_QUERY"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Query Data. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallDAO"
-                    {
-                    "Name" = "8:InstallDAO"
-                    "DisplayName" = "8:InstallDAO"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Microsoft Data Access Objects. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallFIELDDEF"
-                    {
-                    "Name" = "8:InstallFIELDDEF"
-                    "DisplayName" = "8:InstallFIELDDEF"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Field Definitions. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallFILESYSTEM"
-                    {
-                    "Name" = "8:InstallFILESYSTEM"
-                    "DisplayName" = "8:InstallFILESYSTEM"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for File System data. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallIBM_DB2"
-                    {
-                    "Name" = "8:InstallIBM_DB2"
-                    "DisplayName" = "8:InstallIBM_DB2"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for DB2 Server. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallINFORMIX"
-                    {
-                    "Name" = "8:InstallINFORMIX"
-                    "DisplayName" = "8:InstallINFORMIX"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Informix Online Server. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2BBDE"
-                    {
-                    "Name" = "8:InstallP2BBDE"
-                    "DisplayName" = "8:InstallP2BBDE"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for IDAPI. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2BXBSE"
-                    {
-                    "Name" = "8:InstallP2BXBSE"
-                    "DisplayName" = "8:InstallP2BXBSE"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for xBase. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2IXBSE_DLL"
-                    {
-                    "Name" = "8:InstallP2IXBSE_DLL"
-                    "DisplayName" = "8:InstallP2IXBSE_DLL"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports physical database DLL for xBase. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2SACL"
-                    {
-                    "Name" = "8:InstallP2SACL"
-                    "DisplayName" = "8:InstallP2SACL"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Public Folder ACL. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2SEVT"
-                    {
-                    "Name" = "8:InstallP2SEVT"
-                    "DisplayName" = "8:InstallP2SEVT"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for NT Event Log. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2SEXSR"
-                    {
-                    "Name" = "8:InstallP2SEXSR"
-                    "DisplayName" = "8:InstallP2SEXSR"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Exchange Server Admin. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2SMAPI"
-                    {
-                    "Name" = "8:InstallP2SMAPI"
-                    "DisplayName" = "8:InstallP2SMAPI"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Exchange Folders and Address Book. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2SMSIIS"
-                    {
-                    "Name" = "8:InstallP2SMSIIS"
-                    "DisplayName" = "8:InstallP2SMSIIS"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for IIS Log Files. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2SOUTLK"
-                    {
-                    "Name" = "8:InstallP2SOUTLK"
-                    "DisplayName" = "8:InstallP2SOUTLK"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Outlook Data. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2SREPL"
-                    {
-                    "Name" = "8:InstallP2SREPL"
-                    "DisplayName" = "8:InstallP2SREPL"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Exchange Public Folder Replica. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2STRACK"
-                    {
-                    "Name" = "8:InstallP2STRACK"
-                    "DisplayName" = "8:InstallP2STRACK"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Exchange Server Message Tracking Logs. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallP2SWBLG"
-                    {
-                    "Name" = "8:InstallP2SWBLG"
-                    "DisplayName" = "8:InstallP2SWBLG"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Web Log Files. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallSYBASE"
-                    {
-                    "Name" = "8:InstallSYBASE"
-                    "DisplayName" = "8:InstallSYBASE"
-                    "Description" = "8:Property to determine whether to install the Crystal Reports database driver for Sybase. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2DMAPI"
-                    {
-                    "Name" = "8:InstallU2DMAPI"
-                    "DisplayName" = "8:InstallU2DMAPI"
-                    "Description" = "8:Property to determine whether to install the export driver for MAPI Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2DNOTES"
-                    {
-                    "Name" = "8:InstallU2DNOTES"
-                    "DisplayName" = "8:InstallU2DNOTES"
-                    "Description" = "8:Property to determine whether to install the export driver for Lotus Notes Database Destination Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2DVIM"
-                    {
-                    "Name" = "8:InstallU2DVIM"
-                    "DisplayName" = "8:InstallU2DVIM"
-                    "Description" = "8:Property to determine whether to install the export driver for Export to Lotus Notes Mail Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FCR"
-                    {
-                    "Name" = "8:InstallU2FCR"
-                    "DisplayName" = "8:InstallU2FCR"
-                    "Description" = "8:Property to determine whether to install the export driver for Report Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FHTML"
-                    {
-                    "Name" = "8:InstallU2FHTML"
-                    "DisplayName" = "8:InstallU2FHTML"
-                    "Description" = "8:Property to determine whether to install the export driver for HTML 4.0 Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FODBC"
-                    {
-                    "Name" = "8:InstallU2FODBC"
-                    "DisplayName" = "8:InstallU2FODBC"
-                    "Description" = "8:Property to determine whether to install the export driver for ODBC Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FPDF"
-                    {
-                    "Name" = "8:InstallU2FPDF"
-                    "DisplayName" = "8:InstallU2FPDF"
-                    "Description" = "8:Property to determine whether to install the export driver for PDF Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FREC"
-                    {
-                    "Name" = "8:InstallU2FREC"
-                    "DisplayName" = "8:InstallU2FREC"
-                    "Description" = "8:Property to determine whether to install the export driver for Records Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FRTF"
-                    {
-                    "Name" = "8:InstallU2FRTF"
-                    "DisplayName" = "8:InstallU2FRTF"
-                    "Description" = "8:Property to determine whether to install the export driver for RTF Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FSEPV"
-                    {
-                    "Name" = "8:InstallU2FSEPV"
-                    "DisplayName" = "8:InstallU2FSEPV"
-                    "Description" = "8:Property to determine whether to install the export driver for Separated Export Values Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FTEXT"
-                    {
-                    "Name" = "8:InstallU2FTEXT"
-                    "DisplayName" = "8:InstallU2FTEXT"
-                    "Description" = "8:Property to determine whether to install the export driver for Text Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FXLS"
-                    {
-                    "Name" = "8:InstallU2FXLS"
-                    "DisplayName" = "8:InstallU2FXLS"
-                    "Description" = "8:Property to determine whether to install the export driver for Excel Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallU2FXML"
-                    {
-                    "Name" = "8:InstallU2FXML"
-                    "DisplayName" = "8:InstallU2FXML"
-                    "Description" = "8:Property to determine whether to install the export driver for XML Export Format. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "InstallViewerVirtualDir"
-                    {
-                    "Name" = "8:InstallViewerVirtualDir"
-                    "DisplayName" = "8:InstallViewerVirtualDir"
-                    "Description" = "8:Property to control if the IIS virtual directory for Crystal Reports Viewers is installed or not. A value of 1 (default) will install it, and a value of 0 will disable its installation."
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:2"
-                    "Setting" = "3:1"
-                    "Value" = "8:1"
-                    "DefaultValue" = "8:1"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                    "PIDKEY"
-                    {
-                    "Name" = "8:PIDKEY"
-                    "DisplayName" = "8:Keycode"
-                    "Description" = "8:Value of a valid keycode to be used with the deployed runtime components. "
-                    "Type" = "3:3"
-                    "ContextData" = "8:"
-                    "Attributes" = "3:0"
-                    "Setting" = "3:2"
-                    "Value" = "8:B6W60-01CS200-00G8U82-0UM0"
-                    "DefaultValue" = "8:0"
-                    "UsePlugInResources" = "11:FALSE"
-                    }
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E16C65ADED694A7A9C826848840CBA0B"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6C27AB3047684979BF0FE5A78C3414BF"
             {
-            "SourcePath" = "8:..\\Debug\\AlignerReport.dll"
+            "SourcePath" = "8:..\\ReporterLib\\ReporterLib\\obj\\Release\\ReporterLib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1F2DB66C15604113B3F3E17712BA6EE9"
@@ -3150,10 +2039,10 @@
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
+            "ProjectOutputGroupRegister" = "3:2"
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{1B0D2142-B72E-4273-86C5-BFCD9BC44DF5}"
+            "OutputProjectGuid" = "8:{88EDF932-E93E-40CD-B7D8-6699268386F4}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

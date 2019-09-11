@@ -262,7 +262,7 @@ BOOL CAlignerApp::InitInstance( void )
     m_pszAppName = _tcsdup( appName ) ;
 
     Registry reg;  
-    reg.m_strAppName = appName + " MK2";
+    reg.m_strAppName = appName + " MK3";
     m_DAUPresent = FALSE;
   
     int k = reg.GetIntegerValue("DAU\\HSC\\k", 5);

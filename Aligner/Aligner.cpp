@@ -235,7 +235,8 @@ BOOL CAlignerApp::InitInstance( void )
 		::AfxMessageBox( _T("Aligner 308 has expired.") ) ;
 		return FALSE;
 	}
-    
+
+
 #ifdef BUILD_ALIGNER_308    
         DllEnsureInit() ;
 #endif

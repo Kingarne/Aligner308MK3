@@ -74,6 +74,7 @@ private:
     WhiteBackgroundEdit m_sensorDescription [DAU_MAX_NB_SENSOR_CHANNELS] ;
     WhiteBackgroundEdit m_syncroRoll [DAU_MAX_NB_SYNCRO_CHANNELS] ;
     WhiteBackgroundEdit m_syncroPitch [DAU_MAX_NB_SYNCRO_CHANNELS] ;
+	WhiteBackgroundEdit m_syncroHeading[DAU_MAX_NB_SYNCRO_CHANNELS];
     WhiteBackgroundEdit m_syncroDescription [DAU_MAX_NB_SYNCRO_CHANNELS] ;
     WhiteBackgroundEdit m_mainBoardTemperature ;
     

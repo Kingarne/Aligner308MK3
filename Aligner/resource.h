@@ -73,6 +73,7 @@
 #define IDS_SIGMA_40_50                 168
 #define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL 169
 #define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_SET_INDEX_ARM_R2 170
+#define IDS_MINS_NMEA                   171
 #define ID_UTILITIES_DATACONVERSION     201
 #define IDD_TILT_ALIGNMENT_PAGE_1       201
 #define IDD_TILT_ALIGNMENT_PAGE_2       202
@@ -387,11 +388,15 @@
 #define IDC_MEASURED_TEST_VOLTAGE       1095
 #define IDC_REF_CH_8                    1096
 #define IDC_TEXT_9                      1096
+#define IDC_SYNCRO_CHANNEL_4_HEADING    1096
 #define IDC_REF_CH_9                    1097
 #define IDC_TEXT_10                     1097
+#define IDC_SYNCRO_CHANNEL_3_HEADING    1097
 #define IDC_REF_CH_10                   1098
 #define IDC_TEXT_11                     1098
+#define IDC_SYNCRO_CHANNEL_4_HEADING_TEXT 1098
 #define IDC_TEXT_12                     1099
+#define IDC_SYNCRO_CHANNEL_4_HEADING_TEXT2 1099
 #define IDC_TEXT_13                     1100
 #define IDC_TEXT_CH_1                   1100
 #define IDC_TEXT_14                     1101
@@ -965,6 +970,8 @@
 #define IDC_DEBUG_FLAGS                 1625
 #define IDC_DEBUG_INFO_BUTTON           1626
 #define IDC_TYPE_TITLE                  1627
+#define IDC_DEBUG_INFO_BUTTON2          1627
+#define IDC_DEBUG_REPORT_BUTTON         1627
 #define IDC_STATION_TITLE               1629
 #define IDC_STATION_COMBO               1630
 #define IDC_SENS_SN_TITLE               1631
@@ -1412,7 +1419,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        561
+#define _APS_NEXT_RESOURCE_VALUE        562
 #define _APS_NEXT_COMMAND_VALUE         32822
 #define _APS_NEXT_CONTROL_VALUE         1660
 #define _APS_NEXT_SYMED_VALUE           108

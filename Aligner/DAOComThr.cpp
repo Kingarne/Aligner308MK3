@@ -725,6 +725,10 @@ int DAOComThread::HandleUARTData(DAUFrame& msg, int type)
             return HandleSigmaNMEAUARTData(msg, type);
             break;
 
+		case DigChTypeProMinsNMEA:
+			return HandleMINSNMEAUARTData(msg, type);
+			break;
+
         case DigChTypeProIXSEA:
             return HandleSigmaIXSEAData(msg, type);
             break;
@@ -913,7 +917,7 @@ int DAOComThread::HandleSigmaNMEAUARTData(DAUFrame& msg, int type)
         fifo.erase(fifo.begin(), startIt+pos);
 */
         DAUFrame newMsg;
-        newMsg.type = type;
+        newMsg.type = type; 
         newMsg.seq = -1;//seqNum;
         newMsg.length = frame.size();
         newMsg.crc = 57;//crc;
@@ -926,6 +930,87 @@ int DAOComThread::HandleSigmaNMEAUARTData(DAUFrame& msg, int type)
     }
     return 1;
 }
+
+int DAOComThread::HandleMINSNMEAUARTData(DAUFrame& msg, int type)
+{
+	std::deque<char>& fifo = (type == FRAME_TYPE_UART_A) ? m_UARTAFifo : m_UARTBFifo;
+
+	if (fifo.size() > 1000)
+	{
+		fifo.clear(); // purge if to large
+	}
+	//  TRACE("Len:%d, seq:%d\n", msg.length, msg.seq);
+	unsigned char payloadLen, frameType, seqNum, crc;
+	unsigned char *pData = msg.HdlcMsg;
+	fifo.insert(fifo.end(), pData, pData + msg.length);
+
+	if (fifo.size() == 0)
+		return 0;
+
+	char startSeq[] = "$PANZHRP";
+	char endSeq[] = "\r\n";
+	int ssLen = strlen(startSeq);
+	int esLen = strlen(endSeq);
+	while (1)
+	{
+
+		std::deque<char>::iterator startIt;
+		if ((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq + ssLen)) == fifo.end())
+		{
+			return 0;
+		}
+		//TRACE("Start found\n");
+
+		std::deque<char>::iterator endIt;
+		if ((endIt = std::search(fifo.begin(), fifo.end(), endSeq, endSeq + esLen)) == fifo.end())
+		{
+			return 0;
+		}
+
+		int n = distance(startIt, endIt);
+		if (n < 0)
+		{
+			advance(endIt, 2);
+			fifo.erase(fifo.begin(), endIt);
+			return 0;
+		}
+		vector<char> frame;//(n);//(startIt, endIt);
+		std::deque<char>::iterator it;
+		for (it = startIt; it != endIt; it++)
+		{
+			frame.push_back(*it);
+			//TRACE("frame:%c\n",*it);       
+		}
+
+		//ParseNMEA(frame);
+		//copy(fifo.begin(), fifo.end(), frame.begin());
+
+//         frame.resize(n);
+//         std::copy(startIt, endIt, frame.begin());
+
+		advance(endIt, 2);
+		fifo.erase(fifo.begin(), endIt);
+
+
+		/*        std::deque<char>::iterator it = startIt;
+		int pos = ssLen;
+		fifo.erase(fifo.begin(), startIt+pos);
+*/
+		DAUFrame newMsg;
+		newMsg.type = type;
+		newMsg.seq = -1;//seqNum;
+		newMsg.length = frame.size();
+		newMsg.crc = 57;//crc;
+		char* pMsgData = (char*)&newMsg.HdlcMsg;
+		memcpy(pMsgData, &frame[0], frame.size());
+
+		m_recentDigFrame[type].received = TRUE;
+		m_recentDigFrame[type].frame = newMsg;
+		::QueryPerformanceCounter(&m_recentDigFrame[type].stamp);
+	}
+	return 1;
+}
+
 
 BOOL DAOComThread::ParseNMEA(vector<char>& frame)
 {

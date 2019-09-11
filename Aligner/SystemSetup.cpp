@@ -259,6 +259,17 @@ void SystemSetup::LoadDigitalSyncroTypesFromRegistry( void )
 	   info.rate = 38400;
 	   m_validSyncroTypes[info.type] = info;
    }
+   if (SystemSetup::IsDigitalSyncroTypeEnabled(FEATURE_MASK_MINS_NMEA) == TRUE)
+   {
+	   str.LoadString(IDS_MINS_NMEA);
+	   info.name = str;
+	   info.type = DigChTypeProMinsNMEA;
+	   info.serialType = DigChSerialTypeProUart;
+	   info.bits = 8;
+	   info.parity = 1;
+	   info.rate = 38400;
+	   m_validSyncroTypes[info.type] = info;
+   }
 
     ReadDigitalSettings();
 

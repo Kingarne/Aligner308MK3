@@ -72,6 +72,10 @@ void DAUDataPro::Init()
 	str.LoadString(IDS_PL40) ;
 	m_digChMap[str] = DigChTypeProPL40;
 	
+	str.LoadString(IDS_MINS_NMEA);
+	m_digChMap[str] = DigChTypeProMinsNMEA;
+
+
     m_digInterfaceMap[DigChTypeProUnused] = DigChSerialTypeProUart;
     m_digInterfaceMap[DigChTypeProSeapath] = DigChSerialTypeProUart;
     m_digInterfaceMap[DigChTypeProSigma40_03] = DigChSerialTypeProUart;
@@ -81,6 +85,7 @@ void DAUDataPro::Init()
     m_digInterfaceMap[DigChTypeProMins] = DigChSerialTypeProHdlc;
     m_digInterfaceMap[DigChTypeProIXSEA] = DigChSerialTypeProUart;
 	m_digInterfaceMap[DigChTypeProPL40] = DigChSerialTypeProUart;
+	m_digInterfaceMap[DigChTypeProMinsNMEA] = DigChSerialTypeProUart;
 }
 
 

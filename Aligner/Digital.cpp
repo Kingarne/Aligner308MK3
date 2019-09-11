@@ -58,7 +58,7 @@ void Digital::SetData( double roll, double pitch, double heading, int status )
             Rotate( roll, pitch, -(M_PI * GetNominalAzimuth() / 180.0) , roll, pitch ) ;
             m_rollCandidate =  - ( M_PI * roll ) / 180 ;
             m_pitchCandidate = - ( M_PI * pitch ) / 180 ;
-            m_headingCandidate = - ( M_PI * heading*2 ) / 180 ;    
+			m_headingCandidate = heading;// -(M_PI * heading * 2) / 180;
         }
         else
         {
@@ -94,7 +94,8 @@ CString Digital::GetDigTypeText( )
         case DigChTypeProMins:          typeText = _T("MINS");          break ;        
         case DigChTypeProIXSEA:         typeText = _T("IXSEA");          break ;        
         case DigChTypeProMSI:           typeText = _T("MSI");          break ;      
-		case DigChTypeProPL40:          typeText = _T("PL-41");          break ;   
+		case DigChTypeProPL40:          typeText = _T("PL-41");          break ; 
+		case DigChTypeProMinsNMEA:      typeText = _T("MINS-NMEA");    break;
 		default:ASSERT(0); break ;
     }
     return typeText ;
@@ -336,6 +337,85 @@ BOOL Digital::ParseNMEA(vector<char>& frame, double& roll, double& pitch, double
     return TRUE;
 }
 
+BOOL Digital::ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK)
+{
+	std::vector<char>::iterator pos = find(frame.begin(), frame.end(), '*');
+	if (pos == frame.end())
+		return FALSE;
+
+	CString checkSumStr;
+	checkSumStr += *(pos + 1);
+	checkSumStr += *(pos + 2);
+
+	unsigned int x;
+	std::stringstream ss;
+	ss << std::hex << checkSumStr;
+	ss >> x;
+
+	std::vector<char>::iterator p1 = pos + 1;
+	std::vector<char>::iterator p2 = pos + 2;
+	frame.erase(pos, pos + 3);
+	//frame.push_back('*');
+	//calc checksum
+	BYTE checkSum = 0;
+	for (int i = 1; i < frame.size(); i++)
+	{
+		checkSum ^= frame[i];
+		//  TRACE("%c",frame[i]);
+	}
+
+	checksumOK = m_checkMINSCRC ? (x == checkSum) : TRUE;
+	if (!checksumOK)
+	{
+		return TRUE;
+	}
+
+	vector<CString> field;
+	CString str;
+	std::vector<char>::iterator start = frame.begin();
+	pos = find(frame.begin(), frame.end(), ',');
+	while (pos != frame.end())
+	{
+		str = "";
+		std::vector<char>::iterator it;
+		for (it = start; it != pos; it++)
+		{
+			str += *it;
+		}
+
+		start = pos + 1;
+		pos = find(start, frame.end(), ',');
+		field.push_back(str);
+	}
+
+	str = "";
+	std::vector<char>::iterator it;
+	for (it = start; it != frame.end(); it++)
+	{
+		str += *it;
+	}
+	field.push_back(str);
+
+	//     vector<CString>::iterator fIt;
+	//     for(fIt = field.begin();fIt!=field.end();fIt++)
+	//     {
+	//         TRACE("field:%s\n",*fIt);
+	//     }
+
+	//if (field.size() != 10)
+	//	return FALSE;
+
+	if (field[0] != "$PANZHRP")
+		return FALSE;
+
+
+	heading = atof(field[2]);
+	roll = atof(field[3]);
+	pitch = atof(field[4]);
+
+	return TRUE;
+}
+
 BOOL Digital::ParseMSI(vector<char>& frame, double& roll, double& pitch, double& heading)
 {
 	roll = 0;
@@ -385,6 +465,31 @@ void Digital::HandleSigma40_NMEA(DAUFrame &frame )
         }
     }
 }
+
+void Digital::HandleMINSNMEA(DAUFrame &frame)
+{
+	vector<char> vec;
+	vec.insert(vec.begin(), frame.HdlcMsg, frame.HdlcMsg + frame.length);
+
+	double roll = 0, pitch = 0, heading = 0;
+	BOOL checksumOK = FALSE;
+	//TRACE("r:%f, p:%f\n",roll,pitch);
+
+	if (ParseMINSNMEA(vec, roll, pitch, heading, checksumOK))
+	{
+		if (checksumOK)
+		{
+			SetData(roll, pitch, heading);
+		}
+		else
+		{
+			//Checksum incorrect
+			SetData(0, 0, 0, DS_CRC_ERR);
+			m_CRCError = TRUE;
+		}
+	}
+}
+
 
 void Digital::HandlePL40(DAUFrame &frame )
 {    
@@ -801,6 +906,10 @@ UINT Digital::HandleDataFrame(DAUFrame &frame)
         case DigChTypeProSigma40_01:
             HandleSigma40_01(frame) ;
         break ;
+
+		case DigChTypeProMinsNMEA:
+			HandleMINSNMEA(frame);
+			break;
 
         case DigChTypeProMins:
             HandleMINS(frame) ;

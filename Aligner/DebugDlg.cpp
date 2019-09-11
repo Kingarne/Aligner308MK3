@@ -8,6 +8,7 @@
 #include "type.h"
 #include <sstream>
 #include "SystemConfigurationView.h"
+#include "ReportManager.h"
 
 // DebugDlg dialog
 
@@ -82,6 +83,7 @@ BEGIN_MESSAGE_MAP(DebugDlg, CDialog)
     ON_BN_CLICKED(IDC_ENABLE_COMPENSATION, OnBnClickedEnableCompensation)
     ON_BN_CLICKED(IDC_SET_AZ_BUTTON, OnBnClickedSetAzButton)
 	ON_BN_CLICKED(IDC_DUMP_SENSOR_STATES, &DebugDlg::OnBnClickedDumpSensorStates)
+	ON_BN_CLICKED(IDC_DEBUG_REPORT_BUTTON, &DebugDlg::OnBnClickedDebugReportButton)
 END_MESSAGE_MAP()
 
 
@@ -546,4 +548,13 @@ void DebugDlg::OnBnClickedSetAzButton()
 void DebugDlg::OnBnClickedDumpSensorStates()
 {
 	DAU::GetDAU().DumpSensorStates();
+}
+
+
+void DebugDlg::OnBnClickedDebugReportButton()
+{
+	ReportManager rm;
+	rm.OpenReport(640);
+
+
 }

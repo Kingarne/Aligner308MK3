@@ -99,11 +99,13 @@ void CLiveDataView::DoDataExchange( CDataExchange *pDX )
 
 	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_3_ROLL, m_syncroRoll [2] ) ;
 	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_3_PITCH, m_syncroPitch [2] ) ;
+	DDX_Control(pDX, IDC_SYNCRO_CHANNEL_3_HEADING, m_syncroHeading[2]);
 	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_3_DESCRIPTION, m_syncroDescription [2] ) ;
 	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_3_HEADER, m_syncroHeader [2] ) ;
 
-	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_4_ROLL, m_syncroRoll [3] ) ;
+	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_4_ROLL, m_syncroRoll [3] ) ;	
 	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_4_PITCH, m_syncroPitch [3] ) ;
+	DDX_Control(pDX, IDC_SYNCRO_CHANNEL_4_HEADING, m_syncroHeading[3]);
 	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_4_DESCRIPTION, m_syncroDescription [3] ) ;
 	DDX_Control( pDX, IDC_SYNCRO_CHANNEL_4_HEADER, m_syncroHeader [3] ) ;
 
@@ -222,6 +224,7 @@ void CLiveDataView::SetSyncroChannelState(int ch, BOOL connected)
     m_syncroDescription[ch].SetBkColor(col);
     m_syncroRoll[ch].SetBkColor(col);
     m_syncroPitch[ch].SetBkColor(col);    
+	m_syncroHeading[ch].SetBkColor(col);
 }
 
 void CLiveDataView::UpdateText( void )
@@ -514,10 +517,11 @@ void CLiveDataView::UpdateSyncroData( void )
     {
         CString rollText ;
         CString pitchText ;
+		CString headingText="";
         Syncro *pCurrent = m_pSource -> GetSyncro( i ) ;
         if ((ViewRaw == m_viewMode || UnitType::Unused != m_pSource -> GetSyncro( i ) -> GetType()) && (pCurrent -> IsSelected() || !m_showOnlySelected))
         {
-            double roll, pitch;
+            double roll, pitch, heading;
             switch (m_viewMode)
             {
             case ViewRaw:
@@ -539,7 +543,7 @@ void CLiveDataView::UpdateSyncroData( void )
 
             default: // ViewCalibrated
                 roll = m_currentValues.GetSyncro( i ).GetRoll();
-                pitch = m_currentValues.GetSyncro( i ).GetPitch();
+                pitch = m_currentValues.GetSyncro( i ).GetPitch();				
                 if( g_AlignerData.SignDef == 1 )
                 {
                     roll = -roll;
@@ -557,6 +561,7 @@ void CLiveDataView::UpdateSyncroData( void )
                     }
                 break ;
             }
+			headingText.Format("%.3f", m_currentValues.GetSyncro(i).GetHeading());
         }
         CString syncroName = pCurrent -> GetName();
 
@@ -567,18 +572,22 @@ void CLiveDataView::UpdateSyncroData( void )
 		    {
 			    rollText.Format("No Data");
 			    pitchText.Format("No Data");
+				headingText.Format("No Data");
 		    }
 	    }
 	    if( D1 == syncroName )
         {
             m_syncroRoll [3].SetWindowText( rollText ) ;
             m_syncroPitch [3].SetWindowText( pitchText ) ;
+			m_syncroHeading[3].SetWindowText(headingText);
+			
         }
         else if( D2 == syncroName )
         {
             m_syncroRoll [2].SetWindowText( rollText ) ;
             m_syncroPitch [2].SetWindowText( pitchText ) ;
-        }
+			m_syncroHeading[2].SetWindowText(headingText);
+		}
         else if( J1 == syncroName )
         {
             m_syncroRoll [1].SetWindowText( rollText ) ;

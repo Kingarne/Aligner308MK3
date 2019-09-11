@@ -43,7 +43,7 @@
     <ProjectGuid>{9A570571-46B0-45F4-99B7-161E58D5030B}</ProjectGuid>
     <RootNamespace>Aligner</RootNamespace>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'" Label="Configuration">
@@ -463,6 +463,7 @@
     <ClCompile Include="InfoDlg.cpp" />
     <ClCompile Include="InPlaceEdit.cpp" />
     <ClCompile Include="Registry.cpp" />
+    <ClCompile Include="ReportManager.cpp" />
     <ClCompile Include="SecrRegistry.cpp" />
     <ClCompile Include="SensorSimulDlg.cpp" />
     <ClCompile Include="SetupHDLCGyroDlg.cpp" />
@@ -655,6 +656,7 @@
     <ClInclude Include="InfoDlg.h" />
     <ClInclude Include="InPlaceEdit.h" />
     <ClInclude Include="MemDC.h" />
+    <ClInclude Include="ReportManager.h" />
     <ClInclude Include="SecrRegistry.h" />
     <ClInclude Include="SensorSimulDlg.h" />
     <ClInclude Include="SetupHDLCGyroDlg.h" />

@@ -79,4 +79,5 @@ public:
     afx_msg void OnBnClickedEnableCompensation();
     afx_msg void OnBnClickedSetAzButton();
 	afx_msg void OnBnClickedDumpSensorStates();
+	afx_msg void OnBnClickedDebugReportButton();
 };

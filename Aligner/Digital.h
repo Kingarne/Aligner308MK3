@@ -62,11 +62,13 @@ private:
     void HandleSigma40_01(DAUFrame &frame);
     void HandleSigma40_NMEA(DAUFrame &frame );
     void HandleMINS(DAUFrame &frame );    
-    void HandleIXSEA(DAUFrame &frame);
+	void HandleMINSNMEA(DAUFrame &frame);
+	void HandleIXSEA(DAUFrame &frame);
 	void HandleMSI(DAUFrame &frame );
 	void HandlePL40(DAUFrame &frame );
 
     BOOL ParseNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK);
+	BOOL ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK);
     BOOL ParseMSI(vector<char>& frame, double& roll, double& pitch, double& heading);
 	void DumpHDLCFrame(HDLCFrameData *frameData);
     void DumpDigFrame(BYTE* pData, int len, int crc);

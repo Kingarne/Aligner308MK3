@@ -228,7 +228,7 @@ void SyncroProperties::OnCbnSelchangeStation()
     int index;
     if((index = m_stationControl.GetCurSel()) == CB_ERR)
         return;
-
+	 
     m_stationControl.GetLBText(index, str);
     m_description = str;
 

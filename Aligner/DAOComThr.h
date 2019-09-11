@@ -217,7 +217,8 @@ protected:
     int HandleSigmaUARTData(DAUFrame& msg, int type);
 	int HandleSigma4050UARTData(DAUFrame& msg, int type);
     int HandleSigmaNMEAUARTData(DAUFrame& msg, int type);
-    int HandleSigmaIXSEAData(DAUFrame& msg, int type);
+	int HandleMINSNMEAUARTData(DAUFrame& msg, int type);
+	int HandleSigmaIXSEAData(DAUFrame& msg, int type);
 	int HandleMSIData(DAUFrame& msg, int type);
 	int HandlePL40UARTData(DAUFrame& msg, int type);
 

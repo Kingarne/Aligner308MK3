@@ -553,8 +553,13 @@ void DebugDlg::OnBnClickedDumpSensorStates()
 
 void DebugDlg::OnBnClickedDebugReportButton()
 {
+	CWnd* pWnd = GetDlgItem(IDC_REPORT_ID);
+	CString str;
+	pWnd->GetWindowText(str);
+	int num = atoi(str);
+
 	ReportManager rm;
-	rm.OpenReport(640);
+	rm.OpenReport(num);
 
 
 }

@@ -29,6 +29,7 @@
 #include "SecrRegistry.h"
 #include <gdiplus.h>
 #include "InfoDlg.h"
+#include "ProjectOpenDlg.h"
 //using namespace Gdiplus;
 
 #include <shellapi.h>
@@ -642,6 +643,17 @@ BOOL CAboutDlg::OnInitDialog()
 //***  1.14
 void CAlignerApp::OnFileOpen( void )
 {
+
+	ProjectOpenDlg dlg;
+	if (dlg.DoModal() == IDOK)
+	{
+		SystemSetup::Instance()->SetProject(dlg.m_selectedProj);
+
+		TRACE("Proj: %s\n",dlg.m_selectedProj.m_projectName);
+		return;
+	}
+
+
 //***  Tried to initialize the OpenDialog with ProjectPath but failed
 //CString Path ;
 //LPCTSTR LPath ;

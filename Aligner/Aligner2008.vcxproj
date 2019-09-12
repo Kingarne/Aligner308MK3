@@ -462,6 +462,7 @@
     <ClCompile Include="GridDropTarget.cpp" />
     <ClCompile Include="InfoDlg.cpp" />
     <ClCompile Include="InPlaceEdit.cpp" />
+    <ClCompile Include="ProjectOpenDlg.cpp" />
     <ClCompile Include="Registry.cpp" />
     <ClCompile Include="ReportManager.cpp" />
     <ClCompile Include="SecrRegistry.cpp" />
@@ -656,6 +657,7 @@
     <ClInclude Include="InfoDlg.h" />
     <ClInclude Include="InPlaceEdit.h" />
     <ClInclude Include="MemDC.h" />
+    <ClInclude Include="ProjectOpenDlg.h" />
     <ClInclude Include="ReportManager.h" />
     <ClInclude Include="SecrRegistry.h" />
     <ClInclude Include="SensorSimulDlg.h" />

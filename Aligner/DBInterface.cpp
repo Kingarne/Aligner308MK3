@@ -6,7 +6,13 @@ extern NStopWatch sw;
 
 DBInterface* DBInterface::m_ptInstance = NULL;
 
-
+DBTIMESTAMP ToDBTimestamp(TIMESTAMP_STRUCT* t)
+{
+	DBTIMESTAMP ts;
+	memcpy(&ts, t, sizeof(TIMESTAMP_STRUCT));
+	return ts;
+	//ts.year = t->year;
+}
 
 DBInterface::DBInterface(void)
 {
@@ -94,6 +100,60 @@ CString DBInterface::ToText(double d)
 //     return !records.IsEOF();
 // }
 
+BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
+{
+
+	if (!m_db.IsOpen())
+		return FALSE;
+
+	CString sql = "";
+	sql.Format("SELECT * FROM Project INNER JOIN Ships ON Project.shipID = Ships.ShipID");
+
+	ProjectData data;
+
+	CRecordset rs(&m_db);
+	if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+	{
+		TRACE("count: %d, %d\n",rs.GetRecordCount(), rs.GetODBCFieldCount());
+		for (int i = 0; i < rs.GetODBCFieldCount(); i++)
+		{
+			CODBCFieldInfo info;
+			rs.GetODBCFieldInfo(i, info);
+			TRACE("%d, %s\n", i, info.m_strName);
+		}
+			
+		while (!rs.IsEOF())
+		{
+			CDBVariant val;
+			rs.GetFieldValue("ID", val);
+			data.m_projectID = val.m_iVal;
+			rs.GetFieldValue("name", data.m_projectName);
+			rs.GetFieldValue("projTime", val);//oleTime);
+			data.m_time = ToDBTimestamp(val.m_pdate);
+			rs.GetFieldValue("operator", data.m_operatorName);
+			rs.GetFieldValue("location", data.m_place);
+			rs.GetFieldValue("latitude", val);
+			data.m_latitude = val.m_fltVal;
+			rs.GetFieldValue("unit", val);
+			data.m_units = val.m_iVal;
+			rs.GetFieldValue("signDef", val);
+			data.m_signDef = val.m_iVal;
+			rs.GetFieldValue("ShipName", data.m_shipName);
+			rs.GetFieldValue("ClassID", val);
+			data.m_shipClass = val.m_iVal;
+			CString str;
+			rs.GetFieldValue("config", str);
+
+			projects.push_back(data);
+			
+			rs.MoveNext();
+		}
+	}
+
+
+	return true;
+}
+
 BOOL DBInterface::GetDAUData(int DAUSerial, DAUSetupData& dauData)
 {
     if(!m_db.IsOpen())
@@ -126,13 +186,6 @@ BOOL DBInterface::GetDAUData(int DAUSerial, DAUSetupData& dauData)
     return TRUE;
 }
 
-DBTIMESTAMP ToDBTimestamp(TIMESTAMP_STRUCT* t)
-{
-	DBTIMESTAMP ts;
-	memcpy(&ts, t, sizeof(TIMESTAMP_STRUCT));
-	return ts;
-	//ts.year = t->year;
-}
 
 BOOL DBInterface::GetSensorCalibTime(CString se, DBTIMESTAMP& time)
 {
@@ -802,7 +855,7 @@ CString GetSigndefString()
 }
 
 
-BOOL DBInterface::InsertHistoryItem(HistoryData& data)//DBTIMESTAMP ts)
+BOOL DBInterface::InsertHistoryItem(HistoryData& data)
 {
      if(!m_db.IsOpen())
          return FALSE;
@@ -810,14 +863,12 @@ BOOL DBInterface::InsertHistoryItem(HistoryData& data)//DBTIMESTAMP ts)
      COleDateTime time(data.m_time);
      CString str;
      str.LoadString( IDS_ANGULAR_DEFINITION_PART_2 );
-     CString sql="";
-     CString op = SysSetup->GetOperatorName();
-     CString serial = DAU::GetDAU().GetSerialNumber();
-     CString place = SysSetup->GetPlace();
-     CString project = SysSetup->GetProjectName();
+     CString sql="";    
+     CString serial = DAU::GetDAU().GetSerialNumber();    
+     int projectID = SysSetup->GetProjectID();
  
-     sql.Format("INSERT INTO History ( operator, dauSerialNumber, timeOfMeasurement, place, latitude, angulaDefinitionPart1, angulaDefinitionPart2, project, calibInfo ) VALUES ('%s','%s','%s','%s',%f,'%s','%s','%s','%s')",
-         op, serial, time.Format( _T("%Y-%m-%d %H:%M:%S")), place, SysSetup->GetLatitude(), GetSigndefString(), str, project, data.calibInfo);
+     sql.Format("INSERT INTO History ( dauSerialNumber, timeOfMeasurement, project, calibInfo ) VALUES ('%s','%s',%d,'%s')",
+         serial, time.Format( _T("%Y-%m-%d %H:%M:%S")), projectID, data.calibInfo);
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;

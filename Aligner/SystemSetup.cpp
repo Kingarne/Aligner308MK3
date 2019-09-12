@@ -27,10 +27,10 @@ SystemSetup* SystemSetup::m_ptInstance = NULL;
 class SystemSetupDialog : public CDialog
 {
 public:
-    SystemSetupDialog( SystemSetup::Data &dataSource, CWnd *pParent = NULL ) ;
+    SystemSetupDialog(ProjectData &dataSource, CWnd *pParent = NULL ) ;
 	virtual ~SystemSetupDialog( void ) ;
 
-    SystemSetup::Data m_data ;
+	ProjectData m_data ;
     WhiteBackgroundEdit m_date ;
 
 protected:
@@ -414,6 +414,11 @@ CString SystemSetup::GetProjectPath2( void )
     return m_projectPath ;
 }
 
+int SystemSetup::GetProjectID(void)
+{
+	return m_data.m_projectID;
+}
+
 CString SystemSetup::GetProjectName( void )
 {
     return m_data.m_projectName ;
@@ -498,7 +503,7 @@ CString SystemSetup::GetExecutablePath( void )
 
 IMPLEMENT_DYNAMIC(SystemSetupDialog, CDialog)
 
-SystemSetupDialog::SystemSetupDialog( SystemSetup::Data &dataSource, CWnd *pParent )	: CDialog(SystemSetupDialog::IDD, pParent), m_data( dataSource )
+SystemSetupDialog::SystemSetupDialog(ProjectData &dataSource, CWnd *pParent )	: CDialog(SystemSetupDialog::IDD, pParent), m_data( dataSource )
 {
   // Empty
 }
@@ -700,7 +705,7 @@ BOOL SystemSetupDialog::OnInitDialog( void )
         GetDlgItem( IDC_SYSTEM_MEAS_OBJECT )->ShowWindow( SW_HIDE );
         UpdateShips();        
     }
-    m_date.SetWindowText( COleDateTime::GetCurrentTime().Format( VAR_DATEVALUEONLY ) ) ;
+	m_date.SetWindowText(COleDateTime::GetCurrentTime().Format());// VAR_DATEVALUEONLY ) );
     HandleNewMode() ;
     return TRUE ;
 }

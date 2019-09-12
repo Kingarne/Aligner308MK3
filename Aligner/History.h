@@ -32,6 +32,9 @@ public:
     HistoryData(DBTIMESTAMP ts){m_time=ts;}
     
     DBTIMESTAMP m_time ;
+	double m_timeConstant;
+	CString m_comment;
+	CString m_measuredUnit;
     CString calibInfo;
 };
 
@@ -43,13 +46,9 @@ private:
 public:
     class Data : public HistoryData
     {
-    public:
-        double m_timeConstant ;
+    public:       
         CString m_lineOfSightDirection ;
-        CString m_elevationCompensation ;
-        CString m_comment ;
-	    CString m_measuredUnit ;
-	    //DBTIMESTAMP m_time ;
+        CString m_elevationCompensation ;       
     } ;
 
     class ItemData

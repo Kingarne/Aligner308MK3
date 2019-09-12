@@ -209,6 +209,7 @@
 #define IDD_DIALOG1                     547
 #define IDD_AZ_ALIGN_NOTE_DIALOG        547
 #define IDD_GAIN_CALIBRATION_PAGE_6     548
+#define IDD_PROJECT_OPEN_DLG            562
 #define IDC_BROWSE                      1000
 #define IDC_DAU_CAL_PRINT               1000
 #define IDC_LIVE_CLOSE                  1000
@@ -640,6 +641,7 @@
 #define IDC_FRAMES_LIST                 1345
 #define IDC_SENOR_LIST                  1345
 #define IDC_GYRO_LIST                   1345
+#define IDC_PROJECT_LIST                1345
 #define IDC_IMAGE                       1346
 #define IDC_IMAGE_1                     1346
 #define IDC_AVAILABLE                   1346
@@ -953,6 +955,7 @@
 #define IDC_DAU_CH_B_ENABLE             1606
 #define IDC_SIMUL_BUTTON                1607
 #define IDC_SIMULATE                    1608
+#define IDC_REPORT_ID                   1608
 #define IDC_TYPE_COMBO                  1609
 #define IDC_SET_TO_FIX                  1611
 #define IDC_INFO                        1612
@@ -1419,7 +1422,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        562
+#define _APS_NEXT_RESOURCE_VALUE        564
 #define _APS_NEXT_COMMAND_VALUE         32822
 #define _APS_NEXT_CONTROL_VALUE         1660
 #define _APS_NEXT_SYMED_VALUE           108

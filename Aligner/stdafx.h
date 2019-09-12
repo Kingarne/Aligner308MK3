@@ -118,6 +118,7 @@ using namespace C1Chart2D8 ;
 #include "DBInterface.h"
 #include "SystemSetup.h"
 #include <afxwin.h>
+#include <afxwin.h>
 
 #define _PI 3.1415f
 #define ToMRad(a) (a*_PI/180.0f*1000.0f)

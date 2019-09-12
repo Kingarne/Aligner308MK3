@@ -547,6 +547,9 @@
     <ClCompile Include="ReportManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectOpenDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorStatic.h">
@@ -1007,6 +1010,9 @@
     </ClInclude>
     <ClInclude Include="ReportManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectOpenDlg.h">
+      <Filter>Header Files\Application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

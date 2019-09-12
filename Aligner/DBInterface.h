@@ -5,7 +5,7 @@
 #include "LeastSquare.h"
 #include "Util.h"
 #include "history.h"
-
+#include "SystemSetup.h"
 
 class DBInterface
 {
@@ -33,6 +33,8 @@ public:
     BOOL GetChannelCalibTime(CString ch, int dauId, DBTIMESTAMP& time);
     BOOL GetAdapterCalibTime(CString ad, DBTIMESTAMP& time);
     BOOL GetSensorCalibTime(CString se, DBTIMESTAMP& time);
+
+	BOOL GetProjects(vector<ProjectData>& projects);
 
     BOOL UpdateAdapterCalibration(CString serial, double el, double az);
     BOOL UpdateSensorCalibration(CString table, CString serial, CString op, Polynomial& fit);//double a0, double a1, double a2, double a3);

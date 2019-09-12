@@ -72,25 +72,23 @@ void LoadSigndefString( CString &signdefText )
   }
 }
 
-BOOL TiltAlignmentErrorsHistory::AddData(  Data &data )
+BOOL TiltAlignmentErrorsHistory::AddData( Data &data )
 {
     int lastId=0;
     DBInterface::Instance()->InsertHistoryItem(data);
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);    
+    DBInterface::Instance()->GetLastCounter(lastId);        
     m_mainID = lastId;
 
     DBInterface::Instance()->InsertTiltAlignmentErrors(data, m_mainID);
     DBInterface::Instance()->GetLastCounter(lastId);  
-
     m_lastID = lastId;
+
     return TRUE ;
 }
 
 BOOL TiltAlignmentErrorsHistory::AddItem( const ItemData item )
 {
-    return DBInterface::Instance()->InsertTiltAlignmentErrorsItem(item, m_lastID);
+    return DBInterface::Instance()->InsertTiltAlignmentErrorsItem(item, m_mainID);
 }
 
 BOOL TiltAndFlatnessHistory::AddData( Data &data )

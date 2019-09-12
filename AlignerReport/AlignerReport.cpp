@@ -34,7 +34,7 @@ using namespace CrystalDecisions::Shared ;
 #endif
 
 #if defined(GetCurrentDirectory)
-#undef GetCurrentDirectory
+#undef GetCurrentD irectory
 #endif
 
 #if defined(new)

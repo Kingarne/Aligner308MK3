@@ -163,6 +163,27 @@ bool XMLHandler::Load(CString file)
     return true;
 }
 
+bool XMLHandler::ParseConfig(CString text)
+{
+	TiXmlDocument doc;
+	doc.Parse(text);
+	if(doc.Error())
+	{		
+		return false;
+	}
+
+	TiXmlElement* pChannels = doc.FirstChildElement("Channels");
+	if (pChannels)
+	{
+		LoadChannels(pChannels);
+	}
+
+	DAU::GetDAU().UpdateUARTProtocoll();
+	DAU::GetDAU().SetResolutionsToDAU();
+
+}
+
+
 bool XMLHandler::AddAttrib(TiXmlElement* node, CString name, CString str)
 {
     TiXmlElement* attrib = new TiXmlElement("Param");

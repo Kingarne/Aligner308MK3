@@ -649,6 +649,10 @@ void CAlignerApp::OnFileOpen( void )
 	{
 		SystemSetup::Instance()->SetProject(dlg.m_selectedProj);
 
+		CFrameWnd *p = (CFrameWnd*)m_pMainWnd;
+		CAlignerDoc *d = (CAlignerDoc*)p->GetActiveDocument();
+		d->OpenProject();
+
 		TRACE("Proj: %s\n",dlg.m_selectedProj.m_projectName);
 		return;
 	}

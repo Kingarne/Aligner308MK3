@@ -472,6 +472,7 @@
     <ClCompile Include="SimulDlg.cpp" />
     <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="Splash.cpp" />
+    <ClCompile Include="SystemSetupDlg.cpp" />
     <ClCompile Include="TheoAdapterCalibration.cpp" />
     <ClCompile Include="TheoAdapterCalibrationPage0.cpp" />
     <ClCompile Include="TheoAdapterCalibrationPage1.cpp" />
@@ -697,6 +698,7 @@
     <ClInclude Include="GainCalibrationPage4.h" />
     <ClInclude Include="GainCalibrationPage5.h" />
     <ClInclude Include="LeastSquare.h" />
+    <ClInclude Include="SystemSetupDlg.h" />
     <ClInclude Include="TheoAdapterCalibration.h" />
     <ClInclude Include="TheoAdapterCalibrationPage0.h" />
     <ClInclude Include="TheoAdapterCalibrationPage1.h" />

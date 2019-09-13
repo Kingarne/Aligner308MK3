@@ -8,9 +8,10 @@
 #include "DAU.h"
 #include "Aligner.h"
 #include <sstream>
+#include "SystemSetupDlg.h"
 
 SystemSetup* SystemSetup::m_ptInstance = NULL;
-// SystemSetup::Data SystemSetup::m_data ;
+// SystemSetup::Data SystemSetup::m_proj ;
 // map<int, ValidSyncroInfo> SystemSetup::m_validSyncroTypes;
 // int SystemSetup::m_featureMask = 0 ;
 // int SystemSetup::m_currentChannelSetup = 0 ;
@@ -24,35 +25,6 @@ SystemSetup* SystemSetup::m_ptInstance = NULL;
  *  SystemSetupDialog is a (mostly) wizard generated class to handle interaction
  *  with the System Setup menu accessed via the main application menu.
  */
-class SystemSetupDialog : public CDialog
-{
-public:
-    SystemSetupDialog(ProjectData &dataSource, CWnd *pParent = NULL ) ;
-	virtual ~SystemSetupDialog( void ) ;
-
-	ProjectData m_data ;
-    WhiteBackgroundEdit m_date ;
-
-protected:
-	enum { IDD = IDD_SYSTEM_SETUP } ;
-
-	virtual void DoDataExchange( CDataExchange *pDX ) ;
-    virtual BOOL OnInitDialog( void ) ;
-    void HandleNewMode( void ) ;
-	void HandleTextChanged( void ) ;
-
-    afx_msg void OnCbnSelchangeSystemSetupDialogMode( void ) ;
-    afx_msg void OnCbnSelchangeShipName( void ) ;    
-    afx_msg void OnTextChanged( void ) ;
-    afx_msg void OnBnClickedBrowseButton( void ) ;
-
-
-    DECLARE_MESSAGE_MAP()
-    DECLARE_DYNAMIC(SystemSetupDialog)
-
-    void UpdateShips();
-    CComboBox m_shipCombo;
-} ;
 
 SystemSetup::SystemSetup( void )
 {
@@ -93,21 +65,21 @@ BOOL SystemSetup::DoModal( void )
     LoadLatitudeFromRegistry() ;
     LoadUnitsFromRegistry() ;
     LoadFromRegistry() ;
-    SystemSetupDialog dialog( m_data ) ;
+    SystemSetupDialog dialog( m_proj ) ;
     if (IDOK == dialog.DoModal())
     {
-    m_data = dialog.m_data ;
-    SaveToRegistry() ;
-    SaveLatitudeToRegistry() ;
-    if (SYSTEM_SETUP_MODE_ALIGNMENT == GetMode())
-    {
-      SaveUnitsToRegistry() ;
-    }		
-		SaveProjectPathToRegistry() ;			
-		return TRUE ;
-  }
+		m_proj = dialog.m_proj ;
+		SaveToRegistry() ;
+		SaveLatitudeToRegistry() ;
+		if (SYSTEM_SETUP_MODE_ALIGNMENT == GetMode())
+		{
+		  SaveUnitsToRegistry() ;
+		}		
+			SaveProjectPathToRegistry() ;			
+			return TRUE ;
+	 }
   
-  return FALSE ;
+	return FALSE ;
 }
 
 
@@ -115,7 +87,7 @@ void SystemSetup::LoadLatitudeFromRegistry( void )
 {
     Registry reg;
     CString lat = reg.GetStringValue("Latitude", "59.0");
-    m_data.m_latitude = atof(lat);
+    m_proj.m_latitude = atof(lat);
 }
 
 void SystemSetup::LoadUnitsFromRegistry( void )
@@ -134,16 +106,24 @@ void SystemSetup::LoadFromRegistry()
     str = reg.GetStringValue("Project\\Place", "");
     SetPlace(str);
     str = reg.GetStringValue("Project\\Ship", "");
-    SetShipName(str);
+	Ship ship;
+	if (DBInterface::Instance()->GetShip(str, ship))
+	{
+		m_proj.m_shipName = str;
+		m_proj.m_shipClass = ship.m_classID;
+		m_proj.m_shipID = ship.m_ID;
+	}
+
+	
 
 }
 
 void SystemSetup::SaveToRegistry() 
 {
     Registry reg;
-    reg.SetStringValue("Project\\Operator", m_data.m_operatorName);
-    reg.SetStringValue("Project\\Place", m_data.m_place);
-    reg.SetStringValue("Project\\Ship", m_data.m_shipName);    
+    reg.SetStringValue("Project\\Operator", m_proj.m_operatorName);
+    reg.SetStringValue("Project\\Place", m_proj.m_location);
+    reg.SetStringValue("Project\\Ship", m_proj.m_shipName);    
 }
 
 void SystemSetup::LoadChannelsFromRegistry( void )
@@ -373,7 +353,7 @@ BOOL SystemSetup::IsValid( void )
 
 void SystemSetup::SaveLatitudeToRegistry( void )
 {
-  double latitude = m_data.m_latitude ;
+  double latitude = m_proj.m_latitude ;
   Sensor::SetLatitudeCompensation( latitude ) ;
   Registry reg;
   CString lat;
@@ -406,7 +386,7 @@ void SystemSetup::SaveProjectPathToRegistry( void )
 
 CString SystemSetup::GetProjectPath( void )
 {
-    return m_projectPath + _T("\\") + m_data.m_projectName ;
+    return m_projectPath + _T("\\") + m_proj.m_projectName ;
 }
 
 CString SystemSetup::GetProjectPath2( void )
@@ -416,62 +396,62 @@ CString SystemSetup::GetProjectPath2( void )
 
 int SystemSetup::GetProjectID(void)
 {
-	return m_data.m_projectID;
+	return m_proj.m_projectID;
 }
 
 CString SystemSetup::GetProjectName( void )
 {
-    return m_data.m_projectName ;
+    return m_proj.m_projectName ;
 }
 
 CString SystemSetup::GetOperatorName( void )
 {
-  return m_data.m_operatorName ;
+  return m_proj.m_operatorName ;
 }
 
 CString SystemSetup::GetShipName( void )
 {
-  return m_data.m_shipName ;
+  return m_proj.m_shipName ;
 }
 
 double SystemSetup::GetLatitude( void )
 {
-  return m_data.m_latitude ;
+  return m_proj.m_latitude ;
 }
 
 int SystemSetup::GetMode( void )
 {
-  return m_data.m_mode ;
+  return m_proj.m_mode ;
 }
 
 void SystemSetup::SetMode( int mode )
 {
-	m_data.m_mode = mode ;
+	m_proj.m_mode = mode ;
 }
 
 CString SystemSetup::GetPlace( void )
 {
-  return m_data.m_place ;
+  return m_proj.m_location ;
 }
 
 int SystemSetup::GetUnits( void )
 {
-  return m_data.m_units ;
+  return m_proj.m_unit ;
 }
 
 CString SystemSetup::GetUnitText()
 {
-    return (m_data.m_units == UNIT_MRAD) ? "mrad" : "arcmin";
+    return (m_proj.m_unit == UNIT_MRAD) ? "mrad" : "arcmin";
 }
 
 BOOL SystemSetup::GetCanConfigure( void )
 {
-  return SYSTEM_SETUP_NO_MODE != m_data.m_mode ;
+  return SYSTEM_SETUP_NO_MODE != m_proj.m_mode ;
 }
 
 void SystemSetup::SetUnits( int units )
 {
-	m_data.m_units = units;
+	m_proj.m_unit = units;
 }
 
 void SystemSetup::SetImageFileIndex( const long index )
@@ -501,254 +481,29 @@ CString SystemSetup::GetExecutablePath( void )
 }
 
 
-IMPLEMENT_DYNAMIC(SystemSetupDialog, CDialog)
-
-SystemSetupDialog::SystemSetupDialog(ProjectData &dataSource, CWnd *pParent )	: CDialog(SystemSetupDialog::IDD, pParent), m_data( dataSource )
-{
-  // Empty
-}
-
-SystemSetupDialog::~SystemSetupDialog( void )
-{
-  // Empty
-}
-
-void SystemSetupDialog::DoDataExchange( CDataExchange *pDX )
-{
-    CDialog::DoDataExchange( pDX ) ;
-    if (pDX -> m_bSaveAndValidate)
-    {
-        CString text ;
-        GetDlgItem( IDC_SYSTEM_SETUP_DIRECTORY ) -> GetWindowText( text ) ;
-        SysSetup->SetProjectPath( text ) ;
-    }
-    else
-    {
-        SetDlgItemText( IDC_SYSTEM_SETUP_DIRECTORY, SysSetup->GetProjectPath2() ) ;
-    }
-    DDX_Text(pDX, IDC_SYSTEM_SETUP_PROJECT, m_data.m_projectName);
-    DDV_MaxChars(pDX, m_data.m_projectName, 32);
-    DDX_Text(pDX, IDC_SYSTEM_SETUP_NAME, m_data.m_operatorName);
-    DDV_MaxChars(pDX, m_data.m_operatorName, 32);
-    if(theApp.IsAligner202Enabled())
-    {
-        DDX_Text(pDX, IDC_SYSTEM_MEAS_OBJECT, m_data.m_shipName);
-        DDV_MaxChars(pDX, m_data.m_shipName, 32);
-    }
-    DDX_Text(pDX, IDC_EDIT_LATITUDE, m_data.m_latitude);
-    DDV_MinMaxDouble(pDX, m_data.m_latitude, -80, 80);
-    DDX_CBIndex(pDX, IDC_SYSTEM_SETUP_MODE, m_data.m_mode);
-    DDX_Control(pDX, IDC_SYSTEM_SETUP_DATE, m_date);
-    DDX_Text(pDX, IDC_SYSTEM_SETUP_PLACE, m_data.m_place);
-    DDX_CBIndex(pDX, IDC_SYSTEM_SETUP_UNITS, m_data.m_units) ;
-    DDX_Control(pDX, IDC_SHIP_COMBO, m_shipCombo);
-}
-
-BEGIN_MESSAGE_MAP(SystemSetupDialog, CDialog)
-    ON_CBN_SELCHANGE(IDC_SYSTEM_SETUP_MODE, OnCbnSelchangeSystemSetupDialogMode)
-    ON_EN_CHANGE(IDC_SYSTEM_SETUP_NAME, OnTextChanged)
-    ON_EN_CHANGE(IDC_SYSTEM_SETUP_PLACE, OnTextChanged)
-    ON_EN_CHANGE(IDC_SYSTEM_SETUP_SHIP, OnTextChanged)
-    ON_EN_CHANGE(IDC_SYSTEM_SETUP_PROJECT, OnTextChanged)
-    ON_BN_CLICKED(IDC_SYSTEM_SETUP_BROWSE, OnBnClickedBrowseButton)
-    ON_CBN_SELCHANGE(IDC_SHIP_COMBO, OnCbnSelchangeShipName)
-END_MESSAGE_MAP()
-
-void SystemSetupDialog::HandleTextChanged( void )
-{
-    CComboBox *pMode = static_cast<CComboBox *>(GetDlgItem( IDC_SYSTEM_SETUP_MODE )) ;
-    CEdit *pProject = static_cast<CEdit *>(GetDlgItem( IDC_SYSTEM_SETUP_PROJECT )) ;
-    CEdit *pMeasObject = static_cast<CEdit *>(GetDlgItem( IDC_SYSTEM_MEAS_OBJECT )) ;
-    CEdit *pName = static_cast<CEdit *>(GetDlgItem( IDC_SYSTEM_SETUP_NAME )) ;
-    CEdit *pPlace = static_cast<CEdit *>(GetDlgItem( IDC_SYSTEM_SETUP_PLACE )) ;
-    CButton *pOK = static_cast<CButton *>(GetDlgItem( IDOK )) ;
-    CString text ;
-    switch (pMode -> GetCurSel())
-    {
-        case SYSTEM_SETUP_NO_MODE:
-            pOK -> EnableWindow( TRUE ) ;
-        break ;
-
-        case SYSTEM_SETUP_MODE_ALIGNMENT:
-            pProject->GetWindowText( text ) ;
-            if (0 == text.GetLength())
-            {
-                pOK -> EnableWindow( FALSE ) ;
-                break ;
-            }
-            
-            if( !theApp.IsAligner202Enabled())
-            {
-                if (m_shipCombo.GetCurSel() == CB_ERR)
-                {
-                    pOK->EnableWindow( FALSE ) ;
-                    break ;
-                }
-            }
-            
-            
-        case SYSTEM_SETUP_MODE_CALIBRATION:
-            pName -> GetWindowText( text ) ;
-            if (0 == text.GetLength())
-            {
-                pOK -> EnableWindow( FALSE ) ;
-                break ;
-            }
-            pPlace -> GetWindowText( text ) ;
-            if (0 == text.GetLength())
-            {
-                pOK -> EnableWindow( FALSE ) ;
-                break ;
-            }
-            pOK -> EnableWindow( TRUE ) ;
-            break ;
-
-    default:
-        ASSERT(0) ;
-        break ;
-    }
-}
-
-void SystemSetupDialog::HandleNewMode( void )
-{
-  CComboBox *pMode = static_cast<CComboBox *>(GetDlgItem( IDC_SYSTEM_SETUP_MODE )) ;
-  CEdit *pProject = static_cast<CEdit *>(GetDlgItem( IDC_SYSTEM_SETUP_PROJECT )) ;
-  CEdit *pMeasObject = static_cast<CEdit *>(GetDlgItem( IDC_SYSTEM_MEAS_OBJECT )) ;
-    
-  CEdit *pName = static_cast<CEdit *>(GetDlgItem( IDC_SYSTEM_SETUP_NAME )) ;
-  CEdit *pPlace = static_cast<CEdit *>(GetDlgItem( IDC_SYSTEM_SETUP_PLACE )) ;
-  CComboBox *pUnits = static_cast<CComboBox *>(GetDlgItem( IDC_SYSTEM_SETUP_UNITS )) ;
-  ASSERT(pMode && pMeasObject && pName && pUnits) ;
-  switch (pMode -> GetCurSel())
-  {
-  case SYSTEM_SETUP_NO_MODE:
-    pName -> SetReadOnly( TRUE ) ;
-    pPlace -> SetReadOnly( TRUE ) ;
-    pMeasObject -> SetReadOnly( TRUE ) ;
-    m_shipCombo.EnableWindow(FALSE);
-    pUnits -> SetCurSel( 0 ) ;
-    pUnits -> EnableWindow( FALSE ) ;
-    break ;
-
-  case SYSTEM_SETUP_MODE_CALIBRATION:
-    pProject -> SetWindowText( _T("Calibration") ) ;
-    pProject -> SetReadOnly( TRUE ) ;
-    pName -> SetReadOnly( FALSE ) ;
-    pPlace -> SetReadOnly( FALSE ) ;
-    pMeasObject -> SetReadOnly( TRUE ) ;
-    m_shipCombo.EnableWindow(FALSE);
-    pUnits -> SetCurSel( 0 ) ;
-    pUnits -> EnableWindow( FALSE ) ;
-    break ;
-
-  case SYSTEM_SETUP_MODE_ALIGNMENT:
-    pProject -> SetWindowText( _T("") ) ;
-    pProject -> SetReadOnly( FALSE ) ;
-    pName -> SetReadOnly( FALSE ) ;
-    pPlace -> SetReadOnly( FALSE ) ;
-    pMeasObject -> SetReadOnly( FALSE ) ;
-    pUnits -> SetCurSel( m_data.m_units ) ;
-    pUnits -> EnableWindow( TRUE ) ;
-    m_shipCombo.EnableWindow(TRUE);
-    break ;
-
-  default:
-    ASSERT(0) ;
-    break ;
-  }
-  DAU::GetDAU().EnableErrorEvent( FALSE ) ;
-  HandleTextChanged() ;
-}
-
-void SystemSetupDialog::OnCbnSelchangeShipName( void )
-{
-    CString str;
-    int index;
-    if((index = m_shipCombo.GetCurSel()) == CB_ERR)
-        return;
-
-    m_shipCombo.GetLBText(index, str);
-    m_data.m_shipName = str;
-    
-    HandleTextChanged();
-}
-
-void SystemSetupDialog::OnCbnSelchangeSystemSetupDialogMode( void )
-{
-    HandleNewMode() ;
-}
-
-BOOL SystemSetupDialog::OnInitDialog( void )
-{
-    CDialog::OnInitDialog() ;
-
-    if(theApp.IsAligner202Enabled())
-    {
-        GetDlgItem( IDC_LATITUDE_BOUNDARY )->ShowWindow( SW_HIDE );
-        GetDlgItem( IDC_EDIT_LATITUDE )->ShowWindow( SW_HIDE );
-        GetDlgItem( IDC_MODE_BOUNDARY )->ShowWindow( SW_HIDE );
-        GetDlgItem( IDC_SYSTEM_SETUP_MODE )->ShowWindow( SW_HIDE );
-        GetDlgItem( IDC_UNITS_BOUNDARY )->ShowWindow( SW_HIDE );
-        GetDlgItem( IDC_SYSTEM_SETUP_UNITS )->ShowWindow( SW_HIDE );
-        CString str;
-        str.LoadString( IDS_OBJECT );
-        SetDlgItemText( IDC_SHIP_BOUNDARY, str );
-		CComboBox *pMode = static_cast<CComboBox *>(GetDlgItem( IDC_SYSTEM_SETUP_MODE )) ;
-		pMode->SetCurSel( SYSTEM_SETUP_MODE_ALIGNMENT );
-        
-        m_shipCombo.ShowWindow(SW_HIDE);
-        //m_data.m_shipName = "N/A";
-        //UpdateShips();        
-    }
-    else
-    {
-        GetDlgItem( IDC_SYSTEM_MEAS_OBJECT )->ShowWindow( SW_HIDE );
-        UpdateShips();        
-    }
-	m_date.SetWindowText(COleDateTime::GetCurrentTime().Format());// VAR_DATEVALUEONLY ) );
-    HandleNewMode() ;
-    return TRUE ;
-}
-
-
-void SystemSetupDialog::UpdateShips()
-{    
-    m_shipCombo.ResetContent() ;
-
-    vector<CString> ships;
-    DBInterface::Instance()->GetShips(ships); 
-    vector<CString>::iterator iter;
-    for(iter=ships.begin();iter!=ships.end();iter++)
-    {
-        int index = m_shipCombo.AddString(*iter) ;
-    }
-
-    m_shipCombo.SelectString(0, m_data.m_shipName);
-}
-
-void SystemSetupDialog::OnTextChanged( void )
-{
-  HandleTextChanged() ;
-}
-
 void SystemSetup::SetOperatorName( const CString name )
 {
-  m_data.m_operatorName = name ;
+  m_proj.m_operatorName = name ;
 }
 
 void SystemSetup::SetShipName( const CString name )
 {
-  m_data.m_shipName = name ;
+  m_proj.m_shipName = name ;
 }
 
 void SystemSetup::SetPlace( const CString name )
 {
-  m_data.m_place = name ;
+  m_proj.m_location = name ;
+}
+
+void SystemSetup::SetProjectID(int id)
+{
+	m_proj.m_projectID = id;
 }
 
 void SystemSetup::SetProjectName( const CString name )
 {
-  m_data.m_projectName = name ;
+  m_proj.m_projectName = name ;
 }
 
 void SystemSetup::SetProjectPath( const CString name )
@@ -758,25 +513,10 @@ void SystemSetup::SetProjectPath( const CString name )
 
 void SystemSetup::SetLatitude( const double latitude )
 {
-    m_data.m_latitude = latitude ;
+    m_proj.m_latitude = latitude ;
     SaveLatitudeToRegistry() ;
 }
 
-void SystemSetupDialog::OnBnClickedBrowseButton( void )
-{
-    TCHAR path [MAX_PATH] ;
-    TCHAR title [] = _T("Select project location") ;
-    BROWSEINFO browseInfo = { m_hWnd, NULL, path, title, 0, NULL, 0, 0 } ;
-    ITEMIDLIST *pItemList ;
-    if (NULL != (pItemList = SHBrowseForFolder( &browseInfo )))
-    {
-        TCHAR buffer [MAX_PATH] ;
-        if (SHGetPathFromIDList( pItemList, buffer ))
-        {
-            SetDlgItemText( IDC_SYSTEM_SETUP_DIRECTORY, buffer );
-        }
-    }
-}
 
 double SystemSetup::GetRefVoltage(CString name)
 {
@@ -786,3 +526,9 @@ double SystemSetup::GetRefVoltage(CString name)
     return m_refVoltageMap[name];
 
 }
+
+CString SystemSetup::GetConfigXML()
+{
+	return m_proj.m_config;
+}
+

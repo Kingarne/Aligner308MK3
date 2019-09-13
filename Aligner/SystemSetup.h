@@ -54,11 +54,18 @@ struct ValidSyncroInfo
     int parity;
 };
 
+struct Ship
+{
+	int m_ID;
+	CString m_name;
+	int m_classID;
+};
+
 class ProjectData
 {
 public:
 
-	ProjectData(void) : m_projectName(""), m_operatorName(""), m_shipName(""), m_latitude(0.0), m_mode(SYSTEM_SETUP_NO_MODE), m_place(""), m_units(0) 
+	ProjectData(void) : m_projectName(""), m_operatorName(""), m_shipName(""), m_latitude(0.0), m_mode(SYSTEM_SETUP_NO_MODE), m_location(""), m_unit(0) 
 	{
 
 	};
@@ -68,13 +75,15 @@ public:
 	CString m_projectName;
 	DBTIMESTAMP m_time;
 	CString m_operatorName;
+	int m_shipID;
 	CString m_shipName;
 	int m_shipClass;
-	CString m_place;
+	CString m_location;
 	double m_latitude;
-	int m_units;
+	int m_unit;
 	int m_signDef;
 	int m_mode;
+	CString m_config;
 };
 
 class SystemSetup
@@ -93,8 +102,8 @@ public:
 public:
     static SystemSetup* Instance();
 
-	void SetProject(ProjectData data) { m_data = data; }
-	ProjectData GetProject() { return m_data; }
+	void SetProject(ProjectData proj) { m_proj = proj; }
+	ProjectData GetProject() { return m_proj; }
 
 	BOOL DoModal( void ) ;
 	void LoadFromRegistry() ;
@@ -119,30 +128,34 @@ public:
 	CString GetProjectPath( void ) ;
 	CString GetProjectPath2( void ) ;
 	CString GetPlace( void ) ;
-	void SetOperatorName( const CString name ) ;
-	void SetShipName( const CString name ) ;
-	void SetProjectName( const CString name ) ;
-	void SetProjectPath( const CString name ) ;
-	void SetPlace( const CString name ) ;
-	void SetLatitude( const double latitude ) ;
 	double GetLatitude( void ) ;
 	double GetLatitudeCompensation( void ) ;
 	int GetMode( void ) ;
 	int GetUnits( void ) ;
 	BOOL GetCanConfigure( void ) ;
-	void SetUnits( int units ) ;
 	CString GetUnitText() ;
-	void SetMode( int mode ) ;
-	void SetImageFileIndex( const long index ) ;
 	long GetImageFileIndex( void ) ;
 	CString GetNewImageFileIndexString( void ) ;
 	CString GetExecutablePath( void ) ;
 	map<int, ValidSyncroInfo> m_validSyncroTypes;
 	double GetRefVoltage(CString name);   
+	CString GetConfigXML();
+
+	void SetOperatorName(const CString name);
+	void SetShipName(const CString name);
+	void SetProjectName(const CString name);
+	void SetProjectPath(const CString name);
+	void SetPlace(const CString name);
+	void SetLatitude(const double latitude);
+	void SetUnits(int units);
+	void SetMode(int mode);
+	void SetImageFileIndex(const long index);
+	void SetProjectID(int id);
+
 
 private:
 
-	ProjectData m_data ;
+	ProjectData m_proj ;
     CString m_projectPath ;
     int m_featureMask ;  
     int m_currentChannelSetup ;  

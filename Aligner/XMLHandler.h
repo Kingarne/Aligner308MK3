@@ -40,6 +40,7 @@ public:
 
 	bool Load(CString file);
 	bool Store(CString file);	
+	bool ParseConfig(CString text);
 
     CAlignerDoc* m_pDoc;
 

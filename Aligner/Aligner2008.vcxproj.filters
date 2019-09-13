@@ -548,7 +548,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ProjectOpenDlg.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemSetupDlg.cpp">
+      <Filter>Source Files\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -559,9 +562,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConfigGrid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DBInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DebugDlg.h">
@@ -1013,6 +1013,12 @@
     </ClInclude>
     <ClInclude Include="ProjectOpenDlg.h">
       <Filter>Header Files\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemSetupDlg.h">
+      <Filter>Header Files\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="DBInterface.h">
+      <Filter>Header Files\Database</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

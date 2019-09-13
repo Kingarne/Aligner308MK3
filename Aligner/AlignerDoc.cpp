@@ -96,7 +96,6 @@ BOOL CAlignerDoc::OnNewDocument( void )
 		    return FALSE ;
     }
 	
-    DAU::GetDAU().SetSelected(FALSE);
     if (m_initialSetup)
     {
         m_ChannelSetupFileName = _T("ChannelSetup.dat");
@@ -112,9 +111,11 @@ BOOL CAlignerDoc::OnNewDocument( void )
         else
         {
             SetModifiedFlag( FALSE ) ;
-            return TRUE ;
+            return FALSE ;
         }
     }
+	DAU::GetDAU().SetSelected(FALSE);
+
     string directory = SysSetup->GetProjectPath() ;
     if (SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode())
     {
@@ -145,22 +146,24 @@ BOOL CAlignerDoc::OnNewDocument( void )
     if (tester.Open( fileName, CFile::shareDenyNone ))
     {
         tester.Close() ;
-        ::AfxMessageBox( _T("Project is pre-existing!") ) ; 
+        ::AfxMessageBox( _T("Folder is pre-existing!") ) ; 
         OnSetupSystem( SYSTEM_SETUP_NO_MODE, FALSE ) ;
         SetModifiedFlag( FALSE ) ;
         return TRUE ;
     }
     SetPathName( fileName ) ;
-    if (SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode())
+	SysSetup->SetImageFileIndex(0);
+	if (SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode())
     {
-        m_XMLHandler.Store(fileName);    
+		DBInterface::Instance()->InsertProject(SysSetup->GetProject());
+       // m_XMLHandler.Store(fileName);    
         //OnSaveDocument( fileName ) ;
     }
     SetCurrentDirectory( SysSetup->GetProjectPath() ) ;
-    m_ChannelSetupFileDir = DEFAULT_FILE_DIR ;
+   // m_ChannelSetupFileDir = DEFAULT_FILE_DIR ;
     CSetupLiveDataGraphDlg::m_TextFileDir = DEFAULT_FILE_DIR ;
     CGraphView::m_GraphFileDir = DEFAULT_FILE_DIR ;
-    SysSetup->SetImageFileIndex( 0 );
+   
     return TRUE ;
 }
 
@@ -170,6 +173,33 @@ void CAlignerDoc::LoadSensorCalibration()
 	{
 		DAU::GetDAU().GetSensor(i)->LoadCalibration();
 	}
+}
+
+
+
+BOOL CAlignerDoc::OpenProject()
+{
+	if (SysSetup->GetProjectName() == "")
+		return false;
+
+	//m_probeError = FALSE;
+	DAU::GetDAU().Close();
+	CString str;
+	OnSetupSystem(SYSTEM_SETUP_MODE_ALIGNMENT, FALSE);
+	
+	if (m_XMLHandler.ParseConfig(SysSetup->GetConfigXML()))
+	{
+		static_cast<SystemConfigurationView *>(theApp.m_pSystemConfigurationView)->ShowAll(SW_SHOW);
+	}
+	else
+	{
+		OnSetupSystem(SYSTEM_SETUP_NO_MODE, FALSE);
+		return TRUE;	
+	}
+	//m_ChannelSetupFileDir = DEFAULT_FILE_DIR;
+	CSetupLiveDataGraphDlg::m_TextFileDir = DEFAULT_FILE_DIR;
+	CGraphView::m_GraphFileDir = DEFAULT_FILE_DIR;
+	return TRUE;
 }
 
 void CAlignerDoc::ReOpenDocument()
@@ -525,11 +555,15 @@ void CAlignerDoc::Dump( CDumpContext &dc ) const
 BOOL CAlignerDoc::OnSetupSystem( int mode, BOOL showDialog )
 {
 	BOOL creationStatus = TRUE ;
-	SysSetup->SetMode( mode ) ;
+	
 	if (showDialog && !SysSetup->DoModal())
 	{
-		SysSetup->SetMode( SYSTEM_SETUP_NO_MODE ) ;
+		
+//		SysSetup->SetMode( SYSTEM_SETUP_NO_MODE ) ;
+		return FALSE;
 	}
+
+	SysSetup->SetMode(mode);
 	if( SYSTEM_SETUP_NO_MODE != SysSetup->GetMode() )
 	{
 // 		BOOL openResult = FALSE;

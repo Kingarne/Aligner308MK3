@@ -227,7 +227,7 @@ LRESULT CMainFrame::OnDAUStatus( WPARAM wp, LPARAM lp)
 		m_wndStatusBar.SetPaneBGColor(I_INDICATOR_DAU_STATUS, DAU_PRESENT_COLOR);				
 		
 		CAlignerDoc *pDoc = static_cast<CAlignerDoc *>(static_cast<CFrameWnd *>(theApp.m_pMainWnd)->GetActiveDocument());
-		pDoc->ReOpenDocument();
+		pDoc->OpenProject();
 	}
 	else
 	{
@@ -240,7 +240,7 @@ LRESULT CMainFrame::OnDAUStatus( WPARAM wp, LPARAM lp)
 		{
 			DAU::GetDAU().ClearConfig( );
 			CAlignerDoc *pDoc = static_cast<CAlignerDoc *>(static_cast<CFrameWnd *>(theApp.m_pMainWnd)->GetActiveDocument());
-			pDoc->ReOpenDocument();
+			pDoc->OpenProject();
 		}
 	}
 	

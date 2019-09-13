@@ -20,7 +20,8 @@ public:
     BOOL GetSyncros(vector<Syncro*>& syncros, int id);
     BOOL GetCalibratedSensors(vector<CString>& sensors);
     BOOL GetCalibratedAdapters(UnitType::Types t, vector<CString>& adapters);	
-    BOOL GetShips(vector<CString>& ships);
+	BOOL GetShip(CString name, Ship& ship);
+	BOOL GetShips(vector<Ship>& ships);
     BOOL GetStationsOnShip(vector<CString>& ships, CString ship);
     BOOL GetAdapterCalibration(CString adaperSN, AdapterCalibrationData &data);
     BOOL GetSensorCalibrationData(CString calibName, CString SN, SensorTemperatureCalibrationData &data);
@@ -33,7 +34,7 @@ public:
     BOOL GetChannelCalibTime(CString ch, int dauId, DBTIMESTAMP& time);
     BOOL GetAdapterCalibTime(CString ad, DBTIMESTAMP& time);
     BOOL GetSensorCalibTime(CString se, DBTIMESTAMP& time);
-
+	
 	BOOL GetProjects(vector<ProjectData>& projects);
 
     BOOL UpdateAdapterCalibration(CString serial, double el, double az);
@@ -43,6 +44,8 @@ public:
     BOOL UpdateComment(CString table, int historyId, CString comment);
 
 	BOOL UpdateCalibrationFlag(CString table, int id, BOOL b);
+
+	BOOL InsertProject(ProjectData& project);
 
     BOOL InsertSensorData(CString table, CString dauSN, CString SN, CString op, double temp, double val);
     BOOL InsertHistoryPrintItem(int historyId);

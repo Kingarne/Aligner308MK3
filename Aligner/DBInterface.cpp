@@ -100,6 +100,27 @@ CString DBInterface::ToText(double d)
 //     return !records.IsEOF();
 // }
 
+
+BOOL DBInterface::InsertProject(ProjectData& project)
+{
+	if (!m_db.IsOpen())
+		return FALSE;
+
+	COleDateTime time(project.m_time);
+
+	CString sql = "";
+	sql.Format("INSERT INTO Project( name, operator, location, shipId, latitude, unit, imgIdx, projTime, signDef ) VALUES ('%s','%s','%s', %d, %.2f, %d, %d, '%s', %d)",
+		project.m_projectName, project.m_operatorName, project.m_location, project.m_shipID, project.m_latitude, project.m_unit, 0, time.Format(_T("%Y-%m-%d %H:%M:%S")), project.m_signDef);
+
+	m_db.ExecuteSQL(sql);
+
+	int id;
+	GetLastCounter(id);
+	SysSetup->SetProjectID(id);
+
+	return TRUE;
+}
+
 BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 {
 
@@ -131,18 +152,18 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 			rs.GetFieldValue("projTime", val);//oleTime);
 			data.m_time = ToDBTimestamp(val.m_pdate);
 			rs.GetFieldValue("operator", data.m_operatorName);
-			rs.GetFieldValue("location", data.m_place);
+			rs.GetFieldValue("location", data.m_location);
 			rs.GetFieldValue("latitude", val);
 			data.m_latitude = val.m_fltVal;
 			rs.GetFieldValue("unit", val);
-			data.m_units = val.m_iVal;
+			data.m_unit = val.m_iVal;
 			rs.GetFieldValue("signDef", val);
 			data.m_signDef = val.m_iVal;
 			rs.GetFieldValue("ShipName", data.m_shipName);
 			rs.GetFieldValue("ClassID", val);
 			data.m_shipClass = val.m_iVal;
 			CString str;
-			rs.GetFieldValue("config", str);
+			rs.GetFieldValue("config", data.m_config);
 
 			projects.push_back(data);
 			
@@ -427,26 +448,63 @@ BOOL DBInterface::GetCalibratedAdapters(UnitType::Types t, vector<CString>& adap
     return TRUE;
 }
 
+BOOL DBInterface::GetShip(CString name, Ship& ship)
+{
+	if (!m_db.IsOpen())
+		return FALSE;
 
-BOOL DBInterface::GetShips(vector<CString>& ships)
+	CString sql;
+	sql.Format("SELECT * FROM Ships WHERE ShipName='%s'",name);
+	
+
+	CRecordset rs(&m_db);
+	if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+	{
+		if(!rs.IsEOF())
+		{
+			CDBVariant val;
+			rs.GetFieldValue("ShipID", val);
+			ship.m_ID = val.m_iVal;
+			rs.GetFieldValue("ShipName", ship.m_name);
+			rs.GetFieldValue("ClassID", val);
+			ship.m_classID = val.m_iVal;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+
+
+
+BOOL DBInterface::GetShips(vector<Ship>& ships)
 {
     if(!m_db.IsOpen())
         return FALSE;
 
-    CString sql = "SELECT ShipName FROM Ships";	
+    CString sql = "SELECT * FROM Ships";	
 
     int nVal;
     CString strVal;
 
-    CString ship;
+    Ship ship;
     
 	CRecordset rs(&m_db);   
 	if(rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
     {
         while(!rs.IsEOF())
         {
-            rs.GetFieldValue("ShipName", ship);                    
-            ships.push_back(ship);
+			CDBVariant val;
+			rs.GetFieldValue("ShipID", val);
+			ship.m_ID = val.m_iVal;
+			rs.GetFieldValue("ShipName", ship.m_name);                    
+			rs.GetFieldValue("ClassID", val);
+			ship.m_classID = val.m_iVal;			
+			
+			ships.push_back(ship);
 
             rs.MoveNext();
         }

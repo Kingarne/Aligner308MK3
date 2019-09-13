@@ -75,7 +75,7 @@ void ProjectOpenDlg::InitProjList()
 		m_projList.SetItemText(i, 1, "time");
 		m_projList.SetItemText(i, 2, iter->m_operatorName);
 		m_projList.SetItemText(i, 3, iter->m_shipName);
-		m_projList.SetItemText(i, 4, iter->m_place);
+		m_projList.SetItemText(i, 4, iter->m_location);
 		str.Format("%.1f", iter->m_latitude);
 		m_projList.SetItemText(i, 5, str);
 	

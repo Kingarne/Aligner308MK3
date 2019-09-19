@@ -189,13 +189,15 @@ BOOL CAlignerDoc::OpenProject()
 	
 	if (m_XMLHandler.ParseConfig(SysSetup->GetConfigXML()))
 	{
-		static_cast<SystemConfigurationView *>(theApp.m_pSystemConfigurationView)->ShowAll(SW_SHOW);
+
 	}
 	else
 	{
-		OnSetupSystem(SYSTEM_SETUP_NO_MODE, FALSE);
-		return TRUE;	
+		//OnSetupSystem(SYSTEM_SETUP_NO_MODE, FALSE);
+	//	return TRUE;	
 	}
+	static_cast<SystemConfigurationView *>(theApp.m_pSystemConfigurationView)->ShowAll(SW_SHOW);
+
 	//m_ChannelSetupFileDir = DEFAULT_FILE_DIR;
 	CSetupLiveDataGraphDlg::m_TextFileDir = DEFAULT_FILE_DIR;
 	CGraphView::m_GraphFileDir = DEFAULT_FILE_DIR;
@@ -653,7 +655,13 @@ void CAlignerDoc::OnAlignmentSetup( void )
     BOOL result = DAU::GetDAU().ConfigSensors( FALSE ) ;
     if(result)
     {
-        SaveProject();
+		CString xml;
+		m_XMLHandler.GetConfigXML(xml);
+		SysSetup->UpdateConfig(xml);
+		
+
+		
+		//SaveProject();
     }
     InitGlobalSensorStrings( result ) ;
 	static_cast<CLiveDataView *>(theApp.m_pLiveDataView) -> SetShowOnlySelected( FALSE ) ;

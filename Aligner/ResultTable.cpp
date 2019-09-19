@@ -69,7 +69,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 		}
 
         m_TiltAlignmentData.m_comment = (m_InParam.Comment.GetLength() == 0 ) ? DB_EMPTY_STRING : m_InParam.Comment;
-        m_TiltAlignmentData.m_measuredUnit.LoadString( ( GetMRad() == TRUE ) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);	
+//        m_TiltAlignmentData.m_measuredUnit.LoadString( ( GetMRad() == TRUE ) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);	
 		m_TiltAlignmentData.m_time = m_InParam.Time;
 
 		m_TiltAlignmentItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );

@@ -62,21 +62,22 @@ SystemSetup* SystemSetup::Instance()
 
 BOOL SystemSetup::DoModal( void )
 {
-    LoadLatitudeFromRegistry() ;
-    LoadUnitsFromRegistry() ;
-    LoadFromRegistry() ;
+   // LoadLatitudeFromRegistry() ;
+   // LoadUnitsFromRegistry() ;
+   // LoadFromRegistry() ;
     SystemSetupDialog dialog( m_proj ) ;
     if (IDOK == dialog.DoModal())
     {
 		m_proj = dialog.m_proj ;
+		LoadSignFromRegistry();
 		SaveToRegistry() ;
 		SaveLatitudeToRegistry() ;
 		if (SYSTEM_SETUP_MODE_ALIGNMENT == GetMode())
 		{
-		  SaveUnitsToRegistry() ;
+			SaveUnitsToRegistry() ;
 		}		
-			SaveProjectPathToRegistry() ;			
-			return TRUE ;
+		SaveProjectPathToRegistry() ;			
+		return TRUE ;
 	 }
   
 	return FALSE ;
@@ -96,6 +97,25 @@ void SystemSetup::LoadUnitsFromRegistry( void )
   int registryValue = reg.GetIntegerValue("Units", 0);
 
   SetUnits( registryValue ) ;
+}
+
+void SystemSetup::LoadSignFromRegistry(void)
+{
+	Registry reg;
+	CString signdefText = reg.GetStringValue("SignDef", "0");//::AfxGetApp() -> GetProfileString( SIGNDEF_REGISTER_SECTION, SIGNDEF_REGISTER_NAME, SIGNDEF_DEFAULT_VALUE ) ;
+	int def = atoi(signdefText) ? -1 : 1;
+	SetSignDef(def);
+}
+
+
+void SystemSetup::LoadProjectFromRegistry()
+{
+	LoadDigitalSyncroTypesFromRegistry();
+	LoadChannelsFromRegistry();
+	LoadProjectPathFromRegistry();
+	LoadLatitudeFromRegistry();
+	LoadUnitsFromRegistry();
+	LoadFromRegistry();
 }
 
 void SystemSetup::LoadFromRegistry() 
@@ -454,21 +474,34 @@ void SystemSetup::SetUnits( int units )
 	m_proj.m_unit = units;
 }
 
-void SystemSetup::SetImageFileIndex( const long index )
+void SystemSetup::SetSignDef( int sign )
 {
-	m_imageFileIndex = index ;
+	m_proj.m_signDef = sign;
+	g_AlignerData.SignDef = sign;
+}
+
+int SystemSetup::GetSignDef()
+{
+	return m_proj.m_signDef;
 }
 
 long SystemSetup::GetImageFileIndex( void )
 {
-	return m_imageFileIndex ;
+	return m_proj.m_imgIdx;
 }
+
+void SystemSetup::SetImageFileIndex(const long index)
+{
+	m_proj.m_imgIdx = index;
+}
+
+
 
 CString SystemSetup::GetNewImageFileIndexString( void )
 {
-    m_imageFileIndex++;
+    m_proj.m_imgIdx++;
     CString str;
-    str.Format( _T("%d"), m_imageFileIndex );
+    str.Format( _T("%d"), m_proj.m_imgIdx);
 	return str ;
 }
 
@@ -532,3 +565,7 @@ CString SystemSetup::GetConfigXML()
 	return m_proj.m_config;
 }
 
+void SystemSetup::UpdateConfig(CString xml)
+{
+	DBInterface::Instance()->UpdateProjectConfig(m_proj.m_projectID, xml);
+}

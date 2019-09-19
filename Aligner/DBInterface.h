@@ -42,6 +42,7 @@ public:
     BOOL UpdateDAUChannelOffset(CString serialNumber, CString channel, DAUOffsetCalibrationResult &result);
     BOOL UpdateDAUChannelGain(CString serialNumber, CString channel, DAUScaleCalibrationResult &result);
     BOOL UpdateComment(CString table, int historyId, CString comment);
+	BOOL UpdateProjectConfig(int projectID, CString xml);
 
 	BOOL UpdateCalibrationFlag(CString table, int id, BOOL b);
 
@@ -96,7 +97,7 @@ public:
     BOOL InsertGraph(int historyId, CString file, int include);
     BOOL DeleteGraph(CString file);
 
-    BOOL AddSensorCalibrationA0(CString table, CString serial, CString op, double a0);
+    BOOL AddSensorCalibrationA0(CString table, CString serial, CString op, double a0);	
 
     CString ToText(double d);
     CString ToText(LONG l);

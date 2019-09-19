@@ -83,6 +83,7 @@ public:
 	int m_unit;
 	int m_signDef;
 	int m_mode;
+	int m_imgIdx;
 	CString m_config;
 };
 
@@ -106,6 +107,8 @@ public:
 	ProjectData GetProject() { return m_proj; }
 
 	BOOL DoModal( void ) ;
+	void LoadSignFromRegistry(void);
+	void LoadProjectFromRegistry();
 	void LoadFromRegistry() ;
 	void SaveToRegistry() ;
 	void LoadLatitudeFromRegistry( void ) ;
@@ -132,6 +135,7 @@ public:
 	double GetLatitudeCompensation( void ) ;
 	int GetMode( void ) ;
 	int GetUnits( void ) ;
+	int GetSignDef(void);
 	BOOL GetCanConfigure( void ) ;
 	CString GetUnitText() ;
 	long GetImageFileIndex( void ) ;
@@ -140,6 +144,7 @@ public:
 	map<int, ValidSyncroInfo> m_validSyncroTypes;
 	double GetRefVoltage(CString name);   
 	CString GetConfigXML();
+	void UpdateConfig(CString xml);
 
 	void SetOperatorName(const CString name);
 	void SetShipName(const CString name);
@@ -151,7 +156,7 @@ public:
 	void SetMode(int mode);
 	void SetImageFileIndex(const long index);
 	void SetProjectID(int id);
-
+	void SetSignDef(int sign);
 
 private:
 
@@ -160,7 +165,7 @@ private:
     int m_featureMask ;  
     int m_currentChannelSetup ;  
     int m_regChannelMask;
-    long m_imageFileIndex ;
+    //long m_imageFileIndex ;
     map<CString, double> m_refVoltageMap;
 
     void ReadDigitalSettings();  

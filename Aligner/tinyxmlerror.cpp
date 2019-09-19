@@ -1,6 +1,6 @@
 /*
 www.sourceforge.net/projects/tinyxml
-Original code (2.0 and earlier )copyright (c) 2000-2002 Lee Thomason (www.grinninglizard.com)
+Original code (2.0 and earlier )copyright (c) 2000-2006 Lee Thomason (www.grinninglizard.com)
 
 This software is provided 'as-is', without any express or implied 
 warranty. In no event will the authors be held liable for any 
@@ -21,12 +21,8 @@ must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source
 distribution.
 */
-#include "stdafx.h"
-#include "tinyxml.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+#include "tinyxml.h"
 
 // The goal of the seperate error file is to make the first
 // step towards localization. tinyxml (currently) only supports
@@ -35,12 +31,11 @@ distribution.
 // It also cleans up the code a bit.
 //
 
-const char* TiXmlBase::errorString[ TIXML_ERROR_STRING_COUNT ] =
+const char* TiXmlBase::errorString[ TiXmlBase::TIXML_ERROR_STRING_COUNT ] =
 {
 	"No error",
 	"Error",
 	"Failed to open file",
-	"Memory allocation failed.",
 	"Error parsing Element.",
 	"Failed to read Element name",
 	"Error reading Element value.",
@@ -53,4 +48,5 @@ const char* TiXmlBase::errorString[ TIXML_ERROR_STRING_COUNT ] =
 	"Error document empty.",
 	"Error null (0) or unexpected EOF found in input stream.",
 	"Error parsing CDATA.",
+	"Error when TiXmlDocument added to document, because TiXmlDocument can only be at the root.",
 };

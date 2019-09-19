@@ -139,8 +139,7 @@ public:
 	//***  1.14
 	afx_msg void OnFileOpen( void ) ;
 	//***  1.14 End
-private:
-  void LoadSignDefFromRegistry( void ) ;
+private:  
   
   ProgressWnd m_progressWnd;
 	Singleton m_singleton;

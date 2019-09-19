@@ -163,12 +163,37 @@ bool XMLHandler::Load(CString file)
     return true;
 }
 
+//TiXmlDocument doc;
+//XmlSerializer xmlSerializer;
+
+
+bool XMLHandler::GetConfigXML(CString& xml)
+{
+	TiXmlDocument doc;
+	TiXmlElement* channels = new TiXmlElement("Channels");
+	StoreChannels(channels);
+	doc.LinkEndChild(channels);
+	
+	// Declare a printer    
+	TiXmlPrinter printer;
+
+	// attach it to the document you want to convert in to a std::string 
+	doc.Accept(&printer);
+
+	// Create a std::string and copy your document data in to the string    
+	xml = printer.CStr();
+
+	return true;
+}
+
 bool XMLHandler::ParseConfig(CString text)
 {
+	DAU::GetDAU().SetSelected(FALSE);
+
 	TiXmlDocument doc;
 	doc.Parse(text);
 	if(doc.Error())
-	{		
+	{				
 		return false;
 	}
 
@@ -180,7 +205,7 @@ bool XMLHandler::ParseConfig(CString text)
 
 	DAU::GetDAU().UpdateUARTProtocoll();
 	DAU::GetDAU().SetResolutionsToDAU();
-
+	return true;
 }
 
 

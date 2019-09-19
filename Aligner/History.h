@@ -34,7 +34,6 @@ public:
     DBTIMESTAMP m_time ;
 	double m_timeConstant;
 	CString m_comment;
-	CString m_measuredUnit;
     CString calibInfo;
 };
 

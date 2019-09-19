@@ -195,10 +195,10 @@ void SystemSetupDialog::OnCbnSelchangeShipName(void)
 	m_proj.m_shipName = str;
 
 	long data = m_shipCombo.GetItemData(index);
-	m_proj.m_shipID = HIWORD(data);
-	m_proj.m_shipClass = LOWORD(data);
+	m_proj.m_shipID = LOWORD(data);
+	m_proj.m_shipClass = HIWORD(data);
 
-	HandleTextChanged();
+	//HandleTextChanged();
 }
 
 void SystemSetupDialog::OnCbnSelchangeSystemSetupDialogMode(void)
@@ -257,7 +257,7 @@ void SystemSetupDialog::OnBnClickedOk()
 {
 	//m_proj.m_projectName = m_name;
 	//m_proj.m_operatorName = m_operator;
-
+	OnCbnSelchangeShipName();
 
 	CDialog::OnOK();
 }

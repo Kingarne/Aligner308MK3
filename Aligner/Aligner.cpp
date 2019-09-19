@@ -321,13 +321,8 @@ BOOL CAlignerApp::InitInstance( void )
 
   g_AlignerData.Init() ;
   SerialPortSet::Init() ;  
-  LoadSignDefFromRegistry() ;
-  SysSetup->LoadDigitalSyncroTypesFromRegistry() ;
-  SysSetup->LoadChannelsFromRegistry() ;
-  SysSetup->LoadProjectPathFromRegistry() ;
-  SysSetup->LoadLatitudeFromRegistry() ;
-  SysSetup->LoadUnitsFromRegistry() ;
-
+    
+ 
     if (0)//!VerifyDatabase())
     {
         return FALSE ;
@@ -344,7 +339,9 @@ BOOL CAlignerApp::InitInstance( void )
     {
 
     }
-     
+ 
+	SysSetup->LoadProjectFromRegistry();
+
     CCreateContext newContext ;
     newContext.m_pNewViewClass = NULL ;
     newContext.m_pNewDocTemplate = NULL ;
@@ -654,9 +651,10 @@ void CAlignerApp::OnFileOpen( void )
 		d->OpenProject();
 
 		TRACE("Proj: %s\n",dlg.m_selectedProj.m_projectName);
-		return;
+		
 	}
 
+	return;
 
 //***  Tried to initialize the OpenDialog with ProjectPath but failed
 //CString Path ;
@@ -1146,17 +1144,6 @@ void CAlignerApp::OnAlignmentCommonFlatTest( void )
 void CAlignerApp::OnUpdateAlignmentCommonFlatTest( CCmdUI *pCmdUI )
 {
   pCmdUI -> Enable( GetCanAlign() ) ;
-}
-
-const char SIGNDEF_REGISTER_SECTION [] = "" ;
-const char SIGNDEF_REGISTER_NAME []    = "SignDef" ;
-const int  SIGNDEF_DEFAULT_VALUE       = 0 ;
-
-void CAlignerApp::LoadSignDefFromRegistry( void )
-{
-  Registry reg;  
-  CString signdefText = reg.GetStringValue("SignDef", "0");//::AfxGetApp() -> GetProfileString( SIGNDEF_REGISTER_SECTION, SIGNDEF_REGISTER_NAME, SIGNDEF_DEFAULT_VALUE ) ;
-  g_AlignerData.SignDef = atoi( signdefText ) ? -1 : 1 ;
 }
 
 const char ALIGNER202_ENABLED_REGISTER_SECTION [] = "" ;

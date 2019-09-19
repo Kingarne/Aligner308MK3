@@ -1,6 +1,5 @@
 /*
 www.sourceforge.net/projects/tinyxml
-Original file by Yves Berquin.
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any
@@ -22,24 +21,18 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
-/*
- * THIS FILE WAS ALTERED BY Tyge Løvset, 7. April 2005.
- */
-#include "stdafx.h"
 
 #ifndef TIXML_USE_STL
 
 #include "tinystr.h"
 
 // Error value for find primitive
-const TiXmlString::size_type TiXmlString::npos = static_cast< size_type >(-1);
+const TiXmlString::size_type TiXmlString::npos = static_cast< TiXmlString::size_type >(-1);
+
 
 // Null rep.
-TiXmlString::Rep TiXmlString::nullrep_ = { 0, 0, '\0' };
+TiXmlString::Rep TiXmlString::nullrep_ = { 0, 0, { '\0' } };
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
 
 void TiXmlString::reserve (size_type cap)
 {

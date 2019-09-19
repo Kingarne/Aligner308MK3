@@ -41,6 +41,7 @@ public:
 	bool Load(CString file);
 	bool Store(CString file);	
 	bool ParseConfig(CString text);
+	bool GetConfigXML(CString& xml);
 
     CAlignerDoc* m_pDoc;
 

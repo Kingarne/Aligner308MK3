@@ -46,8 +46,8 @@ BOOL ProjectOpenDlg::OnInitDialog()
 
 	m_projList.SetExtendedStyle(m_projList.GetExtendedStyle() | LVS_EX_FULLROWSELECT);
 
-	m_projList.InsertColumn(0, "Name", LVCFMT_LEFT, 150);
-	m_projList.InsertColumn(1, "Time", LVCFMT_LEFT, 80);
+	m_projList.InsertColumn(0, "Name", LVCFMT_LEFT, 120);
+	m_projList.InsertColumn(1, "Time", LVCFMT_LEFT, 120);
 	m_projList.InsertColumn(2, "Operator", LVCFMT_LEFT, 100);
 	m_projList.InsertColumn(3, "Ship", LVCFMT_LEFT, 100);
 	m_projList.InsertColumn(4, "Place", LVCFMT_LEFT, 100);
@@ -71,8 +71,11 @@ void ProjectOpenDlg::InitProjList()
 	{
 		CString str;
 	
+		
+		COleDateTime time(iter->m_time);
+
 		m_projList.InsertItem(i, iter->m_projectName);
-		m_projList.SetItemText(i, 1, "time");
+		m_projList.SetItemText(i, 1, time.Format(_T("%Y-%m-%d %H:%M:%S")));
 		m_projList.SetItemText(i, 2, iter->m_operatorName);
 		m_projList.SetItemText(i, 3, iter->m_shipName);
 		m_projList.SetItemText(i, 4, iter->m_location);

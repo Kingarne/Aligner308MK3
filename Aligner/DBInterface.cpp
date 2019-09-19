@@ -121,9 +121,21 @@ BOOL DBInterface::InsertProject(ProjectData& project)
 	return TRUE;
 }
 
+BOOL DBInterface::UpdateProjectConfig(int projectID, CString xml)
+{
+	if (!m_db.IsOpen())
+		return FALSE;
+
+	CString sql;
+	sql.Format("UPDATE Project SET Config='%s' WHERE ID=%d",xml,projectID);
+
+	m_db.ExecuteSQL(sql);
+
+	return true;
+}
+
 BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 {
-
 	if (!m_db.IsOpen())
 		return FALSE;
 
@@ -925,9 +937,9 @@ BOOL DBInterface::InsertHistoryItem(HistoryData& data)
      CString serial = DAU::GetDAU().GetSerialNumber();    
      int projectID = SysSetup->GetProjectID();
  
-     sql.Format("INSERT INTO History ( dauSerialNumber, timeOfMeasurement, project, calibInfo ) VALUES ('%s','%s',%d,'%s')",
-         serial, time.Format( _T("%Y-%m-%d %H:%M:%S")), projectID, data.calibInfo);
- 
+     sql.Format("INSERT INTO History ( dauSerialNumber, timeOfMeasurement, projectID, timeConstant, calibInfo ) VALUES ('%s','%s',%d, %f, '%s')",
+         serial, time.Format( _T("%Y-%m-%d %H:%M:%S")), projectID, data.m_timeConstant, data.calibInfo);
+	 
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
 }
@@ -963,7 +975,7 @@ BOOL DBInterface::UpdateComment(CString table, int historyId, CString comment)
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
 }
-
+ 
 
 BOOL DBInterface::InsertTiltAlignmentErrors(TiltAlignmentErrorsHistory::Data data, int historyId)
 {
@@ -971,8 +983,8 @@ BOOL DBInterface::InsertTiltAlignmentErrors(TiltAlignmentErrorsHistory::Data dat
          return FALSE;
    
      CString sql="";
-     sql.Format("INSERT INTO TiltAlignmentErrorsHistory (historyID, ship, timeConstant, lineOfSightDirection, elevationCompensation, comment, measuredUnit) VALUES (%d,'%s',%f,'%s','%s','%s','%s')",
-         historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_lineOfSightDirection, data.m_elevationCompensation, data.m_comment, data.m_measuredUnit);    
+     sql.Format("INSERT INTO TiltAlignmentErrorsHistory (historyID, lineOfSightDirection, elevationCompensation) VALUES (%d,'%s','%s')",
+         historyId, data.m_lineOfSightDirection, data.m_elevationCompensation);    
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;

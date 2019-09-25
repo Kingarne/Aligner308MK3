@@ -923,6 +923,7 @@ makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\
     <ClInclude Include="..\MPAP_SyncDrive\QuaDLL.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\ProjectData\Schill\A308\splash.bmp" />
     <None Include="res\A202Splash.bmp" />
     <None Include="res\adapter_1.bmp" />
     <None Include="res\adapter_2.bmp" />
@@ -934,6 +935,7 @@ makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\
     <None Include="res\Aligner.rc2" />
     <None Include="res\Aligner308splash.bmp" />
     <None Include="res\AlignerDoc.ico" />
+    <None Include="res\bitmap2.bmp" />
     <None Include="res\gain_1.bmp" />
     <None Include="res\gain_2.bmp" />
     <None Include="res\gain_3.bmp" />
@@ -943,6 +945,7 @@ makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\
     <None Include="res\offset_2.bmp" />
     <None Include="res\offset_3.bmp" />
     <None Include="res\offset_4.bmp" />
+    <None Include="res\splash.bmp" />
     <None Include="res\Toolbar.bmp" />
     <None Include="hlp\Aligner.hhc" />
     <None Include="hlp\Aligner.hhk" />

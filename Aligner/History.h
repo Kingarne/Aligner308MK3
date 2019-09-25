@@ -4,6 +4,13 @@
 
 #pragma once
 
+enum MeasType {
+	MT_TiltAlignment = 1,
+
+};
+
+
+//Remove use DECLARE_MEASUREMENT
 #define DECLARE_HISTORY \
 public: \
   static BOOL AddData(  Data &data ) ; \
@@ -23,8 +30,27 @@ private: \
   static LONG m_lastItemID ; \
   static LONG m_mainID ;
 
+#define DECLARE_MEASUREMENT \
+public: \
+  static BOOL AddData( Data &data ) ; \
+  static BOOL SetComment( const CString &comment ) ; \
+  static BOOL AddChannel( const ChannelData item ) ; \
+	static BOOL AddChannelErr( const ChannelErrData item ) ; \
+	static BOOL AddExtData( const ExtChannelData extItem ) ; \
+  static BOOL AddGraph( CString filename, BOOL include = TRUE ) ; \
+	static BOOL DeleteLast( void ) ; \
+  static void ResetMainID( void ) ; \
+public: \
+	static void SetLastID( LONG lastID ) ; \
+	static LONG GetLastID( void ) ; \
+	static LONG GetMainID( void ) ; \
+private: \
+  static LONG m_lastID ; \
+  static LONG m_lastChID ; \
+  static LONG m_mainID ;
 
 
+//Remove when done with MeasurementData
 class HistoryData
 {
 public:
@@ -37,20 +63,32 @@ public:
     CString calibInfo;
 };
 
+class MeasurementData
+{
+public:
+	MeasurementData() {}
+	MeasurementData(DBTIMESTAMP ts) { m_time = ts; }
 
-class TiltAlignmentErrorsHistory
+	DBTIMESTAMP m_time;
+	double m_timeConstant;
+	CString m_comment;
+	CString calibInfo;
+	int type;
+};
+
+class TiltAlignment
 {
 private:
-    TiltAlignmentErrorsHistory( void ) {} ;
+    TiltAlignment( void ) {} ;
 public:
-    class Data : public HistoryData
+    class Data : public MeasurementData
     {
     public:       
         CString m_lineOfSightDirection ;
         CString m_elevationCompensation ;       
     } ;
 
-    class ItemData
+    class ChannelData
     {
     public:
         CString m_station ;
@@ -64,15 +102,15 @@ public:
         double m_elevation ;
         double m_bias ;
     } ;
-    class ItemErrData
+    class ChannelErrData
     {
     public:
     } ;
-    class ExtItemData
+    class ExtChannelData
     {
     public:
     } ;
-    DECLARE_HISTORY ;
+	DECLARE_MEASUREMENT;
 } ;
 
 class TiltAndFlatnessHistory

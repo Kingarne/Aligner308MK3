@@ -19,8 +19,11 @@ namespace ReporterLib
         private int m_page;
         private int m_yPos;
 
-        public int HistoryId { get; set; }
+        public int ProjectId { get; set; }
+        public int MeasId { get; set; }
 
+        private DBInterface.Project Project;
+        private DBInterface.Measurement Measurement;
 
         public ReportForm()
         {
@@ -31,7 +34,13 @@ namespace ReporterLib
 
         private void ReportForm_Load(object sender, EventArgs e)
         {
-            m_printerSettings = new PrinterSettings();            
+            m_printerSettings = new PrinterSettings();
+
+            if (MeasId == -1)
+                Text = "Show All";
+            else
+                Text = "Show " + MeasId.ToString();
+
         }
 
         private void printButton_Click(object sender, EventArgs e)
@@ -73,6 +82,13 @@ namespace ReporterLib
         {
             m_page = 0;
             m_yPos = 0;
+
+            Project = new DBInterface.Project();
+            DBI.GetProject(ProjectId, ref Project);
+
+            Measurement = new DBInterface.Measurement();
+            DBI.GetMeasurement(MeasId, ref Measurement);
+            
         }
 
         private void PrintPage(object sender, PrintPageEventArgs e)
@@ -115,7 +131,7 @@ namespace ReporterLib
         private void DrawHeader(PrintPageEventArgs e)
         {
             DBInterface.Measurement measurement = new DBInterface.Measurement();
-            DBI.GetMeasurement(HistoryId, ref measurement);
+            DBI.GetMeasurement(MeasId, ref measurement);
 
 
 
@@ -139,10 +155,10 @@ namespace ReporterLib
             DrawText("Operator:", e.Graphics, HeadFont, br, headRect, 1, startYPerc + ySpace*2);
             DrawText("DAU s/n:", e.Graphics, HeadFont, br, headRect, 1, startYPerc + ySpace*3);
 
-            DrawText(measurement.Project, e.Graphics, HeadFont, br, headRect, 12, startYPerc);
-            DrawText(measurement.Project, e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace);
-            DrawText(measurement.Operator, e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace*2);
-            DrawText(measurement.DAUSerial, e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace*3);
+            DrawText(Project.Name, e.Graphics, HeadFont, br, headRect, 12, startYPerc);
+            DrawText(Project.Ship.ToString(), e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace);
+            DrawText(Project.Operator, e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace*2);
+            DrawText(Measurement.DAUSerial, e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace*3);
 
         }
 
@@ -153,3 +169,4 @@ namespace ReporterLib
         }
     }
 }
+ 

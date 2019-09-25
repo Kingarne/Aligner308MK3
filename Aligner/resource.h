@@ -210,6 +210,8 @@
 #define IDD_AZ_ALIGN_NOTE_DIALOG        547
 #define IDD_GAIN_CALIBRATION_PAGE_6     548
 #define IDD_PROJECT_OPEN_DLG            562
+#define IDB_BITMAP2                     567
+#define IDB_SPLASH_MK3                  567
 #define IDC_BROWSE                      1000
 #define IDC_DAU_CAL_PRINT               1000
 #define IDC_LIVE_CLOSE                  1000
@@ -1422,7 +1424,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        565
+#define _APS_NEXT_RESOURCE_VALUE        568
 #define _APS_NEXT_COMMAND_VALUE         32822
 #define _APS_NEXT_CONTROL_VALUE         1660
 #define _APS_NEXT_SYMED_VALUE           108

@@ -55,97 +55,97 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	    /*																TILT_ALIGNMENT													 */
 	    /***************************************************************************/
 	    case TILT_ALIGNMENT:
-		m_TiltAlignmentData.m_timeConstant = g_AlignerData.TaoTilt;
+		m_TiltAlignment.m_timeConstant = g_AlignerData.TaoTilt;
 
         if( g_AlignerData.NoOfBedPlanes != 0 )
         {
-			m_TiltAlignmentData.m_lineOfSightDirection = g_AlignerData.AzDir;
-            m_TiltAlignmentData.m_elevationCompensation.LoadString( ( g_AlignerData.UseElevError == TRUE ) ? IDS_ON : IDS_OFF);
+			m_TiltAlignment.m_lineOfSightDirection = g_AlignerData.AzDir;
+            m_TiltAlignment.m_elevationCompensation.LoadString( ( g_AlignerData.UseElevError == TRUE ) ? IDS_ON : IDS_OFF);
         }
 		else
 		{
-			m_TiltAlignmentData.m_lineOfSightDirection = DB_EMPTY_STRING;//empty
-			m_TiltAlignmentData.m_elevationCompensation = DB_EMPTY_STRING;//empty
+			m_TiltAlignment.m_lineOfSightDirection = DB_EMPTY_STRING;//empty
+			m_TiltAlignment.m_elevationCompensation = DB_EMPTY_STRING;//empty
 		}
 
-        m_TiltAlignmentData.m_comment = (m_InParam.Comment.GetLength() == 0 ) ? DB_EMPTY_STRING : m_InParam.Comment;
-//        m_TiltAlignmentData.m_measuredUnit.LoadString( ( GetMRad() == TRUE ) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);	
-		m_TiltAlignmentData.m_time = m_InParam.Time;
+        m_TiltAlignment.m_comment = (m_InParam.Comment.GetLength() == 0 ) ? DB_EMPTY_STRING : m_InParam.Comment;
+//        m_TiltAlignment.m_measuredUnit.LoadString( ( GetMRad() == TRUE ) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);	
+		m_TiltAlignment.m_time = m_InParam.Time;
 
-		m_TiltAlignmentItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
-		m_TiltAlignmentItem[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
+		m_TiltAlignmentChannel[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
+		m_TiltAlignmentChannel[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
 
-	    m_TiltAlignmentItem[0].m_sensorSerialNumber = (IsSensor( g_AlignerData.RefObjNo )) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
+	    m_TiltAlignmentChannel[0].m_sensorSerialNumber = (IsSensor( g_AlignerData.RefObjNo )) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
 	
 		if( ( IsGun( g_AlignerData.RefObjNo ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.RefObjNo ) != GUN_ADAP_EMPTY )  )
 	    {
-			m_TiltAlignmentItem[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
+			m_TiltAlignmentChannel[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
         }
         else
         {
-            m_TiltAlignmentItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+            m_TiltAlignmentChannel[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
         }
 
-	    m_TiltAlignmentItem[0].m_roll = DB_EMPTY_DOUBLE;//ref		
-        m_TiltAlignmentItem[0].m_pitch = DB_EMPTY_DOUBLE;//ref
-	    m_TiltAlignmentItem[0].m_tilt = DB_EMPTY_DOUBLE;//ref
-	    m_TiltAlignmentItem[0].m_angle = DB_EMPTY_DOUBLE;//ref
+	    m_TiltAlignmentChannel[0].m_roll = DB_EMPTY_DOUBLE;//ref		
+        m_TiltAlignmentChannel[0].m_pitch = DB_EMPTY_DOUBLE;//ref
+	    m_TiltAlignmentChannel[0].m_tilt = DB_EMPTY_DOUBLE;//ref
+	    m_TiltAlignmentChannel[0].m_angle = DB_EMPTY_DOUBLE;//ref
 
 	    if( IsFixed( g_AlignerData.RefObjNo ) == FALSE )
         {
-		    m_TiltAlignmentItem[0].m_elevation = g_AlignerData.Kh * GetEal( g_AlignerData.RefObjNo );
-		    m_TiltAlignmentItem[0].m_bias = g_AlignerData.Kh * GetEac( g_AlignerData.RefObjNo );
+		    m_TiltAlignmentChannel[0].m_elevation = g_AlignerData.Kh * GetEal( g_AlignerData.RefObjNo );
+		    m_TiltAlignmentChannel[0].m_bias = g_AlignerData.Kh * GetEac( g_AlignerData.RefObjNo );
         }
         else
         {
-            m_TiltAlignmentItem[0].m_elevation = DB_EMPTY_DOUBLE;//empty
-            m_TiltAlignmentItem[0].m_bias = DB_EMPTY_DOUBLE;//empty
+            m_TiltAlignmentChannel[0].m_elevation = DB_EMPTY_DOUBLE;//empty
+            m_TiltAlignmentChannel[0].m_bias = DB_EMPTY_DOUBLE;//empty
         }
 
 	    for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
         {
-			m_TiltAlignmentItem[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-			m_TiltAlignmentItem[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );			
-		    m_TiltAlignmentItem[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
+			m_TiltAlignmentChannel[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
+			m_TiltAlignmentChannel[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
+		    m_TiltAlignmentChannel[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
 
 			if( ( IsGun( g_AlignerData.ObjNo[i] ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.ObjNo[i] ) != GUN_ADAP_EMPTY )  )
 			{
-				m_TiltAlignmentItem[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
+				m_TiltAlignmentChannel[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
 			}
 			else
 			{
-				m_TiltAlignmentItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+				m_TiltAlignmentChannel[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
 			}
 
-            m_TiltAlignmentItem[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
-            m_TiltAlignmentItem[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
-			m_TiltAlignmentItem[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
-			m_TiltAlignmentItem[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
+            m_TiltAlignmentChannel[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
+            m_TiltAlignmentChannel[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
+			m_TiltAlignmentChannel[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
+			m_TiltAlignmentChannel[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
 
 			if( IsFixed( g_AlignerData.ObjNo[i] ) == FALSE )
             {
-				m_TiltAlignmentItem[i].m_elevation = g_AlignerData.Kh * GetEal( g_AlignerData.ObjNo[i] );
-				m_TiltAlignmentItem[i].m_bias = g_AlignerData.Kh * GetEac( g_AlignerData.ObjNo[i] );
+				m_TiltAlignmentChannel[i].m_elevation = g_AlignerData.Kh * GetEal( g_AlignerData.ObjNo[i] );
+				m_TiltAlignmentChannel[i].m_bias = g_AlignerData.Kh * GetEac( g_AlignerData.ObjNo[i] );
             }
             else
             {
-                m_TiltAlignmentItem[i].m_elevation = DB_EMPTY_DOUBLE;//empty
-                m_TiltAlignmentItem[i].m_bias = DB_EMPTY_DOUBLE;//empty
+                m_TiltAlignmentChannel[i].m_elevation = DB_EMPTY_DOUBLE;//empty
+                m_TiltAlignmentChannel[i].m_bias = DB_EMPTY_DOUBLE;//empty
             }
         }//for( i=1; i<=g_AlignerData.NoOfCorr; i++ )
 
         //Get calibration status
-        calibInfo.SetCalibrationTime(m_TiltAlignmentData.m_time);
+        calibInfo.SetCalibrationTime(m_TiltAlignment.m_time);
         for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
         {
-            if(m_TiltAlignmentItem[i].m_sensorSerialNumber == "" && m_TiltAlignmentItem[i].m_adapterSerialNumber == "")
+            if(m_TiltAlignmentChannel[i].m_sensorSerialNumber == "" && m_TiltAlignmentChannel[i].m_adapterSerialNumber == "")
 				continue;
 
-			calibInfo.AddChannel(m_TiltAlignmentItem[i].m_channel);   
-            calibInfo.AddSensor(m_TiltAlignmentItem[i].m_sensorSerialNumber);   
-            calibInfo.AddAdapter(m_TiltAlignmentItem[i].m_adapterSerialNumber);   
+			calibInfo.AddChannel(m_TiltAlignmentChannel[i].m_channel);   
+            calibInfo.AddSensor(m_TiltAlignmentChannel[i].m_sensorSerialNumber);   
+            calibInfo.AddAdapter(m_TiltAlignmentChannel[i].m_adapterSerialNumber);   
         }
-        m_TiltAlignmentData.calibInfo = calibInfo.GetInfo();
+        m_TiltAlignment.calibInfo = calibInfo.GetInfo();
 
 	break;
 	/***************************************************************************/
@@ -987,26 +987,26 @@ BOOL CResultTable::SaveToDataBase( void )
 		case TILT_ALIGNMENT:
 			if( m_InParam.Comment.GetLength() == 0 )
 			{
-				m_TiltAlignmentData.m_comment = DB_EMPTY_STRING;//empty
+				m_TiltAlignment.m_comment = DB_EMPTY_STRING;//empty
 			}
 			else
 			{
-				m_TiltAlignmentData.m_comment = m_InParam.Comment;
+				m_TiltAlignment.m_comment = m_InParam.Comment;
 			}
 
-			if( !TiltAlignmentErrorsHistory::AddData( m_TiltAlignmentData ) )
+			if( !TiltAlignment::AddData( m_TiltAlignment ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
 
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
 			{
-				if( m_TiltAlignmentItem[i].m_station.GetLength() == 0 ) 
+				if( m_TiltAlignmentChannel[i].m_station.GetLength() == 0 ) 
 				{
-					m_TiltAlignmentItem[i].m_station = DB_EMPTY_STRING;
+					m_TiltAlignmentChannel[i].m_station = DB_EMPTY_STRING;
 				}
 
-				if( !TiltAlignmentErrorsHistory::AddItem( m_TiltAlignmentItem[i] ) )
+				if( !TiltAlignment::AddChannel( m_TiltAlignmentChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
@@ -1484,7 +1484,7 @@ BOOL CResultTable::DeleteLast( void )
 	switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		result = TiltAlignmentErrorsHistory::DeleteLast();
+		result = TiltAlignment::DeleteLast();
 		break;
 	case AZIMUTH_ALIGN:
 		result = AzimuthAlignmentErrorsHistory::DeleteLast();
@@ -1561,7 +1561,7 @@ BOOL CResultTable::CreateEmptyReport( void )
     switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		m_reportHistoryMainID = TiltAlignmentErrorsHistory::GetMainID();
+		m_reportHistoryMainID = TiltAlignment::GetMainID();
 		TiltAlignmentErrorsReport::Create( m_reportHistoryMainID, m_hReportWindow );
 		break;
 	case AZIMUTH_ALIGN:
@@ -1684,7 +1684,7 @@ BOOL CResultTable::UpdateComment( void )
 	switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		result = TiltAlignmentErrorsHistory::SetComment( m_InParam.Comment );
+		result = TiltAlignment::SetComment( m_InParam.Comment );
 		break;
 	case AZIMUTH_ALIGN:
 		result = AzimuthAlignmentErrorsHistory::SetComment( m_InParam.Comment );
@@ -1745,7 +1745,7 @@ BOOL CResultTable::ResetMainID( void )
     switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		TiltAlignmentErrorsHistory::ResetMainID();
+		TiltAlignment::ResetMainID();
 		break;
 	case AZIMUTH_ALIGN:
 		AzimuthAlignmentErrorsHistory::ResetMainID();
@@ -1798,7 +1798,7 @@ long CResultTable::GetMainID( void )
 	switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		id = TiltAlignmentErrorsHistory::GetMainID();
+		id = TiltAlignment::GetMainID();
 		break;
 	case AZIMUTH_ALIGN:
 		id = AzimuthAlignmentErrorsHistory::GetMainID();
@@ -1853,7 +1853,7 @@ BOOL result=TRUE;
 	switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		result = TiltAlignmentErrorsHistory::AddGraph( fileName, includeToResultTable );
+		result = TiltAlignment::AddGraph( fileName, includeToResultTable );
 		break;
 	case AZIMUTH_ALIGN:
 		result = AzimuthAlignmentErrorsHistory::AddGraph( fileName, includeToResultTable );

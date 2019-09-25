@@ -9,16 +9,16 @@ namespace ReporterLib
   
     public interface ReporterI
     {
-        int OpenReport(int historyId);
+        int OpenReport(int projectId, int historyId);
     }
 
     public class Reporter : ReporterI
     {
         //private int m_historyId;
         private ReportForm reportForm;
-        public int OpenReport(int historyId)
+        public int OpenReport(int projectId, int measId=-1)
         {
-            Console.WriteLine("Open report: " + historyId.ToString());
+            Console.WriteLine("Open report: " + measId.ToString());
 
             if(reportForm == null)
             {
@@ -26,7 +26,7 @@ namespace ReporterLib
             }
 
 
-            reportForm.HistoryId = historyId;
+            reportForm.MeasId = measId;
             reportForm.ShowDialog();
 
 

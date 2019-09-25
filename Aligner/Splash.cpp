@@ -80,7 +80,7 @@ BOOL CSplashWnd::PreTranslateAppMessage(MSG* pMsg)
 
 BOOL CSplashWnd::Create(CWnd* pParentWnd /*= NULL*/)
 {
-    if (!m_bitmap.LoadBitmap(theApp.IsAligner202Enabled() ? IDB_202_SPLASH : IDB_SPLASH))
+    if (!m_bitmap.LoadBitmap(theApp.IsAligner202Enabled() ? IDB_202_SPLASH : IDB_SPLASH_MK3))
 		return FALSE;
 
 	BITMAP bm;

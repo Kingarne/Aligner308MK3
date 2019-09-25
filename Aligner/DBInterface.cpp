@@ -140,7 +140,7 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 		return FALSE;
 
 	CString sql = "";
-	sql.Format("SELECT * FROM Project INNER JOIN Ships ON Project.shipID = Ships.ShipID");
+	sql.Format("SELECT * FROM Project INNER JOIN Ship ON Project.shipID = Ship.ShipID");
 
 	ProjectData data;
 
@@ -466,7 +466,7 @@ BOOL DBInterface::GetShip(CString name, Ship& ship)
 		return FALSE;
 
 	CString sql;
-	sql.Format("SELECT * FROM Ships WHERE ShipName='%s'",name);
+	sql.Format("SELECT * FROM Ship WHERE ShipName='%s'",name);
 	
 
 	CRecordset rs(&m_db);
@@ -497,7 +497,7 @@ BOOL DBInterface::GetShips(vector<Ship>& ships)
     if(!m_db.IsOpen())
         return FALSE;
 
-    CString sql = "SELECT * FROM Ships";	
+    CString sql = "SELECT * FROM Ship";	
 
     int nVal;
     CString strVal;
@@ -530,7 +530,7 @@ BOOL DBInterface::GetStationsOnShip(vector<CString>& stations, CString ship)
          return FALSE;
  
      CString sql="";
-     sql.Format("SELECT ClassID FROM Ships WHERE ShipName='%s'",ship);	
+     sql.Format("SELECT ClassID FROM Ship WHERE ShipName='%s'",ship);	
     
      int id;
      
@@ -924,6 +924,24 @@ CString GetSigndefString()
     return signdefText;
 }
 
+ 
+BOOL DBInterface::InsertMeasurement(MeasurementData& data)
+{
+	if (!m_db.IsOpen())
+		return FALSE;
+
+	COleDateTime time(data.m_time);
+	CString sql = "";
+	CString serial = DAU::GetDAU().GetSerialNumber();
+	int projectID = SysSetup->GetProjectID();
+
+	sql.Format("INSERT INTO Measurement ( dauSerialNumber, timeOfMeasurement, projectID, timeConstant, calibInfo, measType ) VALUES ('%s','%s',%d, %f, '%s', %d)",
+		serial, time.Format(_T("%Y-%m-%d %H:%M:%S")), projectID, data.m_timeConstant, data.calibInfo, data.type);
+
+	m_db.ExecuteSQL(sql);
+	return TRUE;
+}
+
 
 BOOL DBInterface::InsertHistoryItem(HistoryData& data)
 {
@@ -977,27 +995,27 @@ BOOL DBInterface::UpdateComment(CString table, int historyId, CString comment)
 }
  
 
-BOOL DBInterface::InsertTiltAlignmentErrors(TiltAlignmentErrorsHistory::Data data, int historyId)
+BOOL DBInterface::InsertTiltAlignment(TiltAlignment::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
    
      CString sql="";
-     sql.Format("INSERT INTO TiltAlignmentErrorsHistory (historyID, lineOfSightDirection, elevationCompensation) VALUES (%d,'%s','%s')",
-         historyId, data.m_lineOfSightDirection, data.m_elevationCompensation);    
+     sql.Format("INSERT INTO TiltAlignment (measID, lineOfSightDirection, elevationCompensation) VALUES (%d,'%s','%s')",
+         measId, data.m_lineOfSightDirection, data.m_elevationCompensation);    
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
 }
 
-BOOL DBInterface::InsertTiltAlignmentErrorsItem(TiltAlignmentErrorsHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertTiltAlignmentChannel(TiltAlignment::ChannelData data, int foreignId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAlignmentErrorsHistoryItem (historyID, station, channel, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, bias ) VALUES (%d,'%s','%s','%s','%s',%s,%s,%s,%s,%s,%s)",
-         historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle), ToText(data.m_elevation), ToText(data.m_bias));
+     sql.Format("INSERT INTO TiltAlignmentChannel(foreignID, station, channel, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, bias ) VALUES (%d,'%s','%s','%s','%s',%s,%s,%s,%s,%s,%s)",
+		 foreignId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle), ToText(data.m_elevation), ToText(data.m_bias));
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
@@ -1357,26 +1375,26 @@ BOOL DBInterface::InsertLiveDataA202ErrorsItem(LiveDataA202ErrorsHistory::ItemDa
 	return TRUE;
 }
 
-BOOL DBInterface::InsertGraph(int historyId, CString file, int include)
+BOOL DBInterface::InsertGraph(int measId, CString file, int include)
 {
-     if(!m_db.IsOpen())
-         return FALSE;
+    if(!m_db.IsOpen())
+		return FALSE;
  
-     CString sql="";
-     sql.Format("INSERT INTO GraphHistory (historyID, filename, include ) VALUES (%d,'%s',%d)",historyId, file, include);           
-	 TRACE(sql + "\n");
-    m_db.ExecuteSQL(sql);  
+    CString sql="";
+    sql.Format("INSERT INTO Graph (measID, filename, include ) VALUES (%d,'%s',%d)", measId, file, include);           
+	//TRACE(sql + "\n");
+	m_db.ExecuteSQL(sql);  
 	return TRUE;
 }
 
 BOOL DBInterface::DeleteGraph(CString file)
 {
-     if(!m_db.IsOpen())
-         return FALSE;
+    if(!m_db.IsOpen())
+        return FALSE;
  
-     CString sql="";
-     sql.Format("DELETE FROM GraphHistory WHERE filename='%s'",file);        
-	 TRACE(sql + "\n");
+    CString sql="";
+    sql.Format("DELETE FROM Graph WHERE filename='%s'",file);        
+	//TRACE(sql + "\n");
     m_db.ExecuteSQL(sql);
 	return TRUE;
 }

@@ -625,7 +625,7 @@ BOOL CAboutDlg::OnInitDialog()
 
     m_imageCtrl.Create(_T("my static"),WS_CHILD|WS_VISIBLE|SS_BITMAP|SS_CENTERIMAGE|SS_REALSIZEIMAGE, CRect(0,0,rect.Width(),rect.Height()-25), this);
 
-    HBITMAP hb = ::LoadBitmap(AfxGetResourceHandle(), MAKEINTRESOURCE(theApp.IsAligner202Enabled() ? IDB_202_SPLASH : IDB_SPLASH));
+    HBITMAP hb = ::LoadBitmap(AfxGetResourceHandle(), MAKEINTRESOURCE(theApp.IsAligner202Enabled() ? IDB_202_SPLASH : IDB_SPLASH_MK3));
     m_imageCtrl.SetBitmap(hb);
 
     //::SetWindowPos(m_imageCtrl.m_hWnd, HWND_BOTTOM, 0,0,0,0,SWP_NOSIZE);

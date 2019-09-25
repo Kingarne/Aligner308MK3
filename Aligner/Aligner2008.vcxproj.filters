@@ -1172,6 +1172,15 @@
     <None Include="TiltAlignErrors.rpt">
       <Filter>Reports</Filter>
     </None>
+    <None Include="..\..\..\..\ProjectData\Schill\A308\splash.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\bitmap2.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\splash.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="res\Aligner.manifest">

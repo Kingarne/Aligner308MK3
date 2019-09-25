@@ -10,18 +10,29 @@ namespace ReporterLib
 {
     class DBInterface
     {
+        public class Project
+        {
+            public int ID { get; set; }
+            public string Name{ get; set; }
+            public DateTime Time { get; set; }
+            public string Operator { get; set; }
+            public string Location { get; set; }
+            public string Ship { get; set; }
+            public float Latitude{ get; set; }
+            public int Unit { get; set; }
+            public int SignDef { get; set; }
+        }
+
+
         public class Measurement
         {
             public int ID { get; set; }
+            public int Project { get; set; }
             public DateTime Time { get; set; }
-            public string Operator { get; set; }
-            public string Place { get; set; }
-            public string DAUSerial { get; set; }
-            public double Latitude { get; set; }
-            public string AngDef1 { get; set; }
-            public string AngDef2 { get; set; }
-            public string Project { get; set; }
+            public string DAUSerial { get; set; }            
             public string CalibInfo { get; set; }
+            public int Type { get; set; }
+            public float TimeConstant{ get; set; }
         }
 
 
@@ -49,12 +60,52 @@ namespace ReporterLib
 
         }
 
-        public bool GetMeasurement(int historyId, ref Measurement measurement)
+        public bool GetProject(int projId, ref Project project)
         {
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;
 
-            using (OdbcCommand command = new OdbcCommand("SELECT * FROM History WHERE ID=" + historyId.ToString(), Connection))
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM Project WHERE ID=" + projId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+
+                        for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                        }
+
+                        project.ID = (int)dr["ID"];
+                        project.Name = (string)dr["name"];
+                        project.Operator = (string)dr["operator"];
+                        project.Location = (string)dr["location"];
+                        project.Time = (DateTime)dr["projTime"];
+                        project.Latitude= (float)(double)dr["latitude"];
+                        project.SignDef = (int)dr["signDef"];
+
+                        //measurement.Time = dr["timeOfMeasurement"];
+                        //salvo.Time = Db2Time((int)time);
+
+
+                        Logger.Inst.Trace("ID: " + project.ID.ToString(), Logger.LogLevel.Level1);
+                        // Console.WriteLine(dr.FieldCount);
+                        // Console.WriteLine(dr["ID"].ToString());
+                    }
+                }
+            }
+
+
+            return true;
+        }
+
+        public bool GetMeasurement(int measId, ref Measurement measurement)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM Measurement WHERE ID=" + measId.ToString(), Connection))
             {
                 using (OdbcDataReader dr = command.ExecuteReader())
                 {
@@ -65,19 +116,15 @@ namespace ReporterLib
                         {
                             string name = dr.GetName(i);
                         }
-                        
-
 
                         measurement.ID = (int)dr["ID"];
-                        measurement.Operator = (string)dr["operator"];
-                        measurement.Place = (string)dr["place"];
-                        measurement.Project = (string)dr["project"];
+                        measurement.Project = (int)dr["projectID"];
                         measurement.DAUSerial = (string)dr["dauSerialNumber"];
-                        measurement.Latitude  = (double)dr["latitude"];
-                        measurement.AngDef1 = (string)dr["angulaDefinitionPart1"];
-                        measurement.AngDef2 = (string)dr["angulaDefinitionPart2"];
                         measurement.CalibInfo = (string)dr["calibInfo"];
                         measurement.Time = (DateTime)dr["timeOfMeasurement"];
+                        measurement.Type = (int)dr["measType"];
+                        measurement.TimeConstant = (float)(double)dr["timeConstant"];
+
                         //measurement.Time = dr["timeOfMeasurement"];
                         //salvo.Time = Db2Time((int)time);
 

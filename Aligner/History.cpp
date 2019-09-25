@@ -46,7 +46,37 @@ BOOL DoDelete( LONG index )
     m_mainID = 0 ; \
   }
 
-IMPLEMENT_HISTORY(TiltAlignmentErrors) ;
+#define IMPLEMENT_MEASUREMENT(name) \
+  LONG name::m_lastID ; \
+  LONG name::m_lastChID ; \
+  LONG name::m_mainID ; \
+  void name::SetLastID( LONG lastID ) { m_lastID = lastID ; } \
+  LONG name::GetLastID( void ) { return m_lastID ; } \
+  LONG name::GetMainID( void ) { return m_mainID ; } \
+  BOOL name::DeleteLast( void ) { \
+    return DoDelete( m_mainID ) ; \
+  } \
+  BOOL name::SetComment( const CString &comment) { \
+  CString str(#name); \
+  str.Format("%s",#name); \
+  return DBInterface::Instance()->UpdateComment(str, m_mainID, comment);\
+  } \
+  BOOL name::AddGraph( CString filename, BOOL include ) { \
+    if (m_mainID == 0) { \
+        MeasurementData md; \
+        CTime::GetCurrentTime().GetAsDBTIMESTAMP(md.m_time) ; \
+        DBInterface::Instance()->InsertMeasurement(md); \
+        int lastId = 0; \
+        DBInterface::Instance()->GetLastCounter(lastId); \
+        m_mainID = lastId ; \
+    } \
+    return DBInterface::Instance()->InsertGraph(m_mainID, filename, include); \
+  } \
+  void name::ResetMainID( void ) { \
+    m_mainID = 0 ; \
+  }
+
+IMPLEMENT_MEASUREMENT(TiltAlignment) ;
 IMPLEMENT_HISTORY(TiltAndFlatness) ;
 IMPLEMENT_HISTORY(TiltAndFlatnessFo) ;
 IMPLEMENT_HISTORY(GyroPerformanceTest) ;
@@ -72,23 +102,24 @@ void LoadSigndefString( CString &signdefText )
   }
 }
 
-BOOL TiltAlignmentErrorsHistory::AddData( Data &data )
+BOOL TiltAlignment::AddData( Data &data )
 {
     int lastId=0;
-    DBInterface::Instance()->InsertHistoryItem(data);
+	data.type = MeasType::MT_TiltAlignment;
+    DBInterface::Instance()->InsertMeasurement(data);
     DBInterface::Instance()->GetLastCounter(lastId);        
     m_mainID = lastId;
 
-    DBInterface::Instance()->InsertTiltAlignmentErrors(data, m_mainID);
+    DBInterface::Instance()->InsertTiltAlignment(data, m_mainID);
     DBInterface::Instance()->GetLastCounter(lastId);  
     m_lastID = lastId;
 
     return TRUE ;
 }
 
-BOOL TiltAlignmentErrorsHistory::AddItem( const ItemData item )
+BOOL TiltAlignment::AddChannel( const ChannelData chData )
 {
-    return DBInterface::Instance()->InsertTiltAlignmentErrorsItem(item, m_mainID);
+    return DBInterface::Instance()->InsertTiltAlignmentChannel(chData, m_lastID);
 }
 
 BOOL TiltAndFlatnessHistory::AddData( Data &data )

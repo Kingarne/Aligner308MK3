@@ -90,8 +90,8 @@ protected:
     CAlignmentWizard* m_pParent;
     CPresentDialog* m_pPresentDlg;
 
-	TiltAlignmentErrorsHistory::Data m_TiltAlignmentData;
-	TiltAlignmentErrorsHistory::ItemData m_TiltAlignmentItem[SIZE_OF_ARRAYS];
+	TiltAlignment::Data m_TiltAlignment;
+	TiltAlignment::ChannelData m_TiltAlignmentChannel[SIZE_OF_ARRAYS];
 
 	TiltAndFlatnessHistory::Data m_TiltAndFlatnessData;
 	TiltAndFlatnessHistory::ItemData m_TiltAndFlatnessItem[SIZE_OF_ARRAYS];

@@ -22,28 +22,71 @@ namespace ReporterLib
         public int ProjectId { get; set; }
         public int MeasId { get; set; }
 
+        private bool MultiMode { get; set; }
         private DBInterface.Project Project;
+
         private DBInterface.Measurement Measurement;
+        private Dictionary<int, DBInterface.Measurement> Measurements;
+
 
         public ReportForm()
         {
             InitializeComponent();
             DBI = new DBInterface();
             DBI.Open();
+
+            Measurements = new Dictionary<int, DBInterface.Measurement>();
         }
 
         private void ReportForm_Load(object sender, EventArgs e)
         {
             m_printerSettings = new PrinterSettings();
 
-            if (MeasId == -1)
-                Text = "Show All";
+            MultiMode = (MeasId == -1);
+            reportList.Visible = MultiMode;
+
+            Project = new DBInterface.Project();
+            DBI.GetProject(ProjectId, ref Project);
+
+
+
+            if (MultiMode)
+            {
+                DBI.GetProjectMeasurements(ProjectId, ref Measurements);
+
+                reportList.Columns.Add("Report");
+                reportList.Columns.Add("Time");
+                reportList.Columns[0].Width = 150;
+                reportList.Columns[1].Width = 100;
+
+                UpdateReportList();    
+            }
+
+            if (MultiMode)
+                Text = ProjectId.ToString() + ": Show All";
             else
-                Text = "Show " + MeasId.ToString();
+                Text = ProjectId.ToString() + ": Show " + MeasId.ToString();
+
 
         }
 
-        private void printButton_Click(object sender, EventArgs e)
+        private void UpdateReportList()
+        {
+            reportList.Items.Clear();
+        
+            int i = 0;
+            foreach (var meas in Measurements)
+            {
+                reportList.Items.Add(meas.Value.TypeText);                
+                reportList.Items[i].SubItems.Add(meas.Value.Time.ToString("yy/MM/dd HH:mm:ss"));
+                reportList.Items[i].Tag = meas.Key;
+                i++;
+            }
+
+
+        }
+
+        private void Print()
         {
             m_document = new PrintDocument();
             m_document.PrinterSettings = m_printerSettings;
@@ -55,7 +98,11 @@ namespace ReporterLib
 
             printPreviewControl.Document = m_document;
             printPreviewControl.StartPage = 0;
+        }
 
+        private void printButton_Click(object sender, EventArgs e)
+        {
+        
 
 
            /* PrintPreviewDialog pd = new PrintPreviewDialog();
@@ -83,11 +130,10 @@ namespace ReporterLib
             m_page = 0;
             m_yPos = 0;
 
-            Project = new DBInterface.Project();
-            DBI.GetProject(ProjectId, ref Project);
 
-            Measurement = new DBInterface.Measurement();
-            DBI.GetMeasurement(MeasId, ref Measurement);
+            Measurement = Measurements[MeasId];
+                new DBInterface.Measurement();
+   //         DBI.GetMeasurement(MeasId, ref Measurement);
             
         }
 
@@ -128,7 +174,7 @@ namespace ReporterLib
 
         }
 
-        private void DrawHeader(PrintPageEventArgs e)
+        private void DrawHeader(PrintPageEventArgs e) 
         {
             DBInterface.Measurement measurement = new DBInterface.Measurement();
             DBI.GetMeasurement(MeasId, ref measurement);
@@ -166,6 +212,23 @@ namespace ReporterLib
         {
             printPreviewControl.StartPage = ((int)pageUpDown.Value) -1 ;
             printPreviewControl.Update();
+        }
+
+        private void reportList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            ShowSelected();
+        }
+
+        private void ShowSelected()
+        {
+            if (reportList.SelectedItems.Count > 0)
+            {
+                int item = reportList.SelectedItems[0].Index;
+                MeasId = (int)reportList.Items[item].Tag;
+                Print();
+                //Logger.Inst.
+
+            }
         }
     }
 }

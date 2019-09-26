@@ -557,9 +557,10 @@ void DebugDlg::OnBnClickedDebugReportButton()
 	CString str;
 	pWnd->GetWindowText(str);
 	int num = atoi(str);
+	if (num < 1)num = -1;
 
 	ReportManager rm;
-	rm.OpenReport(num);
+	rm.OpenReport(SysSetup->GetProjectID(), num);
 
 
 }

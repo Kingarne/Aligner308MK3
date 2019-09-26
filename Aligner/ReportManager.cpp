@@ -16,7 +16,7 @@ ReportManager::~ReportManager()
 }
 
 
-int ReportManager::OpenReport(int historyId)
+int ReportManager::OpenReport(int projectId, int measId)
 {
 	
 	//Class1Ptr ic(__uuidof(Class2));
@@ -26,7 +26,7 @@ int ReportManager::OpenReport(int historyId)
 	//ic->Add(0,0,&l);
 	//Class2 c2;
 	BSTR str = L"I am a happy BSTR";
-	reporter->OpenReport(historyId,&l);
+	reporter->OpenReport(projectId, measId, &l);
 	//c2.Add(100, 100);
 
 	return 0;

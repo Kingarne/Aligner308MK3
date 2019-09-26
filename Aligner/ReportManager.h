@@ -8,6 +8,6 @@ public:
 	ReportManager();
 	~ReportManager();
 
-	int OpenReport(int historyId);
+	int OpenReport(int projectID, int measId);
 };
 

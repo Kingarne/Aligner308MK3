@@ -32,7 +32,7 @@
             this.printPreviewControl = new System.Windows.Forms.PrintPreviewControl();
             this.pageUpDown = new System.Windows.Forms.NumericUpDown();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.measureList = new System.Windows.Forms.ListView();
+            this.reportList = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,23 +64,25 @@
             this.pageUpDown.TabIndex = 3;
             this.pageUpDown.ValueChanged += new System.EventHandler(this.pageUpDown_ValueChanged);
             // 
-            // measureList
+            // reportList
             // 
-            this.measureList.GridLines = true;
-            this.measureList.HideSelection = false;
-            this.measureList.Location = new System.Drawing.Point(1, 12);
-            this.measureList.Name = "measureList";
-            this.measureList.Size = new System.Drawing.Size(264, 336);
-            this.measureList.TabIndex = 4;
-            this.measureList.UseCompatibleStateImageBehavior = false;
-            this.measureList.View = System.Windows.Forms.View.Details;
+            this.reportList.FullRowSelect = true;
+            this.reportList.GridLines = true;
+            this.reportList.HideSelection = false;
+            this.reportList.Location = new System.Drawing.Point(12, 12);
+            this.reportList.Name = "reportList";
+            this.reportList.Size = new System.Drawing.Size(253, 336);
+            this.reportList.TabIndex = 4;
+            this.reportList.UseCompatibleStateImageBehavior = false;
+            this.reportList.View = System.Windows.Forms.View.Details;
+            this.reportList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.reportList_ItemSelectionChanged);
             // 
             // ReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(737, 716);
-            this.Controls.Add(this.measureList);
+            this.Controls.Add(this.reportList);
             this.Controls.Add(this.pageUpDown);
             this.Controls.Add(this.printPreviewControl);
             this.Controls.Add(this.printButton);
@@ -97,6 +99,6 @@
         private System.Windows.Forms.PrintPreviewControl printPreviewControl;
         private System.Windows.Forms.NumericUpDown pageUpDown;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.ListView measureList;
+        private System.Windows.Forms.ListView reportList;
     }
 }

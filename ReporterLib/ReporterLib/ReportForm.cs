@@ -13,12 +13,11 @@ namespace ReporterLib
 {
     public partial class ReportForm : Form
     {
+       
         private DBInterface DBI;
         private PrinterSettings m_printerSettings;
         private PrintDocument m_document;
-        private int m_page;
-        private int m_yPos;
-
+        
         public int ProjectId { get; set; }
         public int MeasId { get; set; }
 
@@ -27,7 +26,26 @@ namespace ReporterLib
 
         private DBInterface.Measurement Measurement;
         private Dictionary<int, DBInterface.Measurement> Measurements;
+        Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, int>> PrintMeasFunc = new Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, int>>();
 
+        private int m_page;
+        private int m_yPos;
+        int yHeadSpace = 15;
+        int startYHeadPerc = 35;
+        int MargY = 20;
+        Rectangle HeadRect;
+        private Font HeadFont = new Font("Ariel", 8, FontStyle.Regular);
+
+
+        public class TableItem
+        {
+            public TableItem(string text, float pos, float width, StringAlignment sa=StringAlignment.Center) { Text = text; PosPerc = pos; WidthPerc = width; Align = sa; }
+            public string Text { get; set; }
+            public float PosPerc { get; set; }
+            public float WidthPerc { get; set; }
+            public StringAlignment Align { get; set; }
+            public Color Color;
+        }
 
         public ReportForm()
         {
@@ -36,8 +54,11 @@ namespace ReporterLib
             DBI.Open();
 
             Measurements = new Dictionary<int, DBInterface.Measurement>();
+
+            PrintMeasFunc[DBInterface.MeasType.MT_TiltAlignment] = PrintTiltAlignment;
         }
 
+        
         private void ReportForm_Load(object sender, EventArgs e)
         {
             m_printerSettings = new PrinterSettings();
@@ -82,8 +103,14 @@ namespace ReporterLib
                 reportList.Items[i].Tag = meas.Key;
                 i++;
             }
+        }
 
-
+        private string GetAngularDef(int signDef)
+        {
+            string dir = signDef > 0 ? "down" : "up";
+            string text1 = "Angular definitions:\nRoll / Pitch are positive if stbd / aft " + dir + " (Cartesian coordinates).\n";
+            string text2 = "The tilt vector mark indicates the high point (Polar coordinates).\nThe angle of the tilt vector is positive clockwise from fore.\nElevation is positive up.\nAzimuth is positive clockwise from fore.";
+            return text1 + text2;
         }
 
         private void Print()
@@ -147,13 +174,14 @@ namespace ReporterLib
 
             if (m_page == 0)
             {
-                DrawHeader(e);
+                PrintMeasFunc[Measurement.Type].Invoke(e);
+                //DrawHeader(e);
             }
 
             //  string text = "This text to be printed. "+ m_page.ToString();
             // e.Graphics.DrawString(text, new Font("Georgia", 35, FontStyle.Bold), Brushes.Black, 10, 10);
 
-            e.HasMorePages = (m_page++ <= 3);
+            e.HasMorePages = (m_page++ <= 1);
 
 
         }
@@ -174,43 +202,9 @@ namespace ReporterLib
 
         }
 
-        private void DrawHeader(PrintPageEventArgs e) 
-        {
-            DBInterface.Measurement measurement = new DBInterface.Measurement();
-            DBI.GetMeasurement(MeasId, ref measurement);
-
-
-
-            int headX = e.MarginBounds.Left;
-            int headY = e.MarginBounds.Top;
-            Rectangle headRect = new Rectangle(new Point(headX, headY), new Size(e.MarginBounds.Width, 100));
-
-            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(255, 240, 240, 255)), headRect);
-            // e.Graphics.DrawRectangle(new Pen(Color.FromArgb(155,0,0,0)), headRect);
-            int ySpace = 17;
-            int startYPerc = 25;
-            string text = "AZIMUTH ALIGNMENT ERRORS ";
-
-            Font HeadFont = new Font("Ariel", 8, FontStyle.Regular);
-            SolidBrush br = new SolidBrush(Color.Black);
-
-            //e.Graphics.DrawString(text, new Font("Ariel", 8, FontStyle.Bold), Brushes.Black, headX +10, headY+10);
-            DrawText(text, e.Graphics, new Font("Ariel", 9, FontStyle.Bold), Brushes.Black, headRect, 1, 2);
-            DrawText("Project:", e.Graphics, HeadFont, br, headRect, 1, startYPerc);
-            DrawText("Ship:", e.Graphics, HeadFont, br, headRect, 1, startYPerc + ySpace);
-            DrawText("Operator:", e.Graphics, HeadFont, br, headRect, 1, startYPerc + ySpace*2);
-            DrawText("DAU s/n:", e.Graphics, HeadFont, br, headRect, 1, startYPerc + ySpace*3);
-
-            DrawText(Project.Name, e.Graphics, HeadFont, br, headRect, 12, startYPerc);
-            DrawText(Project.Ship.ToString(), e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace);
-            DrawText(Project.Operator, e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace*2);
-            DrawText(Measurement.DAUSerial, e.Graphics, HeadFont, br, headRect, 12, startYPerc + ySpace*3);
-
-        }
-
         private void pageUpDown_ValueChanged(object sender, EventArgs e)
         {
-            printPreviewControl.StartPage = ((int)pageUpDown.Value) -1 ;
+            printPreviewControl.StartPage = ((int)pageUpDown.Value) - 1;
             printPreviewControl.Update();
         }
 
@@ -230,6 +224,129 @@ namespace ReporterLib
 
             }
         }
+
+        private void DrawHeader(PrintPageEventArgs e) 
+        {
+            //DBInterface.Measurement measurement = new DBInterface.Measurement();
+            //DBI.GetMeasurement(MeasId, ref measurement);
+
+           
+            SolidBrush br = new SolidBrush(Color.Black);
+
+           
+            int headX = e.MarginBounds.Left;
+            int headY = e.MarginBounds.Top;
+
+            string angDef = GetAngularDef(Project.SignDef);
+            e.Graphics.DrawString(angDef, HeadFont, br, headX, headY);
+            SizeF size = e.Graphics.MeasureString(angDef, HeadFont);
+
+            headY = headY + (int)size.Height + MargY;
+
+            HeadRect = new Rectangle(new Point(headX, headY), new Size(e.MarginBounds.Width, 120));
+
+            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(255, 240, 240, 255)), HeadRect);
+            e.Graphics.DrawRectangle(new Pen(Color.FromArgb(50,0,0,0)), HeadRect);
+            int xPerc = 2;
+            //string text = "AZIMUTH ALIGNMENT ERRORS ";
+                                  
+            //e.Graphics.DrawString(text, new Font("Ariel", 8, FontStyle.Bold), Brushes.Black, headX +10, headY+10);
+            DrawText(Measurement.TypeText.ToUpper(), e.Graphics, new Font("Ariel", 10, FontStyle.Bold), Brushes.Black, HeadRect, 2, 6);
+            DrawText("Project:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
+            DrawText("Ship:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            DrawText("Operator:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace*2);
+            DrawText("DAU s/n:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace*3);
+
+            xPerc = xPerc + 10;
+            DrawText(Project.Name, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
+            DrawText(Project.Ship.ToString(), e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            DrawText(Project.Operator, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace*2);
+            DrawText(Project.DAUSerial.ToString("###"), e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace*3);
+
+            xPerc = 30;
+            DrawText("Date:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
+            DrawText("Place:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            DrawText("Latitude:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
+            DrawText("Time const:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
+
+            xPerc = xPerc + 10;
+            DrawText(Measurement.Time.ToString("yy/MM/dd HH:mm:ss"), e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
+            DrawText(Project.Location, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            DrawText(Project.Latitude.ToString("0.00") + " [deg]", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
+            DrawText(Measurement.TimeConstant.ToString("0.0") + " [s]", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
+
+            m_yPos = HeadRect.Bottom + MargY;
+        }
+
+        private int DrawTableLine(Graphics gr, List<TableItem> table, Point pos, int width)
+        {
+            SolidBrush br = new SolidBrush(Color.Black);
+            int x = 0;
+            int xLoc=pos.X;
+
+            int maxY = 0;    
+
+            foreach (TableItem ti in table)
+            {
+                StringFormat sf = new StringFormat();
+                sf.Alignment = ti.Align;
+
+                if (ti.PosPerc > 0)
+                    x = pos.X + (int)(width * (ti.PosPerc / 100.0f));
+                else
+                    x = xLoc;
+
+                int w = (int)((float)width * (ti.WidthPerc / 100.0f));
+
+                RectangleF textRect = new RectangleF(x, pos.Y, w, 100);
+                SizeF size = gr.MeasureString(ti.Text, Font, w, sf);
+                gr.DrawString(ti.Text, Font, br, textRect, sf);
+
+                Rectangle drawRect = new Rectangle(x, pos.Y, w, 100);
+                gr.DrawRectangle(new Pen(Color.Black), drawRect);                
+
+                xLoc = (int)textRect.Right;
+                if (size.Height > maxY)
+                    maxY = (int)size.Height;
+            }
+
+            return maxY;
+        }
+
+
+        private int PrintTiltAlignment(PrintPageEventArgs e)
+        {
+            DrawHeader(e);
+
+            DBInterface.TiltAlignment tam = new DBInterface.TiltAlignment();
+            DBI.GetTiltAlignmentMeas(Measurement.ID, ref tam);
+            List<DBInterface.TiltAlignmentCh> channels = new List<DBInterface.TiltAlignmentCh>();             
+            DBI.GetTiltAlignmentCh(tam.ID, ref channels);
+
+            SolidBrush br = new SolidBrush(Color.Black);
+
+            int xPerc = 60;
+            DrawText("LOS Dir:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
+            DrawText("Elev. Comp:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            xPerc = xPerc + 10;
+            DrawText(tam.LOSDir, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
+            DrawText(tam.ElevComp?"On":"Off", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+
+            List<TableItem> table = new List<TableItem>();
+            table.Add(new TableItem("Station", 2, 25, StringAlignment.Near));
+            table.Add(new TableItem("Ch", -1, 5));
+            table.Add(new TableItem("Sensor\n(s/n)", -1, 7));
+
+            m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+           // m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+
+
+
+            return 0;
+        }
+
+
+
     }
 }
  

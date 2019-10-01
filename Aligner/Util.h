@@ -137,6 +137,8 @@ BOOL GetCompositeAngle( double coarseAngle, double fineAngle, double fineAngleGe
 void AdjustSyncroValueToRangeA202( double* pSyncroValue, double gearing );
 int AskGunAdapterTiltCheck();
 BOOL IsGunPresent();
+UnitType::Types GetUnitType(int arrayIndex);
+
 
 __declspec(selectany) double FoundationStraightEdgeAngle ;
 

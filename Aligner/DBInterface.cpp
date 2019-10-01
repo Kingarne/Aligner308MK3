@@ -193,7 +193,7 @@ BOOL DBInterface::GetDAUData(int DAUSerial, DAUSetupData& dauData)
         return FALSE;
 
     CString sql="";
-    sql.Format("SELECT * FROM DAUSetup WHERE serialID = %d ",DAUSerial);	
+    sql.Format("SELECT * FROM DAUSetup WHERE serialNumber = %d ",DAUSerial);	
     int nVal;
     CString strVal;
 
@@ -207,13 +207,15 @@ BOOL DBInterface::GetDAUData(int DAUSerial, DAUSetupData& dauData)
 			CDBVariant val;
             rs.GetFieldValue("ID", val);
 			dauData.DBId = val.m_iVal;
-            rs.GetFieldValue("serialNumber", dauData.serialStr);                    
-            rs.GetFieldValue("serialID", val);
+            //rs.GetFieldValue("serialNumber", dauData.serialStr);                    
+            rs.GetFieldValue("serialNumber", val);
 			dauData.serial = val.m_iVal;
-            rs.GetFieldValue("protocolVersion", val);
+			dauData.serialStr.Format("%03d", dauData.serial);
+
+           /* rs.GetFieldValue("protocolVersion", val);
 			dauData.protocolVersion  = val.m_iVal;
             rs.GetFieldValue("sampleAndHold", val);
-			dauData.sampleAndHold = val.m_iVal;
+			dauData.sampleAndHold = val.m_iVal;*/
         }
     }    
     return TRUE;
@@ -355,8 +357,8 @@ BOOL DBInterface::GetSyncros(vector<Syncro*>& syncros, int id)
          return FALSE;
  
      CString sql="";
-     sql.Format("SELECT * FROM DAUSetupSyncroChannel WHERE foreignID = %d ORDER BY [order] ASC",id);	
- 
+     sql.Format("SELECT * FROM DAUSetupSyncroChannel WHERE foreignID = %d",id);	
+	 //sql.Format("SELECT * FROM DAUSetupSyncroChannel WHERE foreignID = %d ORDER BY [order] ASC", id);
      int nVal;
      CString strVal;
  
@@ -935,8 +937,8 @@ BOOL DBInterface::InsertMeasurement(MeasurementData& data)
 	CString serial = DAU::GetDAU().GetSerialNumber();
 	int projectID = SysSetup->GetProjectID();
 
-	sql.Format("INSERT INTO Measurement ( dauSerialNumber, timeOfMeasurement, projectID, timeConstant, calibInfo, measType ) VALUES ('%s','%s',%d, %f, '%s', %d)",
-		serial, time.Format(_T("%Y-%m-%d %H:%M:%S")), projectID, data.m_timeConstant, data.calibInfo, data.type);
+	sql.Format("INSERT INTO Measurement ( projectID, timeOfMeasurement, timeConstant, calibInfo, measType ) VALUES (%d, '%s', %f, '%s', %d)",
+		projectID, time.Format(_T("%Y-%m-%d %H:%M:%S")), data.m_timeConstant, data.calibInfo, data.type);
 
 	m_db.ExecuteSQL(sql);
 	return TRUE;
@@ -1001,8 +1003,8 @@ BOOL DBInterface::InsertTiltAlignment(TiltAlignment::Data data, int measId)
          return FALSE;
    
      CString sql="";
-     sql.Format("INSERT INTO TiltAlignment (measID, lineOfSightDirection, elevationCompensation) VALUES (%d,'%s','%s')",
-         measId, data.m_lineOfSightDirection, data.m_elevationCompensation);    
+     sql.Format("INSERT INTO TiltAlignment (measID, referenceChannel, lineOfSightDirection, elevationCompensation) VALUES (%d,'%s','%s','%s')",
+         measId, data.m_refChannel, data.m_lineOfSightDirection, data.m_elevationCompensation);    
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;

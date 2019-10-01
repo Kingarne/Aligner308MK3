@@ -1052,12 +1052,23 @@ BOOL IsConnected( int arrayIndex )
     return FALSE;
 }
 
+UnitType::Types GetUnitType(int arrayIndex)
+{
+	if (IsValidChannel(arrayIndex) == TRUE)
+	{		
+		return  g_AlignerData.PlaneType[arrayIndex];		
+	}
+	return UnitType::Unused;
+}
+
+
 BOOL IsFixed( CString channelName )
 {
   int arrayIndex;
   arrayIndex = GetArrayIndex( channelName );
   return( IsFixed( arrayIndex ) );
 }
+
 
 BOOL IsFixed( int arrayIndex )
 {

@@ -69,7 +69,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 		}
 
         m_TiltAlignment.m_comment = (m_InParam.Comment.GetLength() == 0 ) ? DB_EMPTY_STRING : m_InParam.Comment;
-//        m_TiltAlignment.m_measuredUnit.LoadString( ( GetMRad() == TRUE ) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);	
+		m_TiltAlignment.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
 		m_TiltAlignment.m_time = m_InParam.Time;
 
 		m_TiltAlignmentChannel[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
@@ -90,6 +90,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
         m_TiltAlignmentChannel[0].m_pitch = DB_EMPTY_DOUBLE;//ref
 	    m_TiltAlignmentChannel[0].m_tilt = DB_EMPTY_DOUBLE;//ref
 	    m_TiltAlignmentChannel[0].m_angle = DB_EMPTY_DOUBLE;//ref
+		m_TiltAlignmentChannel[0].m_type = GetUnitType(g_AlignerData.RefObjNo);
 
 	    if( IsFixed( g_AlignerData.RefObjNo ) == FALSE )
         {
@@ -107,6 +108,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 			m_TiltAlignmentChannel[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
 			m_TiltAlignmentChannel[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
 		    m_TiltAlignmentChannel[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
+			m_TiltAlignmentChannel[i].m_type = GetUnitType(g_AlignerData.RefObjNo);
 
 			if( ( IsGun( g_AlignerData.ObjNo[i] ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.ObjNo[i] ) != GUN_ADAP_EMPTY )  )
 			{

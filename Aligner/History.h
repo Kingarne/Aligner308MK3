@@ -85,7 +85,8 @@ public:
     {
     public:       
         CString m_lineOfSightDirection ;
-        CString m_elevationCompensation ;       
+        CString m_elevationCompensation ;
+		CString m_refChannel;
     } ;
 
     class ChannelData
@@ -93,6 +94,7 @@ public:
     public:
         CString m_station ;
 	    CString m_channel ;
+		int m_type;
         CString m_sensorSerialNumber ;
         CString m_adapterSerialNumber ;
         double m_roll ;

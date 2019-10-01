@@ -60,12 +60,12 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
         if( g_AlignerData.NoOfBedPlanes != 0 )
         {
 			m_TiltAlignment.m_lineOfSightDirection = g_AlignerData.AzDir;
-            m_TiltAlignment.m_elevationCompensation.LoadString( ( g_AlignerData.UseElevError == TRUE ) ? IDS_ON : IDS_OFF);
+			m_TiltAlignment.m_elevationCompensation = g_AlignerData.UseElevError;
         }
 		else
 		{
 			m_TiltAlignment.m_lineOfSightDirection = DB_EMPTY_STRING;//empty
-			m_TiltAlignment.m_elevationCompensation = DB_EMPTY_STRING;//empty
+			m_TiltAlignment.m_elevationCompensation = false;//empty
 		}
 
         m_TiltAlignment.m_comment = (m_InParam.Comment.GetLength() == 0 ) ? DB_EMPTY_STRING : m_InParam.Comment;

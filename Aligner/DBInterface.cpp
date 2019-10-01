@@ -81,7 +81,7 @@ CString DBInterface::ToText(double d)
     CString str;    
     if(d == _HUGE)
     {
-        return "NULL";
+        return "0.0";
     }
     else
     {
@@ -1003,7 +1003,7 @@ BOOL DBInterface::InsertTiltAlignment(TiltAlignment::Data data, int measId)
          return FALSE;
    
      CString sql="";
-     sql.Format("INSERT INTO TiltAlignment (measID, referenceChannel, lineOfSightDirection, elevationCompensation) VALUES (%d,'%s','%s','%s')",
+     sql.Format("INSERT INTO TiltAlignment (measID, referenceChannel, lineOfSightDirection, elevationCompensation) VALUES (%d,'%s','%s',%d)",
          measId, data.m_refChannel, data.m_lineOfSightDirection, data.m_elevationCompensation);    
  
     m_db.ExecuteSQL(sql);  	
@@ -1016,8 +1016,8 @@ BOOL DBInterface::InsertTiltAlignmentChannel(TiltAlignment::ChannelData data, in
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAlignmentChannel(foreignID, station, channel, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, bias ) VALUES (%d,'%s','%s','%s','%s',%s,%s,%s,%s,%s,%s)",
-		 foreignId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle), ToText(data.m_elevation), ToText(data.m_bias));
+     sql.Format("INSERT INTO TiltAlignmentChannel(foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, bias ) VALUES (%d,'%s','%s', %d, '%s','%s',%s,%s,%s,%s,%s,%s)",
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle), ToText(data.m_elevation), ToText(data.m_bias));
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;

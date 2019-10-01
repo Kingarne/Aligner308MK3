@@ -38,6 +38,7 @@
             // 
             // printButton
             // 
+            this.printButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.printButton.Location = new System.Drawing.Point(12, 681);
             this.printButton.Name = "printButton";
             this.printButton.Size = new System.Drawing.Size(75, 23);
@@ -58,6 +59,7 @@
             // 
             // pageUpDown
             // 
+            this.pageUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pageUpDown.Location = new System.Drawing.Point(215, 684);
             this.pageUpDown.Name = "pageUpDown";
             this.pageUpDown.Size = new System.Drawing.Size(50, 20);

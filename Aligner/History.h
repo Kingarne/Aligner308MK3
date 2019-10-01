@@ -85,7 +85,7 @@ public:
     {
     public:       
         CString m_lineOfSightDirection ;
-        CString m_elevationCompensation ;
+        bool m_elevationCompensation ;
 		CString m_refChannel;
     } ;
 

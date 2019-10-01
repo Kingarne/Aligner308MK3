@@ -20,7 +20,7 @@ namespace ReporterLib
             public string Location { get; set; }
             public string Ship { get; set; }
             public float Latitude{ get; set; }
-            public int Unit { get; set; }
+            public string UnitText { get; set; }
             public int SignDef { get; set; }
         }
 
@@ -39,19 +39,18 @@ namespace ReporterLib
             public MeasType Type { get; set; }
             public string TypeText { get; set; }
             public float TimeConstant{ get; set; }
-            //public string refChannel;
+            public string Comment { get; set; }
+            public string RefChannel { get; set; }
         }
 
         public class TiltAlignment
         {
-            public int ID { get; set; }
-            public int MeasID { get; set; }
-            public string RefChannel{ get; set; }
+            public int ID { get; set; }            
             public string LOSDir { get; set; }
             public bool ElevComp { get; set; }
         }
 
-        public class TiltAlignmentCh
+        public class ChannelBase
         {
             public int ID { get; set; }
             public int ForeignID { get; set; }
@@ -59,7 +58,7 @@ namespace ReporterLib
             public int Type { get; set; }
             public string TypeText { get; set; }
             public string Channel { get; set; }
-            public float NominalAz{ get; set; }
+            public float NominalAz { get; set; }
             public string SensorSN { get; set; }
             public string AdapterSN { get; set; }
             public float roll { get; set; }
@@ -67,6 +66,12 @@ namespace ReporterLib
             public float tilt { get; set; }
             public float angle { get; set; }
             public float elevation { get; set; }
+            public bool IsRef { get; set; }
+
+        }
+
+        public class TiltAlignmentCh :  ChannelBase
+        {          
             public float bias { get; set; }
         }
 
@@ -92,6 +97,12 @@ namespace ReporterLib
                 //execute queries, etc           
 
             return true;
+
+        }
+
+        public string GetUnitText(int unit)
+        {
+            return (unit == 0) ? "[mrad]" : "[arcmin]";
 
         }
 
@@ -122,6 +133,8 @@ namespace ReporterLib
                         project.Time = (DateTime)dr["projTime"];
                         project.Latitude= (float)(double)dr["latitude"];
                         project.SignDef = (int)dr["signDef"];
+                        int unit = (int)dr["unit"];
+                        project.UnitText = GetUnitText(unit);
 
                         Logger.Inst.Trace("ID: " + project.ID.ToString(), Logger.LogLevel.Level1);
                     }
@@ -157,6 +170,7 @@ namespace ReporterLib
                         measurement.Type = (MeasType)(int)dr["measType"];
                         measurement.TypeText = (string)dr["measTypeName"];
                         measurement.TimeConstant = (float)dr["timeConstant"];
+                        measurement.Comment = (string)dr["comment"];
 
                         measurements[measurement.ID] = measurement;
 
@@ -194,7 +208,7 @@ namespace ReporterLib
                         measurement.Time = (DateTime)dr["timeOfMeasurement"];
                         measurement.Type = (MeasType)(int)dr["measType"];
                         measurement.TimeConstant = (float)dr["timeConstant"];
-
+                        measurement.Comment = (string)dr["comment"];
                         //measurement.Time = dr["timeOfMeasurement"];
                         //salvo.Time = Db2Time((int)time);
 
@@ -211,13 +225,13 @@ namespace ReporterLib
         }
 
 
-        public bool GetTiltAlignmentMeas(int measId, ref TiltAlignment tam)
+        public bool GetTiltAlignmentMeas(ref DBInterface.Measurement meas, ref TiltAlignment tam)
         {
 
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;
 
-            using (OdbcCommand command = new OdbcCommand("SELECT * FROM TiltAlignment WHERE measID=" + measId.ToString(), Connection))
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM TiltAlignment WHERE measID=" + meas.ID.ToString(), Connection))
             {
                 using (OdbcDataReader dr = command.ExecuteReader())
                 {
@@ -230,12 +244,11 @@ namespace ReporterLib
                             string t = dr.GetDataTypeName(i);
                         }
 
-                        tam.ID = (int)dr["ID"];
-                        tam.MeasID = (int)dr["measID"];
-                        tam.RefChannel = (string)dr["referenceChannel"];
+                        tam.ID = (int)dr["ID"];                                                
                         tam.LOSDir = (string)dr["lineOfSightDirection"];
                         tam.ElevComp = (bool)dr["elevationCompensation"];
-                    
+                        string refCh = (string)dr["referenceChannel"];
+                        meas.RefChannel = refCh;
                     }
                 }
             }
@@ -243,7 +256,7 @@ namespace ReporterLib
             return true;
         }
 
-        public bool GetTiltAlignmentCh(int foreignId, ref List<DBInterface.TiltAlignmentCh> channels)
+        public bool GetTiltAlignmentCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
         {
 
             if (Connection.State != System.Data.ConnectionState.Open)

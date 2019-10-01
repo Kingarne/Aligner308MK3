@@ -113,7 +113,7 @@ namespace ReporterLib
             return text1 + text2;
         }
 
-        private void Print()
+        private void PrintPreview()
         {
             m_document = new PrintDocument();
             m_document.PrinterSettings = m_printerSettings;
@@ -129,18 +129,34 @@ namespace ReporterLib
 
         private void printButton_Click(object sender, EventArgs e)
         {
-        
+            m_document = new PrintDocument();
+            m_document.PrinterSettings = m_printerSettings;
+
+            m_document.QueryPageSettings += new System.Drawing.Printing.QueryPageSettingsEventHandler(QuerySettings);
+            m_document.BeginPrint += new System.Drawing.Printing.PrintEventHandler(BeginPrint);
+            m_document.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(PrintPage);
+            m_document.EndPrint += new System.Drawing.Printing.PrintEventHandler(EndPrint);
 
 
-           /* PrintPreviewDialog pd = new PrintPreviewDialog();
-            pd.Document = m_document;
-            pd.Show();*/
-            //printPreviewControl.Update();
+            PrintDialog printDialog = new PrintDialog();
+            printDialog.Document = m_document;
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                m_document.Print();
+                m_printerSettings = m_document.PrinterSettings;
+            }
 
 
-        }
 
-        private void QuerySettings(object sender, System.Drawing.Printing.QueryPageSettingsEventArgs e)
+                /* PrintPreviewDialog pd = new PrintPreviewDialog();
+                 pd.Document = m_document;
+                 pd.Show();*/
+                //printPreviewControl.Update();
+
+
+            }
+
+            private void QuerySettings(object sender, System.Drawing.Printing.QueryPageSettingsEventArgs e)
         {
              e.PageSettings.Margins = new System.Drawing.Printing.Margins(70, 70, 70, 70);
         }
@@ -219,7 +235,7 @@ namespace ReporterLib
             {
                 int item = reportList.SelectedItems[0].Index;
                 MeasId = (int)reportList.Items[item].Tag;
-                Print();
+                PrintPreview();
                 //Logger.Inst.
 
             }
@@ -302,8 +318,8 @@ namespace ReporterLib
                 SizeF size = gr.MeasureString(ti.Text, Font, w, sf);
                 gr.DrawString(ti.Text, Font, br, textRect, sf);
 
-                Rectangle drawRect = new Rectangle(x, pos.Y, w, 100);
-                gr.DrawRectangle(new Pen(Color.Black), drawRect);                
+              //  Rectangle drawRect = new Rectangle(x, pos.Y, w, 100);
+              //  gr.DrawRectangle(new Pen(Color.Black), drawRect);                
 
                 xLoc = (int)textRect.Right;
                 if (size.Height > maxY)
@@ -313,15 +329,73 @@ namespace ReporterLib
             return maxY;
         }
 
+        private int DrawCalibInfo(Graphics gr, DBInterface.Measurement meas, int pos)
+        {
+            int h = 0;
+            int startPos = pos;
+            if(meas.CalibInfo != "")
+            {
+                pos += MargY;
+                SolidBrush br = new SolidBrush(Color.Red);
+                SizeF size = gr.MeasureString(meas.CalibInfo, Font, HeadRect.Width);
+                Rectangle rect = new Rectangle(HeadRect.Left, pos, HeadRect.Width, (int)size.Height);
+                DrawText(meas.CalibInfo, gr, Font, br, rect, 2, 0);
+                //    gr.DrawString(, Font, br, HeadRect.Width);
+                pos += (int)size.Height + MargY;
+                gr.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, pos, HeadRect.Right, pos);
+                h += pos-startPos;
+            }
+
+            return h;
+        }
+
+        private int DrawComment(Graphics gr, DBInterface.Measurement meas, int pos)
+        {
+            int h = 0;
+            int startPos = pos;
+            if (meas.Comment != "")
+            {
+                pos += MargY;
+                string comment = "Comment:\n" + meas.Comment;
+
+                SolidBrush br = new SolidBrush(Color.Black);
+                SizeF size = gr.MeasureString(comment, Font, HeadRect.Width);
+                Rectangle rect = new Rectangle(HeadRect.Left, pos, HeadRect.Width, (int)size.Height);
+                DrawText(comment, gr, Font, br, rect, 2, 0);
+                //    gr.DrawString(, Font, br, HeadRect.Width);
+
+                pos += (int)size.Height;// + MargY;
+              //  gr.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, pos, HeadRect.Right, pos);
+                h = pos-startPos;
+            }
+
+
+            return h;
+        }
+
+
+        private void SetRefChannel(DBInterface.Measurement meas, List<DBInterface.ChannelBase> channels)
+        {
+            foreach(var ch in channels)
+            {
+                if (meas.RefChannel == ch.Channel)
+                {
+                    ch.IsRef = true;
+                    return;
+                }
+            }
+        }
 
         private int PrintTiltAlignment(PrintPageEventArgs e)
         {
             DrawHeader(e);
 
             DBInterface.TiltAlignment tam = new DBInterface.TiltAlignment();
-            DBI.GetTiltAlignmentMeas(Measurement.ID, ref tam);
-            List<DBInterface.TiltAlignmentCh> channels = new List<DBInterface.TiltAlignmentCh>();             
+            DBI.GetTiltAlignmentMeas(ref Measurement, ref tam);            
+            List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();             
             DBI.GetTiltAlignmentCh(tam.ID, ref channels);
+            SetRefChannel(Measurement, channels);
+
 
             SolidBrush br = new SolidBrush(Color.Black);
 
@@ -332,13 +406,69 @@ namespace ReporterLib
             DrawText(tam.LOSDir, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
             DrawText(tam.ElevComp?"On":"Off", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
 
+            int wPerc = 8;
             List<TableItem> table = new List<TableItem>();
             table.Add(new TableItem("Station", 2, 25, StringAlignment.Near));
             table.Add(new TableItem("Ch", -1, 5));
-            table.Add(new TableItem("Sensor\n(s/n)", -1, 7));
+            table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
+            table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+            table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+            table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+            table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
+            table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
+            table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
+            table.Add(new TableItem("Bias*\n" + Project.UnitText, -1, wPerc));
 
+            int smalMarg = 4;
             m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
-           // m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+            m_yPos += smalMarg;
+            e.Graphics.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+            m_yPos += smalMarg;
+
+           
+            foreach (DBInterface.TiltAlignmentCh ch in channels)
+            {
+                table = new List<TableItem>();
+                table.Add(new TableItem(ch.Station, 2, 25, StringAlignment.Near));
+                table.Add(new TableItem(ch.Channel, -1, 5));
+                table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                if (ch.IsRef)
+                {
+                    string refStr = "Ref";
+                    table.Add(new TableItem(refStr, -1, wPerc));
+                    table.Add(new TableItem(refStr, -1, wPerc));
+                    table.Add(new TableItem(refStr, -1, wPerc));
+                    table.Add(new TableItem(refStr, -1, wPerc));
+                    table.Add(new TableItem(refStr, -1, wPerc));
+                    table.Add(new TableItem(refStr, -1, wPerc));
+                }
+                else
+                {
+                    table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.tilt.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.elevation.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.bias.ToString("0.00"), -1, wPerc));                    
+                }
+
+                m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+            }
+
+            e.Graphics.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+           
+            m_yPos += DrawCalibInfo(e.Graphics, Measurement, m_yPos);
+            // m_yPos += MargY;
+
+            m_yPos += DrawComment(e.Graphics, Measurement, m_yPos);
+            m_yPos += MargY;
+
+
+
+            DrawText("*Bias across line-of-sight.", e.Graphics, HeadFont, br, new Rectangle(HeadRect.Left, e.MarginBounds.Bottom, HeadRect.Width, 10), 2, 0);
+            // m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
 
 
 

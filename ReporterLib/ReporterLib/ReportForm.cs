@@ -19,14 +19,17 @@ namespace ReporterLib
         private PrintDocument m_document;
         
         public int ProjectId { get; set; }
-        public int MeasId { get; set; }
+        //public int MeasId { get; set; }
+        List<int> MeasIds = new List<int>();
+        private int MeasNum { get; set; }
+        private bool HeadPage { get; set; }
 
         private bool MultiMode { get; set; }
         private DBInterface.Project Project;
 
         private DBInterface.Measurement Measurement;
         private Dictionary<int, DBInterface.Measurement> Measurements;
-        Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, int>> PrintMeasFunc = new Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, int>>();
+        Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, bool>> PrintMeasFunc = new Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, bool>>();
 
         private int m_page;
         private int m_yPos;
@@ -36,6 +39,17 @@ namespace ReporterLib
         Rectangle HeadRect;
         private Font HeadFont = new Font("Ariel", 8, FontStyle.Regular);
 
+        ReportSorter Sorter;
+        static private SortOrder LastSortOrder;
+        static private int LastSortColumn;
+
+
+
+        public void SetMeasId(int id)
+        {
+            if (id > 0)
+                MeasIds.Add(id);
+        }
 
         public class TableItem
         {
@@ -50,6 +64,11 @@ namespace ReporterLib
         public ReportForm()
         {
             InitializeComponent();
+
+            LastSortOrder = SortOrder.Ascending;
+            LastSortColumn = 1; //time
+            Sorter = new ReportSorter();
+
             DBI = new DBInterface();
             DBI.Open();
 
@@ -63,7 +82,7 @@ namespace ReporterLib
         {
             m_printerSettings = new PrinterSettings();
 
-            MultiMode = (MeasId == -1);
+            MultiMode = (MeasIds.Count() == 0);
             reportList.Visible = MultiMode;
 
             Project = new DBInterface.Project();
@@ -86,15 +105,36 @@ namespace ReporterLib
             if (MultiMode)
                 Text = ProjectId.ToString() + ": Show All";
             else
-                Text = ProjectId.ToString() + ": Show " + MeasId.ToString();
+                Text = ProjectId.ToString() + ": Show " + MeasIds[0].ToString();
 
+            printPreviewControl.MouseWheel += new MouseEventHandler(printPreview_MouseWheel);
+           
 
         }
+
+        private void printPreview_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Do stuff!
+            int delte = e.Delta;
+            int currentPage = printPreviewControl.StartPage;
+            int inc = e.Delta > 0 ? -1 : 1;
+            int newPage = currentPage + inc;
+            if (newPage < 0 || newPage > m_page)
+                return;
+
+
+
+            printPreviewControl.StartPage = newPage;//((int)pageUpDown.Value) - 1;
+            printPreviewControl.Update();
+        }
+
 
         private void UpdateReportList()
         {
             reportList.Items.Clear();
-        
+            reportList.ListViewItemSorter = null;
+            reportList.Sorting = SortOrder.None;
+
             int i = 0;
             foreach (var meas in Measurements)
             {
@@ -103,6 +143,10 @@ namespace ReporterLib
                 reportList.Items[i].Tag = meas.Key;
                 i++;
             }
+
+            Sorter.ByColumn = LastSortColumn;
+            reportList.Sorting = LastSortOrder;
+            reportList.ListViewItemSorter = Sorter;
         }
 
         private string GetAngularDef(int signDef)
@@ -115,6 +159,9 @@ namespace ReporterLib
 
         private void PrintPreview()
         {
+            if (reportList.CheckedItems.Count == 0)
+                return;
+
             m_document = new PrintDocument();
             m_document.PrinterSettings = m_printerSettings;
 
@@ -164,7 +211,8 @@ namespace ReporterLib
         private void EndPrint(object sender, System.Drawing.Printing.PrintEventArgs e)
         {
             pageUpDown.Minimum = 1;
-            pageUpDown.Maximum = m_page;            
+            pageUpDown.Maximum = m_page;
+            UpdateColumns();
         }
 
 
@@ -172,32 +220,60 @@ namespace ReporterLib
         {
             m_page = 0;
             m_yPos = 0;
+            MeasNum = 0;
+            HeadPage = true;
+            Measurement = null;
 
-
-            Measurement = Measurements[MeasId];
-                new DBInterface.Measurement();
-   //         DBI.GetMeasurement(MeasId, ref Measurement);
+            MeasIds = new List<int>();
+            int i = 0;
+            foreach (var chitem in reportList.CheckedItems)
+            {
+                int selected = reportList.CheckedItems[i].Index;
+                MeasIds.Add((int)reportList.Items[selected].Tag);
+                i++;
+            }
             
+            if (MeasIds.Count > 0)
+                Measurement = Measurements[MeasIds[MeasNum]];
+
+            //   new DBInterface.Measurement();
+            //         DBI.GetMeasurement(MeasId, ref Measurement);
+
         }
 
         private void PrintPage(object sender, PrintPageEventArgs e)
         {
+            if (Measurement == null)
+            {
+                e.HasMorePages = false;
+                return;
+            }
+
+
             Rectangle bound = e.PageBounds;
             bound.Inflate(-2, -2);
             //e.Graphics.DrawRectangle(new Pen(Color.FromArgb(200, 255, 0, 0)), bound);
             //e.Graphics.DrawRectangle(new Pen(Color.FromArgb(100, 110, 110, 10)), e.MarginBounds);
             DrawPageNum(e);
 
-            if (m_page == 0)
+            bool done = PrintMeasFunc[Measurement.Type].Invoke(e);
+           
+            if(done)
             {
-                PrintMeasFunc[Measurement.Type].Invoke(e);
-                //DrawHeader(e);
+                if(++MeasNum < MeasIds.Count)
+                {
+                    //We have more reports
+                    done = false;
+                    HeadPage = true;
+                    m_yPos = 0;
+                    Measurement = Measurements[MeasIds[MeasNum]];
+                }
+
             }
 
-            //  string text = "This text to be printed. "+ m_page.ToString();
-            // e.Graphics.DrawString(text, new Font("Georgia", 35, FontStyle.Bold), Brushes.Black, 10, 10);
 
-            e.HasMorePages = (m_page++ <= 1);
+            m_page++;
+            e.HasMorePages = !done;
 
 
         }
@@ -220,25 +296,70 @@ namespace ReporterLib
 
         private void pageUpDown_ValueChanged(object sender, EventArgs e)
         {
+            if (pageUpDown.Value < 1)
+                return;
             printPreviewControl.StartPage = ((int)pageUpDown.Value) - 1;
             printPreviewControl.Update();
         }
 
-        private void reportList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void reportList_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            ShowSelected();
-        }
+            PrintPreview();
 
-        private void ShowSelected()
-        {
-            if (reportList.SelectedItems.Count > 0)
+
+           /* if (reportList.CheckedItems.Count > 0)
             {
-                int item = reportList.SelectedItems[0].Index;
+                int item = reportList.CheckedItems[0].Index;
                 MeasId = (int)reportList.Items[item].Tag;
                 PrintPreview();
                 //Logger.Inst.
 
             }
+           // reportList.CheckedItems[0].Index;
+           */
+        }
+
+
+        private void commentButton_Click(object sender, EventArgs e)
+        {
+            OpenComment();
+        }
+
+        private void OpenComment()
+        {
+            if (reportList.SelectedItems.Count > 0)
+            {
+                int item = reportList.SelectedItems[0].Index;
+                int measId = (int)reportList.Items[item].Tag;
+                DBInterface.Measurement meas = Measurements[measId];
+
+                EditTextForm etf = new EditTextForm();
+                etf.textBox.Text = meas.Comment;
+                if (etf.ShowDialog(this) == DialogResult.OK)
+                {
+                    meas.Comment = etf.textBox.Text;
+                    DBI.UpdateComment(meas.ID, meas.Comment);
+
+                }
+                else return;
+
+
+            }
+        }
+
+        private void reportList_DoubleClick(object sender, EventArgs e)
+        {
+        
+        }
+
+        private void reportList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            UpdateStates();    
+        }
+
+        private void UpdateStates()
+        {
+            commentButton.Enabled = (reportList.SelectedItems.Count > 0);
         }
 
         private void DrawHeader(PrintPageEventArgs e) 
@@ -262,7 +383,7 @@ namespace ReporterLib
             HeadRect = new Rectangle(new Point(headX, headY), new Size(e.MarginBounds.Width, 120));
 
             e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(255, 240, 240, 255)), HeadRect);
-            e.Graphics.DrawRectangle(new Pen(Color.FromArgb(50,0,0,0)), HeadRect);
+            e.Graphics.DrawRectangle(new Pen(Color.FromArgb(255,100,100,100)), HeadRect);
             int xPerc = 2;
             //string text = "AZIMUTH ALIGNMENT ERRORS ";
                                   
@@ -355,7 +476,7 @@ namespace ReporterLib
             int startPos = pos;
             if (meas.Comment != "")
             {
-                pos += MargY;
+                pos += MargY/2;
                 string comment = "Comment:\n" + meas.Comment;
 
                 SolidBrush br = new SolidBrush(Color.Black);
@@ -386,7 +507,7 @@ namespace ReporterLib
             }
         }
 
-        private int PrintTiltAlignment(PrintPageEventArgs e)
+        private bool PrintTiltAlignment(PrintPageEventArgs e)
         {
             DrawHeader(e);
 
@@ -440,8 +561,8 @@ namespace ReporterLib
                     table.Add(new TableItem(refStr, -1, wPerc));
                     table.Add(new TableItem(refStr, -1, wPerc));
                     table.Add(new TableItem(refStr, -1, wPerc));
-                    table.Add(new TableItem(refStr, -1, wPerc));
-                    table.Add(new TableItem(refStr, -1, wPerc));
+                    table.Add(new TableItem("", -1, wPerc));
+                    table.Add(new TableItem("", -1, wPerc));
                 }
                 else
                 {
@@ -463,7 +584,7 @@ namespace ReporterLib
             // m_yPos += MargY;
 
             m_yPos += DrawComment(e.Graphics, Measurement, m_yPos);
-            m_yPos += MargY;
+            //m_yPos += MargY;
 
 
 
@@ -472,11 +593,87 @@ namespace ReporterLib
 
 
 
-            return 0;
+            return true;
         }
 
+        private void printPreviewControl_Click(object sender, EventArgs e)
+        {
+            printPreviewControl.Focus();
+        }
+
+        private void ReportForm_SizeChanged(object sender, EventArgs e)
+        {
+            UpdateColumns();
+        }
+
+        private void UpdateColumns()
+        {
+            int oldColumns = printPreviewControl.Columns;
+            int newColumns=1;
+
+            if (m_page > 1)
+            {
+                float col = (float)printPreviewControl.Size.Width / printPreviewControl.Size.Height / 0.7f;
+                int c = (int)col;
+                if (c < 1) c = 1;
+                newColumns = Math.Min(m_page, c);
+                //if ((float)printPreviewControl.Size.Width / printPreviewControl.Size.Height > 1.5f)
+                {
+                    
+                }                
+            }
+
+            if (newColumns != oldColumns)
+            {
+                printPreviewControl.Columns = newColumns;
+                printPreviewControl.Update();
+            }
 
 
+
+        }
+
+        private void allButton_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in reportList.Items)
+            {
+                item.Checked = true;
+            }
+        }
+
+        private void noneButton_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in reportList.Items)
+            {
+                item.Checked = false;
+            }
+        }
+
+        private void reportList_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            this.reportList.ItemChecked -= new System.Windows.Forms.ItemCheckedEventHandler(this.reportList_ItemChecked);
+            reportList.ListViewItemSorter = null;
+
+            if (Sorter.LastSort == e.Column)
+            {
+                if (reportList.Sorting == SortOrder.Ascending)
+                    reportList.Sorting = SortOrder.Descending;
+                else
+                    reportList.Sorting = SortOrder.Ascending;
+            }
+            else
+            {
+                reportList.Sorting = SortOrder.Descending;
+            }
+
+            LastSortOrder = reportList.Sorting;
+            LastSortColumn = e.Column;
+            Sorter.ByColumn = e.Column;
+            reportList.ListViewItemSorter = Sorter;
+            this.reportList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.reportList_ItemChecked);
+
+            PrintPreview();
+        }
     }
 }
  

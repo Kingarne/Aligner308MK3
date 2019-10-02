@@ -124,12 +124,13 @@ public:
 	BOOL IsValid( void ) ;
 	void LoadProjectPathFromRegistry( void ) ;
 	void SaveProjectPathToRegistry( void ) ;
+		
 	CString GetOperatorName( void ) ;
 	CString GetShipName( void ) ;
 	CString GetProjectName( void ) ;
 	int GetProjectID(void);
 	CString GetProjectPath( void ) ;
-	CString GetProjectPath2( void ) ;
+	CString GetProjectPathBase( void ) ;
 	CString GetPlace( void ) ;
 	double GetLatitude( void ) ;
 	double GetLatitudeCompensation( void ) ;

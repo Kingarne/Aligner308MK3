@@ -92,7 +92,7 @@ namespace ReporterLib
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error ODBC");
+                MessageBox.Show("Error ODBC: " + e.Message);
             }
                 //execute queries, etc           
 
@@ -182,7 +182,23 @@ namespace ReporterLib
 
             return true;
         }
-               
+
+        public bool UpdateComment(int measId, string comment)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            string sql = String.Format("UPDATE Measurement SET comment='{0}' WHERE ID={1}",comment, measId);            
+
+            using (OdbcCommand command = new OdbcCommand(sql, Connection))
+            {
+                command.ExecuteNonQuery();
+
+                
+            }
+            return true;
+
+        }
 
 
         public bool GetMeasurement(int measId, ref Measurement measurement)

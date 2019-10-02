@@ -8,7 +8,8 @@ public:
 	SystemSetupDialog(ProjectData &dataSource, CWnd *pParent = NULL);
 	virtual ~SystemSetupDialog(void);
 
-	ProjectData m_proj;
+	ProjectData m_proj;	
+	CString m_folder;
 	WhiteBackgroundEdit m_date;
 
 protected:
@@ -31,7 +32,7 @@ protected:
 	void UpdateShips();
 	CComboBox m_shipCombo;
 
-	CString m_folder;
+	
 	
 /*	CString m_name;
 	CString m_operator;

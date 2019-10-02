@@ -27,7 +27,7 @@ namespace ReporterLib
 
 
             reportForm.ProjectId = projectId;
-            reportForm.MeasId = measId;
+            reportForm.SetMeasId(measId);
             reportForm.ShowDialog();
 
 

@@ -166,7 +166,7 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 			rs.GetFieldValue("operator", data.m_operatorName);
 			rs.GetFieldValue("location", data.m_location);
 			rs.GetFieldValue("latitude", val);
-			data.m_latitude = val.m_fltVal;
+			data.m_latitude = val.m_dblVal;
 			rs.GetFieldValue("unit", val);
 			data.m_unit = val.m_iVal;
 			rs.GetFieldValue("signDef", val);

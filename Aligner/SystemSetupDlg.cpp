@@ -255,9 +255,13 @@ void SystemSetupDialog::OnBnClickedBrowseButton(void)
 
 void SystemSetupDialog::OnBnClickedOk()
 {
+	UpdateData(TRUE);
 	//m_proj.m_projectName = m_name;
 	//m_proj.m_operatorName = m_operator;
 	OnCbnSelchangeShipName();
+
+	if (m_proj.m_projectName == "")
+		return;
 
 	CDialog::OnOK();
 }

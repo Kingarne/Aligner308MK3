@@ -33,6 +33,9 @@
             this.pageUpDown = new System.Windows.Forms.NumericUpDown();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.reportList = new System.Windows.Forms.ListView();
+            this.commentButton = new System.Windows.Forms.Button();
+            this.allButton = new System.Windows.Forms.Button();
+            this.noneButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,10 +55,13 @@
             this.printPreviewControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.printPreviewControl.Location = new System.Drawing.Point(271, 12);
+            this.printPreviewControl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.printPreviewControl.Location = new System.Drawing.Point(285, 12);
             this.printPreviewControl.Name = "printPreviewControl";
-            this.printPreviewControl.Size = new System.Drawing.Size(454, 692);
+            this.printPreviewControl.Size = new System.Drawing.Size(457, 692);
             this.printPreviewControl.TabIndex = 2;
+            this.printPreviewControl.UseAntiAlias = true;
+            this.printPreviewControl.Click += new System.EventHandler(this.printPreviewControl_Click);
             // 
             // pageUpDown
             // 
@@ -68,22 +74,60 @@
             // 
             // reportList
             // 
+            this.reportList.CheckBoxes = true;
             this.reportList.FullRowSelect = true;
             this.reportList.GridLines = true;
             this.reportList.HideSelection = false;
-            this.reportList.Location = new System.Drawing.Point(12, 12);
+            this.reportList.Location = new System.Drawing.Point(12, 32);
+            this.reportList.MultiSelect = false;
             this.reportList.Name = "reportList";
-            this.reportList.Size = new System.Drawing.Size(253, 336);
+            this.reportList.Size = new System.Drawing.Size(267, 369);
             this.reportList.TabIndex = 4;
             this.reportList.UseCompatibleStateImageBehavior = false;
             this.reportList.View = System.Windows.Forms.View.Details;
+            this.reportList.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.reportList_ColumnClick);
+            this.reportList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.reportList_ItemChecked);
             this.reportList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.reportList_ItemSelectionChanged);
+            this.reportList.DoubleClick += new System.EventHandler(this.reportList_DoubleClick);
+            // 
+            // commentButton
+            // 
+            this.commentButton.Location = new System.Drawing.Point(12, 407);
+            this.commentButton.Name = "commentButton";
+            this.commentButton.Size = new System.Drawing.Size(75, 23);
+            this.commentButton.TabIndex = 5;
+            this.commentButton.Text = "Comment...";
+            this.commentButton.UseVisualStyleBackColor = true;
+            this.commentButton.Click += new System.EventHandler(this.commentButton_Click);
+            // 
+            // allButton
+            // 
+            this.allButton.Location = new System.Drawing.Point(12, 12);
+            this.allButton.Name = "allButton";
+            this.allButton.Size = new System.Drawing.Size(42, 19);
+            this.allButton.TabIndex = 6;
+            this.allButton.Text = "All";
+            this.allButton.UseVisualStyleBackColor = true;
+            this.allButton.Click += new System.EventHandler(this.allButton_Click);
+            // 
+            // noneButton
+            // 
+            this.noneButton.Location = new System.Drawing.Point(60, 12);
+            this.noneButton.Name = "noneButton";
+            this.noneButton.Size = new System.Drawing.Size(42, 19);
+            this.noneButton.TabIndex = 7;
+            this.noneButton.Text = "None";
+            this.noneButton.UseVisualStyleBackColor = true;
+            this.noneButton.Click += new System.EventHandler(this.noneButton_Click);
             // 
             // ReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(737, 716);
+            this.ClientSize = new System.Drawing.Size(754, 716);
+            this.Controls.Add(this.noneButton);
+            this.Controls.Add(this.allButton);
+            this.Controls.Add(this.commentButton);
             this.Controls.Add(this.reportList);
             this.Controls.Add(this.pageUpDown);
             this.Controls.Add(this.printPreviewControl);
@@ -91,6 +135,7 @@
             this.Name = "ReportForm";
             this.Text = "ReportForm";
             this.Load += new System.EventHandler(this.ReportForm_Load);
+            this.SizeChanged += new System.EventHandler(this.ReportForm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).EndInit();
             this.ResumeLayout(false);
 
@@ -102,5 +147,8 @@
         private System.Windows.Forms.NumericUpDown pageUpDown;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.ListView reportList;
+        private System.Windows.Forms.Button commentButton;
+        private System.Windows.Forms.Button allButton;
+        private System.Windows.Forms.Button noneButton;
     }
 }

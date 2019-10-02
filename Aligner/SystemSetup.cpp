@@ -66,9 +66,11 @@ BOOL SystemSetup::DoModal( void )
    // LoadUnitsFromRegistry() ;
    // LoadFromRegistry() ;
     SystemSetupDialog dialog( m_proj ) ;
+	dialog.m_folder = m_projectPath;
     if (IDOK == dialog.DoModal())
     {
 		m_proj = dialog.m_proj ;
+		m_projectPath = dialog.m_folder;
 		LoadSignFromRegistry();
 		SaveToRegistry() ;
 		SaveLatitudeToRegistry() ;
@@ -409,7 +411,7 @@ CString SystemSetup::GetProjectPath( void )
     return m_projectPath + _T("\\") + m_proj.m_projectName ;
 }
 
-CString SystemSetup::GetProjectPath2( void )
+CString SystemSetup::GetProjectPathBase( void )
 {
     return m_projectPath ;
 }

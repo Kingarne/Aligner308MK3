@@ -109,8 +109,8 @@ BOOL DBInterface::InsertProject(ProjectData& project)
 	COleDateTime time(project.m_time);
 
 	CString sql = "";
-	sql.Format("INSERT INTO Project( name, operator, location, shipId, latitude, unit, imgIdx, projTime, signDef ) VALUES ('%s','%s','%s', %d, %.2f, %d, %d, '%s', %d)",
-		project.m_projectName, project.m_operatorName, project.m_location, project.m_shipID, project.m_latitude, project.m_unit, 0, time.Format(_T("%Y-%m-%d %H:%M:%S")), project.m_signDef);
+	sql.Format("INSERT INTO Project( name, dauSerial, operator, location, shipId, latitude, unit, imgIdx, projTime, signDef ) VALUES ('%s',%d, '%s','%s', %d, %.2f, %d, %d, '%s', %d)",
+		project.m_projectName, SysSetup->GetDAUSerial(), project.m_operatorName, project.m_location, project.m_shipID, project.m_latitude, project.m_unit, 0, time.Format(_T("%Y-%m-%d %H:%M:%S")), project.m_signDef);
 
 	m_db.ExecuteSQL(sql);
 
@@ -176,6 +176,9 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 			data.m_shipClass = val.m_iVal;
 			CString str;
 			rs.GetFieldValue("config", data.m_config);
+			rs.GetFieldValue("imgIdx", val);
+			data.m_imgIdx = val.m_iVal;
+
 
 			projects.push_back(data);
 			

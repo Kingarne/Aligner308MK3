@@ -13,7 +13,7 @@
 
 BOOL DoDelete( LONG index )
 {
-    return DBInterface::Instance()->DeleteRecord("History", index);        
+    return DBInterface::Instance()->DeleteRecord("Measurement", index);        
 }
 
 #define IMPLEMENT_HISTORY(name) \
@@ -47,33 +47,14 @@ BOOL DoDelete( LONG index )
   }
 
 #define IMPLEMENT_MEASUREMENT(name) \
-  LONG name::m_lastID ; \
-  LONG name::m_lastChID ; \
-  LONG name::m_mainID ; \
-  void name::SetLastID( LONG lastID ) { m_lastID = lastID ; } \
-  LONG name::GetLastID( void ) { return m_lastID ; } \
-  LONG name::GetMainID( void ) { return m_mainID ; } \
-  BOOL name::DeleteLast( void ) { \
-    return DoDelete( m_mainID ) ; \
-  } \
-  BOOL name::SetComment( const CString &comment) { \
-  CString str(#name); \
-  str.Format("%s",#name); \
-  return DBInterface::Instance()->UpdateComment(str, m_mainID, comment);\
-  } \
-  BOOL name::AddGraph( CString filename, BOOL include ) { \
-    if (m_mainID == 0) { \
-        MeasurementData md; \
-        CTime::GetCurrentTime().GetAsDBTIMESTAMP(md.m_time) ; \
-        DBInterface::Instance()->InsertMeasurement(md); \
-        int lastId = 0; \
-        DBInterface::Instance()->GetLastCounter(lastId); \
-        m_mainID = lastId ; \
-    } \
-    return DBInterface::Instance()->InsertGraph(m_mainID, filename, include); \
-  } \
-  void name::ResetMainID( void ) { \
-    m_mainID = 0 ; \
+  LONG name::m_measTypeID ; \
+  LONG name::m_measChID ; \
+  LONG name::m_measID ; \
+  void name::SetMeasTypeID( LONG measTypeID ) { m_measTypeID = measTypeID ; } \
+  LONG name::GetMeasTypeID( void ) { return m_measTypeID ; } \
+  LONG name::GetMeasID( void ) { return m_measID ; } \
+  void name::ResetMeasID( void ) { \
+    m_measID = 0 ; \
   }
 
 IMPLEMENT_MEASUREMENT(TiltAlignment) ;
@@ -108,18 +89,18 @@ BOOL TiltAlignment::AddData( Data &data )
 	data.type = MeasType::MT_TiltAlignment;
     DBInterface::Instance()->InsertMeasurement(data);
     DBInterface::Instance()->GetLastCounter(lastId);        
-    m_mainID = lastId;
+    m_measID = lastId;
 
-    DBInterface::Instance()->InsertTiltAlignment(data, m_mainID);
+    DBInterface::Instance()->InsertTiltAlignment(data, m_measID);
     DBInterface::Instance()->GetLastCounter(lastId);  
-    m_lastID = lastId;
+    m_measTypeID = lastId;
 
     return TRUE ;
 }
 
 BOOL TiltAlignment::AddChannel( const ChannelData chData )
 {
-    return DBInterface::Instance()->InsertTiltAlignmentChannel(chData, m_lastID);
+    return DBInterface::Instance()->InsertTiltAlignmentChannel(chData, m_measTypeID);
 }
 
 BOOL TiltAndFlatnessHistory::AddData( Data &data )

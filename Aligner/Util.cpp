@@ -1924,7 +1924,7 @@ void AdjustSyncroValueToRangeA202( double* pSyncroValue, double gearing )
   }
 }
 
-BOOL MoveFileToTemporaryDirectory( CString &fileNameWithPath )
+/*BOOL MoveFileToTemporaryDirectory( CString &fileNameWithPath )
 {
     TRACE("MoveFileToTemporaryDirectory: %s\n",fileNameWithPath);
     CString path, filename;
@@ -1961,7 +1961,7 @@ BOOL MoveFileToTemporaryDirectory( CString &fileNameWithPath )
             path = path.Left( position + 1 );
         }
     }
-    path += _T("TemporaryImages\\");
+    path += _T("IntermediateImages\\");
     std::string stdTemporaryPath = path ;
 
     if( ::CreateDirectory( stdTemporaryPath.c_str(), NULL ) == FALSE )
@@ -1985,7 +1985,7 @@ BOOL MoveFileToTemporaryDirectory( CString &fileNameWithPath )
     return( result );
 
 }
-
+*/
 CString GetFileName( CString &fileNameWithPath )
 {
     CString filename;

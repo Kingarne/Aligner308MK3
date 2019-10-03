@@ -148,7 +148,7 @@ void SystemConfigurationView::UpdateGeneralConfiguration( void )
 	m_GeneralShip.SetWindowText( (LPCTSTR)SysSetup->GetShipName() );
 	m_GeneralOperator.SetWindowText( (LPCTSTR)SysSetup->GetOperatorName() );
 	m_GeneralDauSN.SetWindowText( (LPCTSTR)DAU::GetDAU().GetSerialNumber() );
-	m_GeneralDate.SetWindowText( COleDateTime::GetCurrentTime().Format( _T("%Y-%m-%d %H:%M:%S") ) );
+	m_GeneralDate.SetWindowText(SysSetup->GetProjectTime());// COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")) );
 	m_GeneralPlace.SetWindowText( (LPCTSTR)SysSetup->GetPlace() );
 
     if( theApp.IsAligner202Enabled() == FALSE )
@@ -245,12 +245,12 @@ void SystemConfigurationView::OnShowWindow(BOOL bShow, UINT nStatus)
 {
   __super::OnShowWindow(bShow, nStatus) ;
   
-  if (bShow)
+  /*if (bShow)
   {
     SetTimer( m_timerId, 1000, NULL ) ;
   }
   else
   {
     KillTimer( m_timerId ) ;
-  }
+  }*/
 }

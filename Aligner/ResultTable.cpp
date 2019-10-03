@@ -8,6 +8,7 @@
 #include "AlignmentWizard.h"
 #include "ResultTable.h"
 #include "calibInfo.h"
+#include "ReportManager.h"
 
 #ifdef BUILD_ALIGNER_308
 #include "../AlignerReport/AlignerReport.h"
@@ -25,19 +26,12 @@ void CResultTable::SetReportFolder( string baseDir )
 CResultTable::CResultTable( CWnd* pParent /*=NULL*/)
 {
 	m_InParam.Version = VERSION_NOT_DEFINED;
-	m_reportHistoryMainID = -1;
-	m_pPresentDlg = NULL;
-	m_hReportWindow = NULL;
+	m_reportMeasID = -1;
     m_pParent = (CAlignmentWizard*)pParent;
 }
 
 CResultTable::~CResultTable()
 {
-	// don't delete m_pPresentDlg, it will be done by the dialog's own code ??
-	if( m_pPresentDlg != NULL )
-	{
-		delete m_pPresentDlg;
-	}
 }
 
 BOOL CResultTable::InitiateReport( InParam* pInParam )
@@ -986,34 +980,24 @@ BOOL CResultTable::SaveToDataBase( void )
 
 		switch( m_InParam.Version )
 		{
-		case TILT_ALIGNMENT:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_TiltAlignment.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_TiltAlignment.m_comment = m_InParam.Comment;
-			}
-
+			case TILT_ALIGNMENT:
+	
 			if( !TiltAlignment::AddData( m_TiltAlignment ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
 
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
-			{
-				if( m_TiltAlignmentChannel[i].m_station.GetLength() == 0 ) 
-				{
-					m_TiltAlignmentChannel[i].m_station = DB_EMPTY_STRING;
-				}
-
+			{		
 				if( !TiltAlignment::AddChannel( m_TiltAlignmentChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
 			}
+			m_reportMeasID = TiltAlignment::GetMeasID();
+
 			break;
+
 		case AZIMUTH_ALIGN:
 			if( m_InParam.Comment.GetLength() == 0 )
 			{
@@ -1479,14 +1463,21 @@ BOOL CResultTable::SaveToDataBase( void )
   return TRUE ;
 }
 
-BOOL CResultTable::DeleteLast( void )
+BOOL CResultTable::DeleteLast(void)
 {
-	BOOL result = TRUE;
+	BOOL res =  DBInterface::Instance()->DeleteRecord("Measurement", m_reportMeasID);
+	m_reportMeasID = -1;
+
+	return res;
+}
+
+
+/*	BOOL result = TRUE;
 #ifdef BUILD_ALIGNER_308
 	switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		result = TiltAlignment::DeleteLast();
+		result = TiltAlignment::DeleteMeas();
 		break;
 	case AZIMUTH_ALIGN:
 		result = AzimuthAlignmentErrorsHistory::DeleteLast();
@@ -1531,39 +1522,41 @@ BOOL CResultTable::DeleteLast( void )
 #endif
 	if( result == TRUE )
 	{
-		m_reportHistoryMainID = -1;
+		m_reportMeasID = -1;
 	}
 	return( result );
 }
-
+*/
 
 BOOL CResultTable::OpenReport( BOOL SaveToDB )
 {
 	BOOL result = TRUE;
-#ifdef BUILD_ALIGNER_308
+
 	if( SaveToDB == TRUE )
 	{
 		result = SaveToDataBase();
-		Sleep(1000);
 	}
 
-	if( CreateEmptyReport() == FALSE )
+	ReportManager rm;
+	rm.OpenReport(SysSetup->GetProjectID(), m_reportMeasID);
+
+	/*if( CreateEmptyReport() == FALSE )
 	{
 		return( FALSE );
 	}
 	
 	result =  ShowPresentDialog( m_InParam.ShowPresenetDialog );
-#endif
+#endif*/
 	return( result );
 }
-
+/*
 BOOL CResultTable::CreateEmptyReport( void )
 {
 #ifdef BUILD_ALIGNER_308
     switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		m_reportHistoryMainID = TiltAlignment::GetMainID();
+		m_reportHistoryMainID = TiltAlignment::GetMeasID();
 		TiltAlignmentErrorsReport::Create( m_reportHistoryMainID, m_hReportWindow );
 		break;
 	case AZIMUTH_ALIGN:
@@ -1686,7 +1679,7 @@ BOOL CResultTable::UpdateComment( void )
 	switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		result = TiltAlignment::SetComment( m_InParam.Comment );
+//		result = TiltAlignment::SetComment( m_InParam.Comment );
 		break;
 	case AZIMUTH_ALIGN:
 		result = AzimuthAlignmentErrorsHistory::SetComment( m_InParam.Comment );
@@ -1741,13 +1734,14 @@ BOOL CResultTable::UpdateComment( void )
     return result ;
 }
 
+
 BOOL CResultTable::ResetMainID( void )
 {
 #ifdef BUILD_ALIGNER_308
     switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		TiltAlignment::ResetMainID();
+		TiltAlignment::ResetMeasID();
 		break;
 	case AZIMUTH_ALIGN:
 		AzimuthAlignmentErrorsHistory::ResetMainID();
@@ -1792,7 +1786,7 @@ BOOL CResultTable::ResetMainID( void )
 #endif
     return TRUE ;
 }
-
+/*
 long CResultTable::GetMainID( void )
 {
     long id=0;
@@ -1800,7 +1794,7 @@ long CResultTable::GetMainID( void )
 	switch( m_InParam.Version )
 	{
 	case TILT_ALIGNMENT:
-		id = TiltAlignment::GetMainID();
+		id = TiltAlignment::GetMeasID();
 		break;
 	case AZIMUTH_ALIGN:
 		id = AzimuthAlignmentErrorsHistory::GetMainID();
@@ -1845,12 +1839,16 @@ long CResultTable::GetMainID( void )
 #endif
 	return id ;
 }
-
-BOOL CResultTable::AddGraph( CString fileName, BOOL includeToResultTable )
+*/
+BOOL CResultTable::AddGraph(CString fileName, BOOL includeToResultTable)
 {
-BOOL result=TRUE;
+	return DBInterface::Instance()->InsertGraph(m_reportMeasID, fileName, includeToResultTable);	
+}
+
+
+/*BOOL result=TRUE;
 #ifdef BUILD_ALIGNER_308    
-	CloseReport();
+//	CloseReport();
 
 	switch( m_InParam.Version )
 	{
@@ -1900,7 +1898,7 @@ BOOL result=TRUE;
 #endif
 	return result ;
 }
-
+/*
 BOOL CResultTable::IsReportOpen( void )
 {
 	BOOL result = FALSE;
@@ -1953,12 +1951,19 @@ BOOL CResultTable::IsReportOpen( void )
 #endif
 	return result;
 }
-
-BOOL CResultTable::ShowReport( BOOL CloseFirst )
+*/
+BOOL CResultTable::ShowReport(BOOL CloseFirst)
 {
-	BOOL result = FALSE;
-#ifdef BUILD_ALIGNER_308
+	BOOL result = InitiateReport(NULL);
+	if(result )
+	{
+		result = OpenReport(TRUE);
+	}
 
+	
+	return result;
+}
+/*
 	if( CloseFirst == TRUE )
 	{
 		CloseReport();
@@ -1981,9 +1986,8 @@ BOOL CResultTable::ShowReport( BOOL CloseFirst )
 		}
 		result = OpenReport( TRUE );
 	}
-#endif
 	return result;
-}
+}*/
 
 BOOL CResultTable::OpenCalibrationReport()
 {
@@ -2007,7 +2011,7 @@ BOOL CResultTable::OpenMainReport()
 #endif    
     return TRUE;
 }
-
+/*
 BOOL CResultTable::CloseReport( void )
 {
 #ifdef BUILD_ALIGNER_308
@@ -2057,7 +2061,7 @@ BOOL CResultTable::CloseReport( void )
 		break;
 	}
 
-	m_hReportWindow = NULL;
+//	m_hReportWindow = NULL;
 #endif
 	return( TRUE );
-}
+}*/

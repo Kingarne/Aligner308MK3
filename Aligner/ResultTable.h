@@ -61,12 +61,12 @@ public:
 	virtual ~CResultTable();
 
     BOOL DeleteLast( void );
-	BOOL CloseReport( void );
+	//BOOL CloseReport( void );
 	BOOL ShowReport( BOOL CloseFirst );	
-	BOOL UpdateComment( void );
+	//BOOL UpdateComment( void );
 	BOOL AddGraph( CString fileName, BOOL includeToResultTable );
-	BOOL ResetMainID( void );
-    long GetMainID( void );
+//	BOOL ResetMainID( void );
+   // long GetMainID( void );
     
     BOOL OpenMainReport();
     BOOL OpenCalibrationReport();
@@ -75,20 +75,21 @@ public:
   
     InParam m_InParam;
     LiveDataA202Param* m_pLiveDataA202Param;
-    long m_reportHistoryMainID;
+    long m_reportMeasID;
 
 protected:
 
-	BOOL CreateEmptyReport( void );
+	//BOOL CreateEmptyReport( void );
     BOOL InitiateReport( InParam* pInParam );
     BOOL SaveToDataBase( void );
 	BOOL OpenReport( BOOL SaveToDB );
 	BOOL IsReportOpen( void );
-	BOOL ShowPresentDialog( BOOL Show );
+	//BOOL ShowPresentDialog( BOOL Show );
 
-    HANDLE m_hReportWindow;
+    
     CAlignmentWizard* m_pParent;
-    CPresentDialog* m_pPresentDlg;
+    //CPresentDialog* m_pPresentDlg;
+	//HANDLE m_hReportWindow;
 
 	TiltAlignment::Data m_TiltAlignment;
 	TiltAlignment::ChannelData m_TiltAlignmentChannel[SIZE_OF_ARRAYS];

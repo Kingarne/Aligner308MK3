@@ -201,7 +201,7 @@ BOOL GetMRad();
 void SetSelectedChannels( DAU *pSource = NULL, BOOL fromLiveGraphData=FALSE );
 void ClearSelectedChannels( DAU *pSource = NULL );
 void SetUsedAsSelectedChannels( DAU *pSource = NULL);
-BOOL MoveFileToTemporaryDirectory( CString &fileNameWithPath );
+//BOOL MoveFileToTemporaryDirectory( CString &fileNameWithPath );
 CString GetFileName( CString &fileNameWithPath );
 void SetupSensors(MeasureInParam& inParam);
 Digital* GetDigital(CString name);

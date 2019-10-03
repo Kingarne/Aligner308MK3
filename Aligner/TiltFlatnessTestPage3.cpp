@@ -192,7 +192,7 @@ BOOL CTiltFlatnessTestPage3::OnWizardFinish()
 			}			
 			OnBnClickedShowResultGraph();
 		    OnBnClickedShowPolarGraph();    
-			m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
+			//m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
 
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 			m_pParent->m_pResultTable->ShowReport( TRUE );
@@ -235,12 +235,12 @@ BOOL CTiltFlatnessTestPage3::OnWizardFinish()
 						m_pParent->m_GraphFileManager.IncludeToResultTable( keepError, m_pParent->m_ErrorGraphFileName );						
 					}
 				}				
-                m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
+               // m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
 				return CPropertyPage::OnWizardFinish();
 			}
 			else
 			{
-				m_pParent->m_pResultTable->CloseReport();
+			//	m_pParent->m_pResultTable->CloseReport();
 			}
     }
 

@@ -27,8 +27,8 @@ public:
 public:
   virtual void DeleteContents( void ) ;
 public:
-  void AddMeasurment( LONG measurmentID ) ;
-  void RemoveMeasurment( LONG measurmentID ) ;
+  //void AddMeasurment( LONG measurmentID ) ;
+  //void RemoveMeasurment( LONG measurmentID ) ;
   void SaveProject( void ) ;
   void ReOpenDocument();
   void LoadSensorCalibration();
@@ -89,7 +89,7 @@ public:
 private:
   BOOL m_initialSetup ;
   XMLHandler m_XMLHandler;
-  std::set<LONG> m_projectMeasurments ;
+ // std::set<LONG> m_projectMeasurments ;
   CString m_ChannelSetupFileDir ;
   CString m_ChannelSetupFileName ;
 #ifdef _DEBUG

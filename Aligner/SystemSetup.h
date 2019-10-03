@@ -65,7 +65,7 @@ class ProjectData
 {
 public:
 
-	ProjectData(void) : m_projectName(""), m_operatorName(""), m_shipName(""), m_latitude(0.0), m_mode(SYSTEM_SETUP_NO_MODE), m_location(""), m_unit(0) 
+	ProjectData(void) : m_projectName(""), m_dauSerial(0), m_operatorName(""), m_shipName(""), m_latitude(0.0), m_mode(SYSTEM_SETUP_NO_MODE), m_location(""), m_unit(0)
 	{
 
 	};
@@ -74,6 +74,7 @@ public:
 	int m_projectID;
 	CString m_projectName;
 	DBTIMESTAMP m_time;
+	int m_dauSerial;
 	CString m_operatorName;
 	int m_shipID;
 	CString m_shipName;
@@ -125,6 +126,8 @@ public:
 	void LoadProjectPathFromRegistry( void ) ;
 	void SaveProjectPathToRegistry( void ) ;
 		
+	int GetDAUSerial();
+	CString GetProjectTime(void);
 	CString GetOperatorName( void ) ;
 	CString GetShipName( void ) ;
 	CString GetProjectName( void ) ;
@@ -147,6 +150,7 @@ public:
 	CString GetConfigXML();
 	void UpdateConfig(CString xml);
 
+	void SetDAUSerial(int serial);
 	void SetOperatorName(const CString name);
 	void SetShipName(const CString name);
 	void SetProjectName(const CString name);

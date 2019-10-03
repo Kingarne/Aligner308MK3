@@ -41,12 +41,11 @@
             // 
             // printButton
             // 
-            this.printButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.printButton.Location = new System.Drawing.Point(12, 681);
+            this.printButton.Location = new System.Drawing.Point(12, 6);
             this.printButton.Name = "printButton";
             this.printButton.Size = new System.Drawing.Size(75, 23);
             this.printButton.TabIndex = 1;
-            this.printButton.Text = "Print";
+            this.printButton.Text = "Print...";
             this.printButton.UseVisualStyleBackColor = true;
             this.printButton.Click += new System.EventHandler(this.printButton_Click);
             // 
@@ -65,8 +64,7 @@
             // 
             // pageUpDown
             // 
-            this.pageUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pageUpDown.Location = new System.Drawing.Point(215, 684);
+            this.pageUpDown.Location = new System.Drawing.Point(174, 9);
             this.pageUpDown.Name = "pageUpDown";
             this.pageUpDown.Size = new System.Drawing.Size(50, 20);
             this.pageUpDown.TabIndex = 3;
@@ -92,7 +90,7 @@
             // 
             // commentButton
             // 
-            this.commentButton.Location = new System.Drawing.Point(12, 407);
+            this.commentButton.Location = new System.Drawing.Point(93, 6);
             this.commentButton.Name = "commentButton";
             this.commentButton.Size = new System.Drawing.Size(75, 23);
             this.commentButton.TabIndex = 5;
@@ -102,7 +100,7 @@
             // 
             // allButton
             // 
-            this.allButton.Location = new System.Drawing.Point(12, 12);
+            this.allButton.Location = new System.Drawing.Point(12, 407);
             this.allButton.Name = "allButton";
             this.allButton.Size = new System.Drawing.Size(42, 19);
             this.allButton.TabIndex = 6;
@@ -112,7 +110,7 @@
             // 
             // noneButton
             // 
-            this.noneButton.Location = new System.Drawing.Point(60, 12);
+            this.noneButton.Location = new System.Drawing.Point(60, 407);
             this.noneButton.Name = "noneButton";
             this.noneButton.Size = new System.Drawing.Size(42, 19);
             this.noneButton.TabIndex = 7;
@@ -132,6 +130,7 @@
             this.Controls.Add(this.pageUpDown);
             this.Controls.Add(this.printPreviewControl);
             this.Controls.Add(this.printButton);
+            this.MinimumSize = new System.Drawing.Size(770, 755);
             this.Name = "ReportForm";
             this.Text = "ReportForm";
             this.Load += new System.EventHandler(this.ReportForm_Load);

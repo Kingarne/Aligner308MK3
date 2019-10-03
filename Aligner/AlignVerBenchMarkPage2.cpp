@@ -474,7 +474,7 @@ BOOL CAlignVerBenchMarkPage2::OnWizardFinish()
 
     if( IDYES == MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
     {
-			m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();      
+	//		m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();      
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 			m_pParent->m_pResultTable->ShowReport( TRUE );
             m_pParent->m_deleteReport = TRUE;
@@ -489,7 +489,7 @@ BOOL CAlignVerBenchMarkPage2::OnWizardFinish()
 			}
 			else
 			{
-				m_pParent->m_pResultTable->CloseReport();
+		//		m_pParent->m_pResultTable->CloseReport();
 			}
     }
     break;

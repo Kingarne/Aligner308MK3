@@ -1150,6 +1150,7 @@ const char ALIGNER202_ENABLED_REGISTER_SECTION [] = "" ;
 const char ALIGNER202_ENABLED_REGISTER_NAME []    = "Aligner202Enabled" ;
 const BOOL  ALIGNER202_ENABLED_DEFAULT_VALUE       = FALSE ;
 
+/*
 void CAlignerApp::AddToDocument( LONG id )
 {
   static_cast<CAlignerDoc *>(static_cast<CFrameWnd *>(m_pMainWnd) -> GetActiveDocument()) -> AddMeasurment( id ) ;
@@ -1159,7 +1160,7 @@ void CAlignerApp::RemoveFromDocument( LONG id )
 {
   static_cast<CAlignerDoc *>(static_cast<CFrameWnd *>(m_pMainWnd) -> GetActiveDocument()) -> RemoveMeasurment( id ) ;
 }
-
+*/
 void CAlignerApp::OnUtilitiesDa( void )
 {
   DAU::GetDAU().m_comThr.BeginDACTest(FULL_DAC_TEST);

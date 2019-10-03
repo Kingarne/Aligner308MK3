@@ -82,16 +82,17 @@ namespace ReporterLib
         {
             m_printerSettings = new PrinterSettings();
 
-            MultiMode = (MeasIds.Count() == 0);
-            reportList.Visible = MultiMode;
-
             Project = new DBInterface.Project();
             DBI.GetProject(ProjectId, ref Project);
 
-
+            MultiMode = (MeasIds.Count() == 0);
+            reportList.Visible = MultiMode;
+            allButton.Visible = MultiMode;
+            noneButton.Visible = MultiMode;
 
             if (MultiMode)
             {
+                Text = ProjectId.ToString() + ": Show All";
                 DBI.GetProjectMeasurements(ProjectId, ref Measurements);
 
                 reportList.Columns.Add("Report");
@@ -101,15 +102,23 @@ namespace ReporterLib
 
                 UpdateReportList();    
             }
-
-            if (MultiMode)
-                Text = ProjectId.ToString() + ": Show All";
             else
+            {
                 Text = ProjectId.ToString() + ": Show " + MeasIds[0].ToString();
+                Measurement = new DBInterface.Measurement();
+                DBI.GetMeasurement(MeasIds[0], ref Measurement);
+                Measurements[MeasIds[0]] = Measurement;
+
+
+                printPreviewControl.Location = new Point(10, 12 + commentButton.Size.Height + 2);
+                printPreviewControl.Size = new Size(Size.Width-40, Size.Height - 90);
+
+                //commentButton.Location = new Point(12, 12);
+               // printButton.Location = new Point(12 + commentButton.Size.Width + 2, 12);
+                PrintPreview();
+            }
 
             printPreviewControl.MouseWheel += new MouseEventHandler(printPreview_MouseWheel);
-           
-
         }
 
         private void printPreview_MouseWheel(object sender, MouseEventArgs e)
@@ -157,11 +166,31 @@ namespace ReporterLib
             return text1 + text2;
         }
 
+        private bool FillMeasIds()
+        {
+            if (MultiMode)
+            {
+                if (reportList.CheckedItems.Count == 0)
+                    return false;
+
+                MeasIds = new List<int>();
+                int i = 0;
+                foreach (var chitem in reportList.CheckedItems)
+                {
+                    int selected = reportList.CheckedItems[i].Index;
+                    MeasIds.Add((int)reportList.Items[selected].Tag);
+                    i++;
+                }
+            }
+
+            return true;
+        }
+
         private void PrintPreview()
         {
-            if (reportList.CheckedItems.Count == 0)
+            if (!FillMeasIds())
                 return;
-
+            
             m_document = new PrintDocument();
             m_document.PrinterSettings = m_printerSettings;
 
@@ -224,14 +253,7 @@ namespace ReporterLib
             HeadPage = true;
             Measurement = null;
 
-            MeasIds = new List<int>();
-            int i = 0;
-            foreach (var chitem in reportList.CheckedItems)
-            {
-                int selected = reportList.CheckedItems[i].Index;
-                MeasIds.Add((int)reportList.Items[selected].Tag);
-                i++;
-            }
+           
             
             if (MeasIds.Count > 0)
                 Measurement = Measurements[MeasIds[MeasNum]];
@@ -327,24 +349,36 @@ namespace ReporterLib
 
         private void OpenComment()
         {
-            if (reportList.SelectedItems.Count > 0)
+            int measId = 0;
+            if (MultiMode)
             {
-                int item = reportList.SelectedItems[0].Index;
-                int measId = (int)reportList.Items[item].Tag;
-                DBInterface.Measurement meas = Measurements[measId];
-
-                EditTextForm etf = new EditTextForm();
-                etf.textBox.Text = meas.Comment;
-                if (etf.ShowDialog(this) == DialogResult.OK)
+                if (reportList.SelectedItems.Count > 0)
                 {
-                    meas.Comment = etf.textBox.Text;
-                    DBI.UpdateComment(meas.ID, meas.Comment);
-
+                    int item = reportList.SelectedItems[0].Index;
+                    measId = (int)reportList.Items[item].Tag;
                 }
-                else return;
-
-
             }
+            else
+            {
+                measId = MeasIds[0];
+            }
+            if (measId == 0)
+                return;
+
+            DBInterface.Measurement meas = Measurements[measId];
+
+            EditTextForm etf = new EditTextForm();
+            etf.textBox.Text = meas.Comment;
+            if (etf.ShowDialog(this) == DialogResult.OK)
+            {
+                meas.Comment = etf.textBox.Text;
+                DBI.UpdateComment(meas.ID, meas.Comment);
+                PrintPreview();
+            }
+            else return;
+
+
+            
         }
 
         private void reportList_DoubleClick(object sender, EventArgs e)
@@ -383,7 +417,7 @@ namespace ReporterLib
             HeadRect = new Rectangle(new Point(headX, headY), new Size(e.MarginBounds.Width, 120));
 
             e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(255, 240, 240, 255)), HeadRect);
-            e.Graphics.DrawRectangle(new Pen(Color.FromArgb(255,100,100,100)), HeadRect);
+            e.Graphics.DrawRectangle(new Pen(Color.FromArgb(255,180,180,180)), HeadRect);
             int xPerc = 2;
             //string text = "AZIMUTH ALIGNMENT ERRORS ";
                                   

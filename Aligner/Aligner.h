@@ -87,8 +87,8 @@ private:
     BOOL m_LiveDataViewActivated;
     BOOL m_TiltAndFlatnessFoundationTestEnabled;
 public:
-    void AddToDocument( LONG id ) ;
-    void RemoveFromDocument( LONG id ) ;
+    //void AddToDocument( LONG id ) ;
+   // void RemoveFromDocument( LONG id ) ;
 public:
     CPropertySheet *m_pAzimuthAlignWizard ;
     CPropertySheet *m_pAzimuthVerificationWizard ;

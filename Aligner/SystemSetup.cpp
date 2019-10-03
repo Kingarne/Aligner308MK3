@@ -398,7 +398,16 @@ void SystemSetup::SaveUnitsToRegistry( void )
 {
     Registry reg;
     m_projectPath = reg.GetStringValue("ProjectPath", "C:\\").TrimRight("\\");//::AfxGetApp() -> GetProfileString( PROJECT_PATH_REGISTER_SECTION, PROJECT_PATH_REGISTER_NAME, PROJECT_PATH_DEFAULT_VALUE ) ;
-}
+
+	if (!::CreateDirectory(m_projectPath, NULL))
+	{
+		int err = GetLastError();
+		if (err != ERROR_ALREADY_EXISTS)
+		{
+			::AfxMessageBox(_T("Unable to create project directory"));
+		}		
+	}
+ }
 
 void SystemSetup::SaveProjectPathToRegistry( void )
 {
@@ -425,6 +434,13 @@ CString SystemSetup::GetProjectName( void )
 {
     return m_proj.m_projectName ;
 }
+
+CString SystemSetup::GetProjectTime(void)
+{
+	COleDateTime time(m_proj.m_time);
+	return time.Format(_T("%Y-%m-%d %H:%M:%S"));
+}
+
 
 CString SystemSetup::GetOperatorName( void )
 {
@@ -497,6 +513,15 @@ void SystemSetup::SetImageFileIndex(const long index)
 	m_proj.m_imgIdx = index;
 }
 
+void SystemSetup::SetDAUSerial(int serial)
+{
+	m_proj.m_dauSerial = serial;
+}
+
+int SystemSetup::GetDAUSerial()
+{
+	return m_proj.m_dauSerial;
+}
 
 
 CString SystemSetup::GetNewImageFileIndexString( void )

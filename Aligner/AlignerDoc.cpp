@@ -23,6 +23,7 @@
 #include "TheoAdapterCalibration.h"
 #include ".\alignerdoc.h"
 #include "ComSettingsDlg.h"
+#include "ReportManager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -121,7 +122,15 @@ BOOL CAlignerDoc::OnNewDocument( void )
     {
         if (!::CreateDirectory( directory.c_str(), NULL ))
         {
-            ::AfxMessageBox( _T("Unable to create project directory") ) ; 
+			int err = GetLastError();
+			if (err == ERROR_ALREADY_EXISTS)
+			{
+				::AfxMessageBox(_T("Project already exist, enter different project name"));
+			}
+			else
+			{
+				::AfxMessageBox(_T("Unable to create project directory"));
+			}
             OnSetupSystem( SYSTEM_SETUP_NO_MODE, FALSE ) ;
             SetModifiedFlag( FALSE ) ;
             return TRUE ;
@@ -254,7 +263,7 @@ private:
 void CAlignerDoc::DeleteContents( void )
 {
 //  Tracer()().Format( _T("Vector size is -> %d\n"), m_projectMeasurments.size()) ;
-  m_projectMeasurments.clear() ;
+//  m_projectMeasurments.clear() ;
   __super::DeleteContents() ;
 }
 
@@ -485,6 +494,7 @@ int CAlignerDoc::LoadChSetup(CArchive& ar, int ver)
 
 void CAlignerDoc::Serialize( CArchive &archive )
 {     
+	/*
     if (archive.IsStoring())
     {                        
         archive << FILE_FORMAT_VERSION;
@@ -537,7 +547,7 @@ void CAlignerDoc::Serialize( CArchive &archive )
               
     }
     
-    
+    */
 }
 
 
@@ -950,7 +960,10 @@ void CAlignerDoc::OnSetupSystem( void )
 
 void CAlignerDoc::OnUtilitiesViewreport( void )
 {
-    DBInterface::Instance()->ClearTable("HistoryPrint");
+	ReportManager rm;
+	rm.OpenReport(SysSetup->GetProjectID(), -1);
+
+/*    DBInterface::Instance()->ClearTable("HistoryPrint");
     
     for (std::set<LONG>::const_iterator i = m_projectMeasurments.begin() ; i != m_projectMeasurments.end() ; i++)
     {
@@ -959,6 +972,7 @@ void CAlignerDoc::OnUtilitiesViewreport( void )
     
     CResultTable rs;
     rs.OpenMainReport();
+	*/
 }
 
 void CAlignerDoc::OnUpdateUtilitiesViewreport( CCmdUI *pCmdUI )
@@ -969,11 +983,11 @@ void CAlignerDoc::OnUpdateUtilitiesViewreport( CCmdUI *pCmdUI )
   }  
   else
   {
-    pCmdUI -> Enable( 0 < m_projectMeasurments.size() && SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode()) ;
+    pCmdUI -> Enable(/*m_projectMeasurments.size() > 0  &&*/ SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode()) ;
   }
 }
 
-void CAlignerDoc::AddMeasurment( LONG measurmentID )
+/*void CAlignerDoc::AddMeasurment( LONG measurmentID )
 {
   TRACE("Adding report number %d\n", measurmentID) ;
   if( measurmentID > 0 )
@@ -996,7 +1010,7 @@ void CAlignerDoc::RemoveMeasurment( LONG measurmentID )
     //DoSave( m_strPathName, TRUE ) ;
   }
 }
-
+*/
 void CAlignerDoc::SaveProject( void )
 {
     //SetModifiedFlag( TRUE ) ;

@@ -27,7 +27,7 @@ public:
 	CString GetFileName( int index );
 	BOOL GetIncludeToResultTable( int index );
 	BOOL GetIncludeToResultTable( CString &fileName );    
-    void MoveUnwantedToTemporaryDir();
+  //  void MoveUnwantedToTemporaryDir();
 
 private:
 	CList<GraphFileObject,GraphFileObject&> m_GraphFileObjects;

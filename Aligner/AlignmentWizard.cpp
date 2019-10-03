@@ -39,7 +39,7 @@ void CAlignmentWizard::ExitResultTable( BOOL DeleteReport, BOOL b)
 {
 	if( m_pResultTable != NULL )
 	{
-        m_pResultTable->CloseReport();
+     //   m_pResultTable->CloseReport();
 
 // 		if( SaveGraphFileNameWithoutReport == TRUE )
 // 		{
@@ -49,19 +49,19 @@ void CAlignmentWizard::ExitResultTable( BOOL DeleteReport, BOOL b)
 
         if( DeleteReport == TRUE )
         {
-            theApp.RemoveFromDocument( m_pResultTable -> m_reportHistoryMainID ) ;
+           // theApp.RemoveFromDocument( m_pResultTable -> m_reportHistoryMainID ) ;
             m_pResultTable->DeleteLast();
         }
         else
         {
-            theApp.AddToDocument( m_pResultTable->m_reportHistoryMainID ) ;
+            //theApp.AddToDocument( m_pResultTable->m_reportHistoryMainID ) ;
         }
 
 		delete m_pResultTable;
 		m_pResultTable = NULL;
 	}
 }
-
+/*
 BOOL CAlignmentWizard::AddGraphFileNameToDataBase( void )
 {
 	BOOL result = TRUE;
@@ -81,7 +81,7 @@ BOOL CAlignmentWizard::AddGraphFileNameToDataBase( void )
 	}
 	return( result );
 }
-
+*/
 BEGIN_MESSAGE_MAP(CAlignmentWizard, CPropertySheet)
 	ON_WM_DESTROY()
   ON_MESSAGE(UM_NEW_DATA, OnNewData)
@@ -191,7 +191,7 @@ void CAlignmentWizard::SavePolarGraphFile( void )
 	if( m_PolarGraphFileName.GetLength() == 0 )
 	{
 		CString graphFileName;
-		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
+		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName, TRUE ) == TRUE )
 		{
 			m_GraphFileManager.SaveFileName( graphFileName, TRUE );
 			m_PolarGraphFileName = graphFileName;
@@ -212,9 +212,9 @@ void CAlignmentWizard::SaveErrorGraphFile( void )
 	if( m_ErrorGraphFileName.GetLength() == 0 )
 	{
 		CString graphFileName;
-		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
+		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName, FALSE ) == TRUE )
 		{
-			m_GraphFileManager.SaveFileName( graphFileName, TRUE );
+			//m_GraphFileManager.SaveFileName( graphFileName, TRUE );
 			m_ErrorGraphFileName = graphFileName;
 		}
 	}
@@ -233,7 +233,7 @@ void CAlignmentWizard::SaveResultGraphFile( void )
 	if( m_ResultGraphFileName.GetLength() == 0 )
 	{
 		CString graphFileName;
-		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
+		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName, TRUE ) == TRUE )
 		{
 			m_GraphFileManager.SaveFileName( graphFileName, TRUE );
 			m_ResultGraphFileName = graphFileName;

@@ -65,7 +65,7 @@ void CPresentDialog::OnBnClickedOk()
 	{
 		m_pResultTable->m_InParam.Comment = m_Comment.Left( MAX_COMMENT_LENGTH );
 		//m_pResultTable->UpdateReport();
-		m_pResultTable->UpdateComment();
+	//	m_pResultTable->UpdateComment();
 	}
 	OnOK();
 }
@@ -78,7 +78,7 @@ void CPresentDialog::OnBnClickedCancel()
 void CPresentDialog::OnBnClickedSave()
 {
 	m_pResultTable->m_InParam.Comment = m_Comment.Left( MAX_COMMENT_LENGTH );
-	m_pResultTable->CloseReport();
+//	m_pResultTable->CloseReport();
 	OnOK();
 }
 

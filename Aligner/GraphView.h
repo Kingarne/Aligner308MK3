@@ -208,13 +208,13 @@ public:
     BOOL UpdateData( void ) ;
     BOOL UpdateLiveData( void ) ;
     BOOL UpdateGraph( void );
-    BOOL SaveGraphToUniqueFileName( CString &fileName );
+    BOOL SaveGraphToUniqueFileName( CString &fileName, bool resultImage=false);
     BOOL SaveGraphToFile( CString &fileName );
 	BOOL WriteLiveDataFileHeader( LiveDataGraphInParam* pInParam );
 	void CloseLiveDataFile( void );
     void InitResultTable( void );
 	void ExitResultTable( BOOL DeleteReport);
-	BOOL AddGraphFileNameToDataBase( void );
+	//BOOL AddGraphFileNameToDataBase( void );
 	void CleanUp( void );
     virtual void OnInitialUpdate() ;
     void AddChartLabel(CString labelName, CString text, int x, int y, AnchorConstants anchor=oc2dAnchorEast, AttachMethodConstants method=oc2dAttachCoord);

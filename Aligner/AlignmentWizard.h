@@ -52,7 +52,7 @@ public:
     CAlignmentWizard(  UINT nIDCaption, CWnd *pParentWnd = NULL );
 	virtual ~CAlignmentWizard();
 	void ExitResultTable( BOOL DeleteReport, BOOL SaveGraphFileNameWithoutReport =FALSE);
-	BOOL AddGraphFileNameToDataBase( void );
+//	BOOL AddGraphFileNameToDataBase( void );
 	void SavePolarGraphFile( void );
 	void SaveErrorGraphFile( void );
 	void SaveResultGraphFile( void );

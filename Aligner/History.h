@@ -33,21 +33,18 @@ private: \
 #define DECLARE_MEASUREMENT \
 public: \
   static BOOL AddData( Data &data ) ; \
-  static BOOL SetComment( const CString &comment ) ; \
   static BOOL AddChannel( const ChannelData item ) ; \
 	static BOOL AddChannelErr( const ChannelErrData item ) ; \
 	static BOOL AddExtData( const ExtChannelData extItem ) ; \
-  static BOOL AddGraph( CString filename, BOOL include = TRUE ) ; \
-	static BOOL DeleteLast( void ) ; \
-  static void ResetMainID( void ) ; \
+  static void ResetMeasID( void ) ; \
 public: \
-	static void SetLastID( LONG lastID ) ; \
-	static LONG GetLastID( void ) ; \
-	static LONG GetMainID( void ) ; \
+	static void SetMeasTypeID( LONG lastID ) ; \
+	static LONG GetMeasTypeID( void ) ; \
+	static LONG GetMeasID( void ) ; \
 private: \
-  static LONG m_lastID ; \
-  static LONG m_lastChID ; \
-  static LONG m_mainID ;
+  static LONG m_measTypeID ; \
+  static LONG m_measChID ; \
+  static LONG m_measID ;
 
 
 //Remove when done with MeasurementData
@@ -75,6 +72,8 @@ public:
 	CString calibInfo;
 	int type;
 };
+
+
 
 class TiltAlignment
 {

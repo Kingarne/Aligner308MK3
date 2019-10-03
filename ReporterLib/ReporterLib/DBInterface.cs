@@ -206,7 +206,7 @@ namespace ReporterLib
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;
 
-            using (OdbcCommand command = new OdbcCommand("SELECT * FROM Measurement WHERE ID=" + measId.ToString(), Connection))
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM Measurement  INNER JOIN MeasType ON Measurement.measType = MeasType.measType WHERE ID=" + measId.ToString(), Connection))
             {
                 using (OdbcDataReader dr = command.ExecuteReader())
                 {
@@ -223,6 +223,7 @@ namespace ReporterLib
                         measurement.CalibInfo = (string)dr["calibInfo"];
                         measurement.Time = (DateTime)dr["timeOfMeasurement"];
                         measurement.Type = (MeasType)(int)dr["measType"];
+                        measurement.TypeText = (string)dr["measTypeName"];
                         measurement.TimeConstant = (float)dr["timeConstant"];
                         measurement.Comment = (string)dr["comment"];
                         //measurement.Time = dr["timeOfMeasurement"];

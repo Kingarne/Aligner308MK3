@@ -53,9 +53,9 @@ void CTiltAlignmentPage2::ShowGraphButtons()
 	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	CString graphFileName;
 
-	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
+	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName, FALSE ) == TRUE )
 	{
-		m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
+	//	m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
 	}
 }
 
@@ -248,7 +248,7 @@ BOOL CTiltAlignmentPage2::OnWizardFinish()
         if( IDYES == MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
         {
             OnBnClickedShowPolarGraph();    
-			m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
+		//	m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
 
             m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 			m_pParent->m_pResultTable->ShowReport( TRUE );
@@ -261,21 +261,21 @@ BOOL CTiltAlignmentPage2::OnWizardFinish()
 				CString graphFileName;				
 				m_pParent->ExitResultTable(FALSE);
 
-				if( m_pParent->m_PolarGraphFileName.GetLength() != 0 )
+		/*		if( m_pParent->m_PolarGraphFileName.GetLength() != 0 )
 				{
 					m_Text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD );
 					BOOL keepPoolar = (MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1) == IDYES);
 					m_pParent->m_GraphFileManager.IncludeToResultTable( keepPoolar, m_pParent->m_PolarGraphFileName );						
 				}
-								
-				m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
+			*/					
+			//	m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
                 
                 return CPropertyPage::OnWizardFinish();
 			}
 			else
 			{
                 AdjustIfAfterCommonFlatTest() ;
-				m_pParent->m_pResultTable->CloseReport();
+			//	m_pParent->m_pResultTable->CloseReport();
 			}
      }
         break;

@@ -187,11 +187,11 @@ void GainCalibrationPage6::SaveDayToDayCalibrationData( Gain6CalibrationResult &
 		text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
 		if (IDYES != MessageBox(text, msgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1))
 		{
-			m_pResultTable->CloseReport();
+		//	m_pResultTable->CloseReport();
 			return;
 		}
-		m_pResultTable->CloseReport();
-		theApp.AddToDocument(m_pResultTable->m_reportHistoryMainID);
+		//m_pResultTable->CloseReport();
+		//theApp.AddToDocument(m_pResultTable->m_reportHistoryMainID);
 		delete m_pResultTable;
 		m_pResultTable = NULL;
 	  }

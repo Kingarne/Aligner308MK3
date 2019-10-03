@@ -235,7 +235,7 @@ bool XMLHandler::AddAttrib(TiXmlElement* node, CString name, double val)
 
 bool XMLHandler::LoadMeasurements(TiXmlElement* node)
 {
-    m_pDoc->m_projectMeasurments.clear();
+   /* m_pDoc->m_projectMeasurments.clear();
     TiXmlElement* pMeas = node->FirstChildElement("Measurement");
 
     while(pMeas)
@@ -249,13 +249,13 @@ bool XMLHandler::LoadMeasurements(TiXmlElement* node)
 
         pMeas = pMeas->NextSiblingElement("Measurement");		
     }
-
+	*/
     return true;
 }
 
 bool XMLHandler::StoreMeasurements(TiXmlElement* node)
 {
-    TiXmlElement* measGroup = new TiXmlElement("Measurements");        
+ /*   TiXmlElement* measGroup = new TiXmlElement("Measurements");        
     
     for (std::set<LONG>::iterator i = m_pDoc->m_projectMeasurments.begin() ; i != m_pDoc->m_projectMeasurments.end() ; i++)
     {
@@ -266,7 +266,7 @@ bool XMLHandler::StoreMeasurements(TiXmlElement* node)
     }
     
     node->LinkEndChild(measGroup);
-    
+   */ 
     return true;
 }
 

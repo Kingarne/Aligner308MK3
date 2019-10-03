@@ -140,7 +140,7 @@ TRACE("GraphFileManager:ClearAllIncludeToResultTable\n");
 }
 
 
-void GraphFileManager::MoveUnwantedToTemporaryDir()
+/*void GraphFileManager::MoveUnwantedToTemporaryDir()
 {
     GraphFileObject object;
     POSITION pos;
@@ -156,5 +156,5 @@ void GraphFileManager::MoveUnwantedToTemporaryDir()
         
     } 
     
-}
+}*/
 

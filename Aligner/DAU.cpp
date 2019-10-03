@@ -22,6 +22,7 @@
 #include "AutoLock.h"
 #include "CalibInfo.h"
 #include "Util.h"
+#include "SystemSetup.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -725,7 +726,7 @@ BOOL DAU::LoadConfig()
   m_serial = m_comThr.m_dauSN ;
   
   DBInterface::Instance()->GetDAUData(m_serial, m_dauDBData);
-  
+  SysSetup->SetDAUSerial(m_serial);
 
   //test
     /*CalibrationInfo info;

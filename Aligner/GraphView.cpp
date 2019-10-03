@@ -2691,7 +2691,7 @@ void CGraphView::OnBnClickedLiveGraphQuit( void )
 		}
     }
     
-    m_LiveGraphFileManager.MoveUnwantedToTemporaryDir();  
+  //  m_LiveGraphFileManager.MoveUnwantedToTemporaryDir();  
       
     CleanUp();
     theApp.SetLiveGraphViewActivated( FALSE );
@@ -3195,17 +3195,17 @@ BOOL CGraphView::ShowBarGraphWithText( BarGraphInParam* pInParam )
 }
 
 
-BOOL CGraphView::SaveGraphToUniqueFileName( CString &fileName )
+BOOL CGraphView::SaveGraphToUniqueFileName( CString &fileName, bool resultImage)
 {
   USES_CONVERSION ;
 
-	CFrameWnd* pFrame = DYNAMIC_DOWNCAST(CFrameWnd, theApp.m_pMainWnd);
-    CDocument* pDoc1 = pFrame->GetActiveDocument();
-	CString name = pDoc1->GetTitle();
+//	CFrameWnd* pFrame = DYNAMIC_DOWNCAST(CFrameWnd, theApp.m_pMainWnd);
+//    CDocument* pDoc1 = pFrame->GetActiveDocument();
+	CString name = SysSetup->GetProjectName();// pDoc1->GetTitle();
     CString path = SysSetup->GetProjectPath() ;
     CString tempBmpName;
 
-    path += _T("\\Images\\") ;
+    path += resultImage ? _T("\\Images\\") : _T("\\IntermediateImages\\");
 
 	std::string stdPath = path ;
     
@@ -3219,10 +3219,11 @@ BOOL CGraphView::SaveGraphToUniqueFileName( CString &fileName )
     		return( FALSE );
         }
 	}
-
+	
     name += _T("(");
-    name += SysSetup->GetNewImageFileIndexString();    
-    CString tiffName = name + _T(").tiff");;
+    //name += SysSetup->GetNewImageFileIndexString();    
+	name += COleDateTime::GetCurrentTime().Format(_T("%Y%m%d-%H%M%S"));
+	CString tiffName = name + _T(").tiff");;
 
     fileName = path + tiffName;
 
@@ -3239,7 +3240,7 @@ BOOL CGraphView::SaveGraphToUniqueFileName( CString &fileName )
 
    // fileName = fileName.TrimRight(".bmp") + ".tiff";
 
-    return saveFlag ;
+    return saveFlag;
 }
 
 
@@ -4018,9 +4019,9 @@ void CGraphView::InitResultTable( void )
 
 void CGraphView::ExitResultTable( BOOL DeleteReport )
 {
-	if( m_pLiveGraphResultTable != NULL )
+/*	if( m_pLiveGraphResultTable != NULL )
 	{
-        m_pLiveGraphResultTable->CloseReport();
+    //    m_pLiveGraphResultTable->CloseReport();
 
 		if( DeleteReport == TRUE )
         {
@@ -4034,10 +4035,10 @@ void CGraphView::ExitResultTable( BOOL DeleteReport )
 
 		delete m_pLiveGraphResultTable;
 		m_pLiveGraphResultTable = NULL;
-    }
+    }*/
 }
 
-BOOL CGraphView::AddGraphFileNameToDataBase( void )
+/*BOOL CGraphView::AddGraphFileNameToDataBase( void )
 {
 	BOOL result = TRUE;
 
@@ -4056,7 +4057,7 @@ BOOL CGraphView::AddGraphFileNameToDataBase( void )
         }
 	}
 	return( result );
-}
+}*/
 
 void CGraphView::AddCommonHeader( GraphInParam* pInParam, int leftXPos )
 {

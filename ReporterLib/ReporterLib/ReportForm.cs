@@ -29,7 +29,10 @@ namespace ReporterLib
 
         private DBInterface.Measurement Measurement;
         private Dictionary<int, DBInterface.Measurement> Measurements;
-        Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, bool>> PrintMeasFunc = new Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, bool>>();
+        private Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, bool>> PrintMeasFunc = new Dictionary<DBInterface.MeasType, Func<PrintPageEventArgs, bool>>();
+
+        private List<DBInterface.ImageInfo> Images;
+
 
         private int m_page;
         private int m_yPos;
@@ -38,6 +41,7 @@ namespace ReporterLib
         int MargY = 20;
         Rectangle HeadRect;
         private Font HeadFont = new Font("Ariel", 8, FontStyle.Regular);
+        private SolidBrush MainBr = new SolidBrush(Color.Black);
 
         ReportSorter Sorter;
         static private SortOrder LastSortOrder;
@@ -290,14 +294,14 @@ namespace ReporterLib
                     m_yPos = 0;
                     Measurement = Measurements[MeasIds[MeasNum]];
                 }
-
             }
-
+            else
+            {
+                HeadPage = false;
+            }
 
             m_page++;
             e.HasMorePages = !done;
-
-
         }
 
         private void DrawPageNum(PrintPageEventArgs e)
@@ -399,17 +403,13 @@ namespace ReporterLib
         private void DrawHeader(PrintPageEventArgs e) 
         {
             //DBInterface.Measurement measurement = new DBInterface.Measurement();
-            //DBI.GetMeasurement(MeasId, ref measurement);
-
-           
-            SolidBrush br = new SolidBrush(Color.Black);
-
+            //DBI.GetMeasurement(MeasId, ref measurement);                       
            
             int headX = e.MarginBounds.Left;
             int headY = e.MarginBounds.Top;
 
             string angDef = GetAngularDef(Project.SignDef);
-            e.Graphics.DrawString(angDef, HeadFont, br, headX, headY);
+            e.Graphics.DrawString(angDef, HeadFont, MainBr, headX, headY);
             SizeF size = e.Graphics.MeasureString(angDef, HeadFont);
 
             headY = headY + (int)size.Height + MargY;
@@ -423,35 +423,34 @@ namespace ReporterLib
                                   
             //e.Graphics.DrawString(text, new Font("Ariel", 8, FontStyle.Bold), Brushes.Black, headX +10, headY+10);
             DrawText(Measurement.TypeText.ToUpper(), e.Graphics, new Font("Ariel", 10, FontStyle.Bold), Brushes.Black, HeadRect, 2, 6);
-            DrawText("Project:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
-            DrawText("Ship:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
-            DrawText("Operator:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace*2);
-            DrawText("DAU s/n:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace*3);
+            DrawText("Project:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+            DrawText("Ship:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            DrawText("Operator:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace*2);
+            DrawText("DAU s/n:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace*3);
 
             xPerc = xPerc + 10;
-            DrawText(Project.Name, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
-            DrawText(Project.Ship.ToString(), e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
-            DrawText(Project.Operator, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace*2);
-            DrawText(Project.DAUSerial.ToString("###"), e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace*3);
+            DrawText(Project.Name, e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+            DrawText(Project.Ship.ToString(), e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            DrawText(Project.Operator, e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace*2);
+            DrawText(Project.DAUSerial.ToString("###"), e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace*3);
 
             xPerc = 30;
-            DrawText("Date:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
-            DrawText("Place:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
-            DrawText("Latitude:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
-            DrawText("Time const:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
+            DrawText("Date:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+            DrawText("Place:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            DrawText("Latitude:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
+            DrawText("Time const:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
 
             xPerc = xPerc + 10;
-            DrawText(Measurement.Time.ToString("yy/MM/dd HH:mm:ss"), e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
-            DrawText(Project.Location, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
-            DrawText(Project.Latitude.ToString("0.00") + " [deg]", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
-            DrawText(Measurement.TimeConstant.ToString("0.0") + " [s]", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
+            DrawText(Measurement.Time.ToString("yy/MM/dd HH:mm:ss"), e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+            DrawText(Project.Location, e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+            DrawText(Project.Latitude.ToString("0.00") + " [deg]", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
+            DrawText(Measurement.TimeConstant.ToString("0.0") + " [s]", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
 
             m_yPos = HeadRect.Bottom + MargY;
         }
 
         private int DrawTableLine(Graphics gr, List<TableItem> table, Point pos, int width)
-        {
-            SolidBrush br = new SolidBrush(Color.Black);
+        {            
             int x = 0;
             int xLoc=pos.X;
 
@@ -471,7 +470,7 @@ namespace ReporterLib
 
                 RectangleF textRect = new RectangleF(x, pos.Y, w, 100);
                 SizeF size = gr.MeasureString(ti.Text, Font, w, sf);
-                gr.DrawString(ti.Text, Font, br, textRect, sf);
+                gr.DrawString(ti.Text, Font, MainBr, textRect, sf);
 
               //  Rectangle drawRect = new Rectangle(x, pos.Y, w, 100);
               //  gr.DrawRectangle(new Pen(Color.Black), drawRect);                
@@ -528,6 +527,42 @@ namespace ReporterLib
             return h;
         }
 
+        private bool DrawImage(Graphics gr, DBInterface.ImageInfo image)
+        {
+            Image im;
+            try
+            {
+                im = Image.FromFile(image.Path);
+            }
+            catch(Exception e)
+            {
+                SolidBrush red = new SolidBrush(Color.Red);
+                gr.DrawString(image.Path, Font, red, HeadRect.Left, m_yPos);
+                return true;
+            }
+            double ratio = (double)im.Width / im.Height;
+            double w = HeadRect.Width;
+            double h = w / ratio;
+
+            gr.DrawImage(im, new Rectangle(HeadRect.Left, m_yPos, (int)w, (int)h));
+            return true;
+        }
+
+
+        private bool DrawImages(Graphics gr, ref List<DBInterface.ImageInfo> images)
+        {
+            foreach(DBInterface.ImageInfo ii in images)
+            {
+                if (ii.Include)
+                {
+                    bool drawn = DrawImage(gr, ii);
+                    if (!drawn)
+                        return false;
+                }
+            }
+
+            return true;
+        }
 
         private void SetRefChannel(DBInterface.Measurement meas, List<DBInterface.ChannelBase> channels)
         {
@@ -543,86 +578,97 @@ namespace ReporterLib
 
         private bool PrintTiltAlignment(PrintPageEventArgs e)
         {
-            DrawHeader(e);
-
-            DBInterface.TiltAlignment tam = new DBInterface.TiltAlignment();
-            DBI.GetTiltAlignmentMeas(ref Measurement, ref tam);            
-            List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();             
-            DBI.GetTiltAlignmentCh(tam.ID, ref channels);
-            SetRefChannel(Measurement, channels);
-
-
-            SolidBrush br = new SolidBrush(Color.Black);
-
-            int xPerc = 60;
-            DrawText("LOS Dir:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
-            DrawText("Elev. Comp:", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
-            xPerc = xPerc + 10;
-            DrawText(tam.LOSDir, e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc);
-            DrawText(tam.ElevComp?"On":"Off", e.Graphics, HeadFont, br, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
-
-            int wPerc = 8;
-            List<TableItem> table = new List<TableItem>();
-            table.Add(new TableItem("Station", 2, 25, StringAlignment.Near));
-            table.Add(new TableItem("Ch", -1, 5));
-            table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
-            table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
-            table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
-            table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
-            table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
-            table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
-            table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
-            table.Add(new TableItem("Bias*\n" + Project.UnitText, -1, wPerc));
-
-            int smalMarg = 4;
-            m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
-            m_yPos += smalMarg;
-            e.Graphics.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-            m_yPos += smalMarg;
-
-           
-            foreach (DBInterface.TiltAlignmentCh ch in channels)
+            if (HeadPage)
             {
-                table = new List<TableItem>();
-                table.Add(new TableItem(ch.Station, 2, 25, StringAlignment.Near));
-                table.Add(new TableItem(ch.Channel, -1, 5));
-                table.Add(new TableItem(ch.SensorSN, -1, wPerc));
-                table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
-                if (ch.IsRef)
-                {
-                    string refStr = "Ref";
-                    table.Add(new TableItem(refStr, -1, wPerc));
-                    table.Add(new TableItem(refStr, -1, wPerc));
-                    table.Add(new TableItem(refStr, -1, wPerc));
-                    table.Add(new TableItem(refStr, -1, wPerc));
-                    table.Add(new TableItem("", -1, wPerc));
-                    table.Add(new TableItem("", -1, wPerc));
-                }
-                else
-                {
-                    table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
-                    table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
-                    table.Add(new TableItem(ch.tilt.ToString("0.00"), -1, wPerc));
-                    table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));
-                    table.Add(new TableItem(ch.elevation.ToString("0.00"), -1, wPerc));
-                    table.Add(new TableItem(ch.bias.ToString("0.00"), -1, wPerc));                    
-                }
+                DrawHeader(e);
 
+                DBInterface.TiltAlignment tam = new DBInterface.TiltAlignment();
+                DBI.GetTiltAlignmentMeas(ref Measurement, ref tam);
+
+                List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+                DBI.GetTiltAlignmentCh(tam.ID, ref channels);
+                SetRefChannel(Measurement, channels);
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+
+                
+
+                int xPerc = 60;
+                DrawText("LOS Dir:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                DrawText("Elev. Comp:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+                xPerc = xPerc + 10;
+                DrawText(tam.LOSDir, e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                DrawText(tam.ElevComp ? "On" : "Off", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+
+                int wPerc = 8;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 25, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Bias*\n" + Project.UnitText, -1, wPerc));
+
+                int smalMarg = 4;
                 m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
                 m_yPos += smalMarg;
+                e.Graphics.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+
+                foreach (DBInterface.TiltAlignmentCh ch in channels)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(ch.Station, 2, 25, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                    table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                    if (ch.IsRef)
+                    {
+                        string refStr = "Ref";
+                        table.Add(new TableItem(refStr, -1, wPerc));
+                        table.Add(new TableItem(refStr, -1, wPerc));
+                        table.Add(new TableItem(refStr, -1, wPerc));
+                        table.Add(new TableItem(refStr, -1, wPerc));
+                        table.Add(new TableItem("", -1, wPerc));
+                        table.Add(new TableItem("", -1, wPerc));
+                    }
+                    else
+                    {
+                        table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.tilt.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.elevation.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.bias.ToString("0.00"), -1, wPerc));
+                    }
+
+                    m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                e.Graphics.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                m_yPos += DrawCalibInfo(e.Graphics, Measurement, m_yPos);
+                // m_yPos += MargY;
+
+                m_yPos += DrawComment(e.Graphics, Measurement, m_yPos);
+                m_yPos += MargY;
+
+
+
+                DrawText("*Bias across line-of-sight.", e.Graphics, HeadFont, MainBr, new Rectangle(HeadRect.Left, e.PageBounds.Bottom-30, HeadRect.Width, 10), 2, 0);
             }
 
-            e.Graphics.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-           
-            m_yPos += DrawCalibInfo(e.Graphics, Measurement, m_yPos);
-            // m_yPos += MargY;
-
-            m_yPos += DrawComment(e.Graphics, Measurement, m_yPos);
-            //m_yPos += MargY;
+            if (Images != null)
+                return DrawImages(e.Graphics, ref Images);
 
 
-
-            DrawText("*Bias across line-of-sight.", e.Graphics, HeadFont, br, new Rectangle(HeadRect.Left, e.MarginBounds.Bottom, HeadRect.Width, 10), 2, 0);
             // m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
 
 

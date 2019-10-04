@@ -30,6 +30,14 @@ namespace ReporterLib
 
         }
 
+        public class ImageInfo
+        {
+            public int ID { get; set; }
+            public string Path { get; set; }
+            public bool Include { get; set; }
+            //Bitmap bitmap;
+        }
+
         public class Measurement
         {
             public int ID { get; set; }
@@ -43,9 +51,13 @@ namespace ReporterLib
             public string RefChannel { get; set; }
         }
 
-        public class TiltAlignment
+        public class AlignmentBase
         {
-            public int ID { get; set; }            
+            public int ID { get; set; }
+        }
+
+        public class TiltAlignment : AlignmentBase
+        {        
             public string LOSDir { get; set; }
             public bool ElevComp { get; set; }
         }
@@ -311,6 +323,32 @@ namespace ReporterLib
                     }
                 }
             }
+
+            return true;
+        }
+
+        public bool GetImages(int measId, ref List<ImageInfo> images)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+            
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM Graph WHERE measID=" + measId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        ImageInfo im = new ImageInfo();
+
+                        im.ID = (int)dr["ID"];
+                        im.Path = (string)dr["filename"];
+                        im.Include = (bool)dr["include"];
+
+                        images.Add(im);
+                    }
+                }
+            }
+
 
             return true;
         }

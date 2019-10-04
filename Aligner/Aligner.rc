@@ -14141,10 +14141,8 @@ BEGIN
     IDS_MUSTSETADAPTER      "You must set the serial number of the adapter."
     IDS_MUSTSETCOMPORT      "You must select a com port to use."
     IDS_SELECT_TABLE        "You must select a platform"
-    IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD 
-                            "Save the graph to the measurement record?"
-    IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD 
-                            "Check the result table in the background.\nSave it to the measurement record?"
+    IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD "Keep measurement?"
+    IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD "Keep measurement?"
     IDS_EXIT_WITH_OPPORTUNITY_TO_SAVE 
                             "Exit with the opportunity to save the result?"
 END

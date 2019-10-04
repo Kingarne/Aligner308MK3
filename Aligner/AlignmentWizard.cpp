@@ -35,28 +35,15 @@ CAlignmentWizard::~CAlignmentWizard()
   // Empty
 }
 
-void CAlignmentWizard::ExitResultTable( BOOL DeleteReport, BOOL b)
+void CAlignmentWizard::ExitResultTable( BOOL DeleteReport)
 {
 	if( m_pResultTable != NULL )
 	{
-     //   m_pResultTable->CloseReport();
-
-// 		if( SaveGraphFileNameWithoutReport == TRUE )
-// 		{
-// 			m_GraphFileManager.ClearAllIncludeToResultTable();
-// 			AddGraphFileNameToDataBase();
-// 		}
-
         if( DeleteReport == TRUE )
         {
-           // theApp.RemoveFromDocument( m_pResultTable -> m_reportHistoryMainID ) ;
             m_pResultTable->DeleteLast();
         }
-        else
-        {
-            //theApp.AddToDocument( m_pResultTable->m_reportHistoryMainID ) ;
-        }
-
+  
 		delete m_pResultTable;
 		m_pResultTable = NULL;
 	}
@@ -159,7 +146,7 @@ LRESULT CAlignmentWizard::OnDauError( WPARAM, LPARAM )
 
 void CAlignmentWizard::OnDestroy() 
 {  
-	ExitResultTable( FALSE, FALSE );
+	ExitResultTable( FALSE);
 
     if( m_pSource )
     {

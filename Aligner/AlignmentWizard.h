@@ -51,7 +51,7 @@ class CAlignmentWizard : public CPropertySheet, public DataRecepient
 public:
     CAlignmentWizard(  UINT nIDCaption, CWnd *pParentWnd = NULL );
 	virtual ~CAlignmentWizard();
-	void ExitResultTable( BOOL DeleteReport, BOOL SaveGraphFileNameWithoutReport =FALSE);
+	void ExitResultTable( BOOL DeleteReport);
 //	BOOL AddGraphFileNameToDataBase( void );
 	void SavePolarGraphFile( void );
 	void SaveErrorGraphFile( void );

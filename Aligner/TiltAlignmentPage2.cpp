@@ -49,8 +49,8 @@ void CTiltAlignmentPage2::ShowGraphButtons()
 {
     GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
     GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
+//    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
+//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	CString graphFileName;
 
 	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName, FALSE ) == TRUE )
@@ -63,13 +63,13 @@ void CTiltAlignmentPage2::HideGraphButtons()
 {
     GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
     GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+//    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 }
 
 void CTiltAlignmentPage2::DisableAllButtons()
 {
     GetDlgItem( IDC_PRINT_GRAPH )->EnableWindow( FALSE );
-    GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+//    GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
     GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
     GetDlgItem( IDC_SHOW_POLAR_GRAPH )->EnableWindow( FALSE );
     GetDlgItem( IDC_SHOW_RESULT_TABLE )->EnableWindow( FALSE );

@@ -35,6 +35,7 @@ namespace ReporterLib
             public int ID { get; set; }
             public string Path { get; set; }
             public bool Include { get; set; }
+            public bool Drawn { get; set; }
             //Bitmap bitmap;
         }
 
@@ -343,6 +344,7 @@ namespace ReporterLib
                         im.ID = (int)dr["ID"];
                         im.Path = (string)dr["filename"];
                         im.Include = (bool)dr["include"];
+                        im.Drawn = false;
 
                         images.Add(im);
                     }

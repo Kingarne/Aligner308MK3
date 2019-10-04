@@ -6,7 +6,15 @@
 
 enum MeasType {
 	MT_TiltAlignment = 1,
-
+	MT_TiltFlatnessRP,
+	MT_TiltFlatnessFo,
+	MT_AzimuthAlign,
+	MT_GyroPerf,
+	MT_LiveGraph,
+	MT_VerifAbsolute,
+	MT_VerifRelative,
+	MT_CommonFlatTilt,
+	MT_SensorValidation
 };
 
 
@@ -167,24 +175,24 @@ public:
 	DECLARE_HISTORY ;
 } ;
 
-class TiltAndFlatnessFoHistory
+class TiltAndFlatnessFo
 {
 private:
-  TiltAndFlatnessFoHistory( void ) {} ;
+	TiltAndFlatnessFo( void ) {} ;
 public:
-    class Data : public HistoryData
-  {
-  public:
-    double m_timeConstant ;
-    LONG m_numberOfMeasurements ;
-    CString m_reference ;
-    CString m_comment ;
-	CString m_measuredUnit ;
-	//DBTIMESTAMP m_time ;
-	double m_IndexArmLength ;
-  } ;
+    class Data : public MeasurementData
+	{
+	  public:
+		double m_timeConstant ;
+		LONG m_numberOfMeasurements ;
+		CString m_reference ;
+		CString m_comment ;
+		CString m_measuredUnit ;
+		//DBTIMESTAMP m_time ;
+		double m_IndexArmLength ;
+	} ;
 
-  class ItemData
+  class ChannelData
   {
   public:
     CString m_station ;
@@ -208,7 +216,7 @@ public:
     CString m_refsensorSerialNumber ;
   } ;
 
-  class ItemErrData
+  class ChannelErrData
   {
   public:
     double m_azimuth ;
@@ -217,7 +225,7 @@ public:
     double m_dh;
   } ;
 
-	class ExtItemData
+	class ExtChannelData
   {
   public:
 		double m_azimuthAngle ;
@@ -229,7 +237,7 @@ public:
 		double m_deviationJ8 ;
 		double m_deviationJ9 ;
   } ;
-	DECLARE_HISTORY ;
+	DECLARE_MEASUREMENT ;
 } ;
 
 

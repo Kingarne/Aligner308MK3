@@ -62,9 +62,9 @@ public:
     BOOL InsertTiltAndFlatnessItem(TiltAndFlatnessHistory::ItemData data, int historyId);
     BOOL InsertTiltAndFlatnessItemErr(TiltAndFlatnessHistory::ItemErrData data, int historyId);
 
-    BOOL InsertTiltAndFlatnessFo(TiltAndFlatnessFoHistory::Data data, int historyId);
-    BOOL InsertTiltAndFlatnessFoItem(TiltAndFlatnessFoHistory::ItemData data, int historyId);
-    BOOL InsertTiltAndFlatnessFoItemErr(TiltAndFlatnessFoHistory::ItemErrData data, int historyId);
+    BOOL InsertTiltAndFlatnessFo(TiltAndFlatnessFo::Data data, int measId);
+    BOOL InsertTiltAndFlatnessFoChannel(TiltAndFlatnessFo::ChannelData data, int measId);
+    BOOL InsertTiltAndFlatnessFoChannelErr(TiltAndFlatnessFo::ChannelErrData data, int measId);
 
     BOOL InsertGyroPerformanceTest(GyroPerformanceTestHistory::Data data, int historyId);
     BOOL InsertGyroPerformanceTestItem(GyroPerformanceTestHistory::ItemData data, int historyId);

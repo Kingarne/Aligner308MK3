@@ -1225,7 +1225,7 @@ BOOL CResultTable::SaveToDataBase( void )
 				m_TiltAndFlatnessFoData.m_comment = m_InParam.Comment;
 			}
 
-			if( !TiltAndFlatnessFoHistory::AddData( m_TiltAndFlatnessFoData ) )
+			if( !TiltAndFlatnessFo::AddData( m_TiltAndFlatnessFoData ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
@@ -1242,7 +1242,7 @@ BOOL CResultTable::SaveToDataBase( void )
 				m_TiltAndFlatnessFoItem[0].m_refstation = DB_EMPTY_STRING;
 			}
 
-			if( !TiltAndFlatnessFoHistory::AddItem( m_TiltAndFlatnessFoItem[0] ) )
+			if( !TiltAndFlatnessFo::AddChannel( m_TiltAndFlatnessFoItem[0] ) )
 			{
 				ASSERT(0); // This is a "badass" error.
 			}
@@ -1257,7 +1257,7 @@ BOOL CResultTable::SaveToDataBase( void )
 				//	m_TiltAndFlatnessFoItem[i].m_station = DB_EMPTY_STRING;
 				//}
 
-				//if( !TiltAndFlatnessFoHistory::AddItem( m_TiltAndFlatnessFoItem[i] ) )
+				//if( !TiltAndFlatnessFo::AddItem( m_TiltAndFlatnessFoItem[i] ) )
 				//{
 				//	ASSERT(0); // This is a "badass" error.
 				//}
@@ -1271,39 +1271,39 @@ BOOL CResultTable::SaveToDataBase( void )
 
 				//if (i != 0)
 				//{
-					//LONG oldId = TiltAndFlatnessFoHistory::GetLastID();
+					//LONG oldId = TiltAndFlatnessFo::GetLastID();
 					//LastCounter lastID ;
 					//GUARD(::OpenTable( lastID )) ;
 					//GUARD(lastID.MoveFirst()) ;
-					//TiltAndFlatnessFoHistory::SetLastID( lastID.m_id);
+					//TiltAndFlatnessFo::SetLastID( lastID.m_id);
 				//if (i == 0)
 				//{
-				//	if( !TiltAndFlatnessFoHistory::AddItemErr( m_TiltAndFlatnessFoItemErr[0] ) )	// index 0 = reference
+				//	if( !TiltAndFlatnessFo::AddItemErr( m_TiltAndFlatnessFoItemErr[0] ) )	// index 0 = reference
 				//	{
 				//		ASSERT(0); // This is a "badass" error.
 				//	}
 				//}
 				//else
 				//{
-					//LONG oldId = TiltAndFlatnessFoHistory::GetLastID();
+					//LONG oldId = TiltAndFlatnessFo::GetLastID();
 					//LastCounter lastID ;
 					//GUARD(::OpenTable( lastID )) ;
 					//GUARD(lastID.MoveFirst()) ;
-					//TiltAndFlatnessFoHistory::SetLastID( lastID.m_id);
+					//TiltAndFlatnessFo::SetLastID( lastID.m_id);
 
 					for( int j=1; j<=m_pParent->m_N; j++ )
 					{
-//						if( !TiltAndFlatnessFoHistory::AddItemErr( m_TiltAndFlatnessFoItemErr[(i-1)*m_pParent->m_N + j] ) )
-						if( !TiltAndFlatnessFoHistory::AddItemErr( m_TiltAndFlatnessFoItemErr[j] ) )
+//						if( !TiltAndFlatnessFo::AddItemErr( m_TiltAndFlatnessFoItemErr[(i-1)*m_pParent->m_N + j] ) )
+						if( !TiltAndFlatnessFo::AddChannelErr( m_TiltAndFlatnessFoItemErr[j] ) )
 						{
 							ASSERT(0); // This is a "badass" error.
 						}
 					//}
-					//TiltAndFlatnessFoHistory::SetLastID( oldId);
+					//TiltAndFlatnessFo::SetLastID( oldId);
 					}
 				//}	// else
 				//}
-				//if( !TiltAndFlatnessFoHistory::AddItemErr( m_TiltAndFlatnessFoItemErr[i] ) )
+				//if( !TiltAndFlatnessFo::AddItemErr( m_TiltAndFlatnessFoItemErr[i] ) )
 				//{
 				//	ASSERT(0); // This is a "badass" error.
 				//}
@@ -1311,11 +1311,11 @@ BOOL CResultTable::SaveToDataBase( void )
 
 			for( int extI=0; extI<m_TiltAndFlatnessFoData.m_numberOfMeasurements; extI++ )
 			{
-				if( !TiltAndFlatnessFoHistory::AddExtItem( m_TiltAndFlatnessFoExtItem[extI] ) )
+				if( !TiltAndFlatnessFo::AddExtData( m_TiltAndFlatnessFoExtItem[extI] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
-				//if( !TiltAndFlatnessFoHistory::AddItemErr( m_TiltAndFlatnessFoItemErr[extI] ) )
+				//if( !TiltAndFlatnessFo::AddItemErr( m_TiltAndFlatnessFoItemErr[extI] ) )
 				//{
 				//	ASSERT(0); // This is a "badass" error.
 				//}
@@ -1501,7 +1501,7 @@ BOOL CResultTable::DeleteLast(void)
 		result = TiltAndFlatnessHistory::DeleteLast();
 		break;
 	case TILT_FLATNESS_FOUNDATION_TEST:
-		result = TiltAndFlatnessFoHistory::DeleteLast();
+		result = TiltAndFlatnessFo::DeleteLast();
 		break;
 	case COMMON_FLAT_TEST:
 		result = CommonFlatTiltHistory::DeleteLast();
@@ -1588,7 +1588,7 @@ BOOL CResultTable::CreateEmptyReport( void )
 		TiltAndFlatnessReport::Create( m_reportHistoryMainID, m_hReportWindow );
 		break;
 	case TILT_FLATNESS_FOUNDATION_TEST:
-		m_reportHistoryMainID = TiltAndFlatnessFoHistory::GetMainID();
+		m_reportHistoryMainID = TiltAndFlatnessFo::GetMainID();
 		TiltAndFlatnessFoReport::Create( m_reportHistoryMainID, m_hReportWindow );
 		break;
 	case COMMON_FLAT_TEST:
@@ -1703,7 +1703,7 @@ BOOL CResultTable::UpdateComment( void )
 		result = TiltAndFlatnessHistory::SetComment( m_InParam.Comment );
 		break;
 	case TILT_FLATNESS_FOUNDATION_TEST:
-		result = TiltAndFlatnessFoHistory::SetComment( m_InParam.Comment );
+		result = TiltAndFlatnessFo::SetComment( m_InParam.Comment );
 		break;
 	case COMMON_FLAT_TEST:
 		result = CommonFlatTiltHistory::SetComment( m_InParam.Comment );
@@ -1765,7 +1765,7 @@ BOOL CResultTable::ResetMainID( void )
 		TiltAndFlatnessHistory::ResetMainID();
 		break;
 	case TILT_FLATNESS_FOUNDATION_TEST:
-		TiltAndFlatnessFoHistory::ResetMainID();
+		TiltAndFlatnessFo::ResetMainID();
 		break;
 	case COMMON_FLAT_TEST:
 		CommonFlatTiltHistory::ResetMainID();
@@ -1818,7 +1818,7 @@ long CResultTable::GetMainID( void )
 		id = TiltAndFlatnessHistory::GetMainID();
 		break;
 	case TILT_FLATNESS_FOUNDATION_TEST:
-		id = TiltAndFlatnessFoHistory::GetMainID();
+		id = TiltAndFlatnessFo::GetMainID();
 		break;
 	case COMMON_FLAT_TEST:
 		id = CommonFlatTiltHistory::GetMainID();
@@ -1877,7 +1877,7 @@ BOOL CResultTable::AddGraph(CString fileName, BOOL includeToResultTable)
 		result = TiltAndFlatnessHistory::AddGraph( fileName, includeToResultTable );
 		break;
 	case TILT_FLATNESS_FOUNDATION_TEST:
-		result = TiltAndFlatnessFoHistory::AddGraph( fileName, includeToResultTable );
+		result = TiltAndFlatnessFo::AddGraph( fileName, includeToResultTable );
 		break;
 	case COMMON_FLAT_TEST:
 		result = CommonFlatTiltHistory::AddGraph( fileName, includeToResultTable );

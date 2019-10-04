@@ -553,10 +553,10 @@ namespace ReporterLib
         {
             foreach(DBInterface.ImageInfo ii in images)
             {
-                if (ii.Include)
+                if (ii.Include && !ii.Drawn)
                 {
-                    bool drawn = DrawImage(gr, ii);
-                    if (!drawn)
+                    ii.Drawn = DrawImage(gr, ii);
+                    if (!ii.Drawn)
                         return false;
                 }
             }

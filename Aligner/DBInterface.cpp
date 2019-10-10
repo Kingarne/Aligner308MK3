@@ -930,7 +930,7 @@ CString GetSigndefString()
 }
 
  
-BOOL DBInterface::InsertMeasurement(MeasurementData& data)
+BOOL DBInterface::InsertMeasurement(MeasurementBase& data)
 {
 	if (!m_db.IsOpen())
 		return FALSE;
@@ -1019,8 +1019,8 @@ BOOL DBInterface::InsertTiltAlignmentChannel(TiltAlignment::ChannelData data, in
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAlignmentChannel(foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, bias ) VALUES (%d,'%s','%s', %d, '%s','%s',%s,%s,%s,%s,%s,%s)",
-		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle), ToText(data.m_elevation), ToText(data.m_bias));
+     sql.Format("INSERT INTO TiltAlignmentChannel(foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, bias ) VALUES (%d,'%s','%s', %d, '%s','%s',%f,%f,%f,%f,%f,%f)",
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_bias);
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
@@ -1071,8 +1071,8 @@ BOOL DBInterface::InsertTiltAndFlatnessFo(TiltAndFlatnessFo::Data data, int meas
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAndFlatnessFo (measID, ship, timeConstant, numberOfMeasurement, reference, comment, measuredUnit, IndexArmLength) VALUES (%d,'%s',%f,%d,'%s','%s','%s',%f)",
-         measId, SysSetup->GetShipName(), data.m_timeConstant, data.m_numberOfMeasurements, data.m_reference, data.m_comment, data.m_measuredUnit, data.m_IndexArmLength);
+     sql.Format("INSERT INTO TiltAndFlatnessFo (measID, numberOfMeasurement, referenceChannel) VALUES (%d,%d,'%s')",
+         measId, data.m_numberOfMeasurements, data.m_refChannel);
  
     m_db.ExecuteSQL(sql); 
 	return TRUE;
@@ -1084,8 +1084,8 @@ BOOL DBInterface::InsertTiltAndFlatnessFoChannel(TiltAndFlatnessFo::ChannelData 
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAndFlatnessFoChannel (measID, station, channel, sensorSerialNumber, roll, pitch, tilt, angle, elevation1, elevation2, standardDeviation, bottomError, maximumDeviation, azimuth, IndexArmLength, IndexArm2Length, refstation, refchannel, refsensorSerialNumber) VALUES (%d,'%s','%s','%s',%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,'%s','%s','%s')",
-         measId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation1, data.m_elevation2, data.m_standardDeviation, data.m_bottomError, data.m_maximumDeviation, data.m_azimuth, data.m_IndexArmLength, data.m_IndexArm2Length, data.m_refstation, data.m_refchannel, data.m_refsensorSerialNumber);
+     sql.Format("INSERT INTO TiltAndFlatnessFoChannel (foreignID, station, channel, type, sensorSerialNumber, roll, pitch, tilt, angle, elevation1, elevation2, standardDeviation, bottomError, maximumDeviation, azimuth) VALUES (%d,'%s','%s',%d,'%s',%f,%f,%f,%f,%f,%f,%f,%f,%f,%f)",
+         measId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_elevation2, data.m_standardDeviation, data.m_bottomError, data.m_maximumDeviation, data.m_azimuth);
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
@@ -1097,8 +1097,8 @@ BOOL DBInterface::InsertTiltAndFlatnessFoChannelErr(TiltAndFlatnessFo::ChannelEr
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAndFlatnessFoChannelErr (measID, azimuth, error1, error2, dh) VALUES (%d,%s,%s,%s,%s)",
-         measId, ToText(data.m_azimuth), ToText(data.m_error1), ToText(data.m_error2), ToText(data.m_dh));
+     sql.Format("INSERT INTO TiltAndFlatnessFoChannelErr (foreignID, azimuth, IndexArmLength1, IndexArmLength2, error1, error2, dh) VALUES (%d,%f,%f,%f,%f,%f,%f)",
+         measId, data.m_azimuth, data.m_indexArmLength1, data.m_indexArmLength2, data.m_error, data.m_error2, data.m_dh);
  
     m_db.ExecuteSQL(sql);  	
 

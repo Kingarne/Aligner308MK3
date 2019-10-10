@@ -160,12 +160,17 @@ BOOL TiltAndFlatnessFo::AddData( Data &data )
 
 BOOL TiltAndFlatnessFo::AddChannel( const ChannelData item )
 {
-    return DBInterface::Instance()->InsertTiltAndFlatnessFoChannel(item, m_measID);
+	BOOL res = DBInterface::Instance()->InsertTiltAndFlatnessFoChannel(item, m_measTypeID);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measChID = lastId;
+
+	return res;
 }
 
 BOOL TiltAndFlatnessFo::AddChannelErr( const ChannelErrData item )
 {
-	return DBInterface::Instance()->InsertTiltAndFlatnessFoChannelErr(item, m_measTypeID);
+	return DBInterface::Instance()->InsertTiltAndFlatnessFoChannelErr(item, m_measChID);
 }
 
 

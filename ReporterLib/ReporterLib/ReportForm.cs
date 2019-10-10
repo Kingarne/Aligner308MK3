@@ -79,6 +79,8 @@ namespace ReporterLib
             Measurements = new Dictionary<int, DBInterface.Measurement>();
 
             PrintMeasFunc[DBInterface.MeasType.MT_TiltAlignment] = PrintTiltAlignment;
+            PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessFo] = PrintTiltFlatnessFo;
+            
         }
 
         
@@ -275,11 +277,8 @@ namespace ReporterLib
                 return;
             }
 
-
             Rectangle bound = e.PageBounds;
             bound.Inflate(-2, -2);
-            //e.Graphics.DrawRectangle(new Pen(Color.FromArgb(200, 255, 0, 0)), bound);
-            //e.Graphics.DrawRectangle(new Pen(Color.FromArgb(100, 110, 110, 10)), e.MarginBounds);
             DrawPageNum(e);
 
             bool done = PrintMeasFunc[Measurement.Type].Invoke(e);
@@ -576,6 +575,85 @@ namespace ReporterLib
             }
         }
 
+        private void printPreviewControl_Click(object sender, EventArgs e)
+        {
+            printPreviewControl.Focus();
+        }
+
+        private void ReportForm_SizeChanged(object sender, EventArgs e)
+        {
+            UpdateColumns();
+        }
+
+        private void UpdateColumns()
+        {
+            int oldColumns = printPreviewControl.Columns;
+            int newColumns = 1;
+
+            if (m_page > 1)
+            {
+                float col = (float)printPreviewControl.Size.Width / printPreviewControl.Size.Height / 0.7f;
+                int c = (int)col;
+                if (c < 1) c = 1;
+                newColumns = Math.Min(m_page, c);
+                //if ((float)printPreviewControl.Size.Width / printPreviewControl.Size.Height > 1.5f)
+                {
+
+                }
+            }
+
+            if (newColumns != oldColumns)
+            {
+                printPreviewControl.Columns = newColumns;
+                printPreviewControl.Update();
+            }
+
+
+
+        }
+
+        private void allButton_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in reportList.Items)
+            {
+                item.Checked = true;
+            }
+        }
+
+        private void noneButton_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in reportList.Items)
+            {
+                item.Checked = false;
+            }
+        }
+
+        private void reportList_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            this.reportList.ItemChecked -= new System.Windows.Forms.ItemCheckedEventHandler(this.reportList_ItemChecked);
+            reportList.ListViewItemSorter = null;
+
+            if (Sorter.LastSort == e.Column)
+            {
+                if (reportList.Sorting == SortOrder.Ascending)
+                    reportList.Sorting = SortOrder.Descending;
+                else
+                    reportList.Sorting = SortOrder.Ascending;
+            }
+            else
+            {
+                reportList.Sorting = SortOrder.Descending;
+            }
+
+            LastSortOrder = reportList.Sorting;
+            LastSortColumn = e.Column;
+            Sorter.ByColumn = e.Column;
+            reportList.ListViewItemSorter = Sorter;
+            this.reportList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.reportList_ItemChecked);
+
+            PrintPreview();
+        }
+
         private bool PrintTiltAlignment(PrintPageEventArgs e)
         {
             if (HeadPage)
@@ -590,9 +668,7 @@ namespace ReporterLib
                 SetRefChannel(Measurement, channels);
 
                 Images = new List<DBInterface.ImageInfo>();
-                DBI.GetImages(Measurement.ID, ref Images);
-
-                
+                DBI.GetImages(Measurement.ID, ref Images);                
 
                 int xPerc = 60;
                 DrawText("LOS Dir:", e.Graphics, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
@@ -668,92 +744,35 @@ namespace ReporterLib
             if (Images != null)
                 return DrawImages(e.Graphics, ref Images);
 
+            return true;
+        }
 
-            // m_yPos += DrawTableLine(e.Graphics, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+        private bool PrintTiltFlatnessFo(PrintPageEventArgs e)
+        {
+            DrawHeader(e);
 
+            DBInterface.TiltFlatnessFo m = new DBInterface.TiltFlatnessFo();
+            DBI.GetTiltFlatnessFoMeas(ref Measurement, ref m);
 
+            List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+            DBI.GetTiltFlatnessFoCh(m.ID, ref channels);
+            SetRefChannel(Measurement, channels);
+
+            List<DBInterface.ChannelErrBase> channelErr = new List<DBInterface.ChannelErrBase>();
+            DBI.GetTiltFlatnessFoChErr(m.ID, ref channelErr);            
+
+            Images = new List<DBInterface.ImageInfo>();
+            DBI.GetImages(Measurement.ID, ref Images);
+
+            if (Images != null)
+                return DrawImages(e.Graphics, ref Images);
 
             return true;
         }
 
-        private void printPreviewControl_Click(object sender, EventArgs e)
-        {
-            printPreviewControl.Focus();
-        }
+        
 
-        private void ReportForm_SizeChanged(object sender, EventArgs e)
-        {
-            UpdateColumns();
-        }
-
-        private void UpdateColumns()
-        {
-            int oldColumns = printPreviewControl.Columns;
-            int newColumns=1;
-
-            if (m_page > 1)
-            {
-                float col = (float)printPreviewControl.Size.Width / printPreviewControl.Size.Height / 0.7f;
-                int c = (int)col;
-                if (c < 1) c = 1;
-                newColumns = Math.Min(m_page, c);
-                //if ((float)printPreviewControl.Size.Width / printPreviewControl.Size.Height > 1.5f)
-                {
-                    
-                }                
-            }
-
-            if (newColumns != oldColumns)
-            {
-                printPreviewControl.Columns = newColumns;
-                printPreviewControl.Update();
-            }
-
-
-
-        }
-
-        private void allButton_Click(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in reportList.Items)
-            {
-                item.Checked = true;
-            }
-        }
-
-        private void noneButton_Click(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in reportList.Items)
-            {
-                item.Checked = false;
-            }
-        }
-
-        private void reportList_ColumnClick(object sender, ColumnClickEventArgs e)
-        {
-            this.reportList.ItemChecked -= new System.Windows.Forms.ItemCheckedEventHandler(this.reportList_ItemChecked);
-            reportList.ListViewItemSorter = null;
-
-            if (Sorter.LastSort == e.Column)
-            {
-                if (reportList.Sorting == SortOrder.Ascending)
-                    reportList.Sorting = SortOrder.Descending;
-                else
-                    reportList.Sorting = SortOrder.Ascending;
-            }
-            else
-            {
-                reportList.Sorting = SortOrder.Descending;
-            }
-
-            LastSortOrder = reportList.Sorting;
-            LastSortColumn = e.Column;
-            Sorter.ByColumn = e.Column;
-            reportList.ListViewItemSorter = Sorter;
-            this.reportList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.reportList_ItemChecked);
-
-            PrintPreview();
-        }
+        
     }
 }
  

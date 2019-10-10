@@ -99,10 +99,10 @@ protected:
 	TiltAndFlatnessHistory::ItemErrData m_TiltAndFlatnessItemErr[SIZE_OF_X_ARRAY];
 	TiltAndFlatnessHistory::ExtItemData m_TiltAndFlatnessExtItem[SIZE_OF_X_ARRAY];
 	
-	TiltAndFlatnessFo::Data m_TiltAndFlatnessFoData;
-	TiltAndFlatnessFo::ChannelData m_TiltAndFlatnessFoItem[SIZE_OF_ARRAYS];
-	TiltAndFlatnessFo::ChannelErrData m_TiltAndFlatnessFoItemErr[SIZE_OF_X_ARRAY];
-	TiltAndFlatnessFo::ExtChannelData m_TiltAndFlatnessFoExtItem[SIZE_OF_X_ARRAY];
+	TiltAndFlatnessFo::Data m_TiltAndFlatnessFo;
+	TiltAndFlatnessFo::ChannelData m_TiltAndFlatnessFoChannel[SIZE_OF_ARRAYS];
+	TiltAndFlatnessFo::ChannelErrData m_TiltAndFlatnessFoChannelErr[SIZE_OF_X_ARRAY];
+	TiltAndFlatnessFo::ExtChannelData m_TiltAndFlatnessFoExtChannel[SIZE_OF_X_ARRAY];
 	
 	GyroPerformanceTestHistory::Data m_GyroPerformanceTestData;
 	GyroPerformanceTestHistory::ItemData m_GyroPerformanceTestItem[SIZE_OF_ARRAYS];

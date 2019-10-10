@@ -68,47 +68,58 @@ public:
     CString calibInfo;
 };
 
-class MeasurementData
+class MeasurementBase
 {
 public:
-	MeasurementData() {}
-	MeasurementData(DBTIMESTAMP ts) { m_time = ts; }
+	MeasurementBase() {}
+	MeasurementBase(DBTIMESTAMP ts) { m_time = ts; }
 
 	DBTIMESTAMP m_time;
 	double m_timeConstant;
 	CString m_comment;
 	CString calibInfo;
 	int type;
+	CString m_refChannel;
 };
 
+class ChannelBase
+{
+public:
+	CString m_station;
+	CString m_channel;
+	CString m_sensorSerialNumber;
+	CString m_adapterSerialNumber;
+	int m_type;
+	double m_roll;
+	double m_pitch;
+	double m_tilt;
+	double m_angle;
+	double m_elevation;	
+};
 
+class ChannelErrBase
+{
+public:
+	double m_azimuth;
+	double m_error;
+};
 
 class TiltAlignment
 {
 private:
     TiltAlignment( void ) {} ;
 public:
-    class Data : public MeasurementData
+    class Data : public MeasurementBase
     {
     public:       
         CString m_lineOfSightDirection ;
         bool m_elevationCompensation ;
-		CString m_refChannel;
+		
     } ;
 
-    class ChannelData
+    class ChannelData : public ChannelBase
     {
-    public:
-        CString m_station ;
-	    CString m_channel ;
-		int m_type;
-        CString m_sensorSerialNumber ;
-        CString m_adapterSerialNumber ;
-        double m_roll ;
-        double m_pitch ;
-        double m_tilt ;
-        double m_angle ;
-        double m_elevation ;
+		public:
         double m_bias ;
     } ;
     class ChannelErrData
@@ -180,48 +191,28 @@ class TiltAndFlatnessFo
 private:
 	TiltAndFlatnessFo( void ) {} ;
 public:
-    class Data : public MeasurementData
+    class Data : public MeasurementBase
 	{
 	  public:
-		double m_timeConstant ;
 		LONG m_numberOfMeasurements ;
-		CString m_reference ;
-		CString m_comment ;
-		CString m_measuredUnit ;
-		//DBTIMESTAMP m_time ;
-		double m_IndexArmLength ;
 	} ;
 
-  class ChannelData
+  class ChannelData :public ChannelBase
   {
   public:
-    CString m_station ;
-    CString m_channel ;
-    CString m_sensorSerialNumber ;
-//    CString m_adapterSerialNumber ;
-    double m_roll ;
-    double m_pitch ;
-    double m_tilt ;
-    double m_angle ;
-    double m_elevation1 ;
-    double m_elevation2 ;
-    double m_standardDeviation ;
-    double m_bottomError ;
-    double m_maximumDeviation ;
-    double m_azimuth ;
-	double m_IndexArmLength ;
-    double m_IndexArm2Length ;
-    CString m_refstation ;
-    CString m_refchannel ;
-    CString m_refsensorSerialNumber ;
+	  double m_elevation2;
+	  double m_standardDeviation;
+	  double m_bottomError;
+	  double m_maximumDeviation;
+	  double m_azimuth;	
   } ;
 
-  class ChannelErrData
+  class ChannelErrData:public ChannelErrBase
   {
   public:
-    double m_azimuth ;
-    double m_error1 ;
-    double m_error2 ;    
+    double m_error2 ;  
+	double m_indexArmLength1;
+	double m_indexArmLength2;
     double m_dh;
   } ;
 

@@ -53,7 +53,7 @@ public:
     BOOL InsertHistoryItem(HistoryData& data);//DBTIMESTAMP ts);
     BOOL InsertHistory2Item(DBTIMESTAMP ts);
 
-	BOOL InsertMeasurement(MeasurementData& data);
+	BOOL InsertMeasurement(MeasurementBase& data);
 
     BOOL InsertTiltAlignment(TiltAlignment::Data, int measId);
     BOOL InsertTiltAlignmentChannel(TiltAlignment::ChannelData, int measId);

@@ -42,16 +42,17 @@ void CGyroPerformanceTestPage2::HideAll()
 
 void CGyroPerformanceTestPage2::ShowGraphButtons()
 {
-  GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
-  GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-  GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
+	GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
+	GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
+	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
 	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	CString graphFileName;
 	if (m_pParent -> m_pGraph -> SaveGraphToUniqueFileName( graphFileName ) == TRUE )
 	{
-		CString text ;
-    text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD ) ;
+	/*	CString text ;
+		text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD ) ;
 		m_pParent -> m_GraphFileManager.SaveFileName( graphFileName, IDYES == MessageBox( text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1 ) ) ;
+		*/
 	}
 }
 

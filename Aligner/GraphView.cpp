@@ -3221,8 +3221,12 @@ BOOL CGraphView::SaveGraphToUniqueFileName( CString &fileName, bool resultImage)
 	}
 	
     name += _T("(");
-    //name += SysSetup->GetNewImageFileIndexString();    
-	name += COleDateTime::GetCurrentTime().Format(_T("%Y%m%d-%H%M%S"));
+
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+	CString str; str.Format("%02d%02d%02d-%02d%02d%02d-%03d",st.wYear,st.wMonth,st.wDay,st.wHour,st.wMinute,st.wSecond,st.wMilliseconds);
+
+	name += str;// COleDateTime::GetCurrentTime().Format(_T("%Y%m%d-%H%M%S:"));
 	CString tiffName = name + _T(").tiff");;
 
     fileName = path + tiffName;

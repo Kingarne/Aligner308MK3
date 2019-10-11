@@ -156,6 +156,7 @@ namespace ReporterLib
 
         }
 
+        
         public bool GetProject(int projId, ref Project project)
         {
             if (Connection.State != System.Data.ConnectionState.Open)
@@ -250,13 +251,25 @@ namespace ReporterLib
 
         }
 
+        public bool DeleteMeasurement(int id)
+        {           
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("DELETE FROM Measurement WHERE ID =" + id.ToString(), Connection))
+            {
+                command.ExecuteNonQuery();
+            }
+            return true;
+        }
+
 
         public bool GetMeasurement(int measId, ref Measurement measurement)
         {
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;
 
-            using (OdbcCommand command = new OdbcCommand("SELECT * FROM Measurement  INNER JOIN MeasType ON Measurement.measType = MeasType.measType WHERE ID=" + measId.ToString(), Connection))
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM Measurement INNER JOIN MeasType ON Measurement.measType = MeasType.measType WHERE ID=" + measId.ToString(), Connection))
             {
                 using (OdbcDataReader dr = command.ExecuteReader())
                 {
@@ -450,7 +463,7 @@ namespace ReporterLib
 
                         tfeCh.ID = (int)dr["ID"];
                         tfeCh.ForeignID = (int)dr["foreignID"];
-                        tfeCh.aziuth = (float)(double)dr["azimuth"];
+                        tfeCh.aziuth = (float)(double)dr["azimuth"]; 
                         tfeCh.indexArmL1 = (float)(double)dr["IndexArmLength1"];
                         tfeCh.indexArmL2 = (float)(double)dr["IndexArmLength2"];
                         tfeCh.error = (float)(double)dr["error1"];

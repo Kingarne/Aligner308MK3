@@ -1462,7 +1462,10 @@ BOOL CResultTable::SaveToDataBase( void )
         {            
             for( int i = 0; i < m_InParam.pFileGraphManager->GetNoOfSavedFiles(); i++ )
             {                        
-                if( TRUE != AddGraph( m_InParam.pFileGraphManager->GetFileName( i ), TRUE)) //m_InParam->pFileGraphManager.GetIncludeToResultTable( i ) ) )
+				CString file = m_InParam.pFileGraphManager->GetFileName(i);
+				BOOL include = m_InParam.pFileGraphManager->GetIncludeToResultTable(i);
+
+                if( TRUE != AddGraph( file, include))
                 {
                     //result = FALSE;
                 }           

@@ -36,6 +36,7 @@
             this.commentButton = new System.Windows.Forms.Button();
             this.allButton = new System.Windows.Forms.Button();
             this.noneButton = new System.Windows.Forms.Button();
+            this.delButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -118,11 +119,22 @@
             this.noneButton.UseVisualStyleBackColor = true;
             this.noneButton.Click += new System.EventHandler(this.noneButton_Click);
             // 
+            // delButton
+            // 
+            this.delButton.Location = new System.Drawing.Point(223, 407);
+            this.delButton.Name = "delButton";
+            this.delButton.Size = new System.Drawing.Size(56, 19);
+            this.delButton.TabIndex = 8;
+            this.delButton.Text = "Delete...";
+            this.delButton.UseVisualStyleBackColor = true;
+            this.delButton.Click += new System.EventHandler(this.delButton_Click);
+            // 
             // ReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 716);
+            this.Controls.Add(this.delButton);
             this.Controls.Add(this.noneButton);
             this.Controls.Add(this.allButton);
             this.Controls.Add(this.commentButton);
@@ -149,5 +161,6 @@
         private System.Windows.Forms.Button commentButton;
         private System.Windows.Forms.Button allButton;
         private System.Windows.Forms.Button noneButton;
+        private System.Windows.Forms.Button delButton;
     }
 }

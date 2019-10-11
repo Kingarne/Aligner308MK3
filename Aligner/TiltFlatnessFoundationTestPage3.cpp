@@ -45,7 +45,7 @@ void CTiltFlatnessFoundationTestPage3::ShowGraphButtons()
 	CString graphFileName;
 	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
 	{
-		m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
+		//m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
 	}
 }
 

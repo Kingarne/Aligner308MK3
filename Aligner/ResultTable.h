@@ -94,10 +94,10 @@ protected:
 	TiltAlignment::Data m_TiltAlignment;
 	TiltAlignment::ChannelData m_TiltAlignmentChannel[SIZE_OF_ARRAYS];
 
-	TiltAndFlatnessHistory::Data m_TiltAndFlatnessData;
-	TiltAndFlatnessHistory::ItemData m_TiltAndFlatnessItem[SIZE_OF_ARRAYS];
-	TiltAndFlatnessHistory::ItemErrData m_TiltAndFlatnessItemErr[SIZE_OF_X_ARRAY];
-	TiltAndFlatnessHistory::ExtItemData m_TiltAndFlatnessExtItem[SIZE_OF_X_ARRAY];
+	TiltAndFlatness::Data m_TiltAndFlatness;
+	TiltAndFlatness::ChannelData m_TiltAndFlatnessChannel[SIZE_OF_ARRAYS];
+	TiltAndFlatness::ChannelErrData m_TiltAndFlatnessChannelErr[SIZE_OF_X_ARRAY];
+	TiltAndFlatness::ExtChannelData m_TiltAndFlatnessExtChannel[SIZE_OF_X_ARRAY];
 	
 	TiltAndFlatnessFo::Data m_TiltAndFlatnessFo;
 	TiltAndFlatnessFo::ChannelData m_TiltAndFlatnessFoChannel[SIZE_OF_ARRAYS];

@@ -58,7 +58,7 @@ BOOL DoDelete( LONG index )
   }
 
 IMPLEMENT_MEASUREMENT(TiltAlignment) ;
-IMPLEMENT_HISTORY(TiltAndFlatness) ;
+IMPLEMENT_MEASUREMENT(TiltAndFlatness) ;
 IMPLEMENT_MEASUREMENT(TiltAndFlatnessFo) ;
 IMPLEMENT_HISTORY(GyroPerformanceTest) ;
 IMPLEMENT_HISTORY(AzimuthAlignmentErrors) ;
@@ -104,39 +104,38 @@ BOOL TiltAlignment::AddChannel( const ChannelData chData )
     return DBInterface::Instance()->InsertTiltAlignmentChannel(chData, m_measTypeID);
 }
 
-BOOL TiltAndFlatnessHistory::AddData( Data &data )
+BOOL TiltAndFlatness::AddData( Data &data )
 {
-    DBInterface::Instance()->InsertHistoryItem(data);    
-	
-    int lastId = 0;
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);
-    
-    m_mainID = lastId;
-    DBInterface::Instance()->InsertTiltAndFlatness(data, m_mainID);
-    
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    m_lastID = lastId;
+	data.type = MeasType::MT_TiltFlatnessPl;
+
+	DBInterface::Instance()->InsertMeasurement(data);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measID = lastId;
+
+	DBInterface::Instance()->InsertTiltAndFlatness(data, m_measID);
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measTypeID = lastId;
 
     return TRUE ;
 }
 
-BOOL TiltAndFlatnessHistory::AddItem( const ItemData item)
+BOOL TiltAndFlatness::AddChannel( const ChannelData item)
 {
-    BOOL res = DBInterface::Instance()->InsertTiltAndFlatnessItem(item, m_lastID);
-    int lastId;
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    m_lastItemID = lastId;
-    return res;
+	BOOL res = DBInterface::Instance()->InsertTiltAndFlatnessChannel(item, m_measTypeID);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measChID = lastId;
+	return TRUE;
 }
 
-BOOL TiltAndFlatnessHistory::AddItemErr( const ItemErrData item )
+BOOL TiltAndFlatness::AddChannelErr( const ChannelErrData item )
 {
-	return DBInterface::Instance()->InsertTiltAndFlatnessItemErr(item, m_lastItemID);
+	return DBInterface::Instance()->InsertTiltAndFlatnessChannelErr(item, m_measChID);
 }
 
 
-BOOL TiltAndFlatnessHistory::AddExtItem( const ExtItemData extItem )
+BOOL TiltAndFlatness::AddExtData(const ExtChannelData extItem)
 {
   return TRUE ;
 }

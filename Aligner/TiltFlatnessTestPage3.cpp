@@ -177,72 +177,27 @@ LRESULT CTiltFlatnessTestPage3::OnWizardBack()
 
 BOOL CTiltFlatnessTestPage3::OnWizardFinish()
 {
-	switch( m_pParent->m_Status )
+	switch (m_pParent->m_Status)
 	{
 		case STATUS_PAGE_READY:
-		m_MsgCaption.LoadString( IDS_QUESTION_CAPTION );
-		m_Text.LoadString( IDS_EXIT_WITH_OPPORTUNITY_TO_SAVE );
-
-		if( IDYES == MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
 		{
+			m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
+
 			
-			if( m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS )
-			{
-				OnBnClickedShowErrorGraph();
-			}			
 			OnBnClickedShowResultGraph();
-		    OnBnClickedShowPolarGraph();    
-			//m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
-
+			OnBnClickedShowPolarGraph();
+		
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-			m_pParent->m_pResultTable->ShowReport( TRUE );
-            m_pParent->m_deleteReport = TRUE;
-			m_Text.LoadString( IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD );
+			m_pParent->m_pResultTable->ShowReport(TRUE);
+			m_pParent->m_deleteReport = TRUE;
+			m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
 
-			if( IDYES == MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
-			{
-				DisableAllButtons();
-				CString graphFileName;
-				m_pParent->ExitResultTable( FALSE);
-				OnBnClickedShowPolarGraph();				
+			//DisableAllButtons();
+			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
+			m_pParent->ExitResultTable(res != IDYES);
 
-				if( m_pParent->m_PolarGraphFileName.GetLength() != 0 )
-				{
-					m_Text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD );
-					BOOL keepPolar = (MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1) == IDYES);
-					m_pParent->m_GraphFileManager.IncludeToResultTable( keepPolar, m_pParent->m_PolarGraphFileName );
-					
-				}
-				OnBnClickedShowResultGraph();
-				//m_pParent->SaveResultGraphFile();
-
-				if( m_pParent->m_ResultGraphFileName.GetLength() != 0 )
-				{
-					m_Text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD );
-					BOOL keepResult = (MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1) == IDYES);
-					m_pParent->m_GraphFileManager.IncludeToResultTable( keepResult, m_pParent->m_ResultGraphFileName );					
-				}
-
-				if( m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS )
-				{
-					OnBnClickedShowErrorGraph();
-					//m_pParent->SaveErrorGraphFile();
-
-					if( m_pParent->m_ErrorGraphFileName.GetLength() != 0 )
-					{
-						m_Text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD );
-						BOOL keepError = (MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1) == IDYES);
-						m_pParent->m_GraphFileManager.IncludeToResultTable( keepError, m_pParent->m_ErrorGraphFileName );						
-					}
-				}				
-               // m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();  
-				return CPropertyPage::OnWizardFinish();
-			}
-			else
-			{
-			//	m_pParent->m_pResultTable->CloseReport();
-			}
-    }
+			return CPropertyPage::OnWizardFinish();
+		}
 
     break;
   case STATUS_PAGE_ERROR:

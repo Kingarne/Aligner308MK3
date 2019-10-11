@@ -80,6 +80,7 @@ namespace ReporterLib
             Measurements = new Dictionary<int, DBInterface.Measurement>();
 
             PrintMeasFunc[DBInterface.MeasType.MT_TiltAlignment] = PrintTiltAlignment;
+            PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessPl] = PrintTiltFlatnessPl;
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessFo] = PrintTiltFlatnessFo;
             
         }
@@ -278,11 +279,17 @@ namespace ReporterLib
                 return;
             }
 
+            if (!PrintMeasFunc.ContainsKey(Measurement.Type))
+            {
+                return;
+            }
+
             PrintArgs = e;
             Rectangle bound = e.PageBounds;
             bound.Inflate(-2, -2);
             DrawPageNum(e);
 
+            
             bool done = PrintMeasFunc[Measurement.Type].Invoke();
            
             if(done)
@@ -777,6 +784,41 @@ namespace ReporterLib
             return true;
         }
 
+        private bool PrintTiltFlatnessPl()
+        {
+            Graphics gr = PrintArgs.Graphics;
+            DrawHeader();
+
+            DBInterface.TiltFlatnessPl m = new DBInterface.TiltFlatnessPl();
+            DBI.GetTiltFlatnessPlMeas(ref Measurement, ref m);
+
+            List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+            DBI.GetTiltFlatnessPlCh(m.ID, ref channels);
+            SetRefChannel(Measurement, channels);
+
+            DBInterface.ChannelBase measCh = channels.First(c => !c.IsRef);
+            if (measCh == null)
+                return true;
+
+            List<DBInterface.ChannelErrBase> channelErr = new List<DBInterface.ChannelErrBase>();
+            DBI.GetTiltFlatnessFoChErr(measCh.ID, ref channelErr);
+
+            int yPerc = startYHeadPerc;
+            int xPerc = 60;
+            DrawText("Measurements:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+            xPerc = xPerc + 15;
+            DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+           
+           
+
+            Images = new List<DBInterface.ImageInfo>();
+            DBI.GetImages(Measurement.ID, ref Images);
+
+            if (Images != null)
+                return DrawImages(gr, ref Images);
+
+            return true;
+        }
         private bool PrintTiltFlatnessFo()
         {
             Graphics gr = PrintArgs.Graphics;
@@ -801,17 +843,17 @@ namespace ReporterLib
             DrawText("Measurements:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
             xPerc = xPerc + 15;
             DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-            if(channelErr.Count > 0)
-            {                
+            if (channelErr.Count > 0)
+            {
                 DBInterface.TiltFlatnessFoChErr chErr = channelErr[0] as DBInterface.TiltFlatnessFoChErr;
-                if(chErr.indexArmL1 > 0)
+                if (chErr.indexArmL1 > 0)
                 {
                     yPerc += yHeadSpace;
                     xPerc = 60;
                     DrawText("Ix Arm Lengt 1:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
                     xPerc = xPerc + 15;
                     DrawText(chErr.indexArmL1.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-                    
+
                 }
                 if (chErr.indexArmL2 > 0)
                 {
@@ -824,7 +866,7 @@ namespace ReporterLib
                 }
             }
 
-           
+
 
             Images = new List<DBInterface.ImageInfo>();
             DBI.GetImages(Measurement.ID, ref Images);
@@ -835,7 +877,6 @@ namespace ReporterLib
             return true;
         }
 
-        
     }
 }
  

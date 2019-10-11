@@ -219,22 +219,18 @@ BOOL CTiltFlatnessFoundationTestPage3::OnWizardFinish()
 		{
 			m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
 
-			if (m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS)
-			{
-				OnBnClickedShowErrorGraph();
-			}
 			OnBnClickedShowResultGraph();
 			OnBnClickedShowPolarGraph();
-			//m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();      
 
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 			m_pParent->m_pResultTable->ShowReport(TRUE);
 			m_pParent->m_deleteReport = TRUE;
-			m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
 
+			m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
 			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
 			m_pParent->ExitResultTable(res != IDYES);
-			DisableAllButtons();
+
+//			DisableAllButtons();
 			return CPropertyPage::OnWizardFinish();
 		}
 	/*

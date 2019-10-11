@@ -1026,40 +1026,40 @@ BOOL DBInterface::InsertTiltAlignmentChannel(TiltAlignment::ChannelData data, in
 	return TRUE;
 }
 
-BOOL DBInterface::InsertTiltAndFlatness(TiltAndFlatnessHistory::Data data, int historyId)
+BOOL DBInterface::InsertTiltAndFlatness(TiltAndFlatness::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAndFlatnessHistory (historyID, ship, timeConstant, numberOfMeasurement, reference, comment, measuredUnit) VALUES (%d,'%s',%f,%d,'%s','%s','%s')",
-         historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_numberOfMeasurements, data.m_reference, data.m_comment, data.m_measuredUnit);
+     sql.Format("INSERT INTO TiltAndFlatness (measID, numberOfMeasurement, referenceChannel) VALUES (%d,%d,'%s')",
+         measId, data.m_numberOfMeasurements, data.m_refChannel);
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
 }
 
-BOOL DBInterface::InsertTiltAndFlatnessItem(TiltAndFlatnessHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertTiltAndFlatnessChannel(TiltAndFlatness::ChannelData data, int foreignId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAndFlatnessHistoryItem (historyID, station, channel, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth) VALUES (%d,'%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,%s,%s)",
-         historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle), ToText(data.m_elevation), ToText(data.m_standardDeviation), ToText(data.m_maximumDeviation), ToText(data.m_azimuth));
+     sql.Format("INSERT INTO TiltAndFlatnessChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth) VALUES (%d,'%s','%s',%d,'%s',%f,%f,%f,%f,%f,%f,%f,%f,%f)",
+         foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_standardDeviation, data.m_maximumDeviation, data.m_azimuth);
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
 }
 
-BOOL DBInterface::InsertTiltAndFlatnessItemErr(TiltAndFlatnessHistory::ItemErrData data, int historyId)
+BOOL DBInterface::InsertTiltAndFlatnessChannelErr(TiltAndFlatness::ChannelErrData data, int foreignId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAndFlatnessHistoryItemErr (historyID, azimuth, error) VALUES (%d,%s,%s)",
-         historyId, ToText(data.m_azimuth), ToText(data.m_error));
+     sql.Format("INSERT INTO TiltAndFlatnessChannelErr (foreignID, azimuth, error) VALUES (%d,%f,%f)",
+         foreignId, data.m_azimuth, data.m_error);
  
     m_db.ExecuteSQL(sql); 
 	return TRUE;

@@ -27,7 +27,7 @@ namespace ReporterLib
         public enum MeasType
         {
             MT_TiltAlignment = 1,
-            MT_TiltFlatnessRP,
+            MT_TiltFlatnessPl,
             MT_TiltFlatnessFo,
             MT_AzimuthAlign,
             MT_GyroPerf,
@@ -104,6 +104,23 @@ namespace ReporterLib
             public float bias { get; set; }
         }
 
+        public class TiltFlatnessPl : AlignmentBase
+        {
+            public int numMeas { get; set; }
+        }
+
+        public class TiltFlatnessPlCh : ChannelBase
+        {            
+            public float stdDev { get; set; }
+            public float maxDev { get; set; }            
+            public float azimuth { get; set; }
+        }
+
+        public class TiltFlatnessPlChErr : ChannelErrBase
+        {
+           
+        }
+
         public class TiltFlatnessFo : AlignmentBase
         {
             public int numMeas { get; set; }           
@@ -120,7 +137,7 @@ namespace ReporterLib
 
         public class TiltFlatnessFoChErr : ChannelErrBase
         {
-            public float elevation2 { get; set; }
+         //   public float elevation2 { get; set; }
             public float indexArmL1{ get; set; }
             public float indexArmL2{ get; set; }
             public float error2 { get; set; }
@@ -370,6 +387,100 @@ namespace ReporterLib
                         taCh.bias = (float)(double)dr["bias"];
 
                         channels.Add(taCh);
+                    }
+                }
+            }
+
+            return true;
+        }
+        public bool GetTiltFlatnessPlMeas(ref DBInterface.Measurement meas, ref TiltFlatnessPl tfp)
+        {
+
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM TiltAndFlatness WHERE measID=" + meas.ID.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+
+                       /* for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                            string t = dr.GetDataTypeName(i);
+                        }*/
+
+                        tfp.ID = (int)dr["ID"];
+                        tfp.numMeas = (int)dr["numberOfMeasurement"];
+                        string refCh = (string)dr["referenceChannel"];
+                        meas.RefChannel = refCh;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetTiltFlatnessPlCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM TiltAndFlatnessChannel INNER JOIN StationType ON TiltAndFlatnessChannel.type = StationType.stationType WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        DBInterface.TiltFlatnessPlCh tfCh = new DBInterface.TiltFlatnessPlCh();
+
+                        tfCh.ID = (int)dr["ID"];
+                        tfCh.ForeignID = (int)dr["foreignID"];
+                        tfCh.Type = (int)dr["type"];
+                        tfCh.TypeText = (string)dr["stationTypeName"];
+                        tfCh.Station = (string)dr["station"];
+                        tfCh.Channel = (string)dr["channel"];
+                        tfCh.SensorSN = (string)dr["sensorSerialNumber"];
+                        //tfCh.AdapterSN = (string)dr["adapterSerialNumber"];
+                        tfCh.NominalAz = (float)(double)dr["NominalAzimuth"];
+                        tfCh.roll = (float)(double)dr["roll"];
+                        tfCh.pitch = (float)(double)dr["pitch"];
+                        tfCh.tilt = (float)(double)dr["tilt"];
+                        tfCh.angle = (float)(double)dr["angle"];
+                        tfCh.elevation = (float)(double)dr["elevation"];                       
+                        tfCh.stdDev = (float)(double)dr["standardDeviation"];                        
+                        tfCh.maxDev = (float)(double)dr["maximumDeviation"];
+                        tfCh.azimuth = (float)(double)dr["azimuth"];
+
+                        channels.Add(tfCh);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetTiltFlatnessPlChErr(int foreignId, ref List<DBInterface.ChannelErrBase> channelErr)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM TiltAndFlatnessChannelErr WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        DBInterface.TiltFlatnessFoChErr tfeCh = new DBInterface.TiltFlatnessFoChErr();
+
+                        tfeCh.ID = (int)dr["ID"];
+                        tfeCh.ForeignID = (int)dr["foreignID"];
+                        tfeCh.aziuth = (float)(double)dr["azimuth"];
+                        tfeCh.error = (float)(double)dr["error"];                        
+
+                        channelErr.Add(tfeCh);
                     }
                 }
             }

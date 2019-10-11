@@ -538,112 +538,101 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/***************************************************************************/
   case TILT_FLATNESS_TEST:
 		{
-			if( IsFixed( g_AlignerData.RefObjNo ) == TRUE )
-			{
-				m_TiltAndFlatnessData.m_reference.LoadString( IDS_REFERENCE_FIXED_PLANE );
-				m_TiltAndFlatnessItem[0].m_elevation = DB_EMPTY_DOUBLE;//Empty
-			}
-			else
-			{
-				m_TiltAndFlatnessData.m_reference.LoadString( IDS_PLATFORM_RELATIVE_ELEVATION );
-				m_TiltAndFlatnessItem[0].m_elevation = DB_EMPTY_DOUBLE;//DB_ELEVATION_IS_REFERENCE;//Ref
-			}
-			m_TiltAndFlatnessData.m_timeConstant = g_AlignerData.TaoFlat;
-			m_TiltAndFlatnessData.m_numberOfMeasurements = m_pParent->m_N;
+		
+			m_TiltAndFlatness.m_timeConstant = g_AlignerData.TaoFlat;
+			m_TiltAndFlatness.m_numberOfMeasurements = m_pParent->m_N;
+			m_TiltAndFlatness.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
+	        m_TiltAndFlatness.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
+			m_TiltAndFlatness.m_time = m_InParam.Time;
 
-	        m_TiltAndFlatnessData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
-	
-	        m_TiltAndFlatnessData.m_measuredUnit.LoadString( GetMRad() == TRUE ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
-			m_TiltAndFlatnessData.m_time = m_InParam.Time;
-
-			m_TiltAndFlatnessItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
-			m_TiltAndFlatnessItem[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );			
-            m_TiltAndFlatnessItem[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ):DB_EMPTY_STRING;
+			m_TiltAndFlatnessChannel[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
+			m_TiltAndFlatnessChannel[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
+            m_TiltAndFlatnessChannel[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ):DB_EMPTY_STRING;
 
 			if( ( IsGun( g_AlignerData.RefObjNo ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.RefObjNo ) != GUN_ADAP_EMPTY ) )
 			{
-				m_TiltAndFlatnessItem[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
+				m_TiltAndFlatnessChannel[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
 			}
 			else
 			{
-				m_TiltAndFlatnessItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+				m_TiltAndFlatnessChannel[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
 			}
-
-			m_TiltAndFlatnessItemErr[0].m_azimuth = DB_EMPTY_DOUBLE;//empty
-			m_TiltAndFlatnessItemErr[0].m_error = DB_EMPTY_DOUBLE;//empty
-
-			m_TiltAndFlatnessItem[0].m_roll = DB_EMPTY_DOUBLE;//ref
-			m_TiltAndFlatnessItem[0].m_pitch = DB_EMPTY_DOUBLE;//ref
-			m_TiltAndFlatnessItem[0].m_tilt = DB_EMPTY_DOUBLE;//ref
-			m_TiltAndFlatnessItem[0].m_angle = DB_EMPTY_DOUBLE;//ref
-			m_TiltAndFlatnessItem[0].m_standardDeviation = DB_EMPTY_DOUBLE;//empty
-			m_TiltAndFlatnessItem[0].m_maximumDeviation = DB_EMPTY_DOUBLE;//empty
-			m_TiltAndFlatnessItem[0].m_azimuth = DB_EMPTY_DOUBLE;//empty
+			
+			m_TiltAndFlatnessChannel[0].m_type = GetUnitType(g_AlignerData.RefObjNo);
+			m_TiltAndFlatnessChannel[0].m_roll = 0.0f;
+			m_TiltAndFlatnessChannel[0].m_pitch = 0.0f;
+			m_TiltAndFlatnessChannel[0].m_tilt = 0.0f;
+			m_TiltAndFlatnessChannel[0].m_angle = 0.0f;
+			m_TiltAndFlatnessChannel[0].m_standardDeviation = 0.0f;
+			m_TiltAndFlatnessChannel[0].m_maximumDeviation = 0.0f;
+			m_TiltAndFlatnessChannel[0].m_azimuth = 0.0f;
+			m_TiltAndFlatnessChannel[0].m_elevation= 0.0f;
 	
 			for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
 			{
-				m_TiltAndFlatnessItem[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-				m_TiltAndFlatnessItem[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
-			    m_TiltAndFlatnessItem[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ): DB_EMPTY_STRING;
+				m_TiltAndFlatnessChannel[i].m_type = GetUnitType(g_AlignerData.ObjNo[i]);
+				m_TiltAndFlatnessChannel[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
+				m_TiltAndFlatnessChannel[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
+				m_TiltAndFlatnessChannel[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ): DB_EMPTY_STRING;
 			
 				if( ( IsGun( g_AlignerData.ObjNo[i] ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.ObjNo[i] ) != GUN_ADAP_EMPTY ) )
 				{
-					m_TiltAndFlatnessItem[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
+					m_TiltAndFlatnessChannel[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
 				}
 				else
 				{
-					m_TiltAndFlatnessItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+					m_TiltAndFlatnessChannel[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
 				}
 				
-				m_TiltAndFlatnessItem[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
-				m_TiltAndFlatnessItem[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
-				m_TiltAndFlatnessItem[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
-				m_TiltAndFlatnessItem[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
-				m_TiltAndFlatnessItem[i].m_elevation = g_AlignerData.Kh * m_pParent->m_MeanSineFit[i];
+				m_TiltAndFlatnessChannel[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
+				m_TiltAndFlatnessChannel[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
+				m_TiltAndFlatnessChannel[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
+				m_TiltAndFlatnessChannel[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
+				m_TiltAndFlatnessChannel[i].m_elevation = g_AlignerData.Kh * m_pParent->m_MeanSineFit[i];
 
 				if( g_AlignerData.Found == TRUE )
 				{
-					m_TiltAndFlatnessItem[i].m_standardDeviation = g_AlignerData.Sigma[i];
-					m_TiltAndFlatnessItem[i].m_maximumDeviation = m_pParent->m_MaxSineFitError[i];
+					m_TiltAndFlatnessChannel[i].m_standardDeviation = g_AlignerData.Sigma[i];
+					m_TiltAndFlatnessChannel[i].m_maximumDeviation = m_pParent->m_MaxSineFitError[i];
 				}
 				else
 				{
-					m_TiltAndFlatnessItem[i].m_standardDeviation = g_AlignerData.Kh * g_AlignerData.Sigma[i];
-					m_TiltAndFlatnessItem[i].m_maximumDeviation = g_AlignerData.Kh * m_pParent->m_MaxSineFitError[i];
+					m_TiltAndFlatnessChannel[i].m_standardDeviation = g_AlignerData.Kh * g_AlignerData.Sigma[i];
+					m_TiltAndFlatnessChannel[i].m_maximumDeviation = g_AlignerData.Kh * m_pParent->m_MaxSineFitError[i];
 				}
 				//***  Azimuth is always in degrees and should not be scaled by .Kh
-			    m_TiltAndFlatnessItem[i].m_azimuth = m_pParent->m_XAngleForMaxSineFitError[i];
+				m_TiltAndFlatnessChannel[i].m_azimuth = m_pParent->m_XAngleForMaxSineFitError[i];
 			}
 
             //Get calibration status
-            calibInfo.SetCalibrationTime(m_TiltAndFlatnessData.m_time);
+            calibInfo.SetCalibrationTime(m_TiltAndFlatness.m_time);
             for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
             {
-				if(m_TiltAndFlatnessItem[i].m_sensorSerialNumber == "" && m_TiltAndFlatnessItem[i].m_adapterSerialNumber == "")
+				if(m_TiltAndFlatnessChannel[i].m_sensorSerialNumber == "" && m_TiltAndFlatnessChannel[i].m_adapterSerialNumber == "")
 					continue;
 
-				calibInfo.AddChannel(m_TiltAndFlatnessItem[i].m_channel);   
-                calibInfo.AddSensor(m_TiltAndFlatnessItem[i].m_sensorSerialNumber);   
-                calibInfo.AddAdapter(m_TiltAndFlatnessItem[i].m_adapterSerialNumber);   
+				calibInfo.AddChannel(m_TiltAndFlatnessChannel[i].m_channel);
+                calibInfo.AddSensor(m_TiltAndFlatnessChannel[i].m_sensorSerialNumber);
+                calibInfo.AddAdapter(m_TiltAndFlatnessChannel[i].m_adapterSerialNumber);
             }
-            m_TiltAndFlatnessData.calibInfo = calibInfo.GetInfo();
+            m_TiltAndFlatness.calibInfo = calibInfo.GetInfo();
 
 
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
 			{
 				for( int j=1; j<=m_pParent->m_N; j++ )
 				{
-					m_TiltAndFlatnessItemErr[i*m_pParent->m_N + j].m_azimuth = m_pParent->m_XAngle[j] ;
-					m_TiltAndFlatnessItemErr[i*m_pParent->m_N + j].m_error = m_pParent->m_SineFitError[i][j] * g_AlignerData.Kh;
+					m_TiltAndFlatnessChannelErr[i*m_pParent->m_N + j].m_azimuth = m_pParent->m_XAngle[j] ;
+					m_TiltAndFlatnessChannelErr[i*m_pParent->m_N + j].m_error = m_pParent->m_SineFitError[i][j] * g_AlignerData.Kh;
 				}
 			}
 
 			//Extended Item
-			double deviation[SIZE_OF_X_ARRAY][SIZE_OF_ARRAYS] ;//will be copied to m_deviationJ3...m_deviationJ9 !!!!!
+		/*	double deviation[SIZE_OF_X_ARRAY][SIZE_OF_ARRAYS] ;//will be copied to m_deviationJ3...m_deviationJ9 !!!!!
 
 			for( int J=1; J<=m_pParent->m_N; J++ )
 			{
-				m_TiltAndFlatnessExtItem[J-1].m_azimuthAngle = m_pParent->m_XAngle[J];
+				m_TiltAndFlatnessExtChannelItem[J-1].m_azimuthAngle = m_pParent->m_XAngle[J];
 
 				for( int k=1; k<=g_AlignerData.NoOfCorr; k++ )
 				{
@@ -668,7 +657,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 				m_TiltAndFlatnessExtItem[J-1].m_deviationJ7 = deviation[J-1][4];
 				m_TiltAndFlatnessExtItem[J-1].m_deviationJ8 = deviation[J-1][5];
 				m_TiltAndFlatnessExtItem[J-1].m_deviationJ9 = deviation[J-1][6];
-			}	
+			}*/	
 		}
 		break;
 	/***************************************************************************/
@@ -1003,6 +992,7 @@ BOOL CResultTable::SaveToDataBase( void )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
+			m_reportMeasID = TiltAlignment::GetMeasID();
 
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
 			{		
@@ -1011,7 +1001,7 @@ BOOL CResultTable::SaveToDataBase( void )
 					ASSERT(0); // This is a "badass" error.
 				}
 			}
-			m_reportMeasID = TiltAlignment::GetMeasID();
+		
 
 			break;
 
@@ -1184,61 +1174,35 @@ BOOL CResultTable::SaveToDataBase( void )
 			}
 			break;
 		case TILT_FLATNESS_TEST:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_TiltAndFlatnessData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_TiltAndFlatnessData.m_comment = m_InParam.Comment;
-			}
-
-			if( !TiltAndFlatnessHistory::AddData( m_TiltAndFlatnessData ) )
+			
+			m_TiltAndFlatness.m_comment = m_InParam.Comment;
+			
+			if( !TiltAndFlatness::AddData( m_TiltAndFlatness ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
+			m_reportMeasID = TiltAndFlatness::GetMeasID();
 
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
-			{
-				if( m_TiltAndFlatnessItem[i].m_station.GetLength() == 0 ) 
-				{
-					m_TiltAndFlatnessItem[i].m_station = DB_EMPTY_STRING;
-				}
-
-				if( !TiltAndFlatnessHistory::AddItem( m_TiltAndFlatnessItem[i] ) )
+			{			
+				if( !TiltAndFlatness::AddChannel( m_TiltAndFlatnessChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
                 for( int j=1; j<=m_pParent->m_N; j++ )
                 {				
-                    if( !TiltAndFlatnessHistory::AddItemErr( m_TiltAndFlatnessItemErr[m_pParent->m_N*i + j] ) )
+                    if( !TiltAndFlatness::AddChannelErr( m_TiltAndFlatnessChannelErr[m_pParent->m_N*i + j] ) )
                     {
                         ASSERT(0); // This is a "badass" error.
                     }			
                 }
             }
-			
-			
-
-			for( int extI=0; extI<m_TiltAndFlatnessData.m_numberOfMeasurements; extI++ )
-			{
-				if( !TiltAndFlatnessHistory::AddExtItem( m_TiltAndFlatnessExtItem[extI] ) )
-				{
-					ASSERT(0); // This is a "badass" error.
-				}
-			}
 
 			break;
 		case TILT_FLATNESS_FOUNDATION_TEST:
+						
+			m_TiltAndFlatnessFo.m_comment = m_InParam.Comment;
 			
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_TiltAndFlatnessFo.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_TiltAndFlatnessFo.m_comment = m_InParam.Comment;
-			}
 
 			if( !TiltAndFlatnessFo::AddData( m_TiltAndFlatnessFo ) )
 			{

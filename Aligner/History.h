@@ -6,7 +6,7 @@
 
 enum MeasType {
 	MT_TiltAlignment = 1,
-	MT_TiltFlatnessRP,
+	MT_TiltFlatnessPl,
 	MT_TiltFlatnessFo,
 	MT_AzimuthAlign,
 	MT_GyroPerf,
@@ -113,8 +113,7 @@ public:
     {
     public:       
         CString m_lineOfSightDirection ;
-        bool m_elevationCompensation ;
-		
+        bool m_elevationCompensation ;		
     } ;
 
     class ChannelData : public ChannelBase
@@ -133,57 +132,36 @@ public:
 	DECLARE_MEASUREMENT;
 } ;
 
-class TiltAndFlatnessHistory
+class TiltAndFlatness
 {
 private:
-  TiltAndFlatnessHistory( void ) {} ;
+	TiltAndFlatness( void ) {} ;
 public:
-  class Data : public HistoryData
-  {
-  public:
-    double m_timeConstant ;
-    LONG m_numberOfMeasurements ;
-    CString m_reference ;
-    CString m_comment ;
-	CString m_measuredUnit ;
-	//DBTIMESTAMP m_time ;
-  } ;
+	class Data : public MeasurementBase
+	{
+	public:
+		LONG m_numberOfMeasurements;
+	} ;
 
-  class ItemData
-  {
-  public:
-    CString m_station ;
-    CString m_channel ;
-    CString m_sensorSerialNumber ;
-    CString m_adapterSerialNumber ;
-    double m_roll ;
-    double m_pitch ;
-    double m_tilt ;
-    double m_angle ;
-    double m_elevation ;
-    double m_standardDeviation ;
-    double m_maximumDeviation ;
-    double m_azimuth ;
-  } ;
-  class ItemErrData
-  {
-  public:
-	  double m_azimuth ;
-	  double m_error ;  
-  } ;
-  class ExtItemData
-  {
-  public:
-		double m_azimuthAngle ;
-		double m_deviationJ3 ;
-		double m_deviationJ4 ;
-		double m_deviationJ5 ;
-		double m_deviationJ6 ;
-		double m_deviationJ7 ;
-		double m_deviationJ8 ;
-		double m_deviationJ9 ;
-  } ;
-	DECLARE_HISTORY ;
+	class ChannelData : public ChannelBase
+	{
+	public:
+   
+		double m_standardDeviation ;
+		double m_maximumDeviation ;
+		double m_azimuth ;
+	} ;
+	class ChannelErrData :public ChannelErrBase
+	{
+	public:
+		double m_azimuth ;
+		double m_error ;  
+	} ;
+	class ExtChannelData
+	{
+  
+	} ;
+	DECLARE_MEASUREMENT;
 } ;
 
 class TiltAndFlatnessFo
@@ -219,14 +197,14 @@ public:
 	class ExtChannelData
   {
   public:
-		double m_azimuthAngle ;
+	/*	double m_azimuthAngle ;
 		double m_deviationJ3 ;
 		double m_deviationJ4 ;
 		double m_deviationJ5 ;
 		double m_deviationJ6 ;
 		double m_deviationJ7 ;
 		double m_deviationJ8 ;
-		double m_deviationJ9 ;
+		double m_deviationJ9 ;*/
   } ;
 	DECLARE_MEASUREMENT ;
 } ;

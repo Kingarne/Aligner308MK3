@@ -283,12 +283,8 @@ void CTiltAlignmentPage2::OnReset()
 	m_pParent->ExitResultTable( m_pParent->m_deleteReport );
     m_pParent->m_Status = STATUS_PAGE_CANCELED;
     g_AlignerData.ErrorDef = ERR_CANCEL;
-    CAlignerDoc *pDoc = static_cast<CAlignerDoc *>(static_cast<CFrameWnd *>(theApp.m_pMainWnd) -> GetActiveDocument());
-    if( pDoc != NULL )
-    {
-        pDoc->SaveProject();
-    }
-    return CPropertyPage::OnReset(); //Calls OnCancel()
+ 
+	return CPropertyPage::OnReset(); //Calls OnCancel()
 }
 
 void CTiltAlignmentPage2::MeasureRP()

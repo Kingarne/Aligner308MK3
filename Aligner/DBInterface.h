@@ -58,9 +58,9 @@ public:
     BOOL InsertTiltAlignment(TiltAlignment::Data, int measId);
     BOOL InsertTiltAlignmentChannel(TiltAlignment::ChannelData, int measId);
 
-    BOOL InsertTiltAndFlatness(TiltAndFlatnessHistory::Data data, int historyId);
-    BOOL InsertTiltAndFlatnessItem(TiltAndFlatnessHistory::ItemData data, int historyId);
-    BOOL InsertTiltAndFlatnessItemErr(TiltAndFlatnessHistory::ItemErrData data, int historyId);
+    BOOL InsertTiltAndFlatness(TiltAndFlatness::Data data, int historyId);
+    BOOL InsertTiltAndFlatnessChannel(TiltAndFlatness::ChannelData data, int historyId);
+    BOOL InsertTiltAndFlatnessChannelErr(TiltAndFlatness::ChannelErrData data, int historyId);
 
     BOOL InsertTiltAndFlatnessFo(TiltAndFlatnessFo::Data data, int measId);
     BOOL InsertTiltAndFlatnessFoChannel(TiltAndFlatnessFo::ChannelData data, int measId);

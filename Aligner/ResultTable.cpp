@@ -150,65 +150,66 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
   case AZIMUTH_ALIGN:
 		m_AzimuthAlignmentData.m_timeConstant = g_AlignerData.TaoAz;
 		m_AzimuthAlignmentData.m_rollExcentricity = MRADIANS_TO_DEGREES( g_AlignerData.RExc );
-
-		m_AzimuthAlignmentData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;		
-	    m_AzimuthAlignmentData.m_measuredUnit.LoadString( GetMRad() == TRUE ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
+		m_AzimuthAlignmentData.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
+		m_AzimuthAlignmentData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;			    
 		m_AzimuthAlignmentData.m_time = m_InParam.Time;
 
-		m_AzimuthAlignmentItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
-		m_AzimuthAlignmentItem[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
+		m_AzimuthAlignmentChannel[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
+		m_AzimuthAlignmentChannel[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
 		
-	    m_AzimuthAlignmentItem[0].m_sensorSerialNumber = ( IsSensor( g_AlignerData.RefObjNo ) ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
+		m_AzimuthAlignmentChannel[0].m_sensorSerialNumber = ( IsSensor( g_AlignerData.RefObjNo ) ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
 	
 		if( ( IsGun( g_AlignerData.RefObjNo ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.RefObjNo ) != GUN_ADAP_EMPTY )  )
 	    {
-			m_AzimuthAlignmentItem[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
+			m_AzimuthAlignmentChannel[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
         }
         else
         {
-		    m_AzimuthAlignmentItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+			m_AzimuthAlignmentChannel[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
         }
 
-		m_AzimuthAlignmentItem[0].m_nominalAzimuth = GetNominalAzimuthDegree( g_AlignerData.RefObjNo );
-		m_AzimuthAlignmentItem[0].m_nominalAzimuthdifference = DB_EMPTY_DOUBLE;//ref
-		m_AzimuthAlignmentItem[0].m_measuredAzimuthDifference = DB_EMPTY_DOUBLE;//ref
-		m_AzimuthAlignmentItem[0].m_measuredNominalDifference = DB_EMPTY_DOUBLE;//ref
-	
+		m_AzimuthAlignmentChannel[0].m_nominalAzimuth = GetNominalAzimuthDegree( g_AlignerData.RefObjNo );
+		m_AzimuthAlignmentChannel[0].m_nominalAzimuthdifference = 0.0f;
+		m_AzimuthAlignmentChannel[0].m_measuredAzimuthDifference = 0.0f;
+		m_AzimuthAlignmentChannel[0].m_measuredNominalDifference = 0.0f;
+		m_AzimuthAlignmentChannel[0].m_type = GetUnitType(g_AlignerData.RefObjNo);
+
 	    for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
         {
-			m_AzimuthAlignmentItem[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-			m_AzimuthAlignmentItem[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
+			m_AzimuthAlignmentChannel[i].m_type = GetUnitType(g_AlignerData.ObjNo[i]);
+			m_AzimuthAlignmentChannel[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
+			m_AzimuthAlignmentChannel[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
 			
-			m_AzimuthAlignmentItem[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
+			m_AzimuthAlignmentChannel[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
 			
 			if( ( IsGun( g_AlignerData.ObjNo[i] ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.ObjNo[i] ) != GUN_ADAP_EMPTY )  )
 			{
-				m_AzimuthAlignmentItem[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
+				m_AzimuthAlignmentChannel[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
 			}
 			else
 			{
-				m_AzimuthAlignmentItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+				m_AzimuthAlignmentChannel[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
 			}
 
-			m_AzimuthAlignmentItem[i].m_nominalAzimuth = GetNominalAzimuthDegree( g_AlignerData.ObjNo[i] );
+			m_AzimuthAlignmentChannel[i].m_nominalAzimuth = GetNominalAzimuthDegree( g_AlignerData.ObjNo[i] );
             help1 = GetNominalAzimuthDegree( g_AlignerData.ObjNo[i] ) - GetNominalAzimuthDegree( g_AlignerData.RefObjNo );
       		help2 =  MRADIANS_TO_DEGREES( pInParam->pACA[i] );
       		help3 = help2 - help1;
-            m_AzimuthAlignmentItem[i].m_nominalAzimuthdifference = help1;
-            m_AzimuthAlignmentItem[i].m_measuredAzimuthDifference = help2;
-			m_AzimuthAlignmentItem[i].m_measuredNominalDifference = help3;
+			m_AzimuthAlignmentChannel[i].m_nominalAzimuthdifference = help1;
+			m_AzimuthAlignmentChannel[i].m_measuredAzimuthDifference = help2;
+			m_AzimuthAlignmentChannel[i].m_measuredNominalDifference = help3;
         }
     
         //Get calibration status
         calibInfo.SetCalibrationTime(m_AzimuthAlignmentData.m_time);
         for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
         {
-			if(m_AzimuthAlignmentItem[i].m_sensorSerialNumber == "" && m_AzimuthAlignmentItem[i].m_adapterSerialNumber == "")
+			if(m_AzimuthAlignmentChannel[i].m_sensorSerialNumber == "" && m_AzimuthAlignmentChannel[i].m_adapterSerialNumber == "")
 				continue;
 
-			calibInfo.AddChannel(m_AzimuthAlignmentItem[i].m_channel);   
-            calibInfo.AddSensor(m_AzimuthAlignmentItem[i].m_sensorSerialNumber);   
-            calibInfo.AddAdapter(m_AzimuthAlignmentItem[i].m_adapterSerialNumber);   
+			calibInfo.AddChannel(m_AzimuthAlignmentChannel[i].m_channel);
+            calibInfo.AddSensor(m_AzimuthAlignmentChannel[i].m_sensorSerialNumber);
+            calibInfo.AddAdapter(m_AzimuthAlignmentChannel[i].m_adapterSerialNumber);
         }
         m_AzimuthAlignmentData.calibInfo = calibInfo.GetInfo();
 
@@ -1015,19 +1016,19 @@ BOOL CResultTable::SaveToDataBase( void )
 				m_AzimuthAlignmentData.m_comment = m_InParam.Comment;
 			}
 
-			if( !AzimuthAlignmentErrorsHistory::AddData( m_AzimuthAlignmentData ) )
+			if( !AzimuthAlignment::AddData( m_AzimuthAlignmentData ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
 
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
 			{
-				if( m_AzimuthAlignmentItem[i].m_station.GetLength() == 0 ) 
+				if( m_AzimuthAlignmentChannel[i].m_station.GetLength() == 0 ) 
 				{
-					m_AzimuthAlignmentItem[i].m_station = DB_EMPTY_STRING;
+					m_AzimuthAlignmentChannel[i].m_station = DB_EMPTY_STRING;
 				}
 
-				if( !AzimuthAlignmentErrorsHistory::AddItem( m_AzimuthAlignmentItem[i] ) )
+				if( !AzimuthAlignment::AddChannel( m_AzimuthAlignmentChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}

@@ -468,30 +468,22 @@ BOOL CAlignVerBenchMarkPage2::OnWizardFinish()
 {
   switch( m_pParent->m_Status )
   {
-  case STATUS_PAGE_READY:
-    m_MsgCaption.LoadString( IDS_QUESTION_CAPTION );
-    m_Text.LoadString( IDS_EXIT_WITH_OPPORTUNITY_TO_SAVE );
+	case STATUS_PAGE_READY:
+	{
+		m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
 
-    if( IDYES == MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
-    {
-	//		m_pParent->m_GraphFileManager.MoveUnwantedToTemporaryDir();      
-			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-			m_pParent->m_pResultTable->ShowReport( TRUE );
-            m_pParent->m_deleteReport = TRUE;
-			m_Text.LoadString( IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD );
-			g_AlignerData.LogData.ResultFromFirstMeasurementExists = FALSE;
+		m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
+		m_pParent->m_pResultTable->ShowReport(TRUE);
+		m_pParent->m_deleteReport = TRUE;
+		m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
+		g_AlignerData.LogData.ResultFromFirstMeasurementExists = FALSE;
 
-			if( IDYES == MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
-			{
-				DisableAllButtons();				
-				m_pParent->ExitResultTable(FALSE);				
-                return CPropertyPage::OnWizardFinish();
-			}
-			else
-			{
-		//		m_pParent->m_pResultTable->CloseReport();
-			}
-    }
+		int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
+		m_pParent->ExitResultTable(res != IDYES);
+
+		return CPropertyPage::OnWizardFinish();
+	}
+    
     break;
   case STATUS_PAGE_ERROR:
     m_MsgCaption.LoadString( IDS_ERROR_CAPTION );

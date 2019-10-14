@@ -90,6 +90,7 @@ public:
 	CString m_sensorSerialNumber;
 	CString m_adapterSerialNumber;
 	int m_type;
+	double m_nominalAzimuth;
 	double m_roll;
 	double m_pitch;
 	double m_tilt;
@@ -248,42 +249,34 @@ public:
 } ;
 
 
-class AzimuthAlignmentErrorsHistory
+class AzimuthAlignment
 {
 private:
-  AzimuthAlignmentErrorsHistory( void ) {} ;
+  AzimuthAlignment( void ) {} ;
 public:
-  class Data : public HistoryData
+  class Data : public MeasurementBase
   {
   public:
-    double m_timeConstant ;
+  
 	double m_rollExcentricity ;
-    CString m_comment ;
-	CString m_measuredUnit ;
-	//DBTIMESTAMP m_time ;
   } ;
 
-  class ItemData
+  class ChannelData :public ChannelBase
   {
   public:
-    CString m_station ;
-    CString m_channel ;
-    CString m_sensorSerialNumber ;
-    CString m_adapterSerialNumber ;
-		double m_nominalAzimuth ;
 		double m_nominalAzimuthdifference ;
 		double m_measuredAzimuthDifference ;
 		double m_measuredNominalDifference ;
   } ;
-  class ItemErrData
+  class ChannelErrData
   {
   public:
   } ;
-  class ExtItemData
+  class ExtChannelData
   {
   public:
   } ;
-  DECLARE_HISTORY ;
+  DECLARE_MEASUREMENT ;
 } ;
 
 

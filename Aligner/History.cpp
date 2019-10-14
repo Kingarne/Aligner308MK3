@@ -61,7 +61,7 @@ IMPLEMENT_MEASUREMENT(TiltAlignment) ;
 IMPLEMENT_MEASUREMENT(TiltAndFlatness) ;
 IMPLEMENT_MEASUREMENT(TiltAndFlatnessFo) ;
 IMPLEMENT_HISTORY(GyroPerformanceTest) ;
-IMPLEMENT_HISTORY(AzimuthAlignmentErrors) ;
+IMPLEMENT_MEASUREMENT(AzimuthAlignment) ;
 IMPLEMENT_HISTORY(AzimuthVerificationBenchmark) ;
 IMPLEMENT_HISTORY(AzimuthVerificationGyrostability) ;
 IMPLEMENT_HISTORY(HorizonAbsoluteMode) ;
@@ -200,25 +200,25 @@ BOOL GyroPerformanceTestHistory::AddItem( const ItemData item )
     return DBInterface::Instance()->InsertGyroPerformanceTestItem(item, m_lastID);
 }
 
-BOOL AzimuthAlignmentErrorsHistory::AddData(Data &data )
+BOOL AzimuthAlignment::AddData(Data &data )
 {
-    DBInterface::Instance()->InsertHistoryItem(data);
-       
-    int lastId = 0;
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);
-  
-    m_mainID = lastId;
-    DBInterface::Instance()->InsertAzimuthAlignmentErrors(data, m_mainID);                
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    m_lastID = lastId;
+	data.type = MeasType::MT_AzimuthAlign;
+
+	DBInterface::Instance()->InsertMeasurement(data);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measID = lastId;
+
+	DBInterface::Instance()->InsertAzimuthAlignment(data, m_measID);
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measTypeID = lastId;
     
     return TRUE ;
 }
 
-BOOL AzimuthAlignmentErrorsHistory::AddItem( const ItemData item )
+BOOL AzimuthAlignment::AddChannel( const ChannelData item )
 {
-    return DBInterface::Instance()->InsertAzimuthAlignmentErrorsItem(item, m_lastID);                    
+    return DBInterface::Instance()->InsertAzimuthAlignmentChannel(item, m_measTypeID);
 }
 
 BOOL AzimuthVerificationBenchmarkHistory::AddData(Data &data )

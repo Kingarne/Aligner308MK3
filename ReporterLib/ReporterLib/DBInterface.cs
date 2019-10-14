@@ -72,10 +72,10 @@ namespace ReporterLib
             public string Station { get; set; }
             public int Type { get; set; }
             public string TypeText { get; set; }
-            public string Channel { get; set; }
-            public float NominalAz { get; set; }
+            public string Channel { get; set; }           
             public string SensorSN { get; set; }
             public string AdapterSN { get; set; }
+            public float NominalAz { get; set; }
             public float roll { get; set; }
             public float pitch { get; set; }
             public float tilt { get; set; }
@@ -102,6 +102,18 @@ namespace ReporterLib
         public class TiltAlignmentCh :  ChannelBase
         {          
             public float bias { get; set; }
+        }
+
+        public class AzimuthAlignment : AlignmentBase
+        {
+            public float RollExcentricity { get; set; }            
+        }
+
+        public class AzimuthAlignmentCh : ChannelBase
+        {
+            public float NominalAzimuthDiff { get; set; }
+            public float MeasuredAzimuthDiff { get; set; }
+            public float MeasuredNominalDiff { get; set; }
         }
 
         public class TiltFlatnessPl : AlignmentBase
@@ -393,6 +405,75 @@ namespace ReporterLib
 
             return true;
         }
+
+        public bool GetAzimuthAlignmentMeas(ref DBInterface.Measurement meas, ref AzimuthAlignment tam)
+        {
+
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM AzimuthAlignment WHERE measID=" + meas.ID.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+
+                        for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                            string t = dr.GetDataTypeName(i);
+                        }
+
+                        tam.ID = (int)dr["ID"];
+                        tam.RollExcentricity = (float)(double)dr["RollExcentricity"];
+                        string refCh = (string)dr["referenceChannel"];
+                        meas.RefChannel = refCh;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetAzimuthAlignmentCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM AzimuthAlignmentChannel INNER JOIN StationType ON AzimuthAlignmentChannel.type = StationType.stationType WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        /*for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                        }*/
+                        DBInterface.AzimuthAlignmentCh aaCh = new DBInterface.AzimuthAlignmentCh();
+
+                        aaCh.ID = (int)dr["ID"];
+                        aaCh.ForeignID = (int)dr["foreignID"];
+                        aaCh.Type = (int)dr["type"];
+                        aaCh.TypeText = (string)dr["stationTypeName"];
+                        aaCh.Station = (string)dr["station"];
+                        aaCh.Channel = (string)dr["channel"];
+                        aaCh.SensorSN = (string)dr["sensorSerialNumber"];
+                        aaCh.AdapterSN = (string)dr["adapterSerialNumber"];
+                        aaCh.NominalAz = (float)(double)dr["nominalAzimuth"];
+                        aaCh.NominalAzimuthDiff = (float)(double)dr["nominalAzimuthDifference"];
+                        aaCh.MeasuredAzimuthDiff = (float)(double)dr["measuredAzimuthDifference"];
+                        aaCh.MeasuredNominalDiff = (float)(double)dr["measuredNominalDifference"];
+
+                        channels.Add(aaCh);
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public bool GetTiltFlatnessPlMeas(ref DBInterface.Measurement meas, ref TiltFlatnessPl tfp)
         {
 

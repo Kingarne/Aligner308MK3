@@ -42,6 +42,8 @@ namespace ReporterLib
         Rectangle HeadRect;
         private Font HeadFont = new Font("Ariel", 8, FontStyle.Regular);
         private SolidBrush MainBr = new SolidBrush(Color.Black);
+        private int LineWidth = 1;
+        [DefaultValue(typeof(Color), "0x808080")]
 
         ReportSorter Sorter;
         static private SortOrder LastSortOrder;
@@ -58,7 +60,7 @@ namespace ReporterLib
 
         public class TableItem
         {
-            public TableItem(string text, float pos, float width, StringAlignment sa=StringAlignment.Center) { Text = text; PosPerc = pos; WidthPerc = width; Align = sa; }
+            public TableItem(string text, float pos, float width, Color? c = null, StringAlignment sa=StringAlignment.Center) { Text = text; PosPerc = pos; WidthPerc = width; Color = c??Color.Black; Align = sa; }
             public string Text { get; set; }
             public float PosPerc { get; set; }
             public float WidthPerc { get; set; }
@@ -80,6 +82,7 @@ namespace ReporterLib
             Measurements = new Dictionary<int, DBInterface.Measurement>();
 
             PrintMeasFunc[DBInterface.MeasType.MT_TiltAlignment] = PrintTiltAlignment;
+            PrintMeasFunc[DBInterface.MeasType.MT_AzimuthAlign] = PrintAzimuthAlignment;
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessPl] = PrintTiltFlatnessPl;
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessFo] = PrintTiltFlatnessFo;
             
@@ -169,8 +172,8 @@ namespace ReporterLib
         private string GetAngularDef(int signDef)
         {
             string dir = signDef > 0 ? "down" : "up";
-            string text1 = "Angular definitions:\nRoll / Pitch are positive if stbd / aft " + dir + " (Cartesian coordinates).\n";
-            string text2 = "The tilt vector mark indicates the high point (Polar coordinates).\nThe angle of the tilt vector is positive clockwise from fore.\nElevation is positive up.\nAzimuth is positive clockwise from fore.";
+            string text1 = "Angular definitions:\n\tRoll / Pitch are positive if stbd / aft " + dir + " (Cartesian coordinates).\n\t";
+            string text2 = "The tilt vector mark indicates the high point (Polar coordinates).\n\tThe angle of the tilt vector is positive clockwise from fore.\n\tElevation is positive up.\n\tAzimuth is positive clockwise from fore.";
             return text1 + text2;
         }
 
@@ -479,7 +482,8 @@ namespace ReporterLib
 
                 RectangleF textRect = new RectangleF(x, pos.Y, w, 100);
                 SizeF size = gr.MeasureString(ti.Text, Font, w, sf);
-                gr.DrawString(ti.Text, Font, MainBr, textRect, sf);
+                
+                gr.DrawString(ti.Text, Font, new SolidBrush(ti.Color), textRect, sf);
 
               //  Rectangle drawRect = new Rectangle(x, pos.Y, w, 100);
               //  gr.DrawRectangle(new Pen(Color.Black), drawRect);                
@@ -505,7 +509,7 @@ namespace ReporterLib
                 DrawText(meas.CalibInfo, gr, Font, br, rect, 2, 0);
                 //    gr.DrawString(, Font, br, HeadRect.Width);
                 pos += (int)size.Height + MargY;
-                gr.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, pos, HeadRect.Right, pos);
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, pos, HeadRect.Right, pos);
                 h += pos-startPos;
             }
 
@@ -716,7 +720,7 @@ namespace ReporterLib
 
                 int wPerc = 8;
                 List<TableItem> table = new List<TableItem>();
-                table.Add(new TableItem("Station", 2, 25, StringAlignment.Near));
+                table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
                 table.Add(new TableItem("Ch", -1, 5));
                 table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
                 table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
@@ -730,14 +734,14 @@ namespace ReporterLib
                 int smalMarg = 4;
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
                 m_yPos += smalMarg;
-                gr.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
 
 
                 foreach (DBInterface.TiltAlignmentCh ch in channels)
                 {
                     table = new List<TableItem>();
-                    table.Add(new TableItem(ch.Station, 2, 25, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Station, 2, 25, Color.Black, StringAlignment.Near));
                     table.Add(new TableItem(ch.Channel, -1, 5));
                     table.Add(new TableItem(ch.SensorSN, -1, wPerc));
                     table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
@@ -765,7 +769,7 @@ namespace ReporterLib
                     m_yPos += smalMarg;
                 }
 
-                gr.DrawLine(new Pen(Color.Black, 2), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
 
                 m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
                 // m_yPos += MargY;
@@ -776,6 +780,93 @@ namespace ReporterLib
 
 
                 DrawText("*Bias across line-of-sight.", gr, HeadFont, MainBr, new Rectangle(HeadRect.Left, PrintArgs.PageBounds.Bottom-30, HeadRect.Width, 10), 2, 0);
+            }
+
+            if (Images != null)
+                return DrawImages(gr, ref Images);
+
+            return true;
+        }
+
+        private bool PrintAzimuthAlignment()
+        {
+            Graphics gr = PrintArgs.Graphics;
+            if (HeadPage)
+            {
+                DrawHeader();
+
+                DBInterface.AzimuthAlignment aam = new DBInterface.AzimuthAlignment();
+                DBI.GetAzimuthAlignmentMeas(ref Measurement, ref aam);
+
+                List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+                DBI.GetAzimuthAlignmentCh(aam.ID, ref channels);
+                SetRefChannel(Measurement, channels);
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+
+                int xPerc = 60;
+                DrawText("Roll Exc:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);               
+                xPerc = xPerc + 10;
+                DrawText(aam.RollExcentricity.ToString("0.00"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);                
+
+                int wPerc = 8;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Nom Az\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Nom dAz\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Meas dAz\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Az Err\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Az Err\n" + Project.UnitText, -1, wPerc));                
+
+                int smalMarg = 4;
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+
+                foreach (DBInterface.AzimuthAlignmentCh ch in channels)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(ch.Station, 2, 25, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                    table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                    table.Add(new TableItem(ch.NominalAz.ToString("0.00"), -1, wPerc));
+                    if (ch.IsRef)
+                    {
+                        string refStr = "Ref";
+                        table.Add(new TableItem(refStr, -1, wPerc, Color.Orange));
+                        table.Add(new TableItem(refStr, -1, wPerc, Color.Orange));
+                        table.Add(new TableItem(refStr, -1, wPerc, Color.Orange));
+                        table.Add(new TableItem(refStr, -1, wPerc, Color.Orange));                        
+                    }
+                    else
+                    {                       
+                        table.Add(new TableItem(ch.NominalAzimuthDiff.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.MeasuredAzimuthDiff.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.MeasuredNominalDiff.ToString("0.00"), -1, wPerc));
+                        double nomDiff = ch.MeasuredNominalDiff * Math.PI / 180.0f * 1000.0f;
+                        table.Add(new TableItem(nomDiff.ToString("0.00"), -1, wPerc));
+                        
+                    }
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+                // m_yPos += MargY;
+
+                m_yPos += DrawComment(gr, Measurement, m_yPos);
+                m_yPos += MargY;
+
             }
 
             if (Images != null)

@@ -69,8 +69,8 @@ public:
     BOOL InsertGyroPerformanceTest(GyroPerformanceTestHistory::Data data, int historyId);
     BOOL InsertGyroPerformanceTestItem(GyroPerformanceTestHistory::ItemData data, int historyId);
 
-    BOOL InsertAzimuthAlignmentErrors(AzimuthAlignmentErrorsHistory::Data data, int historyId);
-    BOOL InsertAzimuthAlignmentErrorsItem(AzimuthAlignmentErrorsHistory::ItemData data, int historyId);
+    BOOL InsertAzimuthAlignment(AzimuthAlignment::Data data, int measId);
+    BOOL InsertAzimuthAlignmentChannel(AzimuthAlignment::ChannelData data, int measId);
 
     BOOL InsertAzimuthVerificationBenchmark(AzimuthVerificationBenchmarkHistory::Data data, int historyId);
     BOOL InsertAzimuthVerificationBenchmarkItem(AzimuthVerificationBenchmarkHistory::ItemData data, int historyId);

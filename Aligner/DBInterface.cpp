@@ -1131,27 +1131,27 @@ BOOL DBInterface::InsertGyroPerformanceTestItem(GyroPerformanceTestHistory::Item
 	return TRUE;
 }
 
-BOOL DBInterface::InsertAzimuthAlignmentErrors(AzimuthAlignmentErrorsHistory::Data data, int historyId)
+BOOL DBInterface::InsertAzimuthAlignment(AzimuthAlignment::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO AzimuthAlignmentErrorsHistory (historyID, ship, timeConstant, rollExcentricity, comment, measuredUnit) VALUES (%d,'%s',%f,%f,'%s','%s')",
-             historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_rollExcentricity, data.m_comment, data.m_measuredUnit);
+     sql.Format("INSERT INTO AzimuthAlignment (measID, rollExcentricity, referenceChannel) VALUES (%d,%f,'%s')",
+             measId, data.m_rollExcentricity, data.m_refChannel);
  
     m_db.ExecuteSQL(sql); 
 	return TRUE;
 }
 
-BOOL DBInterface::InsertAzimuthAlignmentErrorsItem(AzimuthAlignmentErrorsHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertAzimuthAlignmentChannel(AzimuthAlignment::ChannelData data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO AzimuthAlignmentErrorsHistoryItem (historyID, station, channel, sensorSerialNumber, adapterSerialNumber, nominalAzimuth, nominalAzimuthdifference, measuredAzimuthDifference, measuredNominalDifference ) VALUES (%d,'%s','%s','%s','%s',%f,%s,%s,%s)",
-         historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_nominalAzimuth, ToText(data.m_nominalAzimuthdifference), ToText(data.m_measuredAzimuthDifference), ToText(data.m_measuredNominalDifference));
+     sql.Format("INSERT INTO AzimuthAlignmentChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, nominalAzimuth, nominalAzimuthdifference, measuredAzimuthDifference, measuredNominalDifference ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f)",
+         measId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_nominalAzimuth, data.m_nominalAzimuthdifference, data.m_measuredAzimuthDifference, data.m_measuredNominalDifference);
      
     m_db.ExecuteSQL(sql); 
 	return TRUE;

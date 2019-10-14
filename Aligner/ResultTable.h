@@ -106,8 +106,10 @@ protected:
 	
 	GyroPerformanceTestHistory::Data m_GyroPerformanceTestData;
 	GyroPerformanceTestHistory::ItemData m_GyroPerformanceTestItem[SIZE_OF_ARRAYS];
-	AzimuthAlignmentErrorsHistory::Data m_AzimuthAlignmentData;
-	AzimuthAlignmentErrorsHistory::ItemData m_AzimuthAlignmentItem[SIZE_OF_ARRAYS];
+
+	AzimuthAlignment::Data m_AzimuthAlignmentData;
+	AzimuthAlignment::ChannelData m_AzimuthAlignmentChannel[SIZE_OF_ARRAYS];
+
 	AzimuthVerificationBenchmarkHistory::Data m_AzimuthVerificationBenchmarkData;
 	AzimuthVerificationBenchmarkHistory::ItemData m_AzimuthVerificationBenchmarkItem[SIZE_OF_ARRAYS];
 	AzimuthVerificationGyrostabilityHistory::Data m_AzimuthVerificationGyrostabData;

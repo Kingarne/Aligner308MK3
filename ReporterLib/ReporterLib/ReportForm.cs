@@ -43,7 +43,9 @@ namespace ReporterLib
         private Font HeadFont = new Font("Ariel", 8, FontStyle.Regular);
         private SolidBrush MainBr = new SolidBrush(Color.Black);
         private int LineWidth = 1;
-        [DefaultValue(typeof(Color), "0x808080")]
+        private Color RefColor = Color.DarkOrange;
+
+
 
         ReportSorter Sorter;
         static private SortOrder LastSortOrder;
@@ -82,10 +84,11 @@ namespace ReporterLib
             Measurements = new Dictionary<int, DBInterface.Measurement>();
 
             PrintMeasFunc[DBInterface.MeasType.MT_TiltAlignment] = PrintTiltAlignment;
-            PrintMeasFunc[DBInterface.MeasType.MT_AzimuthAlign] = PrintAzimuthAlignment;
+            PrintMeasFunc[DBInterface.MeasType.MT_AzimuthAlign] = PrintAzimuthAlignment;            
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessPl] = PrintTiltFlatnessPl;
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessFo] = PrintTiltFlatnessFo;
-            
+            PrintMeasFunc[DBInterface.MeasType.MT_GyroPerf] = PrintGyroPerf;
+
         }
 
         
@@ -421,7 +424,7 @@ namespace ReporterLib
             int headY = PrintArgs.MarginBounds.Top;
 
             string angDef = GetAngularDef(Project.SignDef);
-            gr.DrawString(angDef, HeadFont, MainBr, headX, headY);
+            gr.DrawString(angDef, HeadFont, new SolidBrush(Color.DarkGray), headX, headY);
             SizeF size = gr.MeasureString(angDef, HeadFont);
 
             headY = headY + (int)size.Height + MargY;
@@ -804,21 +807,21 @@ namespace ReporterLib
 
                 Images = new List<DBInterface.ImageInfo>();
                 DBI.GetImages(Measurement.ID, ref Images);
-
+                
                 int xPerc = 60;
                 DrawText("Roll Exc:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);               
                 xPerc = xPerc + 10;
-                DrawText(aam.RollExcentricity.ToString("0.00"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);                
-
-                int wPerc = 8;
+                DrawText(aam.RollExcentricity.ToString("0.00"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                                
+                int wPerc = 10;
                 List<TableItem> table = new List<TableItem>();
                 table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
                 table.Add(new TableItem("Ch", -1, 5));
                 table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
                 table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
                 table.Add(new TableItem("Nom Az\n[deg]", -1, wPerc));
-                table.Add(new TableItem("Nom dAz\n[deg]", -1, wPerc));
-                table.Add(new TableItem("Meas dAz\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Nom \u0394Az\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Meas \u0394Az\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Az Err\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Az Err\n" + Project.UnitText, -1, wPerc));                
 
@@ -827,8 +830,7 @@ namespace ReporterLib
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
-
-
+                
                 foreach (DBInterface.AzimuthAlignmentCh ch in channels)
                 {
                     table = new List<TableItem>();
@@ -840,10 +842,10 @@ namespace ReporterLib
                     if (ch.IsRef)
                     {
                         string refStr = "Ref";
-                        table.Add(new TableItem(refStr, -1, wPerc, Color.Orange));
-                        table.Add(new TableItem(refStr, -1, wPerc, Color.Orange));
-                        table.Add(new TableItem(refStr, -1, wPerc, Color.Orange));
-                        table.Add(new TableItem(refStr, -1, wPerc, Color.Orange));                        
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));                        
                     }
                     else
                     {                       
@@ -961,6 +963,83 @@ namespace ReporterLib
 
             Images = new List<DBInterface.ImageInfo>();
             DBI.GetImages(Measurement.ID, ref Images);
+
+            if (Images != null)
+                return DrawImages(gr, ref Images);
+
+            return true;
+        }
+
+        private bool PrintGyroPerf()
+        {
+            Graphics gr = PrintArgs.Graphics;
+            if (HeadPage)
+            {
+                DrawHeader();
+
+                DBInterface.GyroPerf gpm = new DBInterface.GyroPerf();
+                DBI.GetGyroPerfMeas(ref Measurement, ref gpm);
+
+                List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+                DBI.GetGyroPertCh(gpm.ID, ref channels);
+                SetRefChannel(Measurement, channels);
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+
+                int wPerc = 8;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
+
+                int smalMarg = 4;
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+
+                foreach (DBInterface.GyroPerfCh ch in channels)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(ch.Station, 2, 25, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                    table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                    if (ch.IsRef)
+                    {
+                        string refStr = "Ref";
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                    }
+                    else
+                    {
+                        table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.tilt.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));
+                    }
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+                // m_yPos += MargY;
+
+                m_yPos += DrawComment(gr, Measurement, m_yPos);
+                m_yPos += MargY;
+            }
 
             if (Images != null)
                 return DrawImages(gr, ref Images);

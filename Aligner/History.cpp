@@ -60,7 +60,7 @@ BOOL DoDelete( LONG index )
 IMPLEMENT_MEASUREMENT(TiltAlignment) ;
 IMPLEMENT_MEASUREMENT(TiltAndFlatness) ;
 IMPLEMENT_MEASUREMENT(TiltAndFlatnessFo) ;
-IMPLEMENT_HISTORY(GyroPerformanceTest) ;
+IMPLEMENT_MEASUREMENT(GyroPerformance) ;
 IMPLEMENT_MEASUREMENT(AzimuthAlignment) ;
 IMPLEMENT_HISTORY(AzimuthVerificationBenchmark) ;
 IMPLEMENT_HISTORY(AzimuthVerificationGyrostability) ;
@@ -179,25 +179,25 @@ BOOL TiltAndFlatnessFo::AddExtData( const ExtChannelData extItem )
 }
 
 
-BOOL GyroPerformanceTestHistory::AddData(Data &data )
+BOOL GyroPerformance::AddData(Data &data )
 {
-    DBInterface::Instance()->InsertHistoryItem(data);
-    	
-    int lastId = 0;
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);
+	data.type = MeasType::MT_GyroPerf;
 
-    m_mainID = lastId;
-    DBInterface::Instance()->InsertGyroPerformanceTest(data, m_mainID);
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    m_lastID = lastId;
+	DBInterface::Instance()->InsertMeasurement(data);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measID = lastId;
+
+	DBInterface::Instance()->InsertGyroPerformance(data, m_measID);
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measTypeID = lastId;
 
     return TRUE ;
 }
 
-BOOL GyroPerformanceTestHistory::AddItem( const ItemData item )
+BOOL GyroPerformance::AddChannel( const ChannelData item )
 {
-    return DBInterface::Instance()->InsertGyroPerformanceTestItem(item, m_lastID);
+    return DBInterface::Instance()->InsertGyroPerformanceChannel(item, m_measTypeID);
 }
 
 BOOL AzimuthAlignment::AddData(Data &data )

@@ -439,30 +439,31 @@ BOOL DBInterface::GetCalibratedSensors(vector<CString>& sensors)
 
 BOOL DBInterface::GetCalibratedAdapters(UnitType::Types t, vector<CString>& adapters)
 {
-     if(!m_db.IsOpen())
-         return FALSE;
+	if(!m_db.IsOpen())
+		return FALSE;
  
-     CString sql="";
- 	sql.Format("SELECT DISTINCT serialNumber FROM GunAdapterCalibration WHERE type=%d ORDER BY serialNumber",t);	
+	CString table = t == UnitType::Types::Gun ? "GunAdapterCalibration" : "TheoAdapterCalibration";
+	CString sql="";
+	sql.Format("SELECT DISTINCT serialNumber FROM %s ORDER BY serialNumber",table);	
  
-     int nVal;
-     CString strVal;
+	int nVal;
+	CString strVal;
  
     
-     CString serial;
+	CString serial;
      
-	 CRecordset rs(&m_db);
-	 if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
-     {
-         while(!rs.IsEOF())
-         {
-             rs.GetFieldValue("serialNumber", serial);                    
-             adapters.push_back(serial);
+	CRecordset rs(&m_db);
+	if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+	{
+		while(!rs.IsEOF())
+		{
+			rs.GetFieldValue("serialNumber", serial);                    
+			adapters.push_back(serial);
  
-             rs.MoveNext();
-         }
-     }
-    return TRUE;
+			rs.MoveNext();
+		}
+	}
+	return TRUE;
 }
 
 BOOL DBInterface::GetShip(CString name, Ship& ship)
@@ -1105,27 +1106,27 @@ BOOL DBInterface::InsertTiltAndFlatnessFoChannelErr(TiltAndFlatnessFo::ChannelEr
 	return TRUE;
 }
 
-BOOL DBInterface::InsertGyroPerformanceTest(GyroPerformanceTestHistory::Data data, int historyId)
+BOOL DBInterface::InsertGyroPerformance(GyroPerformance::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO GyroPerformanceTestHistory (historyID, ship, timeConstant, comment, measuredUnit) VALUES (%d,'%s',%f,'%s','%s')",
-         historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_comment, data.m_measuredUnit);
+     sql.Format("INSERT INTO GyroPerformance (measID, referenceChannel) VALUES (%d,'%s')",
+         measId, data.m_refChannel);
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
 }
 
-BOOL DBInterface::InsertGyroPerformanceTestItem(GyroPerformanceTestHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertGyroPerformanceChannel(GyroPerformance::ChannelData data, int foreignId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO GyroPerformanceTestHistoryItem (historyID, station, channel, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle ) VALUES (%d,'%s','%s','%s','%s',%s,%s,%s,%s)",
-         historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle));
+     sql.Format("INSERT INTO GyroPerformanceChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f)",
+         foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle);
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;

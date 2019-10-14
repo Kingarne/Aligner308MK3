@@ -104,8 +104,8 @@ protected:
 	TiltAndFlatnessFo::ChannelErrData m_TiltAndFlatnessFoChannelErr[SIZE_OF_X_ARRAY];
 	TiltAndFlatnessFo::ExtChannelData m_TiltAndFlatnessFoExtChannel[SIZE_OF_X_ARRAY];
 	
-	GyroPerformanceTestHistory::Data m_GyroPerformanceTestData;
-	GyroPerformanceTestHistory::ItemData m_GyroPerformanceTestItem[SIZE_OF_ARRAYS];
+	GyroPerformance::Data m_GyroPerformance;
+	GyroPerformance::ChannelData m_GyroPerformanceChannel[SIZE_OF_ARRAYS];
 
 	AzimuthAlignment::Data m_AzimuthAlignmentData;
 	AzimuthAlignment::ChannelData m_AzimuthAlignmentChannel[SIZE_OF_ARRAYS];

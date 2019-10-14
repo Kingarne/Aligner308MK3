@@ -482,55 +482,58 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/*														GYRO_PERFORMANCE_TEST  											 */
 	/***************************************************************************/
 	case GYRO_PERFORMANCE_TEST:
-		m_GyroPerformanceTestData.m_timeConstant = g_AlignerData.TaoGyro;
 
-	    m_GyroPerformanceTestData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;	
-	    m_GyroPerformanceTestData.m_measuredUnit.LoadString( GetMRad() == TRUE ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);	
-		m_GyroPerformanceTestData.m_time = m_InParam.Time;
+		m_GyroPerformance.m_timeConstant = g_AlignerData.TaoGyro;
+		m_GyroPerformance.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
+		m_GyroPerformance.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;		
+		m_GyroPerformance.m_time = m_InParam.Time;
 
-		m_GyroPerformanceTestItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
-		m_GyroPerformanceTestItem[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );		
-	    m_GyroPerformanceTestItem[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ):DB_EMPTY_STRING;
+		m_GyroPerformanceChannel[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
+		m_GyroPerformanceChannel[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
+		m_GyroPerformanceChannel[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ):DB_EMPTY_STRING;
 	
+
 		if( ( IsGun( g_AlignerData.RefObjNo ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.RefObjNo ) != GUN_ADAP_EMPTY )  )
 	    {
-			m_GyroPerformanceTestItem[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
+			m_GyroPerformanceChannel[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
         }
         else
         {
-			m_GyroPerformanceTestItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+			m_GyroPerformanceChannel[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
         }
 
-		m_GyroPerformanceTestItem[0].m_roll = DB_EMPTY_DOUBLE;//ref
-		m_GyroPerformanceTestItem[0].m_pitch = DB_EMPTY_DOUBLE;//ref
-		m_GyroPerformanceTestItem[0].m_tilt = DB_EMPTY_DOUBLE;//ref
-		m_GyroPerformanceTestItem[0].m_angle = DB_EMPTY_DOUBLE;//ref
+		m_GyroPerformanceChannel[0].m_roll = 0.0f;
+		m_GyroPerformanceChannel[0].m_pitch = 0.0f;
+		m_GyroPerformanceChannel[0].m_tilt = 0.0f;
+		m_GyroPerformanceChannel[0].m_angle = 0.0f;
+		m_GyroPerformanceChannel[0].m_type = GetUnitType(g_AlignerData.RefObjNo);
 
 	    for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
         {
-			m_GyroPerformanceTestItem[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-			m_GyroPerformanceTestItem[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
-			m_GyroPerformanceTestItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
-		    m_GyroPerformanceTestItem[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ): DB_EMPTY_STRING;
+			m_GyroPerformanceChannel[i].m_type = GetUnitType(g_AlignerData.ObjNo[i]);
+			m_GyroPerformanceChannel[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
+			m_GyroPerformanceChannel[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
+			m_GyroPerformanceChannel[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+			m_GyroPerformanceChannel[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ): DB_EMPTY_STRING;
 		
-            m_GyroPerformanceTestItem[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
-            m_GyroPerformanceTestItem[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
-			m_GyroPerformanceTestItem[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
-			m_GyroPerformanceTestItem[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
+			m_GyroPerformanceChannel[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
+			m_GyroPerformanceChannel[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
+			m_GyroPerformanceChannel[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
+			m_GyroPerformanceChannel[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
         }
 
         //Get calibration status
-        calibInfo.SetCalibrationTime(m_GyroPerformanceTestData.m_time);
+        calibInfo.SetCalibrationTime(m_GyroPerformance.m_time);
         for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
         {
-			if(m_GyroPerformanceTestItem[i].m_sensorSerialNumber == "" && m_GyroPerformanceTestItem[i].m_adapterSerialNumber == "")
+			if(m_GyroPerformanceChannel[i].m_sensorSerialNumber == "" && m_GyroPerformanceChannel[i].m_adapterSerialNumber == "")
 				continue;
 
-			calibInfo.AddChannel(m_GyroPerformanceTestItem[i].m_channel);   
-            calibInfo.AddSensor(m_GyroPerformanceTestItem[i].m_sensorSerialNumber);   
-            calibInfo.AddAdapter(m_GyroPerformanceTestItem[i].m_adapterSerialNumber);   
+			calibInfo.AddChannel(m_GyroPerformanceChannel[i].m_channel);
+            calibInfo.AddSensor(m_GyroPerformanceChannel[i].m_sensorSerialNumber);
+            calibInfo.AddAdapter(m_GyroPerformanceChannel[i].m_adapterSerialNumber);
         }
-        m_GyroPerformanceTestData.calibInfo = calibInfo.GetInfo();
+		m_GyroPerformance.calibInfo = calibInfo.GetInfo();
 
 
         break;
@@ -1147,28 +1150,25 @@ BOOL CResultTable::SaveToDataBase( void )
 			}
 			break;
 		case GYRO_PERFORMANCE_TEST:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_GyroPerformanceTestData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_GyroPerformanceTestData.m_comment = m_InParam.Comment;
-			}
+		
+			
+			m_GyroPerformance.m_comment = m_InParam.Comment;			
 
-			if( !GyroPerformanceTestHistory::AddData( m_GyroPerformanceTestData ) )
+			if( !GyroPerformance::AddData( m_GyroPerformance ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
+			
+			m_reportMeasID = GyroPerformance::GetMeasID();
 
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
 			{
-				if( m_GyroPerformanceTestItem[i].m_station.GetLength() == 0 ) 
+				if( m_GyroPerformanceChannel[i].m_station.GetLength() == 0 ) 
 				{
-					m_GyroPerformanceTestItem[i].m_station = DB_EMPTY_STRING;
+					m_GyroPerformanceChannel[i].m_station = DB_EMPTY_STRING;
 				}
 
-				if( !GyroPerformanceTestHistory::AddItem( m_GyroPerformanceTestItem[i] ) )
+				if( !GyroPerformance::AddChannel( m_GyroPerformanceChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}

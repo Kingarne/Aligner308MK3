@@ -58,16 +58,16 @@ public:
     BOOL InsertTiltAlignment(TiltAlignment::Data, int measId);
     BOOL InsertTiltAlignmentChannel(TiltAlignment::ChannelData, int measId);
 
-    BOOL InsertTiltAndFlatness(TiltAndFlatness::Data data, int historyId);
-    BOOL InsertTiltAndFlatnessChannel(TiltAndFlatness::ChannelData data, int historyId);
-    BOOL InsertTiltAndFlatnessChannelErr(TiltAndFlatness::ChannelErrData data, int historyId);
+    BOOL InsertTiltAndFlatness(TiltAndFlatness::Data data, int measId);
+    BOOL InsertTiltAndFlatnessChannel(TiltAndFlatness::ChannelData data, int measId);
+    BOOL InsertTiltAndFlatnessChannelErr(TiltAndFlatness::ChannelErrData data, int measId);
 
     BOOL InsertTiltAndFlatnessFo(TiltAndFlatnessFo::Data data, int measId);
     BOOL InsertTiltAndFlatnessFoChannel(TiltAndFlatnessFo::ChannelData data, int measId);
     BOOL InsertTiltAndFlatnessFoChannelErr(TiltAndFlatnessFo::ChannelErrData data, int measId);
 
-    BOOL InsertGyroPerformanceTest(GyroPerformanceTestHistory::Data data, int historyId);
-    BOOL InsertGyroPerformanceTestItem(GyroPerformanceTestHistory::ItemData data, int historyId);
+    BOOL InsertGyroPerformance(GyroPerformance::Data data, int measId);
+    BOOL InsertGyroPerformanceChannel(GyroPerformance::ChannelData data, int measId);
 
     BOOL InsertAzimuthAlignment(AzimuthAlignment::Data data, int measId);
     BOOL InsertAzimuthAlignmentChannel(AzimuthAlignment::ChannelData data, int measId);

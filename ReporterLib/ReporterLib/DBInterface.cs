@@ -149,12 +149,22 @@ namespace ReporterLib
 
         public class TiltFlatnessFoChErr : ChannelErrBase
         {
-         //   public float elevation2 { get; set; }
             public float indexArmL1{ get; set; }
             public float indexArmL2{ get; set; }
             public float error2 { get; set; }
             public float dh{ get; set; }
         }
+
+        public class GyroPerf : AlignmentBase
+        {
+            
+        }
+
+        public class GyroPerfCh : ChannelBase
+        {
+
+        }
+
 
         private OdbcConnection Connection;
         public bool Open()
@@ -397,6 +407,74 @@ namespace ReporterLib
                         taCh.angle = (float)(double)dr["angle"];
                         taCh.elevation= (float)(double)dr["elevation"];
                         taCh.bias = (float)(double)dr["bias"];
+
+                        channels.Add(taCh);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetGyroPerfMeas(ref DBInterface.Measurement meas, ref GyroPerf tam)
+        {
+
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM GyroPerformance WHERE measID=" + meas.ID.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+
+                        for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                            string t = dr.GetDataTypeName(i);
+                        }
+
+                        tam.ID = (int)dr["ID"];                       
+                        string refCh = (string)dr["referenceChannel"];
+                        meas.RefChannel = refCh;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetGyroPertCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM GyroPerformanceChannel INNER JOIN StationType ON GyroPerformanceChannel.type = StationType.stationType WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        /*for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                        }*/
+                        DBInterface.GyroPerfCh taCh = new DBInterface.GyroPerfCh();
+
+                        taCh.ID = (int)dr["ID"];
+                        taCh.ForeignID = (int)dr["foreignID"];
+                        taCh.Type = (int)dr["type"];
+                        taCh.TypeText = (string)dr["stationTypeName"];
+                        taCh.Station = (string)dr["station"];
+                        taCh.Channel = (string)dr["channel"];
+                        taCh.SensorSN = (string)dr["sensorSerialNumber"];
+                        taCh.AdapterSN = (string)dr["adapterSerialNumber"];
+                        taCh.NominalAz = (float)(double)dr["NominalAzimuth"];
+                        taCh.roll = (float)(double)dr["roll"];
+                        taCh.pitch = (float)(double)dr["pitch"];
+                        taCh.tilt = (float)(double)dr["tilt"];
+                        taCh.angle = (float)(double)dr["angle"];                                          
 
                         channels.Add(taCh);
                     }

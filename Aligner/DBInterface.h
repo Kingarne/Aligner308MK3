@@ -78,14 +78,14 @@ public:
     BOOL InsertAzimuthVerificationGyrostability(AzimuthVerificationGyrostabilityHistory::Data data, int historyId);
     BOOL InsertAzimuthVerificationGyrostabilityItem(AzimuthVerificationGyrostabilityHistory::ItemData data, int historyId);
 
-    BOOL InsertHorizonAbsoluteMode(HorizonAbsoluteModeHistory::Data data, int historyId);
-    BOOL InsertHorizonAbsoluteModeItem(HorizonAbsoluteModeHistory::ItemData data, int historyId);
+    BOOL InsertHorizonAbsoluteMode(HorizonAbsoluteMode::Data data, int measId);
+    BOOL InsertHorizonAbsoluteModeChannel(HorizonAbsoluteMode::ChannelData data, int measId);
 
-    BOOL InsertHorizonRelativeMode(HorizonRelativeModeHistory::Data data, int historyId);
-    BOOL InsertHorizonRelativeModeItem(HorizonRelativeModeHistory::ItemData data, int historyId);
+    BOOL InsertHorizonRelativeMode(HorizonRelativeMode::Data data, int measId);
+    BOOL InsertHorizonRelativeModeChannel(HorizonRelativeMode::ChannelData data, int measId);
 
-    BOOL InsertCommonFlatTilt(CommonFlatTiltHistory::Data data, int historyId);
-    BOOL InsertCommonFlatTiltItem(CommonFlatTiltHistory::ItemData data, int historyId);
+    BOOL InsertCommonFlatTilt(CommonFlatTilt::Data data, int measId);
+    BOOL InsertCommonFlatTiltChannel(CommonFlatTilt::ChannelData data, int measId);
 
 	BOOL InsertSensorValidation(SensorValidationHistory::Data data, int historyId);
 	BOOL InsertSensorValidationItem(SensorValidationHistory::ItemData data, int historyId);

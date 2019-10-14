@@ -88,6 +88,9 @@ namespace ReporterLib
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessPl] = PrintTiltFlatnessPl;
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessFo] = PrintTiltFlatnessFo;
             PrintMeasFunc[DBInterface.MeasType.MT_GyroPerf] = PrintGyroPerf;
+            PrintMeasFunc[DBInterface.MeasType.MT_CommonFlatTilt] = PrintCommonFlat;
+            PrintMeasFunc[DBInterface.MeasType.MT_VerifAbsolute] = PrintAbsoluteMode;
+            PrintMeasFunc[DBInterface.MeasType.MT_VerifRelative] = PrintRelativeMode;
 
         }
 
@@ -315,6 +318,7 @@ namespace ReporterLib
             }
 
             m_page++;
+            m_yPos = PrintArgs.MarginBounds.Top;
             e.HasMorePages = !done;
         }
 
@@ -564,6 +568,7 @@ namespace ReporterLib
             if(m_yPos+h>PrintArgs.MarginBounds.Bottom)
             {
                 //Image dont fit.
+                
                 return false;
             }
 
@@ -1039,6 +1044,257 @@ namespace ReporterLib
 
                 m_yPos += DrawComment(gr, Measurement, m_yPos);
                 m_yPos += MargY;
+            }
+
+            if (Images != null)
+                return DrawImages(gr, ref Images);
+
+            return true;
+        }
+
+        private bool PrintCommonFlat()
+        {
+            Graphics gr = PrintArgs.Graphics;
+            if (HeadPage)
+            {
+                DrawHeader();
+
+                DBInterface.CommonFlat cfm = new DBInterface.CommonFlat();
+                DBI.GetCommonFlatMeas(ref Measurement, ref cfm);
+
+                List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+                DBI.GetCommonFlatCh(cfm.ID, ref channels);
+                SetRefChannel(Measurement, channels);
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+
+                int wPerc = 8;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));               
+                table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Parallell\nBias*\n" + Project.UnitText, -1, wPerc+2));
+                table.Add(new TableItem("Perpendicular\nBias*\n" + Project.UnitText, -1, wPerc+5));
+                table.Add(new TableItem("Temperature\n[°C]", -1, wPerc+5));
+
+                int smalMarg = 4;
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+                foreach (DBInterface.CommonFlatCh ch in channels)
+                {
+                    table = new List<TableItem>();
+                    //table.Add(new TableItem(ch.Station, 2, 25, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem("Calibration Flat", 2, 25, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+
+                    if (ch.IsRef)
+                    {
+                        string refStr = "Ref";
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                    }
+                    else
+                    {
+                        table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
+                    }
+
+                    table.Add(new TableItem(ch.ParallellBias.ToString("0.00"), -1, wPerc+2));
+                    table.Add(new TableItem(ch.PerpendicularBias.ToString("0.00"), -1, wPerc+5));
+                    table.Add(new TableItem(ch.Temperature.ToString("0.00"), -1, wPerc + 5));                    
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+                // m_yPos += MargY;
+
+                m_yPos += DrawComment(gr, Measurement, m_yPos);
+                m_yPos += MargY;
+                DrawText("*Bias across line-of-sight.", gr, HeadFont, MainBr, new Rectangle(HeadRect.Left, PrintArgs.PageBounds.Bottom - 30, HeadRect.Width, 10), 2, 0);
+            }
+
+            if (Images != null)
+                return DrawImages(gr, ref Images);
+
+            DrawText("*Bias across line-of-sight.", gr, HeadFont, MainBr, new Rectangle(HeadRect.Left, PrintArgs.PageBounds.Bottom - 30, HeadRect.Width, 10), 2, 0);
+
+            return true;
+        }
+
+        private bool PrintAbsoluteMode()
+        {
+            Graphics gr = PrintArgs.Graphics;
+            if (HeadPage)
+            {
+                DrawHeader();
+
+                DBInterface.AbsoulteModeVerif amm = new DBInterface.AbsoulteModeVerif();
+                DBI.GetAboluteModeMeas(ref Measurement, ref amm);
+
+                List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+                DBI.GetAboluteModeCh(amm.ID, ref channels);
+               // SetRefChannel(Measurement, channels);
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+
+                int xPerc = 60;
+                DrawText("Parallax Comp:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                DrawText("Elevation Comp:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+                xPerc = xPerc + 15;
+                DrawText(amm.parallaxComp ? "On" : "Off", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                DrawText(amm.elevationComp? "On" : "Off", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+
+                int wPerc = 8;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
+               
+
+                int smalMarg = 4;
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+
+                foreach (DBInterface.AbsoulteModeVerifCh ch in channels)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(ch.Station, 2, 25, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                    table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                   
+                    table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.tilt.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.elevation.ToString("0.00"), -1, wPerc));                    
+                    
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+                // m_yPos += MargY;
+
+                m_yPos += DrawComment(gr, Measurement, m_yPos);
+                m_yPos += MargY;
+
+
+            }
+
+            if (Images != null)
+                return DrawImages(gr, ref Images);
+
+            return true;
+        }
+
+        private bool PrintRelativeMode()
+        {
+            Graphics gr = PrintArgs.Graphics;
+            if (HeadPage)
+            {
+                DrawHeader();
+
+                DBInterface.RelativeModeVerif rmm = new DBInterface.RelativeModeVerif();
+                DBI.GetRelativeModeMeas(ref Measurement, ref rmm);
+
+                List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+                DBI.GetRelativeModeCh(rmm.ID, ref channels);
+                SetRefChannel(Measurement, channels);
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+
+                int xPerc = 60;
+                DrawText("Parallax Comp:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                DrawText("Elevation Comp:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+                xPerc = xPerc + 15;
+                DrawText(rmm.parallaxComp ? "On" : "Off", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                DrawText(rmm.elevationComp ? "On" : "Off", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+
+                int wPerc = 8;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
+
+
+                int smalMarg = 4;
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+
+                foreach (DBInterface.RelativeModeVerifCh ch in channels)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(ch.Station, 2, 25, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                    table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                    if (ch.IsRef)
+                    {
+                        string refStr = "Ref";
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                       
+                    }
+                    else
+                    {
+                        table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.tilt.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.elevation.ToString("0.00"), -1, wPerc));                    
+                    }
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+                // m_yPos += MargY;
+
+                m_yPos += DrawComment(gr, Measurement, m_yPos);
+                m_yPos += MargY;
+
+
             }
 
             if (Images != null)

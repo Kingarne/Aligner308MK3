@@ -110,16 +110,20 @@ protected:
 	AzimuthAlignment::Data m_AzimuthAlignmentData;
 	AzimuthAlignment::ChannelData m_AzimuthAlignmentChannel[SIZE_OF_ARRAYS];
 
+	CommonFlatTilt::Data m_CommonFlat;
+	CommonFlatTilt::ChannelData m_CommonFlatChannel[SIZE_OF_ARRAYS];
+
+	HorizonAbsoluteMode::Data m_HorizonAbsoluteMode;
+	HorizonAbsoluteMode::ChannelData m_HorizonAbsoluteModeChannel[SIZE_OF_ARRAYS];
+	HorizonRelativeMode::Data m_HorizonRelativeMode;
+	HorizonRelativeMode::ChannelData m_HorizonRelativeModeChannel[SIZE_OF_ARRAYS];
+
+
 	AzimuthVerificationBenchmarkHistory::Data m_AzimuthVerificationBenchmarkData;
 	AzimuthVerificationBenchmarkHistory::ItemData m_AzimuthVerificationBenchmarkItem[SIZE_OF_ARRAYS];
 	AzimuthVerificationGyrostabilityHistory::Data m_AzimuthVerificationGyrostabData;
 	AzimuthVerificationGyrostabilityHistory::ItemData m_AzimuthVerificationGyrostabItem[SIZE_OF_ARRAYS];
-	HorizonAbsoluteModeHistory::Data m_HorizonAbsoluteModeData;
-	HorizonAbsoluteModeHistory::ItemData m_HorizonAbsoluteModeItem[SIZE_OF_ARRAYS];
-	HorizonRelativeModeHistory::Data m_HorizonRelativeModeData;
-	HorizonRelativeModeHistory::ItemData m_HorizonRelativeModeItem[SIZE_OF_ARRAYS];
-	CommonFlatTiltHistory::Data m_CommonFlatTestData;
-	CommonFlatTiltHistory::ItemData m_CommonFlatTestItem[SIZE_OF_ARRAYS];
+	
 	SensorValidationHistory::Data m_SensorValidationData;
 	SensorValidationHistory::ItemData m_SensorValidationItem[SIZE_OF_ARRAYS];
 	LiveGraphErrorsHistory::Data m_LiveGraphData;

@@ -228,7 +228,7 @@ void CTiltAlignmentPage2::AdjustIfAfterCommonFlatTest( void )
                 poly.UpdateRollOffsetCalibrationData( serialNumber, GetEac( g_AlignerData.ObjNo[i] ) );
                 poly.UpdatePitchOffsetCalibrationData( serialNumber, GetEal( g_AlignerData.ObjNo[i] ) );
             }
-			CommonFlatTiltHistory::UpdateCalibrationFlag(TRUE);
+			CommonFlatTilt::UpdateCalibrationFlag(TRUE);
 			//DBInterface::Instance()->UpdateAdjustedCalibration("CommonFlatTiltHistory", serialNumber, SysSetup->GetOperatorName(), a_0);
 
 

@@ -165,6 +165,43 @@ namespace ReporterLib
 
         }
 
+        public class CommonFlat : AlignmentBase
+        {
+            public bool DBUpdated { get; set;}        
+        }
+
+        public class CommonFlatCh : ChannelBase
+        {
+            public double ParallellBias;
+            public double PerpendicularBias;
+            public double Temperature;
+        }
+
+        public class AbsoulteModeVerif : AlignmentBase
+        {
+            public bool parallaxComp { get; set; }
+            public bool elevationComp { get; set; }
+        }
+
+        public class AbsoulteModeVerifCh : ChannelBase
+        {
+            public double stdDev { get; set; }
+            public double maxDev { get; set; }
+            public double azuimuth { get; set; }
+        }
+
+        public class RelativeModeVerif : AlignmentBase
+        {
+            public bool parallaxComp { get; set; }
+            public bool elevationComp { get; set; }
+        }
+
+        public class RelativeModeVerifCh : ChannelBase
+        {
+            public double stdDev { get; set; }
+            public double maxDev { get; set; }
+            public double azuimuth { get; set; }
+        }
 
         private OdbcConnection Connection;
         public bool Open()
@@ -484,6 +521,65 @@ namespace ReporterLib
             return true;
         }
 
+        public bool GetCommonFlatMeas(ref DBInterface.Measurement meas, ref CommonFlat cfm)
+        {
+
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM CommonFlatTilt WHERE measID=" + meas.ID.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        cfm.ID = (int)dr["ID"];
+                        cfm.DBUpdated  = (bool)dr["dbUpdated"];
+                        string refCh = (string)dr["referenceChannel"];                        
+                        meas.RefChannel = refCh;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetCommonFlatCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            //using (OdbcCommand command = new OdbcCommand("SELECT * FROM CommonFlatTiltChannel INNER JOIN StationType ON CommonFlatTiltChannel.type = StationType.stationType WHERE foreignID=" + foreignId.ToString(), Connection))
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM CommonFlatTiltChannel WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                       
+                        DBInterface.CommonFlatCh cfCh = new DBInterface.CommonFlatCh();
+
+                        cfCh.ID = (int)dr["ID"];
+                        cfCh.ForeignID = (int)dr["foreignID"];
+                        //cfCh.Type = (int)dr["type"];
+                        //cfCh.TypeText = (string)dr["stationTypeName"];
+                        cfCh.Station = (string)dr["station"];
+                        cfCh.Channel = (string)dr["channel"];
+                        cfCh.SensorSN = (string)dr["sensorSerialNumber"];
+                        cfCh.roll = (float)(double)dr["roll"];
+                        cfCh.pitch = (float)(double)dr["pitch"];
+                        cfCh.ParallellBias = (float)(double)dr["parallellBias"];
+                        cfCh.PerpendicularBias = (float)(double)dr["perpendicularBias"];
+                        cfCh.Temperature = (float)(double)dr["temperature"];
+
+                        channels.Add(cfCh);
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public bool GetAzimuthAlignmentMeas(ref DBInterface.Measurement meas, ref AzimuthAlignment tam)
         {
 
@@ -748,6 +844,137 @@ namespace ReporterLib
             return true;
         }
 
+        public bool GetAboluteModeMeas(ref DBInterface.Measurement meas, ref AbsoulteModeVerif amv)
+        {
+
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM VerificationAbsoluteMode WHERE measID=" + meas.ID.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        amv.ID = (int)dr["ID"];
+                        amv.parallaxComp = (bool)dr["parallaxCompensation"];
+                        amv.elevationComp = (bool)dr["elevationCompensation"];                                               
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetAboluteModeCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM VerificationAbsoluteModeChannel INNER JOIN StationType ON VerificationAbsoluteModeChannel.type = StationType.stationType WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        /*for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                        }*/
+                        DBInterface.AbsoulteModeVerifCh amvCh = new DBInterface.AbsoulteModeVerifCh();
+
+                        amvCh.ID = (int)dr["ID"];
+                        amvCh.ForeignID = (int)dr["foreignID"];
+                        amvCh.Type = (int)dr["type"];
+                        amvCh.TypeText = (string)dr["stationTypeName"];
+                        amvCh.Station = (string)dr["station"];
+                        amvCh.Channel = (string)dr["channel"];
+                        amvCh.SensorSN = (string)dr["sensorSerialNumber"];
+                        amvCh.AdapterSN = (string)dr["adapterSerialNumber"];
+                        amvCh.NominalAz = (float)(double)dr["NominalAzimuth"];
+                        amvCh.roll = (float)(double)dr["roll"];
+                        amvCh.pitch = (float)(double)dr["pitch"];
+                        amvCh.tilt = (float)(double)dr["tilt"];
+                        amvCh.angle = (float)(double)dr["angle"];
+                        amvCh.elevation = (float)(double)dr["elevation"];
+                        amvCh.stdDev = (float)(double)dr["standardDeviation"];
+                        amvCh.maxDev = (float)(double)dr["maximumDeviation"];
+                        amvCh.azuimuth = (float)(double)dr["azimuth"];
+
+                        channels.Add(amvCh);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetRelativeModeMeas(ref DBInterface.Measurement meas, ref RelativeModeVerif amv)
+        {
+
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM VerificationRelativeMode WHERE measID=" + meas.ID.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        amv.ID = (int)dr["ID"];
+                        amv.parallaxComp = (bool)dr["parallaxCompensation"];
+                        amv.elevationComp = (bool)dr["elevationCompensation"];
+                        string refCh = (string)dr["referenceChannel"];
+                        meas.RefChannel = refCh;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetRelativeModeCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM VerificationRelativeModeChannel INNER JOIN StationType ON VerificationRelativeModeChannel.type = StationType.stationType WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        /*for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                        }*/
+                        DBInterface.RelativeModeVerifCh amvCh = new DBInterface.RelativeModeVerifCh();
+
+                        amvCh.ID = (int)dr["ID"];
+                        amvCh.ForeignID = (int)dr["foreignID"];
+                        amvCh.Type = (int)dr["type"];
+                        amvCh.TypeText = (string)dr["stationTypeName"];
+                        amvCh.Station = (string)dr["station"];
+                        amvCh.Channel = (string)dr["channel"];
+                        amvCh.SensorSN = (string)dr["sensorSerialNumber"];
+                        amvCh.AdapterSN = (string)dr["adapterSerialNumber"];
+                        amvCh.NominalAz = (float)(double)dr["NominalAzimuth"];
+                        amvCh.roll = (float)(double)dr["roll"];
+                        amvCh.pitch = (float)(double)dr["pitch"];
+                        amvCh.tilt = (float)(double)dr["tilt"];
+                        amvCh.angle = (float)(double)dr["angle"];
+                        amvCh.elevation = (float)(double)dr["elevation"];
+                        amvCh.stdDev = (float)(double)dr["standardDeviation"];
+                        amvCh.maxDev = (float)(double)dr["maximumDeviation"];
+                        amvCh.azuimuth = (float)(double)dr["azimuth"];
+
+                        channels.Add(amvCh);
+                    }
+                }
+            }
+
+            return true;
+        }
 
         public bool GetImages(int measId, ref List<ImageInfo> images)
         {
@@ -771,7 +998,6 @@ namespace ReporterLib
                     }
                 }
             }
-
 
             return true;
         }

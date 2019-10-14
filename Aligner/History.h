@@ -198,14 +198,7 @@ public:
 	class ExtChannelData
   {
   public:
-	/*	double m_azimuthAngle ;
-		double m_deviationJ3 ;
-		double m_deviationJ4 ;
-		double m_deviationJ5 ;
-		double m_deviationJ6 ;
-		double m_deviationJ7 ;
-		double m_deviationJ8 ;
-		double m_deviationJ9 ;*/
+	
   } ;
 	DECLARE_MEASUREMENT ;
 } ;
@@ -347,131 +340,97 @@ public:
 } ;
 
 
-class HorizonAbsoluteModeHistory
+class HorizonAbsoluteMode
 {
 private:
-  HorizonAbsoluteModeHistory( void ) {} ;
+  HorizonAbsoluteMode( void ) {} ;
 public:
-  class Data : public HistoryData
-  {
-  public:
-    double m_timeConstant ;
-	CString m_parallaxCompensation ;
-    CString m_elevationCompensation ;
-    CString m_comment ;
-	CString m_measuredUnit ;
-	//DBTIMESTAMP m_time ;
-  } ;
+	class Data : public MeasurementBase
+	{
+	public:
+		CString m_parallaxCompensation ;
+		CString m_elevationCompensation ;
+    
+	} ;
 
-  class ItemData
-  {
-  public:
-    CString m_station ;
-    CString m_channel ;
-    CString m_sensorSerialNumber ;
-    CString m_adapterSerialNumber ;
-    double m_roll ;
-    double m_pitch ;
-    double m_tilt ;
-    double m_angle ;
-    double m_elevation ;
-    double m_standardDeviation ;
+	class ChannelData : public ChannelBase
+	{
+	public:
+		double m_standardDeviation ;
 		double m_maximumDeviation ;
 		double m_azimuth ;
-  } ;
-  class ItemErrData
-  {
-  public:
-  } ;
-  class ExtItemData
-  {
-  public:
-  } ;
-  DECLARE_HISTORY ;
+	} ;
+	class ChannelErrData
+	{
+	public:
+	} ;
+	class ExtChannelData
+	{
+	public:
+	} ;
+  DECLARE_MEASUREMENT ;
 } ;
 
 
-class HorizonRelativeModeHistory
+class HorizonRelativeMode
 {
 private:
-  HorizonRelativeModeHistory( void ) {} ;
+  HorizonRelativeMode( void ) {} ;
 public:
-  class Data : public HistoryData
-  {
-  public:
-    double m_timeConstant ;
-	CString m_parallaxCompensation ;
-    CString m_elevationCompensation ;
-    CString m_comment ;
-	CString m_measuredUnit ;
-	//	DBTIMESTAMP m_time ;
-  } ;
+	class Data : public MeasurementBase
+	{
+	public:
+		CString m_parallaxCompensation ;
+		CString m_elevationCompensation ;    
+	} ;
 
-  class ItemData
-  {
-  public:
-    CString m_station ;
-    CString m_channel ;
-    CString m_sensorSerialNumber ;
-    CString m_adapterSerialNumber ;
-    double m_roll ;
-    double m_pitch ;
-    double m_tilt ;
-    double m_angle ;
-    double m_elevation ;
-    double m_standardDeviation ;
+	class ChannelData : public ChannelBase
+	{
+	public:
+		double m_standardDeviation ;
 		double m_maximumDeviation ;
 		double m_azimuth ;
-  } ;
-  class ItemErrData
-  {
-  public:
-  } ;
-  class ExtItemData
-  {
-  public:
-  } ;
-  DECLARE_HISTORY ;
+	} ;
+	class  ChannelErrData
+	{
+	public:
+	};
+	class ExtChannelData
+	{
+	public:
+	};
+	DECLARE_MEASUREMENT;
 } ;
 
 
-class CommonFlatTiltHistory
+class CommonFlatTilt
 {
 private:
-	CommonFlatTiltHistory( void ) {} ;
+	CommonFlatTilt( void ) {} ;
 public:
-	class Data : public HistoryData
+	class Data : public MeasurementBase
 	{
 		public:
-		double m_timeConstant ;
-		CString m_comment ;
-		CString m_measuredUnit ;
-	//DBTIMESTAMP m_time ;
 	} ;
 
   static BOOL UpdateCalibrationFlag(BOOL b);
 
-	class ItemData
+	class ChannelData : public ChannelBase
 	{
-		public:
-		CString m_station ;
-		CString m_channel ;
-		CString m_sensorSerialNumber ;
-		double m_roll ;
-		double m_pitch ;
+		public:		
 		double m_parallellBias ;
 		double m_perpendicularBias ;
 		double m_temperature ;
 	} ;
-	class ItemErrData
+	class ChannelErrData
 	{
 		public:
 	} ;
-	class ExtItemData
+	class ExtChannelData
 	{
 	  public:
 	} ;
-	DECLARE_HISTORY ;
+	DECLARE_MEASUREMENT;
   
 } ;
 

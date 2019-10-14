@@ -353,129 +353,130 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/*														HORIZON_ABSOLUTE_MODE 											 */
 	/***************************************************************************/
   case HORIZON_ABSOLUTE_MODE:
-		m_HorizonAbsoluteModeData.m_timeConstant = g_AlignerData.TaoTilt;
-	    m_HorizonAbsoluteModeData.m_parallaxCompensation.LoadString( g_AlignerData.UseParallax == TRUE ? IDS_ON : IDS_OFF);
+	  m_HorizonAbsoluteMode.m_timeConstant = g_AlignerData.TaoTilt;
+	  m_HorizonAbsoluteMode.m_parallaxCompensation.LoadString( g_AlignerData.UseParallax == TRUE ? IDS_ON : IDS_OFF);
 	
-	    m_HorizonAbsoluteModeData.m_elevationCompensation.LoadString( g_AlignerData.UseElevError == TRUE ? IDS_ON : IDS_OFF);	
-		m_HorizonAbsoluteModeData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
-		
-		m_HorizonAbsoluteModeData.m_measuredUnit.LoadString( GetMRad() == TRUE ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);		
-		m_HorizonAbsoluteModeData.m_time = m_InParam.Time;
+	  m_HorizonAbsoluteMode.m_elevationCompensation.LoadString( g_AlignerData.UseElevError == TRUE ? IDS_ON : IDS_OFF);
+	  m_HorizonAbsoluteMode.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
+	  m_HorizonAbsoluteMode.m_refChannel = "";// GetChannelName(g_AlignerData.RefObjNo);
+	  m_HorizonAbsoluteMode.m_time = m_InParam.Time;
 
 		int j;
         for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
 		{
 			j = i-1; //no reference at index 0
-			m_HorizonAbsoluteModeItem[j].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-			m_HorizonAbsoluteModeItem[j].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );			
-		    m_HorizonAbsoluteModeItem[j].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ): DB_EMPTY_STRING;
-		
+			m_HorizonAbsoluteModeChannel[j].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
+			m_HorizonAbsoluteModeChannel[j].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
+			m_HorizonAbsoluteModeChannel[j].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ): DB_EMPTY_STRING;
+			m_HorizonAbsoluteModeChannel[j].m_type= GetUnitType(g_AlignerData.ObjNo[i]);
+
 			if( ( IsGun( g_AlignerData.ObjNo[i] ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.ObjNo[i] ) != GUN_ADAP_EMPTY ) )
 			{
-				m_HorizonAbsoluteModeItem[j].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
+				m_HorizonAbsoluteModeChannel[j].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
 			}
 			else
 			{
-				m_HorizonAbsoluteModeItem[j].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+				m_HorizonAbsoluteModeChannel[j].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
 			}
 			
-			m_HorizonAbsoluteModeItem[j].m_roll = pInParam->SignDef*g_AlignerData.Kh*g_AlignerData.ACR[i];
-			m_HorizonAbsoluteModeItem[j].m_pitch = pInParam->SignDef*g_AlignerData.Kh*g_AlignerData.ACP[i];
-			m_HorizonAbsoluteModeItem[j].m_tilt = g_AlignerData.Kh*g_AlignerData.VecAmp[i];
-			m_HorizonAbsoluteModeItem[j].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
-			m_HorizonAbsoluteModeItem[j].m_elevation = g_AlignerData.Kh * GetEalAbs( g_AlignerData.ObjNo[i] );
-			m_HorizonAbsoluteModeItem[j].m_standardDeviation = g_AlignerData.Kh*g_AlignerData.Sigma[i];
-			m_HorizonAbsoluteModeItem[j].m_maximumDeviation = g_AlignerData.Kh*m_pParent->m_MaxSineFitError[i];
-			m_HorizonAbsoluteModeItem[j].m_azimuth = m_pParent->m_XAngleForMaxSineFitError[i];
+			m_HorizonAbsoluteModeChannel[j].m_roll = pInParam->SignDef*g_AlignerData.Kh*g_AlignerData.ACR[i];
+			m_HorizonAbsoluteModeChannel[j].m_pitch = pInParam->SignDef*g_AlignerData.Kh*g_AlignerData.ACP[i];
+			m_HorizonAbsoluteModeChannel[j].m_tilt = g_AlignerData.Kh*g_AlignerData.VecAmp[i];
+			m_HorizonAbsoluteModeChannel[j].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
+			m_HorizonAbsoluteModeChannel[j].m_elevation = g_AlignerData.Kh * GetEalAbs( g_AlignerData.ObjNo[i] );
+			m_HorizonAbsoluteModeChannel[j].m_standardDeviation = g_AlignerData.Kh*g_AlignerData.Sigma[i];
+			m_HorizonAbsoluteModeChannel[j].m_maximumDeviation = g_AlignerData.Kh*m_pParent->m_MaxSineFitError[i];
+			m_HorizonAbsoluteModeChannel[j].m_azimuth = m_pParent->m_XAngleForMaxSineFitError[i];
 		}
 
         //Get calibration status
-        calibInfo.SetCalibrationTime(m_HorizonAbsoluteModeData.m_time);
+        calibInfo.SetCalibrationTime(m_HorizonAbsoluteMode.m_time);
         for( int i=0; i<g_AlignerData.NoOfCorr; i++ )
         {
-			if(m_HorizonAbsoluteModeItem[i].m_sensorSerialNumber == "" && m_HorizonAbsoluteModeItem[i].m_adapterSerialNumber == "")
+			if(m_HorizonAbsoluteModeChannel[i].m_sensorSerialNumber == "" && m_HorizonAbsoluteModeChannel[i].m_adapterSerialNumber == "")
 				continue;
 
-			calibInfo.AddChannel(m_HorizonAbsoluteModeItem[i].m_channel);   
-            calibInfo.AddSensor(m_HorizonAbsoluteModeItem[i].m_sensorSerialNumber);   
-            calibInfo.AddAdapter(m_HorizonAbsoluteModeItem[i].m_adapterSerialNumber);   
+			calibInfo.AddChannel(m_HorizonAbsoluteModeChannel[i].m_channel);   
+            calibInfo.AddSensor(m_HorizonAbsoluteModeChannel[i].m_sensorSerialNumber);   
+            calibInfo.AddAdapter(m_HorizonAbsoluteModeChannel[i].m_adapterSerialNumber);   
         }
-        m_HorizonAbsoluteModeData.calibInfo = calibInfo.GetInfo();
+        m_HorizonAbsoluteMode.calibInfo = calibInfo.GetInfo();
 
     break;
 	/***************************************************************************/
 	/*													AIR_TARGET_RELATIVE_MODE 											 */
 	/***************************************************************************/
     case AIR_TARGET_RELATIVE_MODE:
-		m_HorizonRelativeModeData.m_timeConstant = g_AlignerData.TaoTilt;
-	    m_HorizonRelativeModeData.m_parallaxCompensation.LoadString( g_AlignerData.UseParallax == TRUE ? IDS_ON : IDS_OFF);
-	
-        m_HorizonRelativeModeData.m_elevationCompensation.LoadString( g_AlignerData.UseElevError == TRUE ? IDS_ON :IDS_OFF);
-	    m_HorizonRelativeModeData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
-	
-		m_HorizonRelativeModeData.m_measuredUnit.LoadString( GetMRad() == TRUE ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);		
-		m_HorizonRelativeModeData.m_time = m_InParam.Time;
+		m_HorizonRelativeMode.m_timeConstant = g_AlignerData.TaoTilt;
+		m_HorizonRelativeMode.m_parallaxCompensation.LoadString( g_AlignerData.UseParallax == TRUE ? IDS_ON : IDS_OFF);
+		m_HorizonRelativeMode.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
+		m_HorizonRelativeMode.m_elevationCompensation.LoadString( g_AlignerData.UseElevError == TRUE ? IDS_ON :IDS_OFF);
+		m_HorizonRelativeMode.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
+		
+		m_HorizonRelativeMode.m_time = m_InParam.Time;
 
-		m_HorizonRelativeModeItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
-		m_HorizonRelativeModeItem[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
-        m_HorizonRelativeModeItem[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
+		m_HorizonRelativeModeChannel[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
+		m_HorizonRelativeModeChannel[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
+		m_HorizonRelativeModeChannel[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
 
 		if( ( IsGun( g_AlignerData.RefObjNo ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.RefObjNo ) != GUN_ADAP_EMPTY ) )
 		{
-			m_HorizonRelativeModeItem[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
+			m_HorizonRelativeModeChannel[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
 		}
 		else
 		{
-			m_HorizonRelativeModeItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+			m_HorizonRelativeModeChannel[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
 		}
 
-		m_HorizonRelativeModeItem[0].m_roll = DB_EMPTY_DOUBLE;//ref
-		m_HorizonRelativeModeItem[0].m_pitch = DB_EMPTY_DOUBLE;//ref
-		m_HorizonRelativeModeItem[0].m_tilt = DB_EMPTY_DOUBLE;//ref
-		m_HorizonRelativeModeItem[0].m_angle = DB_EMPTY_DOUBLE;//ref
-		m_HorizonRelativeModeItem[0].m_elevation = DB_EMPTY_DOUBLE;//ref
-		m_HorizonRelativeModeItem[0].m_standardDeviation = DB_EMPTY_DOUBLE;//ref
-		m_HorizonRelativeModeItem[0].m_maximumDeviation = DB_EMPTY_DOUBLE;//ref
-		m_HorizonRelativeModeItem[0].m_azimuth = DB_EMPTY_DOUBLE;//empty
+		m_HorizonRelativeModeChannel[0].m_roll = 0.0f;
+		m_HorizonRelativeModeChannel[0].m_pitch = 0.0f;
+		m_HorizonRelativeModeChannel[0].m_tilt = 0.0f;
+		m_HorizonRelativeModeChannel[0].m_angle = 0.0f;
+		m_HorizonRelativeModeChannel[0].m_elevation = 0.0f;
+		m_HorizonRelativeModeChannel[0].m_standardDeviation = 0.0f;
+		m_HorizonRelativeModeChannel[0].m_maximumDeviation = 0.0f;
+		m_HorizonRelativeModeChannel[0].m_azimuth = 0.0f;
+		m_HorizonRelativeModeChannel[0].m_type = GetUnitType(g_AlignerData.RefObjNo);
 
         for( i=1; i<=g_AlignerData.NoOfCorr; i++ )
 		{
-			m_HorizonRelativeModeItem[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-			m_HorizonRelativeModeItem[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
+			m_HorizonRelativeModeChannel[i].m_type = GetUnitType(g_AlignerData.ObjNo[i]);
+			m_HorizonRelativeModeChannel[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
+			m_HorizonRelativeModeChannel[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
 			
-	        m_HorizonRelativeModeItem[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ): DB_EMPTY_STRING;
+			m_HorizonRelativeModeChannel[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ): DB_EMPTY_STRING;
 	
 			if( ( IsGun( g_AlignerData.ObjNo[i] ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.ObjNo[i] ) != GUN_ADAP_EMPTY ) )
 			{
-				m_HorizonRelativeModeItem[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
+				m_HorizonRelativeModeChannel[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
 			}
 			else
 			{
-				m_HorizonRelativeModeItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+				m_HorizonRelativeModeChannel[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
 			}
 			
-			m_HorizonRelativeModeItem[i].m_roll = pInParam->SignDef*g_AlignerData.Kh*g_AlignerData.ACR[i];
-			m_HorizonRelativeModeItem[i].m_pitch = pInParam->SignDef*g_AlignerData.Kh*g_AlignerData.ACP[i];
-			m_HorizonRelativeModeItem[i].m_tilt = g_AlignerData.Kh*g_AlignerData.VecAmp[i];
-			m_HorizonRelativeModeItem[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
-			m_HorizonRelativeModeItem[i].m_elevation = g_AlignerData.Kh * g_AlignerData.EalS[i];
+			m_HorizonRelativeModeChannel[i].m_roll = pInParam->SignDef*g_AlignerData.Kh*g_AlignerData.ACR[i];
+			m_HorizonRelativeModeChannel[i].m_pitch = pInParam->SignDef*g_AlignerData.Kh*g_AlignerData.ACP[i];
+			m_HorizonRelativeModeChannel[i].m_tilt = g_AlignerData.Kh*g_AlignerData.VecAmp[i];
+			m_HorizonRelativeModeChannel[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
+			m_HorizonRelativeModeChannel[i].m_elevation = g_AlignerData.Kh * g_AlignerData.EalS[i];
 
-			m_HorizonRelativeModeItem[i].m_standardDeviation = g_AlignerData.Kh*g_AlignerData.Sigma[i];
-			m_HorizonRelativeModeItem[i].m_maximumDeviation = g_AlignerData.Kh*m_pParent->m_MaxSineFitError[i];
-			m_HorizonRelativeModeItem[i].m_azimuth = m_pParent->m_XAngleForMaxSineFitError[i];
+			m_HorizonRelativeModeChannel[i].m_standardDeviation = g_AlignerData.Kh*g_AlignerData.Sigma[i];
+			m_HorizonRelativeModeChannel[i].m_maximumDeviation = g_AlignerData.Kh*m_pParent->m_MaxSineFitError[i];
+			m_HorizonRelativeModeChannel[i].m_azimuth = m_pParent->m_XAngleForMaxSineFitError[i];
 		}
         //Get calibration status
-        calibInfo.SetCalibrationTime(m_HorizonRelativeModeData.m_time);
+        calibInfo.SetCalibrationTime(m_HorizonRelativeMode.m_time);
         for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
         {
-			if(m_HorizonRelativeModeItem[i].m_sensorSerialNumber == "" && m_HorizonRelativeModeItem[i].m_adapterSerialNumber == "")
+			if(m_HorizonRelativeModeChannel[i].m_sensorSerialNumber == "" && m_HorizonRelativeModeChannel[i].m_adapterSerialNumber == "")
 				continue;
 
-			calibInfo.AddChannel(m_HorizonRelativeModeItem[i].m_channel);   
-            calibInfo.AddSensor(m_HorizonRelativeModeItem[i].m_sensorSerialNumber);   
-            calibInfo.AddAdapter(m_HorizonRelativeModeItem[i].m_adapterSerialNumber);   
+			calibInfo.AddChannel(m_HorizonRelativeModeChannel[i].m_channel);
+            calibInfo.AddSensor(m_HorizonRelativeModeChannel[i].m_sensorSerialNumber);
+            calibInfo.AddAdapter(m_HorizonRelativeModeChannel[i].m_adapterSerialNumber);
         }
-        m_HorizonRelativeModeData.calibInfo = calibInfo.GetInfo();
+        m_HorizonRelativeMode.calibInfo = calibInfo.GetInfo();
 
         break;
 	/***************************************************************************/
@@ -780,47 +781,49 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/*															COMMON_FLAT_TEST     											 */
 	/***************************************************************************/
   case COMMON_FLAT_TEST:
-		m_CommonFlatTestData.m_timeConstant = g_AlignerData.TaoTilt;
 
-		m_CommonFlatTestData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
-	    m_CommonFlatTestData.m_measuredUnit.LoadString( ( GetMRad() == TRUE ) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
-		m_CommonFlatTestData.m_time = m_InParam.Time;
+	  m_CommonFlat.m_timeConstant = g_AlignerData.TaoTilt;
+	  m_CommonFlat.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
+	  m_CommonFlat.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
+	  m_CommonFlat.m_time = m_InParam.Time;
 
-		m_CommonFlatTestItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
-		m_CommonFlatTestItem[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
-        m_CommonFlatTestItem[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
+	  m_CommonFlatChannel[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
+	  m_CommonFlatChannel[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
+	  m_CommonFlatChannel[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
 
-        m_CommonFlatTestItem[0].m_roll = DB_EMPTY_DOUBLE;
-		m_CommonFlatTestItem[0].m_pitch = DB_EMPTY_DOUBLE;
+	  m_CommonFlatChannel[0].m_roll = 0.0f;
+	  m_CommonFlatChannel[0].m_pitch = 0.0f;
 
-		m_CommonFlatTestItem[0].m_parallellBias = g_AlignerData.Kh * GetEal( g_AlignerData.RefObjNo );
-		m_CommonFlatTestItem[0].m_perpendicularBias = g_AlignerData.Kh * GetEac( g_AlignerData.RefObjNo );
-		m_CommonFlatTestItem[0].m_temperature = m_InParam.pTemperature[g_AlignerData.RefObjNo];
+	  m_CommonFlatChannel[0].m_parallellBias = g_AlignerData.Kh * GetEal( g_AlignerData.RefObjNo );
+	  m_CommonFlatChannel[0].m_perpendicularBias = g_AlignerData.Kh * GetEac( g_AlignerData.RefObjNo );
+	  m_CommonFlatChannel[0].m_temperature = m_InParam.pTemperature[g_AlignerData.RefObjNo];
+	  m_CommonFlatChannel[0].m_type = GetUnitType(g_AlignerData.RefObjNo);
 
 	    for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
         {
-			m_CommonFlatTestItem[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-			m_CommonFlatTestItem[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );			
-	        m_CommonFlatTestItem[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
+			m_CommonFlatChannel[i].m_type = GetUnitType(g_AlignerData.ObjNo[i]);
+			m_CommonFlatChannel[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
+			m_CommonFlatChannel[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
+			m_CommonFlatChannel[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
 	
-            m_CommonFlatTestItem[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
-            m_CommonFlatTestItem[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
-			m_CommonFlatTestItem[i].m_parallellBias = g_AlignerData.Kh * GetEal( g_AlignerData.ObjNo[i] );
-			m_CommonFlatTestItem[i].m_perpendicularBias = g_AlignerData.Kh * GetEac( g_AlignerData.ObjNo[i] );
-			m_CommonFlatTestItem[i].m_temperature = m_InParam.pTemperature[g_AlignerData.ObjNo[i]];
+			m_CommonFlatChannel[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
+			m_CommonFlatChannel[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
+			m_CommonFlatChannel[i].m_parallellBias = g_AlignerData.Kh * GetEal( g_AlignerData.ObjNo[i] );
+			m_CommonFlatChannel[i].m_perpendicularBias = g_AlignerData.Kh * GetEac( g_AlignerData.ObjNo[i] );
+			m_CommonFlatChannel[i].m_temperature = m_InParam.pTemperature[g_AlignerData.ObjNo[i]];
         }
 
         //Get calibration status
-        calibInfo.SetCalibrationTime(m_CommonFlatTestData.m_time);
+        calibInfo.SetCalibrationTime(m_CommonFlat.m_time);
         for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
         {
-			if(m_CommonFlatTestItem[i].m_sensorSerialNumber == "")
+			if(m_CommonFlatChannel[i].m_sensorSerialNumber == "")
 				continue;
 
-			calibInfo.AddChannel(m_CommonFlatTestItem[i].m_channel);   
-            calibInfo.AddSensor(m_CommonFlatTestItem[i].m_sensorSerialNumber);               
+			calibInfo.AddChannel(m_CommonFlatChannel[i].m_channel);   
+            calibInfo.AddSensor(m_CommonFlatChannel[i].m_sensorSerialNumber);               
         }
-        m_CommonFlatTestData.calibInfo = calibInfo.GetInfo();
+        m_CommonFlat.calibInfo = calibInfo.GetInfo();
 
         break;
 		/***************************************************************************/
@@ -1094,56 +1097,38 @@ BOOL CResultTable::SaveToDataBase( void )
 			}
 			break;
 		case HORIZON_ABSOLUTE_MODE:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_HorizonAbsoluteModeData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_HorizonAbsoluteModeData.m_comment = m_InParam.Comment;
-			}
+			
+			m_HorizonAbsoluteMode.m_comment = m_InParam.Comment;
+			
 
-			if( !HorizonAbsoluteModeHistory::AddData( m_HorizonAbsoluteModeData ) )
+			if( !HorizonAbsoluteMode::AddData( m_HorizonAbsoluteMode ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
-
+			m_reportMeasID = HorizonAbsoluteMode::GetMeasID();
 			for( int i=0; i<g_AlignerData.NoOfCorr; i++ ) // no reference, index 0 = first channel to test
-			{
-				if( m_HorizonAbsoluteModeItem[i].m_station.GetLength() == 0 ) 
-				{
-					m_HorizonAbsoluteModeItem[i].m_station = DB_EMPTY_STRING;
-				}
+			{				
 
-				if( !HorizonAbsoluteModeHistory::AddItem( m_HorizonAbsoluteModeItem[i] ) )
+				if( !HorizonAbsoluteMode::AddChannel( m_HorizonAbsoluteModeChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
 			}
 			break;
 		case AIR_TARGET_RELATIVE_MODE:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_HorizonRelativeModeData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_HorizonRelativeModeData.m_comment = m_InParam.Comment;
-			}
+			
+			m_HorizonRelativeMode.m_comment = m_InParam.Comment;
+			
 
-			if( !HorizonRelativeModeHistory::AddData( m_HorizonRelativeModeData ) )
+			if( !HorizonRelativeMode::AddData( m_HorizonRelativeMode ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
-
+			m_reportMeasID = HorizonRelativeMode::GetMeasID();
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
-			{
-				if( m_HorizonRelativeModeItem[i].m_station.GetLength() == 0 ) 
-				{
-					m_HorizonRelativeModeItem[i].m_station = DB_EMPTY_STRING;
-				}
+			{				
 
-				if( !HorizonRelativeModeHistory::AddItem( m_HorizonRelativeModeItem[i] ) )
+				if( !HorizonRelativeMode::AddChannel( m_HorizonRelativeModeChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
@@ -1300,28 +1285,18 @@ BOOL CResultTable::SaveToDataBase( void )
 
 			break;
 		case COMMON_FLAT_TEST:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_CommonFlatTestData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_CommonFlatTestData.m_comment = m_InParam.Comment;
-			}
-
-			if( !CommonFlatTiltHistory::AddData( m_CommonFlatTestData ) )
+				
+			m_CommonFlat.m_comment = m_InParam.Comment;
+			
+			if( !CommonFlatTilt::AddData( m_CommonFlat ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
 
+			m_reportMeasID = CommonFlatTilt::GetMeasID();
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
-			{
-				if( m_CommonFlatTestItem[i].m_station.GetLength() == 0 ) 
-				{
-					m_CommonFlatTestItem[i].m_station = DB_EMPTY_STRING;
-				}
-
-				if( !CommonFlatTiltHistory::AddItem( m_CommonFlatTestItem[i] ) )
+			{			
+				if( !CommonFlatTilt::AddChannel( m_CommonFlatChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}

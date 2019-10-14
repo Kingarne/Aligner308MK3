@@ -64,9 +64,9 @@ IMPLEMENT_MEASUREMENT(GyroPerformance) ;
 IMPLEMENT_MEASUREMENT(AzimuthAlignment) ;
 IMPLEMENT_HISTORY(AzimuthVerificationBenchmark) ;
 IMPLEMENT_HISTORY(AzimuthVerificationGyrostability) ;
-IMPLEMENT_HISTORY(HorizonAbsoluteMode) ;
-IMPLEMENT_HISTORY(HorizonRelativeMode) ;
-IMPLEMENT_HISTORY(CommonFlatTilt) ;
+IMPLEMENT_MEASUREMENT(HorizonAbsoluteMode) ;
+IMPLEMENT_MEASUREMENT(HorizonRelativeMode) ;
+IMPLEMENT_MEASUREMENT(CommonFlatTilt) ;
 IMPLEMENT_HISTORY(SensorValidation);
 IMPLEMENT_HISTORY(LiveGraphErrors) ;
 IMPLEMENT_HISTORY(LiveDataA202Errors) ;
@@ -263,73 +263,72 @@ BOOL AzimuthVerificationGyrostabilityHistory::AddItem( const ItemData item )
     return DBInterface::Instance()->InsertAzimuthVerificationGyrostabilityItem(item, m_lastID);                            
 }
 
-BOOL HorizonAbsoluteModeHistory::AddData(Data &data )
+BOOL HorizonAbsoluteMode::AddData(Data &data )
 {
-    DBInterface::Instance()->InsertHistoryItem(data);
-    
-    int lastId = 0;
-    DBInterface::Instance()->GetLastCounter(lastId);  
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);
+	data.type = MeasType::MT_VerifAbsolute;
 
-    m_mainID = lastId;
-    DBInterface::Instance()->InsertHorizonAbsoluteMode(data, m_mainID);           
-    DBInterface::Instance()->GetLastCounter(lastId);
-    m_lastID = lastId ;
+	DBInterface::Instance()->InsertMeasurement(data);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measID = lastId;
+
+	DBInterface::Instance()->InsertHorizonAbsoluteMode(data, m_measID);
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measTypeID = lastId;
 
     return TRUE ;
 }
 
-BOOL HorizonAbsoluteModeHistory::AddItem( const ItemData item )
+BOOL HorizonAbsoluteMode::AddChannel( const ChannelData item )
 {
-    return DBInterface::Instance()->InsertHorizonAbsoluteModeItem(item, m_lastID);                                
+    return DBInterface::Instance()->InsertHorizonAbsoluteModeChannel(item, m_measTypeID);
 }
 
-BOOL HorizonRelativeModeHistory::AddData(Data &data )
+BOOL HorizonRelativeMode::AddData(Data &data )
 {
-    DBInterface::Instance()->InsertHistoryItem(data);  
-	    
-    int lastId = 0;
-    DBInterface::Instance()->GetLastCounter(lastId); 
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);
+	data.type = MeasType::MT_VerifRelative;
 
-    m_mainID = lastId;
-    DBInterface::Instance()->InsertHorizonRelativeMode(data, m_mainID);           
-    DBInterface::Instance()->GetLastCounter(lastId);
+	DBInterface::Instance()->InsertMeasurement(data);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measID = lastId;
 
-    m_lastID = lastId ;
-  
+	DBInterface::Instance()->InsertHorizonRelativeMode(data, m_measID);
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measTypeID = lastId;
+
+	return TRUE;
     return TRUE ;
 }
 
-BOOL HorizonRelativeModeHistory::AddItem( const ItemData item )
+BOOL HorizonRelativeMode::AddChannel( const ChannelData item )
 {
-    return DBInterface::Instance()->InsertHorizonRelativeModeItem(item, m_lastID);                                    
+    return DBInterface::Instance()->InsertHorizonRelativeModeChannel(item, m_measTypeID);
 }
 
-BOOL CommonFlatTiltHistory::UpdateCalibrationFlag(BOOL b)
+BOOL CommonFlatTilt::UpdateCalibrationFlag(BOOL b)
 {
-	return DBInterface::Instance()->UpdateCalibrationFlag("CommonFlatTiltHistory", m_mainID, b);
+	return DBInterface::Instance()->UpdateCalibrationFlag("CommonFlatTilt", m_measID, b);
 }
 
-BOOL CommonFlatTiltHistory::AddData(Data &data )
+BOOL CommonFlatTilt::AddData(Data &data )
 {
-    DBInterface::Instance()->InsertHistoryItem(data);  	
-	
-    int lastId = 0;
-    DBInterface::Instance()->GetLastCounter(lastId); 
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);
-  
-    m_mainID = lastId;
-    DBInterface::Instance()->InsertCommonFlatTilt(data, m_mainID);               
-    DBInterface::Instance()->GetLastCounter(lastId);
-    m_lastID = lastId;
+	data.type = MeasType::MT_CommonFlatTilt;
 
+	DBInterface::Instance()->InsertMeasurement(data);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measID = lastId;
+
+	DBInterface::Instance()->InsertCommonFlatTilt(data, m_measID);
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measTypeID = lastId;
     return TRUE ;
 }
 
-BOOL CommonFlatTiltHistory::AddItem( const ItemData item )
+BOOL CommonFlatTilt::AddChannel( const ChannelData item )
 {
-    return DBInterface::Instance()->InsertCommonFlatTiltItem(item, m_lastID);                                        
+    return DBInterface::Instance()->InsertCommonFlatTiltChannel(item, m_measTypeID);
 }
 
 BOOL SensorValidationHistory::UpdateCalibrationFlag(BOOL b)

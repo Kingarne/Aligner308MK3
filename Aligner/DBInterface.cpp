@@ -1210,53 +1210,53 @@ BOOL DBInterface::InsertAzimuthVerificationGyrostabilityItem(AzimuthVerification
 	return TRUE;
 }
 
-BOOL DBInterface::InsertHorizonAbsoluteMode(HorizonAbsoluteModeHistory::Data data, int historyId)
+BOOL DBInterface::InsertHorizonAbsoluteMode(HorizonAbsoluteMode::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO HorizonAbsoluteModeHistory (historyID, ship, timeConstant, parallaxCompensation, elevationCompensation, comment, measuredUnit) VALUES (%d,'%s',%f,'%s','%s','%s','%s')",
-         historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_parallaxCompensation, data.m_elevationCompensation, data.m_comment, data.m_measuredUnit);
+     sql.Format("INSERT INTO VerificationAbsoluteMode (measID, parallaxCompensation, elevationCompensation) VALUES (%d,%f,%f)",
+		 measId, data.m_parallaxCompensation, data.m_elevationCompensation);
  
      m_db.ExecuteSQL(sql); 
 	return TRUE;
 }
 
-BOOL DBInterface::InsertHorizonAbsoluteModeItem(HorizonAbsoluteModeHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertHorizonAbsoluteModeChannel(HorizonAbsoluteMode::ChannelData data, int foreignId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO HorizonAbsoluteModeHistoryItem (historyID, station, channel, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth ) VALUES (%d,'%s','%s','%s','%s',%f,%f,%f,%f,%f,%f,%f,%f) ",
-         historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_standardDeviation, data.m_maximumDeviation, data.m_azimuth);
+     sql.Format("INSERT INTO VerificationAbsoluteModeChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f,%f,%f,%f,%f) ",
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_standardDeviation, data.m_maximumDeviation, data.m_azimuth);
  
     m_db.ExecuteSQL(sql); 
 	return TRUE;
 }
 
-BOOL DBInterface::InsertHorizonRelativeMode(HorizonRelativeModeHistory::Data data, int historyId)
+BOOL DBInterface::InsertHorizonRelativeMode(HorizonRelativeMode::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO HorizonRelativeModeHistory (historyID, ship, timeConstant, parallaxCompensation, elevationCompensation, comment, measuredUnit) VALUES (%d,'%s',%f,'%s','%s','%s','%s')",
-         historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_parallaxCompensation, data.m_elevationCompensation, data.m_comment, data.m_measuredUnit);
+     sql.Format("INSERT INTO VerificationRelativeMode (measID, referenceChannel, parallaxCompensation, elevationCompensation) VALUES (%d,'%s',%f,%f)",
+		 measId, data.m_refChannel, data.m_parallaxCompensation, data.m_elevationCompensation);
  
     m_db.ExecuteSQL(sql); 
 	return TRUE;
 }
 
-BOOL DBInterface::InsertHorizonRelativeModeItem(HorizonRelativeModeHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertHorizonRelativeModeChannel(HorizonRelativeMode::ChannelData data, int foreignId)
 {
      if(!m_db.IsOpen())
      return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO HorizonRelativeModeHistoryItem (historyID, station, channel, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth ) VALUES (%d,'%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,%s,%s) ",
-             historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle), ToText(data.m_elevation), ToText(data.m_standardDeviation), ToText(data.m_maximumDeviation), ToText(data.m_azimuth));
+     sql.Format("INSERT INTO VerificationRelativeModeChannel (foreignId, station, channel, type,  sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f,%f,%f,%f,%f) ",
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_standardDeviation, data.m_maximumDeviation, data.m_azimuth);
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;
@@ -1268,34 +1268,34 @@ BOOL DBInterface::UpdateCalibrationFlag(CString table, int id, BOOL b)
 		return FALSE;
 
 	CString sql="";
-	sql.Format("UPDATE %s SET dbUpdated = %s WHERE historyId = %d", table, b ? "True" : "False", id );		
+	sql.Format("UPDATE %s SET dbUpdated = %s WHERE foreignId = %d", table, b ? "True" : "False", id );		
 
 	m_db.ExecuteSQL(sql);
 
 	return TRUE;
 }
 
-BOOL DBInterface::InsertCommonFlatTilt(CommonFlatTiltHistory::Data data, int historyId)
+BOOL DBInterface::InsertCommonFlatTilt(CommonFlatTilt::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO CommonFlatTiltHistory (historyID, ship, timeConstant, comment, measuredUnit, dbUpdated ) VALUES (%d,'%s',%f,'%s','%s', False)",
-         historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_comment, data.m_measuredUnit );
+     sql.Format("INSERT INTO CommonFlatTilt (measID, referenceChannel, dbUpdated ) VALUES (%d,'%s',False)",
+         measId, data.m_refChannel);
  
     m_db.ExecuteSQL(sql);
 	return TRUE;
 }
 
-BOOL DBInterface::InsertCommonFlatTiltItem(CommonFlatTiltHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertCommonFlatTiltChannel(CommonFlatTilt::ChannelData data, int foreignId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO CommonFlatTiltHistoryItem (historyID, station, channel, sensorSerialNumber, roll, pitch, parallellBias, perpendicularBias, temperature ) VALUES (%d,'%s','%s','%s',%s,%s,%f,%f,%f) ",
-         historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), data.m_parallellBias, data.m_perpendicularBias, data.m_temperature);
+     sql.Format("INSERT INTO CommonFlatTiltChannel (foreignID, station, channel, sensorSerialNumber, roll, pitch, parallellBias, perpendicularBias, temperature ) VALUES (%d,'%s','%s','%s',%f,%f,%f,%f,%f) ",
+		 foreignId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_roll, data.m_pitch, data.m_parallellBias, data.m_perpendicularBias, data.m_temperature);
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;
@@ -1320,8 +1320,8 @@ BOOL DBInterface::InsertSensorValidationItem(SensorValidationHistory::ItemData d
 		return FALSE;
 
 	CString sql="";
-	sql.Format("INSERT INTO SensorValidationHistoryItem (historyID, station, channel, sensorSerialNumber, rollSF, pitchSF, rollAzErr, pitchAzErr, temperature ) VALUES (%d,'%s','%s','%s',%s,%s,%s,%s,%f) ",
-		historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, ToText(data.m_rollSc), ToText(data.m_pitchSc), ToText(data.m_rollAzErr), ToText(data.m_pitchAzErr), data.m_temperature);
+	sql.Format("INSERT INTO SensorValidationHistoryItem (historyID, station, channel, sensorSerialNumber, rollSF, pitchSF, rollAzErr, pitchAzErr, temperature ) VALUES (%d,'%s','%s','%s',%f,%f,%f,%f,%f) ",
+		historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_rollSc, data.m_pitchSc, data.m_rollAzErr, data.m_pitchAzErr, data.m_temperature);
 
 	m_db.ExecuteSQL(sql);
 	return TRUE;

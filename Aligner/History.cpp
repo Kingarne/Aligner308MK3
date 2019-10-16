@@ -62,14 +62,14 @@ IMPLEMENT_MEASUREMENT(TiltAndFlatness) ;
 IMPLEMENT_MEASUREMENT(TiltAndFlatnessFo) ;
 IMPLEMENT_MEASUREMENT(GyroPerformance) ;
 IMPLEMENT_MEASUREMENT(AzimuthAlignment) ;
-IMPLEMENT_HISTORY(AzimuthVerificationBenchmark) ;
-IMPLEMENT_HISTORY(AzimuthVerificationGyrostability) ;
+//IMPLEMENT_HISTORY(AzimuthVerificationBenchmark) ;
+//IMPLEMENT_HISTORY(AzimuthVerificationGyrostability) ;
 IMPLEMENT_MEASUREMENT(HorizonAbsoluteMode) ;
 IMPLEMENT_MEASUREMENT(HorizonRelativeMode) ;
 IMPLEMENT_MEASUREMENT(CommonFlatTilt) ;
-IMPLEMENT_HISTORY(SensorValidation);
-IMPLEMENT_HISTORY(LiveGraphErrors) ;
-IMPLEMENT_HISTORY(LiveDataA202Errors) ;
+IMPLEMENT_MEASUREMENT(SensorValidation);
+IMPLEMENT_MEASUREMENT(LiveGraph) ;
+IMPLEMENT_MEASUREMENT(LiveDataA202) ;
 
 void LoadSigndefString( CString &signdefText )
 {
@@ -202,7 +202,7 @@ BOOL GyroPerformance::AddChannel( const ChannelData item )
 
 BOOL AzimuthAlignment::AddData(Data &data )
 {
-	data.type = MeasType::MT_AzimuthAlign;
+	//data.type = MeasType::MT_AzimuthAlign;
 
 	DBInterface::Instance()->InsertMeasurement(data);
 	int lastId = 0;
@@ -220,7 +220,7 @@ BOOL AzimuthAlignment::AddChannel( const ChannelData item )
 {
     return DBInterface::Instance()->InsertAzimuthAlignmentChannel(item, m_measTypeID);
 }
-
+/*
 BOOL AzimuthVerificationBenchmarkHistory::AddData(Data &data )
 {    
     DBInterface::Instance()->InsertHistoryItem(data);    
@@ -262,7 +262,7 @@ BOOL AzimuthVerificationGyrostabilityHistory::AddItem( const ItemData item )
 {
     return DBInterface::Instance()->InsertAzimuthVerificationGyrostabilityItem(item, m_lastID);                            
 }
-
+*/
 BOOL HorizonAbsoluteMode::AddData(Data &data )
 {
 	data.type = MeasType::MT_VerifAbsolute;
@@ -331,73 +331,72 @@ BOOL CommonFlatTilt::AddChannel( const ChannelData item )
     return DBInterface::Instance()->InsertCommonFlatTiltChannel(item, m_measTypeID);
 }
 
-BOOL SensorValidationHistory::UpdateCalibrationFlag(BOOL b)
+BOOL SensorValidation::UpdateCalibrationFlag(BOOL b)
 {
-	return DBInterface::Instance()->UpdateCalibrationFlag("SensorValidationHistory", m_mainID, b);
+	return DBInterface::Instance()->UpdateCalibrationFlag("SensorValidation", m_measID, b);
 }
 
-BOOL SensorValidationHistory::AddData(Data &data)
+BOOL SensorValidation::AddData(Data &data)
 {
-	DBInterface::Instance()->InsertHistoryItem(data);
+	data.type = MeasType::MT_SensorValidation;
 
+	DBInterface::Instance()->InsertMeasurement(data);
 	int lastId = 0;
 	DBInterface::Instance()->GetLastCounter(lastId);
-	DBInterface::Instance()->InsertHistoryPrintItem(lastId);
+	m_measID = lastId;
 
-	m_mainID = lastId;
-	DBInterface::Instance()->InsertSensorValidation(data, m_mainID);
+	DBInterface::Instance()->InsertSensorValidation(data, m_measID);
 	DBInterface::Instance()->GetLastCounter(lastId);
-	m_lastID = lastId;
+	m_measTypeID = lastId;	
 
 	return TRUE;
 }
 
-BOOL SensorValidationHistory::AddItem(const ItemData item)
+BOOL SensorValidation::AddChannel(const ChannelData item)
 {
-	return DBInterface::Instance()->InsertSensorValidationItem(item, m_lastID);
+	return DBInterface::Instance()->InsertSensorValidationChannel(item, m_measTypeID);
 }
 
 
-BOOL LiveGraphErrorsHistory::AddData(Data &data )
+BOOL LiveGraph::AddData(Data &data )
 {
-    DBInterface::Instance()->InsertHistoryItem(data);    
-	
-    int lastId = 0;
-    DBInterface::Instance()->GetLastCounter(lastId);    
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);
+	data.type = MeasType::MT_LiveGraph;
 
-    m_mainID = lastId;
-    DBInterface::Instance()->InsertLiveGraphErrors(data, m_mainID);       
-    DBInterface::Instance()->GetLastCounter(lastId);
-    m_lastID = lastId ;
+	DBInterface::Instance()->InsertMeasurement(data);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measID = lastId;
+
+	DBInterface::Instance()->InsertLiveGraph(data, m_measID);
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measTypeID = lastId;
          
     return TRUE ;
 }
 
-BOOL LiveGraphErrorsHistory::AddItem( const ItemData item )
+BOOL LiveGraph::AddChannel( const ChannelData item )
 {
-    return DBInterface::Instance()->InsertLiveGraphErrorsItem(item, m_lastID);                                           
+    return DBInterface::Instance()->InsertLiveGraphChannel(item, m_measTypeID);
 }
 
-BOOL LiveDataA202ErrorsHistory::AddData(Data &data )
+BOOL LiveDataA202::AddData(Data &data )
 {        	 
-    DBInterface::Instance()->InsertHistory2Item(data.m_time); 
-    
-    int lastId = 0;
-    DBInterface::Instance()->GetLastCounter(lastId);
-    DBInterface::Instance()->InsertHistoryPrintItem(lastId);
+	data.type = MeasType::MT_LiveGraph;
 
-    m_mainID = lastId;
-    DBInterface::Instance()->InsertLiveDataA202Errors(data, m_mainID);        
-    DBInterface::Instance()->GetLastCounter(lastId);
-    m_lastID = lastId ;
+	DBInterface::Instance()->InsertMeasurement(data);
+	int lastId = 0;
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measID = lastId;
 
+	DBInterface::Instance()->InsertLiveDataA202(data, m_measID);
+	DBInterface::Instance()->GetLastCounter(lastId);
+	m_measTypeID = lastId;
     return TRUE ;
 }
 
-BOOL LiveDataA202ErrorsHistory::AddItem( const ItemData item )
+BOOL LiveDataA202::AddChannel( const ChannelData item )
 {
-    return DBInterface::Instance()->InsertLiveDataA202ErrorsItem(item, m_lastID);                                              
+    return DBInterface::Instance()->InsertLiveDataA202Channel(item, m_measTypeID);
 }
 
 //#include "Util.h"

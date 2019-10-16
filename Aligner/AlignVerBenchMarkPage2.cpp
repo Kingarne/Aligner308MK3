@@ -94,15 +94,15 @@ void CAlignVerBenchMarkPage2::InitResultTable( void )
 {
 	if( m_pParent->m_AziMode == BenchAzi )
 	{
-		m_pParent->m_pResultTable->m_InParam.Version = AZIMUTH_VERIFICATION_BENCHMARK;
+		m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_AZVerBenchmark;// AZIMUTH_VERIFICATION_BENCHMARK;
 	}
 	else if( m_pParent->m_AziMode == StabAzi )
 	{
-		m_pParent->m_pResultTable->m_InParam.Version = AZIMUTH_VERIFICATION_GYROSTAB;
+		m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_AZVerGyrostab;
 	}
 	else
 	{
-		m_pParent->m_pResultTable->m_InParam.Version = AZIMUTH_ALIGN;
+		m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_AzimuthAlign;
 	}
   //m_pParent->m_pResultTable->m_InParam.Title = m_TitleAzi;
 	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
@@ -509,12 +509,8 @@ void CAlignVerBenchMarkPage2::OnReset()
 	}
 	m_pParent->ExitResultTable( m_pParent->m_deleteReport );
 	m_pParent->m_Status = STATUS_PAGE_CANCELED;
-  g_AlignerData.ErrorDef = ERR_CANCEL;
-    CAlignerDoc *pDoc = static_cast<CAlignerDoc *>(static_cast<CFrameWnd *>(theApp.m_pMainWnd) -> GetActiveDocument());
-    if( pDoc != NULL )
-    {
-        pDoc->SaveProject();
-    }
+	g_AlignerData.ErrorDef = ERR_CANCEL;
+  
   return CPropertyPage::OnReset(); //Calls OnCancel()
 }
 

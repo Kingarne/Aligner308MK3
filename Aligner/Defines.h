@@ -121,7 +121,7 @@
 #define CH4	_T("CH4")
 
 // Measurement version
-#define VERSION_NOT_DEFINED							0
+/*#define VERSION_NOT_DEFINED							0
 #define TILT_ALIGNMENT									1
 #define AZIMUTH_ALIGN										2
 #define AZIMUTH_VERIFICATION_BENCHMARK	3
@@ -135,7 +135,7 @@
 #define LIVE_DATA_A202                  11
 #define TILT_FLATNESS_FOUNDATION_TEST		12
 #define SENSOR_VALIDATION_TEST                13
-
+*/
 #define TAU_FREQUENCY_FACTOR								1.5915
 #define MIN_FILTER_TIME_CONSTANT_LIVE_DATA	0.05
 

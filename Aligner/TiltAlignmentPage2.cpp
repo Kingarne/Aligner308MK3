@@ -79,11 +79,11 @@ void CTiltAlignmentPage2::InitResultTable( void )
 {
     if( m_pParent->m_CommonFlatTest == TRUE )
     {
-        m_pParent->m_pResultTable->m_InParam.Version = COMMON_FLAT_TEST;
+        m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_CommonFlatTilt;
     }
     else
     {
-	    m_pParent->m_pResultTable->m_InParam.Version = TILT_ALIGNMENT;
+	    m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_TiltAlignment;
     }
 	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 	m_pParent->m_pResultTable->m_InParam.AngleRange0ToPlusMinus180 = TRUE;

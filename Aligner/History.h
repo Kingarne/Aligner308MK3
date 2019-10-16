@@ -5,16 +5,19 @@
 #pragma once
 
 enum MeasType {
+	MT_Undefined = 0,
 	MT_TiltAlignment = 1,
 	MT_TiltFlatnessPl,
 	MT_TiltFlatnessFo,
-	MT_AzimuthAlign,
-	MT_GyroPerf,
-	MT_LiveGraph,
+	MT_AzimuthAlign,	
+	MT_AZVerGyrostab,
+	MT_AZVerBenchmark, 
 	MT_VerifAbsolute,
 	MT_VerifRelative,
 	MT_CommonFlatTilt,
-	MT_SensorValidation
+	MT_SensorValidation,
+	MT_GyroPerf,
+	MT_LiveGraph
 };
 
 
@@ -261,7 +264,7 @@ public:
   DECLARE_MEASUREMENT ;
 } ;
 
-
+/*
 class AzimuthVerificationBenchmarkHistory
 {
 private:
@@ -339,7 +342,7 @@ public:
   DECLARE_HISTORY ;
 } ;
 
-
+*/
 class HorizonAbsoluteMode
 {
 private:
@@ -434,118 +437,102 @@ public:
   
 } ;
 
-class SensorValidationHistory
+class SensorValidation
 {
 private:
-	SensorValidationHistory(void) {};
+	SensorValidation(void) {};
 public:
-	class Data : public HistoryData
+	class Data : public MeasurementBase
 	{
 	public:
-		double m_timeConstant;
-		CString m_comment;
-		CString m_measuredUnit;		
 	};
 
 	static BOOL UpdateCalibrationFlag(BOOL b);
 
-	class ItemData
+	class ChannelData : public ChannelBase
 	{
 	public:
-		CString m_station;
-		CString m_channel;
-		CString m_sensorSerialNumber;
 		double m_rollSc;
 		double m_pitchSc;
 		double m_rollAzErr;
 		double m_pitchAzErr;
 		double m_temperature;
 	};
-	class ItemErrData
+
+		
+	class ChannelErrData
 	{
 		public:
 	};
-	class ExtItemData
+	class ExtChannelData
 	{
 		public:
 	};
-	DECLARE_HISTORY;
+	DECLARE_MEASUREMENT;
 
 };
 
 
-class LiveGraphErrorsHistory
+class LiveGraph
 {
 private:
-  LiveGraphErrorsHistory( void ) {} ;
+  LiveGraph( void ) {} ;
 public:
-  class Data : public HistoryData
+  class Data : public MeasurementBase
   {
-  public:
-    double m_timeConstant ;
-    double m_samplingRate ;
-    CString m_comment ;
-	CString m_measuredUnit ;
-	//DBTIMESTAMP m_time ;
+  public:  
+	  double m_samplingRate;
+   
   } ;
 
-  class ItemData
+  class ChannelData : public ChannelBase
   {
   public:
-    CString m_station ;
-		CString m_channel ;
-    CString m_sensorSerialNumber ;
-    CString m_adapterSerialNumber ;
-    double m_roll ;
-    double m_pitch ;
-    double m_tilt ;
-    double m_angle ;
+   
     double m_temperature ;
   } ;
-  class ItemErrData
+  class ChannelErrData
   {
   public:
   } ;
-  class ExtItemData
+  class ExtChannelData
   {
   public:
   } ;
-  DECLARE_HISTORY ;
+  DECLARE_MEASUREMENT;
 } ;
 
 
 
-class LiveDataA202ErrorsHistory
+class LiveDataA202
 {
 private:
-  LiveDataA202ErrorsHistory( void ) {} ;
+  LiveDataA202( void ) {} ;
 public:
-  class Data
+	class Data : public MeasurementBase
   {
   public:
     double m_samplingRate ;
-    CString m_comment ;
-	DBTIMESTAMP m_time ;
+  
   } ;
 
-  class ItemData
+  class  ChannelData : public ChannelBase
   {
   public:
-    CString m_station ;
-		CString m_channel ;
+   
     double m_value ;
     double m_gearing ;
     double m_refVoltage ;
   } ;
-  class ItemErrData
+  class ChannelErrData
   {
   public:
   } ;
-  class ExtItemData
+  class ExtChannelData
   {
   public:
   } ;
-  DECLARE_HISTORY ;
+  DECLARE_MEASUREMENT;
 } ;
 
 //BOOL MoveFilesToTemporary( LONG mainId ) ;

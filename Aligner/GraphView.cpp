@@ -2644,9 +2644,9 @@ void CGraphView::OnBnClickedLiveGraphQuit( void )
 
     if( (theApp.IsAligner308Enabled()) && (m_exitWithoutSave == FALSE) )
     {
-	    if( SaveGraphToUniqueFileName( graphFileName ) == TRUE )
+	    if( SaveGraphToUniqueFileName( graphFileName, TRUE ) == TRUE )
 	    {
-		    m_LiveGraphFileManager.SaveFileName( graphFileName, FALSE );
+		    m_LiveGraphFileManager.SaveFileName( graphFileName, TRUE );
 	    }
         m_LiveDataGraphParam.includeGraph = TRUE;
         m_LiveDataGraphParam.graphFileName = graphFileName;
@@ -2663,32 +2663,20 @@ void CGraphView::OnBnClickedLiveGraphQuit( void )
 
 		MsgCaption.LoadString( IDS_QUESTION_CAPTION );
 		MsgText.LoadString( IDS_EXIT_WITH_OPPORTUNITY_TO_SAVE );
+			  
+		m_pLiveGraphResultTable->ShowReport( TRUE );
+		MsgText.LoadString( IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD );
 
 		if( IDYES == MessageBox( MsgText, MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
 		{
-			  
-			m_pLiveGraphResultTable->ShowReport( TRUE );
-			MsgText.LoadString( IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD );
-
-			if( IDYES == MessageBox( MsgText, MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
-			{
-				ExitResultTable( FALSE);		
-				MsgText.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD );
-				if( IDYES == MessageBox( MsgText, MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
-				{
-					m_LiveGraphFileManager.IncludeToResultTable( TRUE, graphFileName );
-				}	
-			}
-			else
-			{
-				ExitResultTable( TRUE);
-			}
-
+			ExitResultTable( FALSE);		
 		}
 		else
 		{
-			ExitResultTable( FALSE);
+			ExitResultTable( TRUE);
 		}
+
+		
     }
     
   //  m_LiveGraphFileManager.MoveUnwantedToTemporaryDir();  
@@ -3995,7 +3983,7 @@ void CGraphView::ClearMeasuredLiveGraphValues( BOOL clearTemp )
 
 void CGraphView::InitResultTable( void )
 {
-	m_pLiveGraphResultTable->m_InParam.Version = LIVE_GRAPH;
+	m_pLiveGraphResultTable->m_InParam.Version = MeasType::MT_LiveGraph;
 	//m_pLiveGraphResultTable->m_InParam.Title.LoadString( IDS_LIVE_DATA_GRAPH );
 	m_pLiveGraphResultTable->m_InParam.Time = m_LiveGraphStartTimeStamp;
 	m_pLiveGraphResultTable->m_InParam.AngleRange0ToPlusMinus180 = TRUE;
@@ -4023,6 +4011,12 @@ void CGraphView::InitResultTable( void )
 
 void CGraphView::ExitResultTable( BOOL DeleteReport )
 {
+	if (DeleteReport == TRUE)
+	{
+		m_pLiveGraphResultTable->DeleteLast();
+	}
+
+
 /*	if( m_pLiveGraphResultTable != NULL )
 	{
     //    m_pLiveGraphResultTable->CloseReport();

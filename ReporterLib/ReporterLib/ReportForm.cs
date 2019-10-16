@@ -84,13 +84,16 @@ namespace ReporterLib
             Measurements = new Dictionary<int, DBInterface.Measurement>();
 
             PrintMeasFunc[DBInterface.MeasType.MT_TiltAlignment] = PrintTiltAlignment;
-            PrintMeasFunc[DBInterface.MeasType.MT_AzimuthAlign] = PrintAzimuthAlignment;            
+            PrintMeasFunc[DBInterface.MeasType.MT_AzimuthAlign] = PrintAzimuthAlignment;
+            PrintMeasFunc[DBInterface.MeasType.MT_AzVerGyrostab] = PrintAzimuthAlignment;
+            PrintMeasFunc[DBInterface.MeasType.MT_AzVerBenchmark] = PrintAzimuthAlignment;
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessPl] = PrintTiltFlatnessPl;
             PrintMeasFunc[DBInterface.MeasType.MT_TiltFlatnessFo] = PrintTiltFlatnessFo;
             PrintMeasFunc[DBInterface.MeasType.MT_GyroPerf] = PrintGyroPerf;
             PrintMeasFunc[DBInterface.MeasType.MT_CommonFlatTilt] = PrintCommonFlat;
             PrintMeasFunc[DBInterface.MeasType.MT_VerifAbsolute] = PrintAbsoluteMode;
             PrintMeasFunc[DBInterface.MeasType.MT_VerifRelative] = PrintRelativeMode;
+            PrintMeasFunc[DBInterface.MeasType.MT_LiveGraph] = PrintLiveGraph;
 
         }
 
@@ -106,6 +109,7 @@ namespace ReporterLib
             reportList.Visible = MultiMode;
             allButton.Visible = MultiMode;
             noneButton.Visible = MultiMode;
+            delButton.Visible = MultiMode;
 
             if (MultiMode)
             {
@@ -697,6 +701,9 @@ namespace ReporterLib
                 {
                     DBI.DeleteMeasurement(measId);
 
+                    DBI.GetProjectMeasurements(ProjectId, ref Measurements);
+                   
+                    UpdateReportList();
 
                 }
             }
@@ -1295,6 +1302,80 @@ namespace ReporterLib
                 m_yPos += MargY;
 
 
+            }
+
+            if (Images != null)
+                return DrawImages(gr, ref Images);
+
+            return true;
+        }
+        private bool PrintLiveGraph()
+        {
+            Graphics gr = PrintArgs.Graphics;
+            if (HeadPage)
+            {
+                DrawHeader();
+
+                DBInterface.LiveGraph lgm = new DBInterface.LiveGraph();
+                DBI.GetLiveGraphMeas(ref Measurement, ref lgm);
+
+                List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+                DBI.GetLiveGraphCh(lgm.ID, ref channels);
+               // SetRefChannel(Measurement, channels);
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+
+                int xPerc = 60;
+                DrawText("Sample Rate:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);                
+                xPerc = xPerc + 10;
+                DrawText(lgm.sampleRate.ToString("0.00"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);                
+
+                int wPerc = 8;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Temperature\n[°C]", -1, wPerc+3));
+               
+
+                int smalMarg = 4;
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+
+                foreach (DBInterface.LiveGraphCh ch in channels)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(ch.Station, 2, 25, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                    table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                    table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.tilt.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));                   
+                    table.Add(new TableItem(ch.temperature.ToString("0.00"), -1, wPerc+3));                   
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+                // m_yPos += MargY;
+
+                m_yPos += DrawComment(gr, Measurement, m_yPos);
+                m_yPos += MargY;
+                
             }
 
             if (Images != null)

@@ -61,7 +61,7 @@ BOOL GainCalibrationPage6::OnSetActive( void )
 
 void GainCalibrationPage6::InitResultTable(void)
 {
-	m_pResultTable->m_InParam.Version = SENSOR_VALIDATION_TEST;
+	m_pResultTable->m_InParam.Version = MeasType::MT_SensorValidation;
 
 	COleDateTime::GetCurrentTime().GetAsDBTIMESTAMP(m_pResultTable->m_InParam.Time);
 	 
@@ -177,7 +177,7 @@ void GainCalibrationPage6::SaveDayToDayCalibrationData( Gain6CalibrationResult &
 			BOOL u1 = poly.UpdateRollAzimuthCalibrationData( serialNumber, result.m_sensorRollAzimuth );
 			BOOL u2 = poly.UpdatePitchAzimuthCalibrationData( serialNumber, result.m_sensorPitchAzimuth );
 			m_calibUpdated = u1 & u2;	  			  
-			SensorValidationHistory::UpdateCalibrationFlag(TRUE);
+			SensorValidation::UpdateCalibrationFlag(TRUE);
 		  }
 
 		  //m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;

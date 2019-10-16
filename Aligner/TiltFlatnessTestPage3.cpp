@@ -35,7 +35,7 @@ void CTiltFlatnessTestPage3::ShowGraphButtons()
 	CString graphFileName;
 	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
 	{
-		m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
+	//	m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
 	}
 }
 
@@ -60,7 +60,7 @@ void CTiltFlatnessTestPage3::DisableAllButtons()
 
 void CTiltFlatnessTestPage3::InitResultTable( void )
 {
-  m_pParent->m_pResultTable->m_InParam.Version = TILT_FLATNESS_TEST;
+	m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_TiltFlatnessPl;// TILT_FLATNESS_TEST;
 	//m_pParent->m_pResultTable->m_InParam.Title.LoadString( IDS_TILT_FLATNESS_FOUNDATION_TEST );
 	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
   m_pParent->m_pResultTable->m_InParam.AngleRange0ToPlusMinus180 = TRUE;

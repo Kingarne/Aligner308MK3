@@ -30,12 +30,14 @@ namespace ReporterLib
             MT_TiltFlatnessPl,
             MT_TiltFlatnessFo,
             MT_AzimuthAlign,
-            MT_GyroPerf,
-            MT_LiveGraph,
+            MT_AzVerGyrostab,
+            MT_AzVerBenchmark,           
             MT_VerifAbsolute,
             MT_VerifRelative,
             MT_CommonFlatTilt,
-            MT_SensorValidation
+            MT_SensorValidation,
+            MT_GyroPerf,
+            MT_LiveGraph
         }
 
         public class ImageInfo
@@ -67,6 +69,7 @@ namespace ReporterLib
 
         public class ChannelBase
         {
+            public ChannelBase() { IsRef = false; }
             public int ID { get; set; }
             public int ForeignID { get; set; }
             public string Station { get; set; }
@@ -203,6 +206,16 @@ namespace ReporterLib
             public double azuimuth { get; set; }
         }
 
+        public class LiveGraph: AlignmentBase
+        {
+            public double sampleRate{ get; set; }            
+        }
+
+        public class LiveGraphCh : ChannelBase
+        {
+            public double temperature { get; set; }
+        }
+
         private OdbcConnection Connection;
         public bool Open()
         {
@@ -276,6 +289,8 @@ namespace ReporterLib
         {
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;
+
+            measurements.Clear();
 
             using (OdbcCommand command = new OdbcCommand("SELECT * FROM Measurement INNER JOIN MeasType ON Measurement.measType = MeasType.measType WHERE projectID=" + projId.ToString(), Connection))
             {
@@ -1002,5 +1017,65 @@ namespace ReporterLib
             return true;
         }
 
+        public bool GetLiveGraphMeas(ref DBInterface.Measurement meas, ref LiveGraph lgm)
+        {
+
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM LiveGraph WHERE measID=" + meas.ID.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {                        
+                        lgm.ID = (int)dr["ID"];
+                        lgm.sampleRate= (double)dr["samplingRate"];                        
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetLiveGraphCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM LiveGraphChannel INNER JOIN StationType ON LiveGraphChannel.type = StationType.stationType WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        /*for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                        }*/
+                        DBInterface.LiveGraphCh lgCh = new DBInterface.LiveGraphCh();
+
+                        lgCh.ID = (int)dr["ID"];
+                        lgCh.ForeignID = (int)dr["foreignID"];
+                        lgCh.Type = (int)dr["type"];
+                        lgCh.TypeText = (string)dr["stationTypeName"];
+                        lgCh.Station = (string)dr["station"];
+                        lgCh.Channel = (string)dr["channel"];
+                        lgCh.SensorSN = (string)dr["sensorSerialNumber"];
+                        lgCh.AdapterSN = (string)dr["adapterSerialNumber"];
+                        lgCh.NominalAz = (float)(double)dr["NominalAzimuth"];
+                        lgCh.roll = (float)(double)dr["roll"];
+                        lgCh.pitch = (float)(double)dr["pitch"];
+                        lgCh.tilt = (float)(double)dr["tilt"];
+                        lgCh.angle = (float)(double)dr["angle"];
+                        lgCh.temperature = (double)dr["temperature"];
+
+                        channels.Add(lgCh);
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 }

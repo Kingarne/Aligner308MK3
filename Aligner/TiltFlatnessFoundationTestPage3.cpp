@@ -70,7 +70,7 @@ void CTiltFlatnessFoundationTestPage3::DisableAllButtons()
 
 void CTiltFlatnessFoundationTestPage3::InitResultTable( void )
 {
-    m_pParent->m_pResultTable->m_InParam.Version = TILT_FLATNESS_FOUNDATION_TEST;
+	m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_TiltFlatnessFo;// TILT_FLATNESS_FOUNDATION_TEST;
 //	m_pParent->m_pResultTable->m_InParam.Title.LoadString( IDS_TILT_FLATNESS_FOUNDATION_TEST );
 	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
     m_pParent->m_pResultTable->m_InParam.AngleRange0ToPlusMinus180 = TRUE;

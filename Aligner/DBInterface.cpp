@@ -1157,7 +1157,7 @@ BOOL DBInterface::InsertAzimuthAlignmentChannel(AzimuthAlignment::ChannelData da
     m_db.ExecuteSQL(sql); 
 	return TRUE;
 } 
-
+/*
 BOOL DBInterface::InsertAzimuthVerificationBenchmark(AzimuthVerificationBenchmarkHistory::Data data, int historyId)
 {
      if(!m_db.IsOpen())
@@ -1209,7 +1209,7 @@ BOOL DBInterface::InsertAzimuthVerificationGyrostabilityItem(AzimuthVerification
     m_db.ExecuteSQL(sql);
 	return TRUE;
 }
-
+*/
 BOOL DBInterface::InsertHorizonAbsoluteMode(HorizonAbsoluteMode::Data data, int measId)
 {
      if(!m_db.IsOpen())
@@ -1301,81 +1301,81 @@ BOOL DBInterface::InsertCommonFlatTiltChannel(CommonFlatTilt::ChannelData data, 
 	return TRUE;
 }
 
-BOOL DBInterface::InsertSensorValidation(SensorValidationHistory::Data data, int historyId)
+BOOL DBInterface::InsertSensorValidation(SensorValidation::Data data, int measId)
 {
 	if (!m_db.IsOpen())
 		return FALSE;
 
 	CString sql="";
-	sql.Format("INSERT INTO SensorValidationHistory (historyID, ship, timeConstant, comment, measuredUnit, dbUpdated ) VALUES (%d,'%s',%f,'%s','%s', False)",
-		historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_comment, data.m_measuredUnit);
+	sql.Format("INSERT INTO SensorValidation (measID, referenceChannel, dbUpdated ) VALUES (%d,'%s',False)",
+		measId, data.m_refChannel);
 
 	m_db.ExecuteSQL(sql);
 	return TRUE;
 }
 
-BOOL DBInterface::InsertSensorValidationItem(SensorValidationHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertSensorValidationChannel(SensorValidation::ChannelData data, int foreignId)
 {
 	if (!m_db.IsOpen())
 		return FALSE;
 
 	CString sql="";
-	sql.Format("INSERT INTO SensorValidationHistoryItem (historyID, station, channel, sensorSerialNumber, rollSF, pitchSF, rollAzErr, pitchAzErr, temperature ) VALUES (%d,'%s','%s','%s',%f,%f,%f,%f,%f) ",
-		historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_rollSc, data.m_pitchSc, data.m_rollAzErr, data.m_pitchAzErr, data.m_temperature);
+	sql.Format("INSERT INTO SensorValidationChannel (foreignID, station, channel, sensorSerialNumber, rollSF, pitchSF, rollAzErr, pitchAzErr, temperature ) VALUES (%d,'%s','%s','%s',%f,%f,%f,%f,%f) ",
+		foreignId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_rollSc, data.m_pitchSc, data.m_rollAzErr, data.m_pitchAzErr, data.m_temperature);
 
 	m_db.ExecuteSQL(sql);
 	return TRUE;
 }
 
 
-BOOL DBInterface::InsertLiveGraphErrors(LiveGraphErrorsHistory::Data data, int historyId)
+BOOL DBInterface::InsertLiveGraph(LiveGraph::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO LiveGraphErrorsHistory (historyID, ship, timeConstant, samplingRate, comment, measuredUnit) VALUES (%d,'%s',%f,%f,'%s','%s')",
-         historyId, SysSetup->GetShipName(), data.m_timeConstant, data.m_samplingRate, data.m_comment, data.m_measuredUnit);
+     sql.Format("INSERT INTO LiveGraph (measID, samplingRate) VALUES (%d,%f)",
+		 measId, data.m_samplingRate);
  
     m_db.ExecuteSQL(sql);
 	return TRUE;
 }
 
-BOOL DBInterface::InsertLiveGraphErrorsItem(LiveGraphErrorsHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertLiveGraphChannel(LiveGraph::ChannelData data, int foreignId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO LiveGraphErrorsHistoryItem (historyID, station, channel, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, temperature ) VALUES (%d,'%s','%s','%s','%s',%s,%s,%s,%s,%s) ",
-         historyId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_adapterSerialNumber, ToText(data.m_roll), ToText(data.m_pitch), ToText(data.m_tilt), ToText(data.m_angle), ToText(data.m_temperature));
+     sql.Format("INSERT INTO LiveGraphChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, temperature ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f,%f) ",
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_temperature);
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;
 }
 
-BOOL DBInterface::InsertLiveDataA202Errors(LiveDataA202ErrorsHistory::Data data, int historyId)
+BOOL DBInterface::InsertLiveDataA202(LiveDataA202::Data data, int measId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO LiveDataA202ErrorsHistory ([historyID], [ship], [samplingRate], [comment]) VALUES (%d,'%s',%f,'%s')",
-         historyId, SysSetup->GetShipName(), data.m_samplingRate, data.m_comment);
+     sql.Format("INSERT INTO LiveDataA202 ([historyID], [ship], [samplingRate], [comment]) VALUES (%d,'%s',%f,'%s')",
+         measId, SysSetup->GetShipName(), data.m_samplingRate, data.m_comment);
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;
 }
 
 
-BOOL DBInterface::InsertLiveDataA202ErrorsItem(LiveDataA202ErrorsHistory::ItemData data, int historyId)
+BOOL DBInterface::InsertLiveDataA202Channel(LiveDataA202::ChannelData data, int foreignId)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO LiveDataA202ErrorsHistoryItem ([historyID], [station], [channel], [measuredValue], [gearing], [refVoltage] ) VALUES (%d,'%s','%s',%f,%f,%f) ",
-         historyId, data.m_station, data.m_channel, data.m_value, data.m_gearing, data.m_refVoltage);
+     sql.Format("INSERT INTO LiveDataA202Channel([foreignId], [station], [channel], [measuredValue], [gearing], [refVoltage] ) VALUES (%d,'%s','%s',%f,%f,%f) ",
+		 foreignId, data.m_station, data.m_channel, data.m_value, data.m_gearing, data.m_refVoltage);
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;

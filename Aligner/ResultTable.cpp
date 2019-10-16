@@ -25,7 +25,7 @@ void CResultTable::SetReportFolder( string baseDir )
 
 CResultTable::CResultTable( CWnd* pParent /*=NULL*/)
 {
-	m_InParam.Version = VERSION_NOT_DEFINED;
+	m_InParam.Version = MeasType::MT_Undefined;
 	m_reportMeasID = -1;
     m_pParent = (CAlignmentWizard*)pParent;
 }
@@ -48,7 +48,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	    /***************************************************************************/
 	    /*																TILT_ALIGNMENT													 */
 	    /***************************************************************************/
-	    case TILT_ALIGNMENT:
+	case MeasType::MT_TiltAlignment:
 		m_TiltAlignment.m_timeConstant = g_AlignerData.TaoTilt;
 
         if( g_AlignerData.NoOfBedPlanes != 0 )
@@ -147,7 +147,10 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/***************************************************************************/
 	/*																AZIMUTH_ALIGN														 */
 	/***************************************************************************/
-  case AZIMUTH_ALIGN:
+  case MeasType::MT_AzimuthAlign:
+  case MeasType::MT_AZVerBenchmark:
+  case MeasType::MT_AZVerGyrostab:
+
 		m_AzimuthAlignmentData.m_timeConstant = g_AlignerData.TaoAz;
 		m_AzimuthAlignmentData.m_rollExcentricity = MRADIANS_TO_DEGREES( g_AlignerData.RExc );
 		m_AzimuthAlignmentData.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
@@ -214,145 +217,9 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
         m_AzimuthAlignmentData.calibInfo = calibInfo.GetInfo();
 
     break;
-	/***************************************************************************/
-	/*												AZIMUTH_VERIFICATION_BENCHMARK									 */
-	/***************************************************************************/
-	case AZIMUTH_VERIFICATION_BENCHMARK:
-		m_AzimuthVerificationBenchmarkData.m_timeConstant = g_AlignerData.TaoAz;
-		m_AzimuthVerificationBenchmarkData.m_rollExcentricity = MRADIANS_TO_DEGREES( g_AlignerData.RExc );
-
-	    m_AzimuthVerificationBenchmarkData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
-	    m_AzimuthVerificationBenchmarkData.m_measuredUnit.LoadString( GetMRad() == TRUE ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
-		m_AzimuthVerificationBenchmarkData.m_time = m_InParam.Time;
-
-		m_AzimuthVerificationBenchmarkItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
-		m_AzimuthVerificationBenchmarkItem[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );		
-        m_AzimuthVerificationBenchmarkItem[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ) : DB_EMPTY_STRING;
-
-		if( ( IsGun( g_AlignerData.RefObjNo ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.RefObjNo ) != GUN_ADAP_EMPTY )  )
-	    {
-		    m_AzimuthVerificationBenchmarkItem[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
-        }
-        else
-        {
-		    m_AzimuthVerificationBenchmarkItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
-        }
-
-		m_AzimuthVerificationBenchmarkItem[0].m_nominalAzimuth = GetNominalAzimuthDegree( g_AlignerData.RefObjNo );
-		m_AzimuthVerificationBenchmarkItem[0].m_nominalAzimuthdifference = DB_EMPTY_DOUBLE;//ref
-		m_AzimuthVerificationBenchmarkItem[0].m_measuredAzimuthDifference = DB_EMPTY_DOUBLE;//ref
-		m_AzimuthVerificationBenchmarkItem[0].m_measuredNominalDifference = DB_EMPTY_DOUBLE;//ref
 	
-	    for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
-        {
-			m_AzimuthVerificationBenchmarkItem[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-			m_AzimuthVerificationBenchmarkItem[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
+  case MeasType::MT_VerifAbsolute:
 
-		    m_AzimuthVerificationBenchmarkItem[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
-		
-			if( ( IsGun( g_AlignerData.ObjNo[i] ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.ObjNo[i] ) != GUN_ADAP_EMPTY )  )
-			{
-				m_AzimuthVerificationBenchmarkItem[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
-			}
-			else
-			{
-				m_AzimuthVerificationBenchmarkItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
-			}
-
-			m_AzimuthVerificationBenchmarkItem[i].m_nominalAzimuth = GetNominalAzimuthDegree( g_AlignerData.ObjNo[i] );
-            help1 = GetNominalAzimuthDegree( g_AlignerData.ObjNo[i] ) - GetNominalAzimuthDegree( g_AlignerData.RefObjNo );      
-			help2 =  MRADIANS_TO_DEGREES( pInParam->pACA[i] );      
-			help3 = help2 - help1;
-            m_AzimuthVerificationBenchmarkItem[i].m_nominalAzimuthdifference = help1;
-            m_AzimuthVerificationBenchmarkItem[i].m_measuredAzimuthDifference = help2;
-			m_AzimuthVerificationBenchmarkItem[i].m_measuredNominalDifference = help3;
-        }
-        //Get calibration status
-        calibInfo.SetCalibrationTime(m_AzimuthVerificationBenchmarkData.m_time);
-        for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
-        {
-			if(m_AzimuthVerificationBenchmarkItem[i].m_sensorSerialNumber == "" && m_AzimuthVerificationBenchmarkItem[i].m_adapterSerialNumber == "")
-				continue;
-
-			calibInfo.AddChannel(m_AzimuthVerificationBenchmarkItem[i].m_channel);   
-            calibInfo.AddSensor(m_AzimuthVerificationBenchmarkItem[i].m_sensorSerialNumber);   
-            calibInfo.AddAdapter(m_AzimuthVerificationBenchmarkItem[i].m_adapterSerialNumber);   
-        }
-        m_AzimuthVerificationBenchmarkData.calibInfo = calibInfo.GetInfo();
-
-    break;
-	/***************************************************************************/
-	/*												AZIMUTH_VERIFICATION_GYROSTAB										 */
-	/***************************************************************************/
-	case AZIMUTH_VERIFICATION_GYROSTAB:
-		m_AzimuthVerificationGyrostabData.m_timeConstant = g_AlignerData.TaoAz;
-		m_AzimuthVerificationGyrostabData.m_rollExcentricity = MRADIANS_TO_DEGREES( g_AlignerData.RExc );
-
-        m_AzimuthVerificationGyrostabData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
-
-        m_AzimuthVerificationGyrostabData.m_measuredUnit.LoadString( ( GetMRad() == TRUE ) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
-		m_AzimuthVerificationGyrostabData.m_time = m_InParam.Time;
-
-		m_AzimuthVerificationGyrostabItem[0].m_station = GetUnitTypeDescription( g_AlignerData.RefObjNo );
-		m_AzimuthVerificationGyrostabItem[0].m_channel = GetChannelName( g_AlignerData.RefObjNo );
-	    m_AzimuthVerificationGyrostabItem[0].m_sensorSerialNumber = IsSensor( g_AlignerData.RefObjNo ) ? GetUnitTypeSerialNumber( g_AlignerData.RefObjNo ): DB_EMPTY_STRING;
-	
-		if( ( IsGun( g_AlignerData.RefObjNo ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.RefObjNo ) != GUN_ADAP_EMPTY )  )
-	    {
-		    m_AzimuthVerificationGyrostabItem[0].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.RefObjNo );
-        }
-        else
-        {
-		    m_AzimuthVerificationGyrostabItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
-        }
-
-		m_AzimuthVerificationGyrostabItem[0].m_nominalAzimuth = GetNominalAzimuthDegree( g_AlignerData.RefObjNo );
-		m_AzimuthVerificationGyrostabItem[0].m_nominalAzimuthdifference = DB_EMPTY_DOUBLE;//ref
-		m_AzimuthVerificationGyrostabItem[0].m_measuredAzimuthDifference = DB_EMPTY_DOUBLE;//ref
-		m_AzimuthVerificationGyrostabItem[0].m_measuredNominalDifference = DB_EMPTY_DOUBLE;//ref
-	
-	    for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
-        {
-			m_AzimuthVerificationGyrostabItem[i].m_station = GetUnitTypeDescription( g_AlignerData.ObjNo[i] );
-			m_AzimuthVerificationGyrostabItem[i].m_channel = GetChannelName( g_AlignerData.ObjNo[i] );
-	        m_AzimuthVerificationGyrostabItem[i].m_sensorSerialNumber = IsSensor( g_AlignerData.ObjNo[i] ) ? GetUnitTypeSerialNumber( g_AlignerData.ObjNo[i] ) : DB_EMPTY_STRING;
-	
-			if( ( IsGun( g_AlignerData.ObjNo[i] ) == TRUE ) && ( GetGunAdapterNumber( g_AlignerData.ObjNo[i] ) != GUN_ADAP_EMPTY )  )
-			{
-				m_AzimuthVerificationGyrostabItem[i].m_adapterSerialNumber = GetGunAdapterNumber( g_AlignerData.ObjNo[i] );
-			}
-			else
-			{
-				m_AzimuthVerificationGyrostabItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
-			}
-
-			m_AzimuthVerificationGyrostabItem[i].m_nominalAzimuth = GetNominalAzimuthDegree( g_AlignerData.ObjNo[i] );
-            help1 = GetNominalAzimuthDegree( g_AlignerData.ObjNo[i] ) - GetNominalAzimuthDegree( g_AlignerData.RefObjNo );
-        	help2 =  MRADIANS_TO_DEGREES( pInParam->pACA[i] );
-     		help3 = help2 - help1;
-            m_AzimuthVerificationGyrostabItem[i].m_nominalAzimuthdifference = help1;
-            m_AzimuthVerificationGyrostabItem[i].m_measuredAzimuthDifference = help2;
-			m_AzimuthVerificationGyrostabItem[i].m_measuredNominalDifference = help3;
-        }
-
-        //Get calibration status
-        calibInfo.SetCalibrationTime(m_AzimuthVerificationGyrostabData.m_time);
-        for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
-        {
-			if(m_AzimuthVerificationGyrostabItem[i].m_sensorSerialNumber == "" && m_AzimuthVerificationGyrostabItem[i].m_adapterSerialNumber == "")
-				continue;
-
-			calibInfo.AddChannel(m_AzimuthVerificationGyrostabItem[i].m_channel);   
-            calibInfo.AddSensor(m_AzimuthVerificationGyrostabItem[i].m_sensorSerialNumber);   
-            calibInfo.AddAdapter(m_AzimuthVerificationGyrostabItem[i].m_adapterSerialNumber);   
-        }
-        m_AzimuthVerificationGyrostabData.calibInfo = calibInfo.GetInfo();
-
-    break;
-	/***************************************************************************/
-	/*														HORIZON_ABSOLUTE_MODE 											 */
-	/***************************************************************************/
-  case HORIZON_ABSOLUTE_MODE:
 	  m_HorizonAbsoluteMode.m_timeConstant = g_AlignerData.TaoTilt;
 	  m_HorizonAbsoluteMode.m_parallaxCompensation.LoadString( g_AlignerData.UseParallax == TRUE ? IDS_ON : IDS_OFF);
 	
@@ -406,7 +273,8 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/***************************************************************************/
 	/*													AIR_TARGET_RELATIVE_MODE 											 */
 	/***************************************************************************/
-    case AIR_TARGET_RELATIVE_MODE:
+    case MeasType::MT_VerifRelative:
+
 		m_HorizonRelativeMode.m_timeConstant = g_AlignerData.TaoTilt;
 		m_HorizonRelativeMode.m_parallaxCompensation.LoadString( g_AlignerData.UseParallax == TRUE ? IDS_ON : IDS_OFF);
 		m_HorizonRelativeMode.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
@@ -482,7 +350,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/***************************************************************************/
 	/*														GYRO_PERFORMANCE_TEST  											 */
 	/***************************************************************************/
-	case GYRO_PERFORMANCE_TEST:
+	case MeasType::MT_GyroPerf:
 
 		m_GyroPerformance.m_timeConstant = g_AlignerData.TaoGyro;
 		m_GyroPerformance.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
@@ -541,7 +409,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/***************************************************************************/
 	/*														TILT_FLATNESS_TEST													 */
 	/***************************************************************************/
-  case TILT_FLATNESS_TEST:
+  case MeasType::MT_TiltFlatnessPl:
 		{
 		
 			m_TiltAndFlatness.m_timeConstant = g_AlignerData.TaoFlat;
@@ -668,7 +536,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/***************************************************************************/
 	/*											TILT_FLATNESS_FOUNDATION_TEST											 */
 	/***************************************************************************/
-	case TILT_FLATNESS_FOUNDATION_TEST:
+	case MeasType::MT_TiltFlatnessFo:
 		{
 			/****************/
 			/***   Data   ***/
@@ -780,7 +648,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/***************************************************************************/
 	/*															COMMON_FLAT_TEST     											 */
 	/***************************************************************************/
-  case COMMON_FLAT_TEST:
+  case MeasType::MT_CommonFlatTilt:
 
 	  m_CommonFlat.m_timeConstant = g_AlignerData.TaoTilt;
 	  m_CommonFlat.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
@@ -829,33 +697,32 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 		/***************************************************************************/
 	/*															SENSOR_VALIDATION_TEST     											 */
 	/***************************************************************************/
-  case SENSOR_VALIDATION_TEST:
-	  m_SensorValidationData.m_timeConstant = g_AlignerData.TaoTilt;
+  case MeasType::MT_SensorValidation:
 
-	  m_SensorValidationData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
-	  m_SensorValidationData.m_measuredUnit.LoadString((GetMRad() == TRUE) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
-	  m_SensorValidationData.m_time = m_InParam.Time;
+	  m_SensorValidation.m_timeConstant = g_AlignerData.TaoTilt;
+	  m_SensorValidation.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
+	  m_SensorValidation.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;	  
+	  m_SensorValidation.m_time = m_InParam.Time;
 
-	  m_SensorValidationItem[0].m_station = GetUnitTypeDescription(g_AlignerData.RefObjNo);
-	  m_SensorValidationItem[0].m_channel = GetChannelName(g_AlignerData.RefObjNo);
-	  m_SensorValidationItem[0].m_sensorSerialNumber = IsSensor(g_AlignerData.RefObjNo) ? GetUnitTypeSerialNumber(g_AlignerData.RefObjNo) : DB_EMPTY_STRING;
+	  m_SensorValidationChannel[0].m_station = GetUnitTypeDescription(g_AlignerData.RefObjNo);
+	  m_SensorValidationChannel[0].m_channel = GetChannelName(g_AlignerData.RefObjNo);
+	  m_SensorValidationChannel[0].m_sensorSerialNumber = IsSensor(g_AlignerData.RefObjNo) ? GetUnitTypeSerialNumber(g_AlignerData.RefObjNo) : DB_EMPTY_STRING;
 
-	  m_SensorValidationItem[0].m_rollSc = DB_EMPTY_DOUBLE;
-	  m_SensorValidationItem[0].m_pitchSc = DB_EMPTY_DOUBLE;
+	  m_SensorValidationChannel[0].m_rollSc = 0.0f;
+	  m_SensorValidationChannel[0].m_pitchSc = 0.0f;
+	  m_SensorValidationChannel[0].m_rollAzErr = 0.0f;
+	  m_SensorValidationChannel[0].m_pitchAzErr = 0.0f;
+	  m_SensorValidationChannel[0].m_temperature = m_InParam.pTemperature[0];// g_AlignerData.RefObjNo];
 
-	  m_SensorValidationItem[0].m_rollAzErr = DB_EMPTY_DOUBLE;
-	  m_SensorValidationItem[0].m_pitchAzErr = DB_EMPTY_DOUBLE;
-	  m_SensorValidationItem[0].m_temperature = m_InParam.pTemperature[0];// g_AlignerData.RefObjNo];
+	  m_SensorValidationChannel[1].m_station = GetUnitTypeDescription(g_AlignerData.ObjNo[1]);
+	  m_SensorValidationChannel[1].m_channel = GetChannelName(g_AlignerData.ObjNo[1]);
+	  m_SensorValidationChannel[1].m_sensorSerialNumber = IsSensor(g_AlignerData.ObjNo[1]) ? GetUnitTypeSerialNumber(g_AlignerData.ObjNo[1]) : DB_EMPTY_STRING;
 
-	  m_SensorValidationItem[1].m_station = GetUnitTypeDescription(g_AlignerData.ObjNo[1]);
-	  m_SensorValidationItem[1].m_channel = GetChannelName(g_AlignerData.ObjNo[1]);
-	  m_SensorValidationItem[1].m_sensorSerialNumber = IsSensor(g_AlignerData.ObjNo[1]) ? GetUnitTypeSerialNumber(g_AlignerData.ObjNo[1]) : DB_EMPTY_STRING;
-
-	  m_SensorValidationItem[1].m_rollSc = g_AlignerData.ACR[1];
-	  m_SensorValidationItem[1].m_pitchSc = g_AlignerData.ACP[1];
-	  m_SensorValidationItem[1].m_rollAzErr = g_AlignerData.Eac[1];
-	  m_SensorValidationItem[1].m_pitchAzErr = g_AlignerData.Eal[1];
-	  m_SensorValidationItem[1].m_temperature = m_InParam.pTemperature[1];// g_AlignerData.ObjNo[1]];
+	  m_SensorValidationChannel[1].m_rollSc = g_AlignerData.ACR[1];
+	  m_SensorValidationChannel[1].m_pitchSc = g_AlignerData.ACP[1];
+	  m_SensorValidationChannel[1].m_rollAzErr = g_AlignerData.Eac[1];
+	  m_SensorValidationChannel[1].m_pitchAzErr = g_AlignerData.Eal[1];
+	  m_SensorValidationChannel[1].m_temperature = m_InParam.pTemperature[1];// g_AlignerData.ObjNo[1]];
 
 	 /* for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
 	  {
@@ -871,87 +738,86 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	  }*/
 
 	  //Get calibration status
-	  calibInfo.SetCalibrationTime(m_SensorValidationData.m_time);
+	  calibInfo.SetCalibrationTime(m_SensorValidation.m_time);
 	  for (int i = 0; i <= g_AlignerData.NoOfCorr; i++)
 	  {
-		  if (m_SensorValidationItem[i].m_sensorSerialNumber == "")
+		  if (m_SensorValidationChannel[i].m_sensorSerialNumber == "")
 			  continue;
 
-		  calibInfo.AddChannel(m_SensorValidationItem[i].m_channel);
-		  calibInfo.AddSensor(m_SensorValidationItem[i].m_sensorSerialNumber);
+		  calibInfo.AddChannel(m_SensorValidationChannel[i].m_channel);
+		  calibInfo.AddSensor(m_SensorValidationChannel[i].m_sensorSerialNumber);
 	  }
-	  m_SensorValidationData.calibInfo = calibInfo.GetInfo();
+	  m_SensorValidation.calibInfo = calibInfo.GetInfo();
 
 	  break;
 	/***************************************************************************/
 	/*																LIVE_GRAPH		     											 */
 	/***************************************************************************/
-	case LIVE_GRAPH:
+	case MeasType::MT_LiveGraph:
     {
-        m_LiveGraphData.m_timeConstant = pInParam->timeConstant;//g_AlignerData.TaoTilt;
-		m_LiveGraphData.m_samplingRate = pInParam->SamplingRate;
-		m_LiveGraphData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
-		
-        m_LiveGraphData.m_measuredUnit.LoadString( GetMRad() == TRUE ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
-		m_LiveGraphData.m_time = m_InParam.Time;
+        m_LiveGraph.m_timeConstant = pInParam->timeConstant;//g_AlignerData.TaoTilt;
+		m_LiveGraph.m_samplingRate = pInParam->SamplingRate;
+		m_LiveGraph.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;			
+		m_LiveGraph.m_time = m_InParam.Time;
 
 		//No reference for live graph
-		m_LiveGraphItem[0].m_station = _T("");
-		m_LiveGraphItem[0].m_channel = _T("");
-		m_LiveGraphItem[0].m_sensorSerialNumber = DB_EMPTY_STRING;//empty
-        m_LiveGraphItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
-		m_LiveGraphItem[0].m_roll = DB_EMPTY_DOUBLE;//empty
-		m_LiveGraphItem[0].m_pitch = DB_EMPTY_DOUBLE;//empty
-		m_LiveGraphItem[0].m_tilt = DB_EMPTY_DOUBLE;//empty
-		m_LiveGraphItem[0].m_angle = DB_EMPTY_DOUBLE;//empty
-		m_LiveGraphItem[0].m_temperature = DB_EMPTY_DOUBLE;//empty
+		m_LiveGraphChannel[0].m_station = _T("");
+		m_LiveGraphChannel[0].m_channel = _T("");
+		m_LiveGraphChannel[0].m_sensorSerialNumber = _T("");
+		m_LiveGraphChannel[0].m_adapterSerialNumber = _T("");
+		m_LiveGraphChannel[0].m_roll = 0.0f;
+		m_LiveGraphChannel[0].m_pitch = 0.0f;
+		m_LiveGraphChannel[0].m_tilt = 0.0f;
+		m_LiveGraphChannel[0].m_angle = 0.0f;
+		m_LiveGraphChannel[0].m_temperature = 0.0f;
 
         int i=1;
         map<int, LiveGraphInfo>::iterator iter ;
         for(iter=g_AlignerData.liveGraphMap.begin(); iter!=g_AlignerData.liveGraphMap.end(); iter++,i++)
         {
             int id = iter->second.id;
-			m_LiveGraphItem[i].m_station = GetUnitTypeDescription( id);//g_AlignerData.ObjNo[i] );
-			m_LiveGraphItem[i].m_channel = GetChannelName( id);//g_AlignerData.ObjNo[i] );
+			m_LiveGraphChannel[i].m_type = GetUnitType(id);
+			m_LiveGraphChannel[i].m_station = GetUnitTypeDescription( id);//g_AlignerData.ObjNo[i] );
+			m_LiveGraphChannel[i].m_channel = GetChannelName( id);//g_AlignerData.ObjNo[i] );
 			
-			m_LiveGraphItem[i].m_sensorSerialNumber = IsSensor(id) ? GetUnitTypeSerialNumber(id) : DB_EMPTY_STRING;
+			m_LiveGraphChannel[i].m_sensorSerialNumber = IsSensor(id) ? GetUnitTypeSerialNumber(id) : DB_EMPTY_STRING;
 			
 			if( ( IsGun( id) == TRUE ) && ( GetGunAdapterNumber( id) != GUN_ADAP_EMPTY )  )
 			{
-				m_LiveGraphItem[i].m_adapterSerialNumber = GetGunAdapterNumber( id);
+				m_LiveGraphChannel[i].m_adapterSerialNumber = GetGunAdapterNumber( id);
 			}
 			else
 			{
-				m_LiveGraphItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;
+				m_LiveGraphChannel[i].m_adapterSerialNumber = DB_EMPTY_STRING;
 			}
 
-            m_LiveGraphItem[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
-            m_LiveGraphItem[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
-			m_LiveGraphItem[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
-			m_LiveGraphItem[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
+			m_LiveGraphChannel[i].m_roll = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACR[i];
+			m_LiveGraphChannel[i].m_pitch = pInParam->SignDef * g_AlignerData.Kh * g_AlignerData.ACP[i];
+			m_LiveGraphChannel[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
+			m_LiveGraphChannel[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
 
-			m_LiveGraphItem[i].m_temperature = IsSensor(id) ? pInParam->pTemperature[i] : DB_EMPTY_DOUBLE;            
+			m_LiveGraphChannel[i].m_temperature = IsSensor(id) ? pInParam->pTemperature[i] : DB_EMPTY_DOUBLE;
         }
 
         //Get calibration status
-        calibInfo.SetCalibrationTime(m_LiveGraphData.m_time);
+        calibInfo.SetCalibrationTime(m_LiveGraph.m_time);
         for( int i=0; i<=g_AlignerData.NoOfCorr; i++ )
         {
-            if(m_LiveGraphItem[i].m_sensorSerialNumber == "" && m_LiveGraphItem[i].m_adapterSerialNumber == "")
+            if(m_LiveGraphChannel[i].m_sensorSerialNumber == "" && m_LiveGraphChannel[i].m_adapterSerialNumber == "")
 				continue;
 			
-			calibInfo.AddChannel(m_LiveGraphItem[i].m_channel);   
-            calibInfo.AddSensor(m_LiveGraphItem[i].m_sensorSerialNumber);   
-            calibInfo.AddAdapter(m_LiveGraphItem[i].m_adapterSerialNumber);   
+			calibInfo.AddChannel(m_LiveGraphChannel[i].m_channel);
+            calibInfo.AddSensor(m_LiveGraphChannel[i].m_sensorSerialNumber);
+            calibInfo.AddAdapter(m_LiveGraphChannel[i].m_adapterSerialNumber);
         }
-        m_LiveGraphData.calibInfo = calibInfo.GetInfo();
+        m_LiveGraph.calibInfo = calibInfo.GetInfo();
 
     }
 	break;
 	/***************************************************************************/
 	/*															LIVE_DATA_A202	     											 */
 	/***************************************************************************/
-  case LIVE_DATA_A202:
+ /* case LIVE_DATA_A202:
 		m_LiveDataA202Data.m_samplingRate = pInParam->SamplingRate;
 
 		if( m_InParam.Comment.GetLength() == 0 )
@@ -974,7 +840,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 			m_LiveDataA202Item[i].m_gearing = m_pLiveDataA202Param[i].m_gearing;
 			m_LiveDataA202Item[i].m_refVoltage = m_pLiveDataA202Param[i].m_refVoltage;
         }
-        break;
+        break;*/
   default:
 		return( FALSE );
     break;
@@ -993,7 +859,7 @@ BOOL CResultTable::SaveToDataBase( void )
 
 		switch( m_InParam.Version )
 		{
-			case TILT_ALIGNMENT:
+		case MeasType::MT_TiltAlignment:
 	
 			if( !TiltAlignment::AddData( m_TiltAlignment ) )
 			{
@@ -1012,91 +878,29 @@ BOOL CResultTable::SaveToDataBase( void )
 
 			break;
 
-		case AZIMUTH_ALIGN:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_AzimuthAlignmentData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_AzimuthAlignmentData.m_comment = m_InParam.Comment;
-			}
+		case MeasType::MT_AzimuthAlign:
+		case MeasType::MT_AZVerGyrostab:
+		case MeasType::MT_AZVerBenchmark:
+
+			m_AzimuthAlignmentData.m_comment = m_InParam.Comment;
+			m_AzimuthAlignmentData.type = m_InParam.Version;
 
 			if( !AzimuthAlignment::AddData( m_AzimuthAlignmentData ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
+			m_reportMeasID = AzimuthAlignment::GetMeasID();
 
 			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
-			{
-				if( m_AzimuthAlignmentChannel[i].m_station.GetLength() == 0 ) 
-				{
-					m_AzimuthAlignmentChannel[i].m_station = DB_EMPTY_STRING;
-				}
-
+			{			
 				if( !AzimuthAlignment::AddChannel( m_AzimuthAlignmentChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
 			}
 			break;
-		case AZIMUTH_VERIFICATION_BENCHMARK:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_AzimuthVerificationBenchmarkData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_AzimuthVerificationBenchmarkData.m_comment = m_InParam.Comment;
-			}
-
-			if( !AzimuthVerificationBenchmarkHistory::AddData( m_AzimuthVerificationBenchmarkData ) )
-			{
-				ASSERT(0) ; // This is a "badass" error.
-			}
-
-			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
-			{
-				if( m_AzimuthVerificationBenchmarkItem[i].m_station.GetLength() == 0 ) 
-				{
-					m_AzimuthVerificationBenchmarkItem[i].m_station = DB_EMPTY_STRING;
-				}
-
-				if( !AzimuthVerificationBenchmarkHistory::AddItem( m_AzimuthVerificationBenchmarkItem[i] ) )
-				{
-					ASSERT(0); // This is a "badass" error.
-				}
-			}
-			break;
-		case AZIMUTH_VERIFICATION_GYROSTAB:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_AzimuthVerificationGyrostabData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_AzimuthVerificationGyrostabData.m_comment = m_InParam.Comment;
-			}
-
-			if( !AzimuthVerificationGyrostabilityHistory::AddData( m_AzimuthVerificationGyrostabData ) )
-			{
-				ASSERT(0) ; // This is a "badass" error.
-			}
-
-			for( int i=0; i<=g_AlignerData.NoOfCorr; i++ ) // index 0 = reference
-			{
-				if( m_AzimuthVerificationGyrostabItem[i].m_station.GetLength() == 0 ) 
-				{
-					m_AzimuthVerificationGyrostabItem[i].m_station = DB_EMPTY_STRING;
-				}
-
-				if( !AzimuthVerificationGyrostabilityHistory::AddItem( m_AzimuthVerificationGyrostabItem[i] ) )
-				{
-					ASSERT(0); // This is a "badass" error.
-				}
-			}
-			break;
-		case HORIZON_ABSOLUTE_MODE:
+		
+		case MeasType::MT_VerifAbsolute:
 			
 			m_HorizonAbsoluteMode.m_comment = m_InParam.Comment;
 			
@@ -1115,7 +919,7 @@ BOOL CResultTable::SaveToDataBase( void )
 				}
 			}
 			break;
-		case AIR_TARGET_RELATIVE_MODE:
+		case MeasType::MT_VerifRelative:
 			
 			m_HorizonRelativeMode.m_comment = m_InParam.Comment;
 			
@@ -1134,7 +938,7 @@ BOOL CResultTable::SaveToDataBase( void )
 				}
 			}
 			break;
-		case GYRO_PERFORMANCE_TEST:
+		case MeasType::MT_GyroPerf:
 		
 			
 			m_GyroPerformance.m_comment = m_InParam.Comment;			
@@ -1159,7 +963,7 @@ BOOL CResultTable::SaveToDataBase( void )
 				}
 			}
 			break;
-		case TILT_FLATNESS_TEST:
+		case MeasType::MT_TiltFlatnessPl:
 			
 			m_TiltAndFlatness.m_comment = m_InParam.Comment;
 			
@@ -1185,7 +989,7 @@ BOOL CResultTable::SaveToDataBase( void )
             }
 
 			break;
-		case TILT_FLATNESS_FOUNDATION_TEST:
+		case MeasType::MT_TiltFlatnessFo:
 						
 			m_TiltAndFlatnessFo.m_comment = m_InParam.Comment;
 			
@@ -1284,7 +1088,7 @@ BOOL CResultTable::SaveToDataBase( void )
 			}
 
 			break;
-		case COMMON_FLAT_TEST:
+		case MeasType::MT_CommonFlatTilt:
 				
 			m_CommonFlat.m_comment = m_InParam.Comment;
 			
@@ -1302,75 +1106,58 @@ BOOL CResultTable::SaveToDataBase( void )
 				}
 			}
 			break;
-		case SENSOR_VALIDATION_TEST:
-			if (m_InParam.Comment.GetLength() == 0)
-			{
-				m_SensorValidationData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_SensorValidationData.m_comment = m_InParam.Comment;
-			}
+		case MeasType::MT_SensorValidation:
+			
+			m_SensorValidation.m_comment = m_InParam.Comment;			
 
-			if (!SensorValidationHistory::AddData(m_SensorValidationData))
+			if (!SensorValidation::AddData(m_SensorValidation))
 			{
 				ASSERT(0); // This is a "badass" error.
 			}
 
 			for (int i = 0; i <= g_AlignerData.NoOfCorr; i++) // index 0 = reference
 			{
-				if (m_SensorValidationItem[i].m_station.GetLength() == 0)
+				if (m_SensorValidationChannel[i].m_station.GetLength() == 0)
 				{
-					m_SensorValidationItem[i].m_station = DB_EMPTY_STRING;
+					m_SensorValidationChannel[i].m_station = DB_EMPTY_STRING;
 				}
 
-				if (!SensorValidationHistory::AddItem(m_SensorValidationItem[i]))
+				if (!SensorValidation::AddChannel(m_SensorValidationChannel[i]))
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
 			}
 			break;
 
-		case LIVE_GRAPH:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_LiveGraphData.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_LiveGraphData.m_comment = m_InParam.Comment;
-			}
+		case MeasType::MT_LiveGraph:
 
-			if( !LiveGraphErrorsHistory::AddData( m_LiveGraphData ) )
+			m_LiveGraph.m_comment = m_InParam.Comment;			
+
+			if( !LiveGraph::AddData( m_LiveGraph ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
 			}
 
+			m_reportMeasID = LiveGraph::GetMeasID();
+			
 			for( int i=1; i<=g_AlignerData.liveGraphMap.size(); i++ ) // index 0 = reference, but live graph has no reference
 			{
-				if( m_LiveGraphItem[i].m_station.GetLength() == 0 ) 
+				if( m_LiveGraphChannel[i].m_station.GetLength() == 0 ) 
 				{
-					m_LiveGraphItem[i].m_station = DB_EMPTY_STRING;
+					m_LiveGraphChannel[i].m_station = DB_EMPTY_STRING;
 				}
 
-				if( !LiveGraphErrorsHistory::AddItem( m_LiveGraphItem[i] ) )
+				if( !LiveGraph::AddChannel( m_LiveGraphChannel[i] ) )
 				{
 					ASSERT(0); // This is a "badass" error.
 				}
-			}
-            //AddGraph(m_InParam.graphFileName, m_InParam.includeGraph);
+			}            
 
       break;
-    case LIVE_DATA_A202:
-			if( m_InParam.Comment.GetLength() == 0 )
-			{
-				m_LiveDataA202Data.m_comment = DB_EMPTY_STRING;//empty
-			}
-			else
-			{
-				m_LiveDataA202Data.m_comment = m_InParam.Comment;
-			}
-
+   // case LIVE_DATA_A202:
+		
+			/*m_LiveDataA202Data.m_comment = m_InParam.Comment;
+			
 			if( !LiveDataA202ErrorsHistory::AddData( m_LiveDataA202Data ) )
 			{
 				ASSERT(0) ; // This is a "badass" error.
@@ -1391,7 +1178,7 @@ BOOL CResultTable::SaveToDataBase( void )
 					ASSERT(0); // This is a "badass" error.
 				}
 			}
-      break;
+      break;*/
 		default:
 			m_InParam.SavedToDataBase = FALSE;
 			break;
@@ -2020,3 +1807,143 @@ BOOL CResultTable::CloseReport( void )
 #endif
 	return( TRUE );
 }*/
+
+
+/***************************************************************************/
+	/*												AZIMUTH_VERIFICATION_BENCHMARK									 */
+	/***************************************************************************/
+/*	case AZIMUTH_VERIFICATION_BENCHMARK:
+		m_AzimuthVerificationBenchmarkData.m_timeConstant = g_AlignerData.TaoAz;
+		m_AzimuthVerificationBenchmarkData.m_rollExcentricity = MRADIANS_TO_DEGREES(g_AlignerData.RExc);
+
+		m_AzimuthVerificationBenchmarkData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
+		m_AzimuthVerificationBenchmarkData.m_measuredUnit.LoadString(GetMRad() == TRUE ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
+		m_AzimuthVerificationBenchmarkData.m_time = m_InParam.Time;
+
+		m_AzimuthVerificationBenchmarkItem[0].m_station = GetUnitTypeDescription(g_AlignerData.RefObjNo);
+		m_AzimuthVerificationBenchmarkItem[0].m_channel = GetChannelName(g_AlignerData.RefObjNo);
+		m_AzimuthVerificationBenchmarkItem[0].m_sensorSerialNumber = IsSensor(g_AlignerData.RefObjNo) ? GetUnitTypeSerialNumber(g_AlignerData.RefObjNo) : DB_EMPTY_STRING;
+
+		if ((IsGun(g_AlignerData.RefObjNo) == TRUE) && (GetGunAdapterNumber(g_AlignerData.RefObjNo) != GUN_ADAP_EMPTY))
+		{
+			m_AzimuthVerificationBenchmarkItem[0].m_adapterSerialNumber = GetGunAdapterNumber(g_AlignerData.RefObjNo);
+		}
+		else
+		{
+			m_AzimuthVerificationBenchmarkItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+		}
+
+		m_AzimuthVerificationBenchmarkItem[0].m_nominalAzimuth = GetNominalAzimuthDegree(g_AlignerData.RefObjNo);
+		m_AzimuthVerificationBenchmarkItem[0].m_nominalAzimuthdifference = DB_EMPTY_DOUBLE;//ref
+		m_AzimuthVerificationBenchmarkItem[0].m_measuredAzimuthDifference = DB_EMPTY_DOUBLE;//ref
+		m_AzimuthVerificationBenchmarkItem[0].m_measuredNominalDifference = DB_EMPTY_DOUBLE;//ref
+
+		for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
+		{
+			m_AzimuthVerificationBenchmarkItem[i].m_station = GetUnitTypeDescription(g_AlignerData.ObjNo[i]);
+			m_AzimuthVerificationBenchmarkItem[i].m_channel = GetChannelName(g_AlignerData.ObjNo[i]);
+
+			m_AzimuthVerificationBenchmarkItem[i].m_sensorSerialNumber = IsSensor(g_AlignerData.ObjNo[i]) ? GetUnitTypeSerialNumber(g_AlignerData.ObjNo[i]) : DB_EMPTY_STRING;
+
+			if ((IsGun(g_AlignerData.ObjNo[i]) == TRUE) && (GetGunAdapterNumber(g_AlignerData.ObjNo[i]) != GUN_ADAP_EMPTY))
+			{
+				m_AzimuthVerificationBenchmarkItem[i].m_adapterSerialNumber = GetGunAdapterNumber(g_AlignerData.ObjNo[i]);
+			}
+			else
+			{
+				m_AzimuthVerificationBenchmarkItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+			}
+
+			m_AzimuthVerificationBenchmarkItem[i].m_nominalAzimuth = GetNominalAzimuthDegree(g_AlignerData.ObjNo[i]);
+			help1 = GetNominalAzimuthDegree(g_AlignerData.ObjNo[i]) - GetNominalAzimuthDegree(g_AlignerData.RefObjNo);
+			help2 = MRADIANS_TO_DEGREES(pInParam->pACA[i]);
+			help3 = help2 - help1;
+			m_AzimuthVerificationBenchmarkItem[i].m_nominalAzimuthdifference = help1;
+			m_AzimuthVerificationBenchmarkItem[i].m_measuredAzimuthDifference = help2;
+			m_AzimuthVerificationBenchmarkItem[i].m_measuredNominalDifference = help3;
+		}
+		//Get calibration status
+		calibInfo.SetCalibrationTime(m_AzimuthVerificationBenchmarkData.m_time);
+		for (int i = 0; i <= g_AlignerData.NoOfCorr; i++)
+		{
+			if (m_AzimuthVerificationBenchmarkItem[i].m_sensorSerialNumber == "" && m_AzimuthVerificationBenchmarkItem[i].m_adapterSerialNumber == "")
+				continue;
+
+			calibInfo.AddChannel(m_AzimuthVerificationBenchmarkItem[i].m_channel);
+			calibInfo.AddSensor(m_AzimuthVerificationBenchmarkItem[i].m_sensorSerialNumber);
+			calibInfo.AddAdapter(m_AzimuthVerificationBenchmarkItem[i].m_adapterSerialNumber);
+		}
+		m_AzimuthVerificationBenchmarkData.calibInfo = calibInfo.GetInfo();
+
+		break;
+		/***************************************************************************/
+		/*												AZIMUTH_VERIFICATION_GYROSTAB										 */
+		/***************************************************************************/
+	/*case AZIMUTH_VERIFICATION_GYROSTAB:
+		m_AzimuthVerificationGyrostabData.m_timeConstant = g_AlignerData.TaoAz;
+		m_AzimuthVerificationGyrostabData.m_rollExcentricity = MRADIANS_TO_DEGREES(g_AlignerData.RExc);
+
+		m_AzimuthVerificationGyrostabData.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
+
+		m_AzimuthVerificationGyrostabData.m_measuredUnit.LoadString((GetMRad() == TRUE) ? IDS_MRAD_UNIT : IDS_ARCMIN_UNIT);
+		m_AzimuthVerificationGyrostabData.m_time = m_InParam.Time;
+
+		m_AzimuthVerificationGyrostabItem[0].m_station = GetUnitTypeDescription(g_AlignerData.RefObjNo);
+		m_AzimuthVerificationGyrostabItem[0].m_channel = GetChannelName(g_AlignerData.RefObjNo);
+		m_AzimuthVerificationGyrostabItem[0].m_sensorSerialNumber = IsSensor(g_AlignerData.RefObjNo) ? GetUnitTypeSerialNumber(g_AlignerData.RefObjNo) : DB_EMPTY_STRING;
+
+		if ((IsGun(g_AlignerData.RefObjNo) == TRUE) && (GetGunAdapterNumber(g_AlignerData.RefObjNo) != GUN_ADAP_EMPTY))
+		{
+			m_AzimuthVerificationGyrostabItem[0].m_adapterSerialNumber = GetGunAdapterNumber(g_AlignerData.RefObjNo);
+		}
+		else
+		{
+			m_AzimuthVerificationGyrostabItem[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+		}
+
+		m_AzimuthVerificationGyrostabItem[0].m_nominalAzimuth = GetNominalAzimuthDegree(g_AlignerData.RefObjNo);
+		m_AzimuthVerificationGyrostabItem[0].m_nominalAzimuthdifference = DB_EMPTY_DOUBLE;//ref
+		m_AzimuthVerificationGyrostabItem[0].m_measuredAzimuthDifference = DB_EMPTY_DOUBLE;//ref
+		m_AzimuthVerificationGyrostabItem[0].m_measuredNominalDifference = DB_EMPTY_DOUBLE;//ref
+
+		for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
+		{
+			m_AzimuthVerificationGyrostabItem[i].m_station = GetUnitTypeDescription(g_AlignerData.ObjNo[i]);
+			m_AzimuthVerificationGyrostabItem[i].m_channel = GetChannelName(g_AlignerData.ObjNo[i]);
+			m_AzimuthVerificationGyrostabItem[i].m_sensorSerialNumber = IsSensor(g_AlignerData.ObjNo[i]) ? GetUnitTypeSerialNumber(g_AlignerData.ObjNo[i]) : DB_EMPTY_STRING;
+
+			if ((IsGun(g_AlignerData.ObjNo[i]) == TRUE) && (GetGunAdapterNumber(g_AlignerData.ObjNo[i]) != GUN_ADAP_EMPTY))
+			{
+				m_AzimuthVerificationGyrostabItem[i].m_adapterSerialNumber = GetGunAdapterNumber(g_AlignerData.ObjNo[i]);
+			}
+			else
+			{
+				m_AzimuthVerificationGyrostabItem[i].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
+			}
+
+			m_AzimuthVerificationGyrostabItem[i].m_nominalAzimuth = GetNominalAzimuthDegree(g_AlignerData.ObjNo[i]);
+			help1 = GetNominalAzimuthDegree(g_AlignerData.ObjNo[i]) - GetNominalAzimuthDegree(g_AlignerData.RefObjNo);
+			help2 = MRADIANS_TO_DEGREES(pInParam->pACA[i]);
+			help3 = help2 - help1;
+			m_AzimuthVerificationGyrostabItem[i].m_nominalAzimuthdifference = help1;
+			m_AzimuthVerificationGyrostabItem[i].m_measuredAzimuthDifference = help2;
+			m_AzimuthVerificationGyrostabItem[i].m_measuredNominalDifference = help3;
+		}
+
+		//Get calibration status
+		calibInfo.SetCalibrationTime(m_AzimuthVerificationGyrostabData.m_time);
+		for (int i = 0; i <= g_AlignerData.NoOfCorr; i++)
+		{
+			if (m_AzimuthVerificationGyrostabItem[i].m_sensorSerialNumber == "" && m_AzimuthVerificationGyrostabItem[i].m_adapterSerialNumber == "")
+				continue;
+
+			calibInfo.AddChannel(m_AzimuthVerificationGyrostabItem[i].m_channel);
+			calibInfo.AddSensor(m_AzimuthVerificationGyrostabItem[i].m_sensorSerialNumber);
+			calibInfo.AddAdapter(m_AzimuthVerificationGyrostabItem[i].m_adapterSerialNumber);
+		}
+		m_AzimuthVerificationGyrostabData.calibInfo = calibInfo.GetInfo();
+
+		break;*/
+		/***************************************************************************/
+		/*														HORIZON_ABSOLUTE_MODE 											 */
+		/***************************************************************************/

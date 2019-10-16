@@ -72,12 +72,6 @@ public:
     BOOL InsertAzimuthAlignment(AzimuthAlignment::Data data, int measId);
     BOOL InsertAzimuthAlignmentChannel(AzimuthAlignment::ChannelData data, int measId);
 
-    BOOL InsertAzimuthVerificationBenchmark(AzimuthVerificationBenchmarkHistory::Data data, int historyId);
-    BOOL InsertAzimuthVerificationBenchmarkItem(AzimuthVerificationBenchmarkHistory::ItemData data, int historyId);
-
-    BOOL InsertAzimuthVerificationGyrostability(AzimuthVerificationGyrostabilityHistory::Data data, int historyId);
-    BOOL InsertAzimuthVerificationGyrostabilityItem(AzimuthVerificationGyrostabilityHistory::ItemData data, int historyId);
-
     BOOL InsertHorizonAbsoluteMode(HorizonAbsoluteMode::Data data, int measId);
     BOOL InsertHorizonAbsoluteModeChannel(HorizonAbsoluteMode::ChannelData data, int measId);
 
@@ -87,14 +81,14 @@ public:
     BOOL InsertCommonFlatTilt(CommonFlatTilt::Data data, int measId);
     BOOL InsertCommonFlatTiltChannel(CommonFlatTilt::ChannelData data, int measId);
 
-	BOOL InsertSensorValidation(SensorValidationHistory::Data data, int historyId);
-	BOOL InsertSensorValidationItem(SensorValidationHistory::ItemData data, int historyId);
+	BOOL InsertSensorValidation(SensorValidation::Data data, int measId);
+	BOOL InsertSensorValidationChannel(SensorValidation::ChannelData data, int measId);
 
-    BOOL InsertLiveGraphErrors(LiveGraphErrorsHistory::Data data, int historyId);
-    BOOL InsertLiveGraphErrorsItem(LiveGraphErrorsHistory::ItemData data, int historyId);
+    BOOL InsertLiveGraph(LiveGraph::Data data, int measId);
+    BOOL InsertLiveGraphChannel(LiveGraph::ChannelData data, int measId);
     
-    BOOL InsertLiveDataA202Errors(LiveDataA202ErrorsHistory::Data data, int historyId);
-    BOOL InsertLiveDataA202ErrorsItem(LiveDataA202ErrorsHistory::ItemData data, int historyId);
+    BOOL InsertLiveDataA202(LiveDataA202::Data data, int measId);
+    BOOL InsertLiveDataA202Channel(LiveDataA202::ChannelData data, int measId);
 
     BOOL InsertGraph(int historyId, CString file, int include);
     BOOL DeleteGraph(CString file);

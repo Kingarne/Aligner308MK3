@@ -118,16 +118,17 @@ protected:
 	HorizonRelativeMode::Data m_HorizonRelativeMode;
 	HorizonRelativeMode::ChannelData m_HorizonRelativeModeChannel[SIZE_OF_ARRAYS];
 
+	SensorValidation::Data m_SensorValidation;
+	SensorValidation::ChannelData m_SensorValidationChannel[SIZE_OF_ARRAYS];
 
-	AzimuthVerificationBenchmarkHistory::Data m_AzimuthVerificationBenchmarkData;
+	/*AzimuthVerificationBenchmarkHistory::Data m_AzimuthVerificationBenchmarkData;
 	AzimuthVerificationBenchmarkHistory::ItemData m_AzimuthVerificationBenchmarkItem[SIZE_OF_ARRAYS];
 	AzimuthVerificationGyrostabilityHistory::Data m_AzimuthVerificationGyrostabData;
 	AzimuthVerificationGyrostabilityHistory::ItemData m_AzimuthVerificationGyrostabItem[SIZE_OF_ARRAYS];
+	*/
 	
-	SensorValidationHistory::Data m_SensorValidationData;
-	SensorValidationHistory::ItemData m_SensorValidationItem[SIZE_OF_ARRAYS];
-	LiveGraphErrorsHistory::Data m_LiveGraphData;
-	LiveGraphErrorsHistory::ItemData m_LiveGraphItem[SIZE_OF_ARRAYS];
-	LiveDataA202ErrorsHistory::Data m_LiveDataA202Data;
-	LiveDataA202ErrorsHistory::ItemData m_LiveDataA202Item[SIZE_OF_ARRAYS];
+	LiveGraph::Data m_LiveGraph;
+	LiveGraph::ChannelData m_LiveGraphChannel[SIZE_OF_ARRAYS];
+	//LiveDataA202ErrorsHistory::Data m_LiveDataA202Data;
+	//LiveDataA202ErrorsHistory::ItemData m_LiveDataA202Item[SIZE_OF_ARRAYS];
 };

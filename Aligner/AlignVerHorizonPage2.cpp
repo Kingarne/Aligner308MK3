@@ -122,12 +122,12 @@ void CAlignVerHorizonPage2::InitResultTable( void )
 {
 	if( m_pParent->m_EnableReference == FALSE )
 	{
-		m_pParent->m_pResultTable->m_InParam.Version = HORIZON_ABSOLUTE_MODE;
+		m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_VerifAbsolute;// HORIZON_ABSOLUTE_MODE;
 		//m_pParent->m_pResultTable->m_InParam.Title.LoadString( IDS_TILT_VERIFICATION_AIR_TARGET_TEST );
 	}
 	else
 	{
-		m_pParent->m_pResultTable->m_InParam.Version = AIR_TARGET_RELATIVE_MODE;
+		m_pParent->m_pResultTable->m_InParam.Version = MeasType::MT_VerifRelative;
 		//m_pParent->m_pResultTable->m_InParam.Title.LoadString( IDS_TILT_VERIFICATION_HORIZON_TEST );
 	}
 	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;  

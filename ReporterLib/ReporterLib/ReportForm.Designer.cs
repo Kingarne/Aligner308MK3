@@ -73,6 +73,8 @@
             // 
             // reportList
             // 
+            this.reportList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.reportList.CheckBoxes = true;
             this.reportList.FullRowSelect = true;
             this.reportList.GridLines = true;
@@ -80,7 +82,7 @@
             this.reportList.Location = new System.Drawing.Point(12, 32);
             this.reportList.MultiSelect = false;
             this.reportList.Name = "reportList";
-            this.reportList.Size = new System.Drawing.Size(267, 369);
+            this.reportList.Size = new System.Drawing.Size(267, 630);
             this.reportList.TabIndex = 4;
             this.reportList.UseCompatibleStateImageBehavior = false;
             this.reportList.View = System.Windows.Forms.View.Details;
@@ -101,7 +103,8 @@
             // 
             // allButton
             // 
-            this.allButton.Location = new System.Drawing.Point(12, 407);
+            this.allButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.allButton.Location = new System.Drawing.Point(12, 668);
             this.allButton.Name = "allButton";
             this.allButton.Size = new System.Drawing.Size(42, 19);
             this.allButton.TabIndex = 6;
@@ -111,7 +114,8 @@
             // 
             // noneButton
             // 
-            this.noneButton.Location = new System.Drawing.Point(60, 407);
+            this.noneButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.noneButton.Location = new System.Drawing.Point(60, 668);
             this.noneButton.Name = "noneButton";
             this.noneButton.Size = new System.Drawing.Size(42, 19);
             this.noneButton.TabIndex = 7;
@@ -121,7 +125,8 @@
             // 
             // delButton
             // 
-            this.delButton.Location = new System.Drawing.Point(223, 407);
+            this.delButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.delButton.Location = new System.Drawing.Point(223, 668);
             this.delButton.Name = "delButton";
             this.delButton.Size = new System.Drawing.Size(56, 19);
             this.delButton.TabIndex = 8;

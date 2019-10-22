@@ -32,7 +32,9 @@ namespace ReporterLib
         private Dictionary<DBInterface.MeasType, Func<bool>> PrintMeasFunc = new Dictionary<DBInterface.MeasType, Func<bool>>();
 
         private List<DBInterface.ImageInfo> Images;
-
+        List<DBInterface.ChannelBase> Channels;
+        List<DBInterface.ChannelErrBaseList> ChannelErrList;
+        private bool OnlyImagesLeft = false;
 
         private int m_page;
         private int m_yPos;
@@ -307,13 +309,15 @@ namespace ReporterLib
            
             if(done)
             {
-                if(++MeasNum < MeasIds.Count)
+                Images = null;
+                if (++MeasNum < MeasIds.Count)
                 {
                     //We have more reports
                     done = false;
                     HeadPage = true;
                     m_yPos = 0;
                     Measurement = Measurements[MeasIds[MeasNum]];
+                   
                 }
             }
             else
@@ -432,7 +436,7 @@ namespace ReporterLib
             int headY = PrintArgs.MarginBounds.Top;
 
             string angDef = GetAngularDef(Project.SignDef);
-            gr.DrawString(angDef, HeadFont, new SolidBrush(Color.DarkGray), headX, headY);
+            gr.DrawString(angDef, HeadFont, new SolidBrush(Color.FromArgb(255, 75,75,75)), headX, headY);
             SizeF size = gr.MeasureString(angDef, HeadFont);
 
             headY = headY + (int)size.Height + MargY;
@@ -763,10 +767,10 @@ namespace ReporterLib
                     if (ch.IsRef)
                     {
                         string refStr = "Ref";
-                        table.Add(new TableItem(refStr, -1, wPerc));
-                        table.Add(new TableItem(refStr, -1, wPerc));
-                        table.Add(new TableItem(refStr, -1, wPerc));
-                        table.Add(new TableItem(refStr, -1, wPerc));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
                         table.Add(new TableItem("", -1, wPerc));
                         table.Add(new TableItem("", -1, wPerc));
                     }
@@ -890,92 +894,324 @@ namespace ReporterLib
         }
 
         private bool PrintTiltFlatnessPl()
-        {
+        {            
             Graphics gr = PrintArgs.Graphics;
-            DrawHeader();
-
+            if (HeadPage)
+            {
+                DrawHeader();
+            }
             DBInterface.TiltFlatnessPl m = new DBInterface.TiltFlatnessPl();
             DBI.GetTiltFlatnessPlMeas(ref Measurement, ref m);
 
-            List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
-            DBI.GetTiltFlatnessPlCh(m.ID, ref channels);
-            SetRefChannel(Measurement, channels);
+            Channels = new List<DBInterface.ChannelBase>();
+            DBI.GetTiltFlatnessPlCh(m.ID, ref Channels);
+            SetRefChannel(Measurement, Channels);
 
-            DBInterface.ChannelBase measCh = channels.First(c => !c.IsRef);
-            if (measCh == null)
+            bool resRef = Channels.Any(c => !c.IsRef);
+            bool resCh = Channels.Any(c => c.IsRef);
+
+            if (!resRef || !resCh)
                 return true;
-
-            List<DBInterface.ChannelErrBase> channelErr = new List<DBInterface.ChannelErrBase>();
-            DBI.GetTiltFlatnessFoChErr(measCh.ID, ref channelErr);
-
-            int yPerc = startYHeadPerc;
-            int xPerc = 60;
-            DrawText("Measurements:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-            xPerc = xPerc + 15;
-            DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
            
-           
+            if (HeadPage)
+            {
+                ChannelErrList = new List<DBInterface.ChannelErrBaseList>();
+                foreach (DBInterface.TiltFlatnessPlCh ch in Channels)
+                {
+                    if (!ch.IsRef)
+                    {
+                        DBInterface.ChannelErrBaseList errList = new DBInterface.ChannelErrBaseList();                       
+                        DBI.GetTiltFlatnessPlChErr(ch.ID, errList);
+                        ChannelErrList.Add(errList);
+                    }
+                }
 
-            Images = new List<DBInterface.ImageInfo>();
-            DBI.GetImages(Measurement.ID, ref Images);
+                int yPerc = startYHeadPerc;
+                int xPerc = 60;
+                DrawText("Measurements:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                xPerc = xPerc + 15;
+                DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+
+                int wPerc = 7;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 20, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Std dev\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Max dev\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Azim\n[deg]", -1, wPerc));
+
+                int smalMarg = 4;
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+                foreach (DBInterface.TiltFlatnessPlCh ch in Channels)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(ch.Station, 2, 20, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                    table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                    if (ch.IsRef)
+                    {
+                        string refStr = "Ref";
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                    }
+                    else
+                    {
+                        table.Add(new TableItem(ch.roll.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitch.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.tilt.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.elevation.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.stdDev.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.maxDev.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.azimuth.ToString("0.00"), -1, wPerc));
+
+
+                    }
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+
+                m_yPos += DrawComment(gr, Measurement, m_yPos);
+                m_yPos += MargY;
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+            }
 
             if (Images != null)
                 return DrawImages(gr, ref Images);
 
             return true;
         }
+
         private bool PrintTiltFlatnessFo()
         {
             Graphics gr = PrintArgs.Graphics;
-            DrawHeader();
+            if (Images != null && OnlyImagesLeft)
+                return DrawImages(gr, ref Images);
+
+            int smalMarg = 4;
+            int wPerc = 10;
+            List<TableItem> table = new List<TableItem>();
+
+            if (HeadPage)
+            {
+                DrawHeader();
+            }
 
             DBInterface.TiltFlatnessFo m = new DBInterface.TiltFlatnessFo();
             DBI.GetTiltFlatnessFoMeas(ref Measurement, ref m);
 
-            List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
-            DBI.GetTiltFlatnessFoCh(m.ID, ref channels);
-            SetRefChannel(Measurement, channels);
+            Channels = new List<DBInterface.ChannelBase>();
+            DBI.GetTiltFlatnessFoCh(m.ID, ref Channels);
+            SetRefChannel(Measurement, Channels);            
 
-            DBInterface.ChannelBase measCh = channels.First(c => !c.IsRef);
-            if (measCh == null)
+            bool resRef = Channels.Any(c => !c.IsRef);
+            bool resCh = Channels.Any(c => c.IsRef);
+
+            if (!resRef || !resCh)
                 return true;
 
-            List<DBInterface.ChannelErrBase> channelErr = new List<DBInterface.ChannelErrBase>();
-            DBI.GetTiltFlatnessFoChErr(measCh.ID, ref channelErr);
+            DBInterface.ChannelBase foCh1 = Channels.First(c => !c.IsRef);
+            if (foCh1 == null)
+                return true;
 
-            int yPerc = startYHeadPerc;
-            int xPerc = 60;
-            DrawText("Measurements:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-            xPerc = xPerc + 15;
-            DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-            if (channelErr.Count > 0)
-            {
-                DBInterface.TiltFlatnessFoChErr chErr = channelErr[0] as DBInterface.TiltFlatnessFoChErr;
-                if (chErr.indexArmL1 > 0)
-                {
-                    yPerc += yHeadSpace;
-                    xPerc = 60;
-                    DrawText("Ix Arm Lengt 1:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-                    xPerc = xPerc + 15;
-                    DrawText(chErr.indexArmL1.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+            DBInterface.ChannelBase foCh2 = Channels.First(c => c.IsRef);
+            if (foCh2 == null)
+                return true;
 
-                }
-                if (chErr.indexArmL2 > 0)
+            DBInterface.TiltFlatnessFoCh measCh = foCh1 as DBInterface.TiltFlatnessFoCh;
+            DBInterface.TiltFlatnessFoCh refCh = foCh2 as DBInterface.TiltFlatnessFoCh;
+            
+            if(HeadPage)
+            { 
+                ChannelErrList = new List<DBInterface.ChannelErrBaseList>();
+
+                ChannelErrList.Add(new DBInterface.ChannelErrBaseList());
+                DBI.GetTiltFlatnessFoChErr(measCh.ID, ChannelErrList[0]);
+                
+                int yPerc = startYHeadPerc;
+                int xPerc = 60;
+                DrawText("Measurements:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                xPerc = xPerc + 15;
+                DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                if (ChannelErrList[0].Count > 0)
                 {
-                    yPerc += yHeadSpace;
-                    xPerc = 60;
-                    DrawText("Ix Arm Lengt 2:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-                    xPerc = xPerc + 15;
-                    DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-                    yPerc += yHeadSpace;
+                    DBInterface.TiltFlatnessFoChErr chErr = ChannelErrList[0][0] as DBInterface.TiltFlatnessFoChErr;
+                   
+                    if (chErr.indexArmL1 > 0)
+                    {
+                        yPerc += yHeadSpace;
+                        xPerc = 60;
+                        DrawText("Ix Arm Lengt 1:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                        xPerc = xPerc + 15;
+                        DrawText(chErr.indexArmL1.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+
+                    }
+                    if (chErr.indexArmL2 > 0)
+                    {
+                        yPerc += yHeadSpace;
+                        xPerc = 60;
+                        DrawText("Ix Arm Lengt 2:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                        xPerc = xPerc + 15;
+                        DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                        yPerc += yHeadSpace;
+                    }
                 }
+                else
+                    return true;
+
+
+                table.Add(new TableItem("Station", 25, 30, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Sensor\n" + Project.UnitText, -1, wPerc));
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
+                m_yPos += smalMarg;
+
+                //Reference row
+                table = new List<TableItem>();
+                table.Add(new TableItem("Reference (" + refCh.TypeText + ") " + refCh.Station, 25, 30, RefColor, StringAlignment.Near));
+                table.Add(new TableItem(refCh.Channel, -1, wPerc, RefColor));
+                table.Add(new TableItem(refCh.SensorSN, -1, wPerc, RefColor));
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+
+                //Measured object row
+                table = new List<TableItem>();
+                table.Add(new TableItem("Measured (" + measCh.TypeText + ") " + measCh.Station, 25, 30, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem(measCh.Channel, -1, wPerc));
+                table.Add(new TableItem(measCh.SensorSN, -1, wPerc));
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
+                m_yPos += MargY;
+
+
+                table = new List<TableItem>();
+                table.Add(new TableItem("Measurment Result", 40, 20));
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += MargY;
+
+                wPerc = 10;
+                table = new List<TableItem>();
+
+                table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Std dev\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Max dev\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Azim\n[deg]", -1, wPerc));
+                table.Add(new TableItem("Elev1\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Elev2\n" + Project.UnitText, -1, wPerc));
+
+                smalMarg = 4;
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += smalMarg;
+
+                table = new List<TableItem>();
+                table.Add(new TableItem(measCh.roll.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.pitch.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.tilt.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.angle.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.elevation.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.stdDev.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.maxDev.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.azimuth.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.elevation.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.elevation2.ToString("0.00"), -1, wPerc));
+
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += MargY * 2;
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+
             }
 
+            if (ChannelErrList[0].Any(e => !e.done))
+            {
+                table = new List<TableItem>();
+                table.Add(new TableItem("Azim\n[deg]", 20, wPerc));
+                table.Add(new TableItem("Err1\n[mm]", -1, wPerc));
+                table.Add(new TableItem("Err2\n[mm]", -1, wPerc));
+                table.Add(new TableItem("h1\n[mm]", -1, wPerc));
+                table.Add(new TableItem("h2\n[mm]", -1, wPerc));
+                table.Add(new TableItem("dh\n[mm]", -1, wPerc));
+
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += smalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
+                m_yPos += smalMarg;
 
 
-            Images = new List<DBInterface.ImageInfo>();
-            DBI.GetImages(Measurement.ID, ref Images);
+                foreach (DBInterface.TiltFlatnessFoChErr err in ChannelErrList[0])
+                {
+                    if (err.done)
+                        continue;
 
+                    if (m_yPos + 10 > PrintArgs.MarginBounds.Bottom)
+                    {
+                        //Don't fit, new page.
+                        return false;
+                    }
+
+                    bool MultiArms = MultiArms = err.indexArmL2 > 0;
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(err.aziuth.ToString("0.00"), 20, wPerc));
+                    table.Add(new TableItem(err.error.ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(MultiArms ? err.error2.ToString("0.00") : "-", -1, wPerc));
+                    table.Add(new TableItem((err.error - measCh.bottomErr).ToString("0.00"), -1, wPerc));
+                    table.Add(new TableItem(MultiArms ? (err.error2 - measCh.bottomErr).ToString("0.00") : "-", -1, wPerc));
+                    table.Add(new TableItem(MultiArms ? err.dh.ToString("0.00") : "-", -1, wPerc));
+                    err.done = true;
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += smalMarg;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
+            }
+
+            if (m_yPos + 50 > PrintArgs.MarginBounds.Bottom)
+            {
+                //Don't fit, new page.
+                return false;
+            }
+
+            m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+
+            m_yPos += DrawComment(gr, Measurement, m_yPos);
+            m_yPos += MargY;
+
+            OnlyImagesLeft = true;
             if (Images != null)
                 return DrawImages(gr, ref Images);
 

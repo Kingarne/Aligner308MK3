@@ -90,10 +90,17 @@ namespace ReporterLib
 
         public class ChannelErrBase
         {
+            public ChannelErrBase() { done = false; }
+            public bool done; // for printing
             public int ID { get; set; }
             public int ForeignID { get; set; }
             public float aziuth { get; set; }
             public float error { get; set; }
+        }
+
+        public class ChannelErrBaseList: List<ChannelErrBase>
+        {
+
         }
 
         public class TiltAlignment : AlignmentBase
@@ -732,7 +739,7 @@ namespace ReporterLib
             return true;
         }
 
-        public bool GetTiltFlatnessPlChErr(int foreignId, ref List<DBInterface.ChannelErrBase> channelErr)
+        public bool GetTiltFlatnessPlChErr(int foreignId, DBInterface.ChannelErrBaseList channelErr)
         {
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;
@@ -829,7 +836,7 @@ namespace ReporterLib
             return true;
         }
 
-        public bool GetTiltFlatnessFoChErr(int foreignId, ref List<DBInterface.ChannelErrBase> channelErr)
+        public bool GetTiltFlatnessFoChErr(int foreignId, DBInterface.ChannelErrBaseList channelErr)
         {
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;

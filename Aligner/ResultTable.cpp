@@ -80,10 +80,10 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
             m_TiltAlignmentChannel[0].m_adapterSerialNumber = DB_EMPTY_STRING;//empty
         }
 
-	    m_TiltAlignmentChannel[0].m_roll = DB_EMPTY_DOUBLE;//ref		
-        m_TiltAlignmentChannel[0].m_pitch = DB_EMPTY_DOUBLE;//ref
-	    m_TiltAlignmentChannel[0].m_tilt = DB_EMPTY_DOUBLE;//ref
-	    m_TiltAlignmentChannel[0].m_angle = DB_EMPTY_DOUBLE;//ref
+		m_TiltAlignmentChannel[0].m_roll = 0.0f;
+        m_TiltAlignmentChannel[0].m_pitch = 0.0f;
+	    m_TiltAlignmentChannel[0].m_tilt = 0.0f;
+	    m_TiltAlignmentChannel[0].m_angle = 0.0f;
 		m_TiltAlignmentChannel[0].m_type = GetUnitType(g_AlignerData.RefObjNo);
 
 	    if( IsFixed( g_AlignerData.RefObjNo ) == FALSE )
@@ -93,8 +93,8 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
         }
         else
         {
-            m_TiltAlignmentChannel[0].m_elevation = DB_EMPTY_DOUBLE;//empty
-            m_TiltAlignmentChannel[0].m_bias = DB_EMPTY_DOUBLE;//empty
+            m_TiltAlignmentChannel[0].m_elevation = 0.0f;
+            m_TiltAlignmentChannel[0].m_bias = 0.0f;
         }
 
 	    for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
@@ -125,8 +125,8 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
             }
             else
             {
-                m_TiltAlignmentChannel[i].m_elevation = DB_EMPTY_DOUBLE;//empty
-                m_TiltAlignmentChannel[i].m_bias = DB_EMPTY_DOUBLE;//empty
+                m_TiltAlignmentChannel[i].m_elevation = 0.0f;
+                m_TiltAlignmentChannel[i].m_bias = 0.0f;
             }
         }//for( i=1; i<=g_AlignerData.NoOfCorr; i++ )
 
@@ -632,17 +632,17 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 				}
             }
 			//Get calibration status
-			calibInfo.SetCalibrationTime(m_TiltAlignment.m_time);
+			calibInfo.SetCalibrationTime(m_TiltAndFlatnessFo.m_time);
 			for (int i = 0; i <= g_AlignerData.NoOfCorr; i++)
 			{
 				if (m_TiltAndFlatnessFoChannel[i].m_sensorSerialNumber == "" && m_TiltAndFlatnessFoChannel[i].m_adapterSerialNumber == "")
 					continue;
 
-				calibInfo.AddChannel(m_TiltAlignmentChannel[i].m_channel);
-				calibInfo.AddSensor(m_TiltAlignmentChannel[i].m_sensorSerialNumber);
-				calibInfo.AddAdapter(m_TiltAlignmentChannel[i].m_adapterSerialNumber);
+				calibInfo.AddChannel(m_TiltAndFlatnessFoChannel[i].m_channel);
+				calibInfo.AddSensor(m_TiltAndFlatnessFoChannel[i].m_sensorSerialNumber);
+				calibInfo.AddAdapter(m_TiltAndFlatnessFoChannel[i].m_adapterSerialNumber);
 			}
-			m_TiltAlignment.calibInfo = calibInfo.GetInfo();
+			m_TiltAndFlatnessFo.calibInfo = calibInfo.GetInfo();
 		}
 		break;
 	/***************************************************************************/

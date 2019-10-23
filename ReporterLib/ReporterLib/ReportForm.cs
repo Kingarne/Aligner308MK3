@@ -309,7 +309,9 @@ namespace ReporterLib
            
             if(done)
             {
+                OnlyImagesLeft = false;                
                 Images = null;
+
                 if (++MeasNum < MeasIds.Count)
                 {
                     //We have more reports
@@ -896,6 +898,9 @@ namespace ReporterLib
         private bool PrintTiltFlatnessPl()
         {            
             Graphics gr = PrintArgs.Graphics;
+            if (Images != null && OnlyImagesLeft)
+                return DrawImages(gr, ref Images);
+
             if (HeadPage)
             {
                 DrawHeader();
@@ -912,7 +917,7 @@ namespace ReporterLib
 
             if (!resRef || !resCh)
                 return true;
-           
+
             if (HeadPage)
             {
                 ChannelErrList = new List<DBInterface.ChannelErrBaseList>();
@@ -920,7 +925,7 @@ namespace ReporterLib
                 {
                     if (!ch.IsRef)
                     {
-                        DBInterface.ChannelErrBaseList errList = new DBInterface.ChannelErrBaseList();                       
+                        DBInterface.ChannelErrBaseList errList = new DBInterface.ChannelErrBaseList();
                         DBI.GetTiltFlatnessPlChErr(ch.ID, errList);
                         ChannelErrList.Add(errList);
                     }
@@ -988,15 +993,16 @@ namespace ReporterLib
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
 
-                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
-
-                m_yPos += DrawComment(gr, Measurement, m_yPos);
-                m_yPos += MargY;
-
                 Images = new List<DBInterface.ImageInfo>();
                 DBI.GetImages(Measurement.ID, ref Images);
-            }
 
+            }
+            m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+
+            m_yPos += DrawComment(gr, Measurement, m_yPos);
+            m_yPos += MargY;
+
+            OnlyImagesLeft = true;
             if (Images != null)
                 return DrawImages(gr, ref Images);
 

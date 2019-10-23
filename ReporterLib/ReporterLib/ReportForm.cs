@@ -43,6 +43,8 @@ namespace ReporterLib
         int MargY = 20;
         Rectangle HeadRect;
         private Font HeadFont = new Font("Ariel", 8, FontStyle.Regular);
+        private Font TextFont = new Font("Ariel", 8, FontStyle.Regular);
+        private Font H1TextFont = new Font("Ariel", 10, FontStyle.Bold);
         private SolidBrush MainBr = new SolidBrush(Color.Black);
         private int LineWidth = 1;
         private Color RefColor = Color.DarkOrange;
@@ -478,7 +480,7 @@ namespace ReporterLib
             m_yPos = HeadRect.Bottom + MargY;
         }
 
-        private int DrawTableLine(Graphics gr, List<TableItem> table, Point pos, int width)
+        private int DrawTableLine(Graphics gr, List<TableItem> table, Point pos, int width, Font font)
         {            
             int x = 0;
             int xLoc=pos.X;
@@ -498,9 +500,9 @@ namespace ReporterLib
                 int w = (int)((float)width * (ti.WidthPerc / 100.0f));
 
                 RectangleF textRect = new RectangleF(x, pos.Y, w, 100);
-                SizeF size = gr.MeasureString(ti.Text, Font, w, sf);
+                SizeF size = gr.MeasureString(ti.Text, font, w, sf);
                 
-                gr.DrawString(ti.Text, Font, new SolidBrush(ti.Color), textRect, sf);
+                gr.DrawString(ti.Text, font, new SolidBrush(ti.Color), textRect, sf);
 
               //  Rectangle drawRect = new Rectangle(x, pos.Y, w, 100);
               //  gr.DrawRectangle(new Pen(Color.Black), drawRect);                
@@ -753,7 +755,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Bias*\n" + Project.UnitText, -1, wPerc));
 
                 int smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -786,7 +788,7 @@ namespace ReporterLib
                         table.Add(new TableItem(ch.bias.ToString("0.00"), -1, wPerc));
                     }
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 
@@ -844,7 +846,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Az Err\n" + Project.UnitText, -1, wPerc));                
 
                 int smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -875,7 +877,7 @@ namespace ReporterLib
                         
                     }
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 
@@ -900,6 +902,10 @@ namespace ReporterLib
             Graphics gr = PrintArgs.Graphics;
             if (Images != null && OnlyImagesLeft)
                 return DrawImages(gr, ref Images);
+
+            int wPerc = 7;
+            int smalMarg = 4;
+            List<TableItem> table;
 
             if (HeadPage)
             {
@@ -930,6 +936,7 @@ namespace ReporterLib
                         ChannelErrList.Add(errList);
                     }
                 }
+               
 
                 int yPerc = startYHeadPerc;
                 int xPerc = 60;
@@ -937,8 +944,8 @@ namespace ReporterLib
                 xPerc = xPerc + 15;
                 DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
 
-                int wPerc = 7;
-                List<TableItem> table = new List<TableItem>();
+               
+                table = new List<TableItem>();
                 table.Add(new TableItem("Station", 2, 20, Color.Black, StringAlignment.Near));
                 table.Add(new TableItem("Ch", -1, 5));
                 table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
@@ -949,11 +956,10 @@ namespace ReporterLib
                 table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Std dev\n" + Project.UnitText, -1, wPerc));
-                table.Add(new TableItem("Max dev\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Max dev\n" + Project.UnitText, -1, wPerc+1));
                 table.Add(new TableItem("Azim\n[deg]", -1, wPerc));
-
-                int smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+               
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -987,16 +993,68 @@ namespace ReporterLib
 
                     }
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += MargY;
+
+                table = new List<TableItem>();
+                table.Add(new TableItem("Flatness Errors", 2, 20));
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, H1TextFont);
+                m_yPos += MargY;
 
                 Images = new List<DBInterface.ImageInfo>();
                 DBI.GetImages(Measurement.ID, ref Images);
 
             }
+
+            if (ChannelErrList.Count == 0)
+                return true;
+
+            //Print error table
+            wPerc = 10;
+            table = new List<TableItem>();
+            table.Add(new TableItem("Azimuth", 2, wPerc, Color.Black, StringAlignment.Near));
+            Channels.ForEach(c => { if(!c.IsRef)table.Add(new TableItem(c.Station, -1, wPerc)); });
+            m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+            m_yPos += smalMarg;
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+            m_yPos += smalMarg;
+
+            DBInterface.ChannelErrBaseList baseList = ChannelErrList[0];
+            int i = 0;
+            foreach (DBInterface.ChannelErrBase err in baseList)
+            {
+                if (err.done)
+                    continue;
+
+                if (m_yPos + 10 > PrintArgs.MarginBounds.Bottom)
+                {
+                    //Don't fit, new page.
+                    return false;
+                }
+                table = new List<TableItem>();
+                table.Add(new TableItem(err.azimuth.ToString("0.00"), 2, wPerc));
+
+                foreach (DBInterface.ChannelErrBaseList errL in ChannelErrList)
+                {
+                    table.Add(new TableItem(errL[i].error.ToString("0.00"), -1, wPerc)); 
+                }
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+                m_yPos += smalMarg;
+                err.done = true;
+            }
+
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+            if (m_yPos + 50 > PrintArgs.MarginBounds.Bottom)
+            {
+                //Don't fit, new page.
+                return false;
+            }
+
             m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
 
             m_yPos += DrawComment(gr, Measurement, m_yPos);
@@ -1090,7 +1148,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Station", 25, 30, Color.Black, StringAlignment.Near));
                 table.Add(new TableItem("Ch\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Sensor\n" + Project.UnitText, -1, wPerc));
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
                 m_yPos += smalMarg;
@@ -1100,7 +1158,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Reference (" + refCh.TypeText + ") " + refCh.Station, 25, 30, RefColor, StringAlignment.Near));
                 table.Add(new TableItem(refCh.Channel, -1, wPerc, RefColor));
                 table.Add(new TableItem(refCh.SensorSN, -1, wPerc, RefColor));
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
 
                 //Measured object row
@@ -1108,7 +1166,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Measured (" + measCh.TypeText + ") " + measCh.Station, 25, 30, Color.Black, StringAlignment.Near));
                 table.Add(new TableItem(measCh.Channel, -1, wPerc));
                 table.Add(new TableItem(measCh.SensorSN, -1, wPerc));
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
@@ -1117,7 +1175,7 @@ namespace ReporterLib
 
                 table = new List<TableItem>();
                 table.Add(new TableItem("Measurment Result", 40, 20));
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, H1TextFont);
                 m_yPos += MargY;
 
                 wPerc = 10;
@@ -1135,7 +1193,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Elev2\n" + Project.UnitText, -1, wPerc));
 
                 smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -1152,7 +1210,7 @@ namespace ReporterLib
                 table.Add(new TableItem(measCh.elevation.ToString("0.00"), -1, wPerc));
                 table.Add(new TableItem(measCh.elevation2.ToString("0.00"), -1, wPerc));
 
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += MargY * 2;
@@ -1162,6 +1220,7 @@ namespace ReporterLib
 
             }
 
+            //Print error table
             if (ChannelErrList[0].Any(e => !e.done))
             {
                 table = new List<TableItem>();
@@ -1172,7 +1231,7 @@ namespace ReporterLib
                 table.Add(new TableItem("h2\n[mm]", -1, wPerc));
                 table.Add(new TableItem("dh\n[mm]", -1, wPerc));
 
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
                 m_yPos += smalMarg;
@@ -1191,7 +1250,7 @@ namespace ReporterLib
 
                     bool MultiArms = MultiArms = err.indexArmL2 > 0;
                     table = new List<TableItem>();
-                    table.Add(new TableItem(err.aziuth.ToString("0.00"), 20, wPerc));
+                    table.Add(new TableItem(err.azimuth.ToString("0.00"), 20, wPerc));
                     table.Add(new TableItem(err.error.ToString("0.00"), -1, wPerc));
                     table.Add(new TableItem(MultiArms ? err.error2.ToString("0.00") : "-", -1, wPerc));
                     table.Add(new TableItem((err.error - measCh.bottomErr).ToString("0.00"), -1, wPerc));
@@ -1199,7 +1258,7 @@ namespace ReporterLib
                     table.Add(new TableItem(MultiArms ? err.dh.ToString("0.00") : "-", -1, wPerc));
                     err.done = true;
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 
@@ -1253,7 +1312,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
 
                 int smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -1282,7 +1341,7 @@ namespace ReporterLib
                         table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));
                     }
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 
@@ -1330,7 +1389,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Temperature\n[°C]", -1, wPerc+5));
 
                 int smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -1359,7 +1418,7 @@ namespace ReporterLib
                     table.Add(new TableItem(ch.PerpendicularBias.ToString("0.00"), -1, wPerc+5));
                     table.Add(new TableItem(ch.Temperature.ToString("0.00"), -1, wPerc + 5));                    
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 
@@ -1419,7 +1478,7 @@ namespace ReporterLib
                
 
                 int smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -1440,7 +1499,7 @@ namespace ReporterLib
                     table.Add(new TableItem(ch.elevation.ToString("0.00"), -1, wPerc));                    
                     
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 
@@ -1499,7 +1558,7 @@ namespace ReporterLib
 
 
                 int smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -1531,7 +1590,7 @@ namespace ReporterLib
                         table.Add(new TableItem(ch.elevation.ToString("0.00"), -1, wPerc));                    
                     }
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 
@@ -1587,7 +1646,7 @@ namespace ReporterLib
                
 
                 int smalMarg = 4;
-                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += smalMarg;
@@ -1606,7 +1665,7 @@ namespace ReporterLib
                     table.Add(new TableItem(ch.angle.ToString("0.00"), -1, wPerc));                   
                     table.Add(new TableItem(ch.temperature.ToString("0.00"), -1, wPerc+3));                   
 
-                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width);
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += smalMarg;
                 }
 

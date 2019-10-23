@@ -94,7 +94,7 @@ namespace ReporterLib
             public bool done; // for printing
             public int ID { get; set; }
             public int ForeignID { get; set; }
-            public float aziuth { get; set; }
+            public float azimuth { get; set; }
             public float error { get; set; }
         }
 
@@ -754,7 +754,7 @@ namespace ReporterLib
 
                         tfeCh.ID = (int)dr["ID"];
                         tfeCh.ForeignID = (int)dr["foreignID"];
-                        tfeCh.aziuth = (float)(double)dr["azimuth"];
+                        tfeCh.azimuth = (float)(double)dr["azimuth"];
                         tfeCh.error = (float)(double)dr["error"];                        
 
                         channelErr.Add(tfeCh);
@@ -851,7 +851,7 @@ namespace ReporterLib
 
                         tfeCh.ID = (int)dr["ID"];
                         tfeCh.ForeignID = (int)dr["foreignID"];
-                        tfeCh.aziuth = (float)(double)dr["azimuth"]; 
+                        tfeCh.azimuth = (float)(double)dr["azimuth"]; 
                         tfeCh.indexArmL1 = (float)(double)dr["IndexArmLength1"];
                         tfeCh.indexArmL2 = (float)(double)dr["IndexArmLength2"];
                         tfeCh.error = (float)(double)dr["error1"];

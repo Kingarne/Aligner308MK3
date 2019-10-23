@@ -983,7 +983,7 @@ void CAlignerDoc::OnUpdateUtilitiesViewreport( CCmdUI *pCmdUI )
   }  
   else
   {
-    pCmdUI -> Enable(/*m_projectMeasurments.size() > 0  &&*/ SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode()) ;
+    pCmdUI -> Enable(SysSetup->IsOpen() && SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode()) ;
   }
 }
 
@@ -1119,14 +1119,18 @@ void CAlignerDoc::OnUpdateCalibrationTheoadapter(CCmdUI *pCmdUI)
 
 void CAlignerDoc::OnUtilitiesViewcalibrationdata( void )
 {
-    CResultTable rs;
-    rs.OpenCalibrationReport();
+	ReportManager rm;
+	rm.OpenCalibrationData(SysSetup->GetProjectID());
+
+
+    //CResultTable rs;
+    //rs.OpenCalibrationReport();
     //CalibrationReportReport::Create() ;
 }
 
 void CAlignerDoc::OnUpdateUtilitiesViewcalibrationdata( CCmdUI *pCmdUI )
 {
-  pCmdUI -> Enable( TRUE ) ;
+  pCmdUI -> Enable(SysSetup->IsOpen()) ;
 }
 
 void CAlignerDoc::OnCalibrationDailyazimutherrortest()

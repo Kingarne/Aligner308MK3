@@ -182,9 +182,9 @@ namespace ReporterLib
 
         public class CommonFlatCh : ChannelBase
         {
-            public double ParallellBias;
-            public double PerpendicularBias;
-            public double Temperature;
+            public double ParallellBias { get; set; }
+            public double PerpendicularBias { get; set; }
+            public double Temperature { get; set; }
         }
 
         public class AbsoulteModeVerif : AlignmentBase
@@ -223,6 +223,18 @@ namespace ReporterLib
             public double temperature { get; set; }
         }
 
+        //Sensor Calilbration
+        public class SensorCalibration
+        {
+            int sn { get; set; }
+            double pitchAz { get; set; }
+            double pitchGain { get; set; }
+            double pitchOffs { get; set; }
+            double rollAz { get; set; }
+            double rollGain { get; set; }
+            double rollOffs { get; set; }
+        }
+               
         private OdbcConnection Connection;
         public bool Open()
         {

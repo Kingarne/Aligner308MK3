@@ -483,6 +483,7 @@
     <ClCompile Include="TheoAdapterCalibrationPageStart.cpp" />
     <ClCompile Include="tinystr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="tinyxml.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>

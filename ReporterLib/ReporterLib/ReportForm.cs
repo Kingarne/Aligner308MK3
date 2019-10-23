@@ -13,18 +13,25 @@ namespace ReporterLib
 {
     public partial class ReportForm : Form
     {
-       
+
         private DBInterface DBI;
         private PrinterSettings m_printerSettings;
         private PrintDocument m_document;
-        
-        public int ProjectId { get; set; }
-        //public int MeasId { get; set; }
+
+        public enum ReportType
+        {
+            RT_Measurement = 0,
+            RT_Calibration = 1,
+        }
+
+        public ReportType PrintType{get;set;}
+        public int ProjectId { get; set; }        
         List<int> MeasIds = new List<int>();
         private int MeasNum { get; set; }
         private bool HeadPage { get; set; }
 
         private bool MultiMode { get; set; }
+
         private DBInterface.Project Project;
 
         private DBInterface.Measurement Measurement;
@@ -109,7 +116,7 @@ namespace ReporterLib
             Project = new DBInterface.Project();
             DBI.GetProject(ProjectId, ref Project);
 
-            MultiMode = (MeasIds.Count() == 0);
+            MultiMode = (MeasIds.Count() == 0) && (PrintType == ReportType.RT_Measurement);
             reportList.Visible = MultiMode;
             allButton.Visible = MultiMode;
             noneButton.Visible = MultiMode;
@@ -127,20 +134,26 @@ namespace ReporterLib
 
                 UpdateReportList();    
             }
-            else
+            else // Single report
             {
-                Text = ProjectId.ToString() + ": Show " + MeasIds[0].ToString();
-                Measurement = new DBInterface.Measurement();
-                DBI.GetMeasurement(MeasIds[0], ref Measurement);
-                Measurements[MeasIds[0]] = Measurement;
-
-
                 printPreviewControl.Location = new Point(10, 12 + commentButton.Size.Height + 2);
-                printPreviewControl.Size = new Size(Size.Width-40, Size.Height - 90);
+                printPreviewControl.Size = new Size(Size.Width - 40, Size.Height - 90);
 
-                //commentButton.Location = new Point(12, 12);
-               // printButton.Location = new Point(12 + commentButton.Size.Width + 2, 12);
-                PrintPreview();
+                if (PrintType == ReportType.RT_Measurement)
+                {
+                    Text = ProjectId.ToString() + ": Show " + MeasIds[0].ToString();
+                    Measurement = new DBInterface.Measurement();
+                    DBI.GetMeasurement(MeasIds[0], ref Measurement);
+                    Measurements[MeasIds[0]] = Measurement;
+
+                    PrintPreview();
+                }
+                else if(PrintType == ReportType.RT_Calibration)
+                {
+                    commentButton.Visible = false;
+                    PrintCalibrationPreview();
+
+                }
             }
 
             printPreviewControl.MouseWheel += new MouseEventHandler(printPreview_MouseWheel);
@@ -211,6 +224,20 @@ namespace ReporterLib
             return true;
         }
 
+        private void PrintCalibrationPreview()
+        {          
+            m_document = new PrintDocument();
+            m_document.PrinterSettings = m_printerSettings;
+
+            m_document.QueryPageSettings += new System.Drawing.Printing.QueryPageSettingsEventHandler(QuerySettingsCalib);
+            m_document.BeginPrint += new System.Drawing.Printing.PrintEventHandler(BeginPrintCalib);
+            m_document.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(PrintPageCalib);
+            m_document.EndPrint += new System.Drawing.Printing.PrintEventHandler(EndPrintCalib);
+
+            printPreviewControl.Document = m_document;
+            printPreviewControl.StartPage = 0;
+        }
+
         private void PrintPreview()
         {
             if (!FillMeasIds())
@@ -255,9 +282,52 @@ namespace ReporterLib
                 //printPreviewControl.Update();
 
 
+        }
+
+        private void QuerySettingsCalib(object sender, System.Drawing.Printing.QueryPageSettingsEventArgs e)
+        {
+            e.PageSettings.Margins = new System.Drawing.Printing.Margins(70, 70, 70, 70);
+        }
+
+        private void EndPrintCalib(object sender, System.Drawing.Printing.PrintEventArgs e)
+        {
+            pageUpDown.Minimum = 1;
+            pageUpDown.Maximum = m_page;
+            UpdateColumns();
+        }
+
+        private void BeginPrintCalib(object sender, System.Drawing.Printing.PrintEventArgs e)
+        {
+            m_page = 0;
+            m_yPos = 0;
+            MeasNum = 0;
+            HeadPage = true;
+        }
+
+        private void PrintPageCalib(object sender, PrintPageEventArgs e)
+        {         
+            PrintArgs = e;
+            Rectangle bound = e.PageBounds;
+            bound.Inflate(-2, -2);
+            DrawPageNum(e);
+
+            bool done = PrintCalibrationData();
+
+            if (done)
+            {
+            
+            }
+            else
+            {
+                HeadPage = false;
             }
 
-            private void QuerySettings(object sender, System.Drawing.Printing.QueryPageSettingsEventArgs e)
+            m_page++;
+            m_yPos = PrintArgs.MarginBounds.Top;
+            e.HasMorePages = !done;
+        }
+
+        private void QuerySettings(object sender, System.Drawing.Printing.QueryPageSettingsEventArgs e)
         {
              e.PageSettings.Margins = new System.Drawing.Printing.Margins(70, 70, 70, 70);
         }
@@ -276,16 +346,10 @@ namespace ReporterLib
             m_yPos = 0;
             MeasNum = 0;
             HeadPage = true;
-            Measurement = null;
-
-           
+            Measurement = null;           
             
             if (MeasIds.Count > 0)
                 Measurement = Measurements[MeasIds[MeasNum]];
-
-            //   new DBInterface.Measurement();
-            //         DBI.GetMeasurement(MeasId, ref Measurement);
-
         }
 
         private void PrintPage(object sender, PrintPageEventArgs e)
@@ -1014,40 +1078,44 @@ namespace ReporterLib
                 return true;
 
             //Print error table
-            wPerc = 10;
-            table = new List<TableItem>();
-            table.Add(new TableItem("Azimuth", 2, wPerc, Color.Black, StringAlignment.Near));
-            Channels.ForEach(c => { if(!c.IsRef)table.Add(new TableItem(c.Station, -1, wPerc)); });
-            m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-            m_yPos += smalMarg;
-            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-            m_yPos += smalMarg;
-
             DBInterface.ChannelErrBaseList baseList = ChannelErrList[0];
-            int i = 0;
-            foreach (DBInterface.ChannelErrBase err in baseList)
+            if (baseList.Any(e => !e.done))
             {
-                if (err.done)
-                    continue;
-
-                if (m_yPos + 10 > PrintArgs.MarginBounds.Bottom)
-                {
-                    //Don't fit, new page.
-                    return false;
-                }
+                wPerc = 10;
                 table = new List<TableItem>();
-                table.Add(new TableItem(err.azimuth.ToString("0.00"), 2, wPerc));
-
-                foreach (DBInterface.ChannelErrBaseList errL in ChannelErrList)
-                {
-                    table.Add(new TableItem(errL[i].error.ToString("0.00"), -1, wPerc)); 
-                }
+                table.Add(new TableItem("Azimuth", 2, wPerc, Color.Black, StringAlignment.Near));
+                Channels.ForEach(c => { if (!c.IsRef) table.Add(new TableItem(c.Station, -1, wPerc)); });
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
-                err.done = true;
-            }
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Left + HeadRect.Width*0.11f*(ChannelErrList.Count+1), m_yPos);
+                m_yPos += smalMarg;
 
-            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+
+                int i = 0;
+                foreach (DBInterface.ChannelErrBase err in baseList)
+                {
+                    if (err.done)
+                        continue;
+
+                    if (m_yPos + 10 > PrintArgs.MarginBounds.Bottom)
+                    {
+                        //Don't fit, new page.
+                        return false;
+                    }
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(err.azimuth.ToString("0.00"), 2, wPerc, Color.Black, StringAlignment.Near));
+
+                    foreach (DBInterface.ChannelErrBaseList errL in ChannelErrList)
+                    {
+                        table.Add(new TableItem(errL[i].error.ToString("0.00"), -1, wPerc));
+                    }
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+                    m_yPos += smalMarg;
+                    err.done = true;
+                }
+
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Left + HeadRect.Width * 0.11f * (ChannelErrList.Count + 1), m_yPos);
+            }
 
             if (m_yPos + 50 > PrintArgs.MarginBounds.Bottom)
             {
@@ -1174,7 +1242,7 @@ namespace ReporterLib
 
 
                 table = new List<TableItem>();
-                table.Add(new TableItem("Measurment Result", 40, 20));
+                table.Add(new TableItem("Measurement Result", 40, 20));
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, H1TextFont);
                 m_yPos += MargY;
 
@@ -1681,6 +1749,12 @@ namespace ReporterLib
 
             if (Images != null)
                 return DrawImages(gr, ref Images);
+
+            return true;
+        }
+
+        private bool PrintCalibrationData()
+        {
 
             return true;
         }

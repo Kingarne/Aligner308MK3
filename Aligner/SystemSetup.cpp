@@ -85,6 +85,10 @@ BOOL SystemSetup::DoModal( void )
 	return FALSE ;
 }
 
+bool SystemSetup::IsOpen()
+{
+	return (m_proj.m_projectID > 0);
+}
 
 void SystemSetup::LoadLatitudeFromRegistry( void )
 {

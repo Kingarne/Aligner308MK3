@@ -10,6 +10,7 @@ namespace ReporterLib
     public interface ReporterI
     {
         int OpenReport(int projectId, int measId);
+        int OpenCalibrationData(int projectId);
     }
 
     public class Reporter : ReporterI
@@ -26,6 +27,8 @@ namespace ReporterLib
             }
 
 
+
+            reportForm.PrintType = ReportForm.ReportType.RT_Measurement;
             reportForm.ProjectId = projectId;
             reportForm.SetMeasId(measId);
             reportForm.ShowDialog();
@@ -34,7 +37,25 @@ namespace ReporterLib
             return 0;
         }
 
-        
+        public int OpenCalibrationData(int projectId)
+        {
+            Console.WriteLine("View Calibration Data");
+
+            if (reportForm == null)
+            {
+                reportForm = new ReportForm();
+            }
+
+            reportForm.PrintType = ReportForm.ReportType.RT_Calibration;
+            reportForm.ProjectId = projectId;
+            reportForm.SetMeasId(-1);
+            reportForm.ShowDialog();
+
+
+            return 0;
+        }
+
+
 
 
     }

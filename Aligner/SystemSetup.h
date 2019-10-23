@@ -65,7 +65,7 @@ class ProjectData
 {
 public:
 
-	ProjectData(void) : m_projectName(""), m_dauSerial(0), m_operatorName(""), m_shipName(""), m_latitude(0.0), m_mode(SYSTEM_SETUP_NO_MODE), m_location(""), m_unit(0)
+	ProjectData(void) : m_projectName(""), m_dauSerial(0), m_operatorName(""), m_shipName(""), m_latitude(0.0), m_mode(SYSTEM_SETUP_NO_MODE), m_location(""), m_unit(0), m_projectID(0)
 	{
 
 	};
@@ -107,6 +107,7 @@ public:
 	void SetProject(ProjectData proj) { m_proj = proj; }
 	ProjectData GetProject() { return m_proj; }
 
+	bool IsOpen();
 	BOOL DoModal( void ) ;
 	void LoadSignFromRegistry(void);
 	void LoadProjectFromRegistry();

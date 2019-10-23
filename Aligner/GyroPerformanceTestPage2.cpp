@@ -47,12 +47,11 @@ void CGyroPerformanceTestPage2::ShowGraphButtons()
 	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
 	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	CString graphFileName;
-	if (m_pParent -> m_pGraph -> SaveGraphToUniqueFileName( graphFileName ) == TRUE )
+	if (m_pParent -> m_pGraph -> SaveGraphToUniqueFileName( graphFileName, TRUE) == TRUE )
 	{
-	/*	CString text ;
+		CString text ;
 		text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD ) ;
-		m_pParent -> m_GraphFileManager.SaveFileName( graphFileName, IDYES == MessageBox( text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1 ) ) ;
-		*/
+		m_pParent -> m_GraphFileManager.SaveFileName( graphFileName, TRUE ) ;		
 	}
 }
 
@@ -228,11 +227,6 @@ void CGyroPerformanceTestPage2::OnReset()
 	m_pParent->ExitResultTable( m_pParent->m_deleteReport );
   m_pParent->m_Status = STATUS_PAGE_CANCELED;
   g_AlignerData.ErrorDef = ERR_CANCEL;
-    CAlignerDoc *pDoc = static_cast<CAlignerDoc *>(static_cast<CFrameWnd *>(theApp.m_pMainWnd) -> GetActiveDocument());
-    if( pDoc != NULL )
-    {
-        pDoc->SaveProject();
-    }
   return CPropertyPage::OnReset(); //Calls OnCancel()
 }
 

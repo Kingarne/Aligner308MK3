@@ -31,3 +31,13 @@ int ReportManager::OpenReport(int projectId, int measId)
 
 	return 0;
 }
+
+int ReportManager::OpenCalibrationData(int projectId)
+{	
+	ReporterIPtr reporter(__uuidof(Reporter));
+
+	long l;
+	reporter->OpenCalibrationData(projectId, &l);	
+
+	return 0;
+}

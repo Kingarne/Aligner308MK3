@@ -10,16 +10,16 @@
 #include "calibInfo.h"
 #include "ReportManager.h"
 
-#ifdef BUILD_ALIGNER_308
-#include "../AlignerReport/AlignerReport.h"
-#endif
+//#ifdef BUILD_ALIGNER_308
+//#include "../AlignerReport/AlignerReport.h"
+//#endif
 
 
 void CResultTable::SetReportFolder( string baseDir )
 {
-#ifdef BUILD_ALIGNER_308
-    SetReportDirectory( baseDir );
-#endif
+//#ifdef BUILD_ALIGNER_308
+//    SetReportDirectory( baseDir );
+//#endif
 
 }
 
@@ -1733,24 +1733,11 @@ BOOL CResultTable::ShowReport(BOOL CloseFirst)
 
 BOOL CResultTable::OpenCalibrationReport()
 {
-#ifdef BUILD_ALIGNER_308
-    CalibrationReportReport::Create() ;
-#endif
     return TRUE;
 }
 
 BOOL CResultTable::OpenMainReport()
 {
-#ifdef BUILD_ALIGNER_308
-    if (theApp.IsAligner202Enabled())
-    {
-        MainReportA202Report::Create() ;
-    }
-    else
-    {
-        MainReportReport::Create() ;
-    }
-#endif    
     return TRUE;
 }
 /*

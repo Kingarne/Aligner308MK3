@@ -487,12 +487,15 @@
     </ClCompile>
     <ClCompile Include="tinyxml.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="tinyxmlerror.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="tinyxmlparser.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TitleTip.cpp" />
     <ClCompile Include="XMLHandler.cpp" />

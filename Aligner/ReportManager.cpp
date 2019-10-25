@@ -2,7 +2,8 @@
 #include "ReportManager.h"
 
 
-#import "..\ReporterLib\ReporterLib\bin\Debug\ReporterLib.tlb" raw_interfaces_only
+//#import "..\ReporterLib\ReporterLib\bin\Debug\ReporterLib.tlb" raw_interfaces_only
+#import "..\ReporterLib\ReporterLib\bin\Release\ReporterLib.tlb" raw_interfaces_only
 using namespace ReporterLib;
 
 ReportManager::ReportManager()

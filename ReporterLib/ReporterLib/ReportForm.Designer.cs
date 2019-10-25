@@ -97,7 +97,7 @@
             this.commentButton.Name = "commentButton";
             this.commentButton.Size = new System.Drawing.Size(75, 23);
             this.commentButton.TabIndex = 5;
-            this.commentButton.Text = "Comment...";
+            this.commentButton.Text = "Manage...";
             this.commentButton.UseVisualStyleBackColor = true;
             this.commentButton.Click += new System.EventHandler(this.commentButton_Click);
             // 

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Odbc;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace ReporterLib
 {
-    class DBInterface
+    public class DBInterface
     {
         public class Project
         {
@@ -98,6 +99,7 @@ namespace ReporterLib
             public float error { get; set; }
         }
 
+        [ClassInterface(ClassInterfaceType.None)]
         public class ChannelErrBaseList: List<ChannelErrBase>
         {
 
@@ -1036,6 +1038,24 @@ namespace ReporterLib
             return true;
         }
 
+        public bool UpdateImage(ImageInfo img)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            string sql = String.Format("UPDATE Graph SET include={0} WHERE ID={1}", img.Include, img.ID);
+
+            using (OdbcCommand command = new OdbcCommand(sql, Connection))
+            {
+                command.ExecuteNonQuery();
+
+
+            }
+
+            return true;
+        }
+
+         
         public bool GetLiveGraphMeas(ref DBInterface.Measurement meas, ref LiveGraph lgm)
         {
 

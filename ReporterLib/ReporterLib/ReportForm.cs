@@ -465,7 +465,7 @@ namespace ReporterLib
 
             DBInterface.Measurement meas = Measurements[measId];
 
-            EditTextForm etf = new EditTextForm();
+            EditTextForm etf = new EditTextForm(DBI, meas.ID);
             etf.textBox.Text = meas.Comment;
             if (etf.ShowDialog(this) == DialogResult.OK)
             {

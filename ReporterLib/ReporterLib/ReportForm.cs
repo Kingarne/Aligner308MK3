@@ -39,9 +39,11 @@ namespace ReporterLib
         private Dictionary<DBInterface.MeasType, Func<bool>> PrintMeasFunc = new Dictionary<DBInterface.MeasType, Func<bool>>();
 
         private List<DBInterface.ImageInfo> Images;
-        List<DBInterface.ChannelBase> Channels;
-        List<DBInterface.ChannelErrBaseList> ChannelErrList;
+        private List<DBInterface.ChannelBase> Channels;
+        private List<DBInterface.ChannelErrBaseList> ChannelErrList;
         private bool OnlyImagesLeft = false;
+
+        private List<DBInterface.SensorCalibrationInfo> SensorCalib;
 
         private int m_page;
         private int m_yPos;
@@ -1755,6 +1757,13 @@ namespace ReporterLib
 
         private bool PrintCalibrationData()
         {
+            Graphics gr = PrintArgs.Graphics;
+            if (HeadPage)
+            {
+                SensorCalib = new List<DBInterface.SensorCalibrationInfo>();
+                DBI.GetSensorCalibration(ref SensorCalib);
+
+            }
 
             return true;
         }

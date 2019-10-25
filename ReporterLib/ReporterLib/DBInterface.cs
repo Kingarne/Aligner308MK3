@@ -226,15 +226,21 @@ namespace ReporterLib
         }
 
         //Sensor Calilbration
-        public class SensorCalibration
+        public class CalibData
         {
-            int sn { get; set; }
-            double pitchAz { get; set; }
-            double pitchGain { get; set; }
-            double pitchOffs { get; set; }
-            double rollAz { get; set; }
-            double rollGain { get; set; }
-            double rollOffs { get; set; }
+            public double[] a = new double[4];
+        }
+
+        public class SensorCalibrationInfo
+        {
+            public int sn { get; set; }
+            public DateTime time { get; set; }
+            public CalibData pitchAz { get; set; }
+            public CalibData pitchGain { get; set; }
+            public CalibData pitchOffs { get; set; }
+            public CalibData rollAz { get; set; }
+            public CalibData rollGain { get; set; }
+            public CalibData rollOffs { get; set; }
         }
                
         private OdbcConnection Connection;
@@ -1110,6 +1116,36 @@ namespace ReporterLib
                         lgCh.temperature = (double)dr["temperature"];
 
                         channels.Add(lgCh);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetSensorCalibration(ref List<SensorCalibrationInfo> SensCalib)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchAzimuthCalibration", Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        SensorCalibrationInfo sc = new SensorCalibrationInfo();
+
+                        sc.sn = (int)dr["serialNumber"];
+                        sc.time = (DateTime)dr["time"];
+                        sc.pitchAz.a[0] = (double)dr["a_0"];
+                        sc.pitchAz.a[1] = (double)dr["a_1"];
+                        sc.pitchAz.a[2] = (double)dr["a_2"];
+                        sc.pitchAz.a[3] = (double)dr["a_3"];
+
+                        SensCalib.Add(sc);
                     }
                 }
             }

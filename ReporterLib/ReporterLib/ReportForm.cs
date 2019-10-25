@@ -400,7 +400,7 @@ namespace ReporterLib
 
         private void DrawPageNum(PrintPageEventArgs e)
         {
-            PrintArgs.Graphics.DrawString((m_page+1).ToString(), new Font("Ariel", 8, FontStyle.Bold), Brushes.Black, e.PageBounds.Width-20, e.PageBounds.Height - 20);
+            PrintArgs.Graphics.DrawString((m_page+1).ToString(), new Font("Ariel", 8, FontStyle.Bold), Brushes.Black, e.PageBounds.Width-30, e.PageBounds.Height - 30);
 
         }
 
@@ -1083,8 +1083,8 @@ namespace ReporterLib
             {
                 wPerc = 10;
                 table = new List<TableItem>();
-                table.Add(new TableItem("Azimuth", 2, wPerc, Color.Black, StringAlignment.Near));
-                Channels.ForEach(c => { if (!c.IsRef) table.Add(new TableItem(c.Station, -1, wPerc)); });
+                table.Add(new TableItem("Azimuth\n  [deg]", 2, wPerc, Color.Black, StringAlignment.Near));
+                Channels.ForEach(c => { if (!c.IsRef) table.Add(new TableItem(c.Station + "\n" + Project.UnitText, -1, wPerc)); });
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += smalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Left + HeadRect.Width*0.11f*(ChannelErrList.Count+1), m_yPos);
@@ -1223,7 +1223,7 @@ namespace ReporterLib
 
                 //Reference row
                 table = new List<TableItem>();
-                table.Add(new TableItem("Reference (" + refCh.TypeText + ") " + refCh.Station, 25, 30, RefColor, StringAlignment.Near));
+                table.Add(new TableItem("Reference: " + refCh.Station, 25, 30, RefColor, StringAlignment.Near));
                 table.Add(new TableItem(refCh.Channel, -1, wPerc, RefColor));
                 table.Add(new TableItem(refCh.SensorSN, -1, wPerc, RefColor));
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
@@ -1231,7 +1231,7 @@ namespace ReporterLib
 
                 //Measured object row
                 table = new List<TableItem>();
-                table.Add(new TableItem("Measured (" + measCh.TypeText + ") " + measCh.Station, 25, 30, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Measured:  " + measCh.Station, 25, 30, Color.Black, StringAlignment.Near));
                 table.Add(new TableItem(measCh.Channel, -1, wPerc));
                 table.Add(new TableItem(measCh.SensorSN, -1, wPerc));
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
@@ -1242,7 +1242,7 @@ namespace ReporterLib
 
 
                 table = new List<TableItem>();
-                table.Add(new TableItem("Measurement Result", 40, 20));
+                table.Add(new TableItem("Measurement Result", 40, 22));
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, H1TextFont);
                 m_yPos += MargY;
 

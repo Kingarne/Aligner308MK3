@@ -4,10 +4,19 @@
 
 #pragma once
 
+enum GraphType
+{
+	GT_Live=0,
+	GT_Polar,
+	GT_Sin, 
+	GT_Error
+};
+
 struct GraphFileObject
 {
     GraphFileObject():fileName(""),includeToResultTable(FALSE){}
     CString fileName;
+	GraphType type;
 	BOOL includeToResultTable;    
 };//GraphFileObject;
 
@@ -20,15 +29,17 @@ public:
 	virtual ~GraphFileManager( void );
 
     void Reset( void );
-	void SaveFileName( CString &fileName, BOOL includeToResultTable );
+	void SaveFileName( CString &fileName, GraphType gt, BOOL includeToResultTable );
 	void IncludeToResultTable( BOOL include, CString &fileName );
 	void ClearAllIncludeToResultTable( void );
 	int GetNoOfSavedFiles( void );
 	CString GetFileName( int index );
 	BOOL GetIncludeToResultTable( int index );
 	BOOL GetIncludeToResultTable( CString &fileName );    
-  //  void MoveUnwantedToTemporaryDir();
+	void Sort();
 
 private:
+
+	vector< GraphFileObject> m_graphVec;
 	CList<GraphFileObject,GraphFileObject&> m_GraphFileObjects;
 };

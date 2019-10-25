@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "GraphFileManager.h"
 #include "Util.h"
+#include <algorithm>
 
 //	GraphFileManager
 
@@ -20,16 +21,20 @@ GraphFileManager::~GraphFileManager( void )
 
 void GraphFileManager::Reset( void )
 {
+	m_graphVec.clear();
     m_GraphFileObjects.RemoveAll();
     TRACE("GraphFileManager:Reset\n");
 }
 
-void GraphFileManager::SaveFileName( CString &fileName, BOOL includeToResultTable )
+void GraphFileManager::SaveFileName( CString &fileName, GraphType gt, BOOL includeToResultTable )
 {
 	GraphFileObject object;
 	object.fileName = fileName;
+	object.type = gt;
 	object.includeToResultTable = includeToResultTable;
 	m_GraphFileObjects.AddHead( object );
+
+	m_graphVec.push_back(object);
 
     TRACE("GraphFileManager::SaveFileName, %s, size:%d, inc:%d\n",fileName, m_GraphFileObjects.GetSize(), includeToResultTable);
 }
@@ -41,120 +46,37 @@ int GraphFileManager::GetNoOfSavedFiles( void )
 
 CString GraphFileManager::GetFileName( int index )
 {
-	GraphFileObject object;
-	object.fileName = _T("");
+	if (index >= m_graphVec.size())
+		return "";
 
-	POSITION pos = m_GraphFileObjects.FindIndex( index );
-
-	if( pos != NULL )
-	{
-		object = m_GraphFileObjects.GetNext( pos );
-	}
-
-	return( object.fileName );
+	return m_graphVec[index].fileName;	
 }
 
 BOOL GraphFileManager::GetIncludeToResultTable( int index )
 {
-	GraphFileObject object;
-	object.includeToResultTable = FALSE;
-	
-	POSITION pos = m_GraphFileObjects.FindIndex( index );
+	if (index >= m_graphVec.size())
+		return false;
 
-	if( pos != NULL )
-	{
-		object = m_GraphFileObjects.GetNext( pos );
-	}
-	return( object.includeToResultTable );
+	return m_graphVec[index].includeToResultTable;
 }
 
 BOOL GraphFileManager::GetIncludeToResultTable( CString &fileName )
 {
-	GraphFileObject object;
-	POSITION pos;
-
-  for( pos = m_GraphFileObjects.GetHeadPosition(); pos != NULL; )
-  {
-		object = m_GraphFileObjects.GetNext( pos );
-
-		if( object.fileName == fileName )
-		{
-			return( object.includeToResultTable );
-		}
-  }
-	return( FALSE );
+	
+	return FALSE;
 }
 
 void GraphFileManager::IncludeToResultTable( BOOL include, CString &fileName )
 {
-	GraphFileObject object;
-	POSITION pos;
 
-  for( pos = m_GraphFileObjects.GetHeadPosition(); pos != NULL; )
-  {
-		object = m_GraphFileObjects.GetNext( pos );
-
-		if( object.fileName == fileName )
-		{
-			object.includeToResultTable = include;
-			if( pos != NULL )
-			{
-				m_GraphFileObjects.GetPrev( pos );
-			}
-			else
-			{
-				pos = m_GraphFileObjects.GetTailPosition();
-			}
-			m_GraphFileObjects.SetAt( pos, object );
-			 TRACE("GraphFileManager::IncludeToResultTable, %s, size:%d, inc:%d\n",fileName, m_GraphFileObjects.GetSize(), include);
-            
-            return;
-		}
-  }	
-	return;
 }
 
 void GraphFileManager::ClearAllIncludeToResultTable( void )
 {
-	GraphFileObject object;
-	POSITION pos;
-TRACE("GraphFileManager:ClearAllIncludeToResultTable\n");
-  for( pos = m_GraphFileObjects.GetHeadPosition(); pos != NULL; )
-  {
-		object = m_GraphFileObjects.GetNext( pos );
-		object.includeToResultTable = FALSE;
-		if( pos != NULL )
-		{
-			m_GraphFileObjects.GetPrev( pos );
-			m_GraphFileObjects.SetAt( pos, object );
-			m_GraphFileObjects.GetNext( pos );
-		}
-		else
-		{
-			pos = m_GraphFileObjects.GetTailPosition();
-			m_GraphFileObjects.SetAt( pos, object );
-			pos = NULL;
-		}
-  }	
-	return;
 }
 
-
-/*void GraphFileManager::MoveUnwantedToTemporaryDir()
+void GraphFileManager::Sort()
 {
-    GraphFileObject object;
-    POSITION pos;
-
-    for( pos = m_GraphFileObjects.GetHeadPosition(); pos != NULL; )
-    {
-        object = m_GraphFileObjects.GetNext( pos );
-
-        if(object.includeToResultTable == FALSE)
-        {
-            MoveFileToTemporaryDirectory(object.fileName);    
-        }
-        
-    } 
-    
-}*/
+	sort(m_graphVec.begin(), m_graphVec.end(), [](const GraphFileObject& lhs, const GraphFileObject& rhs)	{ return lhs.type < rhs.type;	});
+}
 

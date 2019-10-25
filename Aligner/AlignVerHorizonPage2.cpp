@@ -90,8 +90,8 @@ void CAlignVerHorizonPage2::ShowGraphButtons()
 {
     GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
     GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
+    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
+	//GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	CString graphFileName;
 	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
 	{
@@ -103,13 +103,13 @@ void CAlignVerHorizonPage2::HideGraphButtons()
 {
     GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
     GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 }
 
 void CAlignVerHorizonPage2::DisableAllButtons()
 {
     GetDlgItem( IDC_PRINT_GRAPH )->EnableWindow( FALSE );
-    GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+    //GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
 	GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
 	GetDlgItem( IDC_SHOW_RESULT_GRAPH )->EnableWindow( FALSE );
 	GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( FALSE );
@@ -270,17 +270,20 @@ BOOL CAlignVerHorizonPage2::OnWizardFinish()
 	switch (m_pParent->m_Status)
 	{
 	case STATUS_PAGE_READY:
-	{
-		m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
-		
+	{				
+		if (m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS)
+		{
+			OnBnClickedShowErrorGraph();
+		}
 		OnBnClickedShowResultGraph();
 		OnBnClickedShowPolarGraph();
 		
 		m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 		m_pParent->m_pResultTable->ShowReport(TRUE);
 		m_pParent->m_deleteReport = TRUE;
-		m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
 
+		m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
+		m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
 		int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
 		m_pParent->ExitResultTable(res != IDYES);
 			   
@@ -874,7 +877,7 @@ void CAlignVerHorizonPage2::HideAll()
 	/***************************************************************************/
 void CAlignVerHorizonPage2::OnBnClickedShowResultGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
     m_YRan = RoundToInt( g_AlignerData.Kh * (m_pParent->m_Ymax - m_pParent->m_Ymin) + 1.5 );
     m_YBias = RoundToInt( g_AlignerData.Kh * (m_pParent->m_Ymax + m_pParent->m_Ymin) / 2 );
 
@@ -974,7 +977,7 @@ void CAlignVerHorizonPage2::OnBnClickedShowResultGraph()
 	/***************************************************************************/
 void CAlignVerHorizonPage2::OnBnClickedShowErrorGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
     UnitModeT UMode;
     int m_YRan;
     CString str;
@@ -1099,12 +1102,12 @@ void CAlignVerHorizonPage2::OnBnClickedShowErrorGraph()
     }
 
     m_pParent->m_pGraph->ShowTiltFlatnessTestGraphWithText( &graphParams );
-	    m_pParent->SaveErrorGraphFile();
+	m_pParent->SaveErrorGraphFile();
 }
 
 void CAlignVerHorizonPage2::OnBnClickedShowPolarGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 
     //init the graph
     m_pParent->m_pGraph->InitDefaultPolarGraph( g_AlignerData.NoOfCorr );
@@ -1152,8 +1155,8 @@ void CAlignVerHorizonPage2::OnBnClickedPrintGraph()
 
 void CAlignVerHorizonPage2::OnBnClickedSaveGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
+	//GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+	//m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
 }
 
 

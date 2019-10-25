@@ -751,8 +751,8 @@ void CAlignVerBenchMarkPage2::OnBnClickedPrintGraph()
 
 void CAlignVerBenchMarkPage2::OnBnClickedSaveGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
+//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+//	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
 }
 
 LRESULT CAlignVerBenchMarkPage2::OnDauError( WPARAM, LPARAM )

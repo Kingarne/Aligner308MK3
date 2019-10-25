@@ -1099,7 +1099,7 @@ BOOL CTiltAlignmentPage2::CallMeasure( double *pRoll, double *pPitch )
 
 void CTiltAlignmentPage2::OnBnClickedShowPolarGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 		
 	//init the graph
     m_pParent->m_pGraph->InitDefaultPolarGraph( g_AlignerData.NoOfCorr );
@@ -1154,8 +1154,8 @@ void CTiltAlignmentPage2::OnBnClickedPrintGraph()
 
 void CTiltAlignmentPage2::OnBnClickedSaveGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
+	//GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+	//m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
 }
 
 void CTiltAlignmentPage2::StartMeasure( void )

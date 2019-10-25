@@ -40,26 +40,22 @@ void CTiltFlatnessFoundationTestPage3::ShowGraphButtons()
 {
     GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
     GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
-	CString graphFileName;
-	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
-	{
-		//m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
-	}
+    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
+//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
+	
 }
 
 void CTiltFlatnessFoundationTestPage3::HideGraphButtons()
 {
     GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
     GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 }
 
 void CTiltFlatnessFoundationTestPage3::DisableAllButtons()
 {
     GetDlgItem( IDC_PRINT_GRAPH )->EnableWindow( FALSE );
-    GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+    //GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
 	GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
 	GetDlgItem( IDC_SHOW_RESULT_GRAPH )->EnableWindow( FALSE );
 	GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( FALSE );
@@ -216,8 +212,11 @@ BOOL CTiltFlatnessFoundationTestPage3::OnWizardFinish()
 	switch( m_pParent->m_Status )
 	{
 		case STATUS_PAGE_READY:
-		{
-			m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
+		{			
+			if (m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS)
+			{
+				OnBnClickedShowErrorGraph();
+			}
 
 			OnBnClickedShowResultGraph();
 			OnBnClickedShowPolarGraph();
@@ -226,6 +225,7 @@ BOOL CTiltFlatnessFoundationTestPage3::OnWizardFinish()
 			m_pParent->m_pResultTable->ShowReport(TRUE);
 			m_pParent->m_deleteReport = TRUE;
 
+			m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
 			m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
 			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
 			m_pParent->ExitResultTable(res != IDYES);
@@ -463,7 +463,10 @@ void CTiltFlatnessFoundationTestPage3::StartMeasureRound2()
     }
     m_measurmentNum++;
     ShowGraphButtons();
-    SetWindowProp(IDC_INFO_TEXT, true, IDS_MEASUREMENT_READY);
+	CString graphFileName;
+	m_pParent->m_pGraph->SaveGraphToUniqueFileName(graphFileName);
+
+	SetWindowProp(IDC_INFO_TEXT, true, IDS_MEASUREMENT_READY);
     m_pParent->m_EnableMoveOfWizard = TRUE;
 
     m_pParent->m_Y[2][m_measurmentNum] = m_pParent->m_dP[1];
@@ -566,7 +569,10 @@ void CTiltFlatnessFoundationTestPage3::StartMeasureRound1()
     m_pParent->m_N++;
     m_pParent->m_XAngle[m_pParent->m_N] = m_AzimuthAngleReal;
     ShowGraphButtons();
-    m_Text.LoadString( IDS_MEASUREMENT_READY );
+	CString graphFileName;
+	m_pParent->m_pGraph->SaveGraphToUniqueFileName(graphFileName);
+
+	m_Text.LoadString( IDS_MEASUREMENT_READY );
     SetDlgItemText( IDC_INFO_TEXT, m_Text );
     GetDlgItem( IDC_INFO_TEXT )->ShowWindow( SW_SHOW );
     m_pParent->m_EnableMoveOfWizard = TRUE;
@@ -877,7 +883,7 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedShowResultGraph()
 	if(m_measureWarping)
         return;
     
-    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
     UnitModeT UMode;
     CString str;
     TiltFlatnessFoTestGraphInParam graphParams;
@@ -976,7 +982,7 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedShowResultGraph()
 	/***************************************************************************/
 void CTiltFlatnessFoundationTestPage3::OnBnClickedShowErrorGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
     UnitModeT UMode;
     int YRan;
     CString str;
@@ -1094,7 +1100,7 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedShowErrorGraph()
 	/***************************************************************************/
 void CTiltFlatnessFoundationTestPage3::OnBnClickedShowPolarGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 
     //init the graph
     m_pParent->m_pGraph->InitDefaultPolarGraph( g_AlignerData.NoOfCorr );
@@ -1140,8 +1146,8 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedPrintGraph()
 
 void CTiltFlatnessFoundationTestPage3::OnBnClickedSaveGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
+//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+//	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
 }
 
 void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit()

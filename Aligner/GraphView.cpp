@@ -2646,7 +2646,7 @@ void CGraphView::OnBnClickedLiveGraphQuit( void )
     {
 	    if( SaveGraphToUniqueFileName( graphFileName, TRUE ) == TRUE )
 	    {
-		    m_LiveGraphFileManager.SaveFileName( graphFileName, TRUE );
+		    m_LiveGraphFileManager.SaveFileName( graphFileName, GraphType::GT_Live, TRUE );
 	    }
         m_LiveDataGraphParam.includeGraph = TRUE;
         m_LiveDataGraphParam.graphFileName = graphFileName;

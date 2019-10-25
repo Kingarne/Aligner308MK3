@@ -180,28 +180,28 @@ void CAlignmentWizard::SavePolarGraphFile( void )
 		CString graphFileName;
 		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName, TRUE ) == TRUE )
 		{
-			m_GraphFileManager.SaveFileName( graphFileName, TRUE );
+			m_GraphFileManager.SaveFileName( graphFileName, GraphType::GT_Polar, TRUE );
 			m_PolarGraphFileName = graphFileName;
 		}
 	}
     else 
     {
-        _bstr_t footer = m_pGraph -> m_pChart -> GetFooter() -> GetText() -> GetText() ;
+        _bstr_t footer = m_pGraph->m_pChart->GetFooter()->GetText()->GetText() ;
         CString footerText( footer.GetBSTR() ) ;
         footerText += _T("\n") ;
         footerText += GetFileName( m_PolarGraphFileName ) ;
-        m_pGraph -> m_pChart -> GetFooter() -> GetText() -> PutText( footerText.AllocSysString() ) ;
+        m_pGraph->m_pChart->GetFooter()->GetText()->PutText( footerText.AllocSysString() ) ;
     }
 }
 
 void CAlignmentWizard::SaveErrorGraphFile( void )
-{
+{ 
 	if( m_ErrorGraphFileName.GetLength() == 0 )
 	{
 		CString graphFileName;
-		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName, FALSE ) == TRUE )
+		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName, TRUE ) == TRUE )
 		{
-			//m_GraphFileManager.SaveFileName( graphFileName, TRUE );
+			m_GraphFileManager.SaveFileName( graphFileName, GraphType::GT_Error, TRUE );
 			m_ErrorGraphFileName = graphFileName;
 		}
 	}
@@ -222,7 +222,7 @@ void CAlignmentWizard::SaveResultGraphFile( void )
 		CString graphFileName;
 		if( m_pGraph->SaveGraphToUniqueFileName( graphFileName, TRUE ) == TRUE )
 		{
-			m_GraphFileManager.SaveFileName( graphFileName, TRUE );
+			m_GraphFileManager.SaveFileName( graphFileName, GraphType::GT_Sin, TRUE );
 			m_ResultGraphFileName = graphFileName;
 		}
 	}

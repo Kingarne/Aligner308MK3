@@ -44,28 +44,22 @@ void CGyroPerformanceTestPage2::ShowGraphButtons()
 {
 	GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
 	GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
-	CString graphFileName;
-	if (m_pParent -> m_pGraph -> SaveGraphToUniqueFileName( graphFileName, TRUE) == TRUE )
-	{
-		CString text ;
-		text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD ) ;
-		m_pParent -> m_GraphFileManager.SaveFileName( graphFileName, TRUE ) ;		
-	}
+	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
+	//GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
+	
 }
 
 void CGyroPerformanceTestPage2::HideGraphButtons()
 {
   GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
   GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+  //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 }
 
 void CGyroPerformanceTestPage2::DisableAllButtons()
 {
   GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+  //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 	GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );
 	GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_HIDE );
 	GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_HIDE );
@@ -272,6 +266,13 @@ void CGyroPerformanceTestPage2::OnBnClickedStartMeasure()
   GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
 
   ShowGraphButtons();
+  
+  CString graphFileName;
+  if (m_pParent->m_pGraph->SaveGraphToUniqueFileName(graphFileName, TRUE) == TRUE)
+  {
+	  m_pParent->m_GraphFileManager.SaveFileName(graphFileName, GraphType::GT_Live, TRUE);
+  }
+
   m_Text.LoadString( IDS_MEASUREMENT_READY );
   SetDlgItemText( IDC_INFO_TEXT, m_Text );
   GetDlgItem( IDC_INFO_TEXT )->ShowWindow( SW_SHOW );
@@ -420,6 +421,6 @@ void CGyroPerformanceTestPage2::OnBnClickedPrintGraph()
 
 void CGyroPerformanceTestPage2::OnBnClickedSaveGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
+//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+//	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
 }

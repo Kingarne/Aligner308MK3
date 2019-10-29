@@ -225,22 +225,58 @@ namespace ReporterLib
             public double temperature { get; set; }
         }
 
-        //Sensor Calilbration
+        //Calilbration
+        public class DAUChData
+        {
+            public DateTime time;
+            public string ch;
+            public double pitchGain;
+            public double rollGain;
+            public int pitchOffs;
+            public int rollOffs;
+        }
+
+        public class DAUData
+        {            
+            public bool done = false;
+            public int ID;
+            public int sn;
+            public List<DAUChData> chData = new List<DAUChData>();
+        }
+
+        public enum CalType
+        {
+            CT_PitchAz = 0,
+            CT_PitchGain,
+            CT_PitchOffs,
+            CT_RollAz,
+            CT_RollGain,
+            CT_RollOffs,
+        }
+
         public class CalibData
         {
+            public CalibData(CalType ct) { type = ct; }
+            public bool done = false;
+            public CalType type;
             public double[] a = new double[4];
-        }
+        }        
 
         public class SensorCalibrationInfo
         {
-            public int sn { get; set; }
+            public SensorCalibrationInfo()
+            {
+                calData = new Dictionary<CalType, CalibData>();
+                calData[CalType.CT_PitchAz] = new CalibData(CalType.CT_PitchAz);
+                calData[CalType.CT_PitchGain] = new CalibData(CalType.CT_PitchGain);
+                calData[CalType.CT_PitchOffs] = new CalibData(CalType.CT_PitchOffs);
+                calData[CalType.CT_RollAz] = new CalibData(CalType.CT_RollAz);
+                calData[CalType.CT_RollGain] = new CalibData(CalType.CT_RollGain);
+                calData[CalType.CT_RollOffs] = new CalibData(CalType.CT_RollOffs);
+            }
+            public string sn { get; set; }
             public DateTime time { get; set; }
-            public CalibData pitchAz { get; set; }
-            public CalibData pitchGain { get; set; }
-            public CalibData pitchOffs { get; set; }
-            public CalibData rollAz { get; set; }
-            public CalibData rollGain { get; set; }
-            public CalibData rollOffs { get; set; }
+            public Dictionary<CalType, CalibData> calData{ get; set; }       
         }
                
         private OdbcConnection Connection;
@@ -1123,12 +1159,58 @@ namespace ReporterLib
             return true;
         }
 
-        public bool GetSensorCalibration(ref List<SensorCalibrationInfo> SensCalib)
+        public bool GetDAUCalibration(ref List<DAUData> DAUCalib)
         {
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;
 
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM DAUSetup", Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        DAUData dd = new DAUData();
 
+                        dd.ID = (int)dr["ID"];
+                        dd.sn = (int)dr["serialNumber"];                        
+
+                        DAUCalib.Add(dd);
+                    }
+                }
+            }
+
+            foreach (DAUData dd in DAUCalib)
+            {
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM DAUSetupSensorChannel WHERE foreignID=" + dd.ID, Connection))
+                {
+                    using (OdbcDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            DAUChData cd = new DAUChData();
+
+                            cd.time = (DateTime)dr["calibTime"];
+                            cd.ch = (string)dr["name"];
+                            cd.rollGain = (double)dr["rollGain"];
+                            cd.pitchGain = (double)dr["pitchGain"];
+                            cd.rollOffs = (int)dr["rollOffset"];
+                            cd.pitchOffs = (int)dr["pitchOffset"];
+
+                            dd.chData.Add(cd);                            
+                        }
+                    }
+                }
+            }
+
+
+            return true;
+        }
+
+        public bool GetSensorCalibration(ref List<SensorCalibrationInfo> SensCalib)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;            
 
             using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchAzimuthCalibration", Connection))
             {
@@ -1138,12 +1220,12 @@ namespace ReporterLib
                     {
                         SensorCalibrationInfo sc = new SensorCalibrationInfo();
 
-                        sc.sn = (int)dr["serialNumber"];
+                        sc.sn = (string)dr["serialNumber"];
                         sc.time = (DateTime)dr["time"];
-                        sc.pitchAz.a[0] = (double)dr["a_0"];
-                        sc.pitchAz.a[1] = (double)dr["a_1"];
-                        sc.pitchAz.a[2] = (double)dr["a_2"];
-                        sc.pitchAz.a[3] = (double)dr["a_3"];
+                        sc.calData[CalType.CT_PitchAz].a[0] = (double)dr["a_0"];
+                        sc.calData[CalType.CT_PitchAz].a[1] = (double)dr["a_1"];
+                        sc.calData[CalType.CT_PitchAz].a[2] = (double)dr["a_2"];
+                        sc.calData[CalType.CT_PitchAz].a[3] = (double)dr["a_3"];
 
                         SensCalib.Add(sc);
                     }

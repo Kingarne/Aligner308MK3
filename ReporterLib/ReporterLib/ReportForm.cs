@@ -44,20 +44,24 @@ namespace ReporterLib
         private bool OnlyImagesLeft = false;
 
         private List<DBInterface.SensorCalibrationInfo> SensorCalib;
+        private List<DBInterface.DAUData> DAUCalib;
 
         private int m_page;
         private int m_yPos;
         int yHeadSpace = 15;
         int startYHeadPerc = 35;
         int MargY = 20;
+        int SmalMarg = 4;
         Rectangle HeadRect;
         private Font HeadFont = new Font("Ariel", 8, FontStyle.Regular);
         private Font TextFont = new Font("Ariel", 8, FontStyle.Regular);
         private Font H1TextFont = new Font("Ariel", 10, FontStyle.Bold);
+        private Font CalibHeadFont = new Font("Ariel", 16, FontStyle.Regular);
         private SolidBrush MainBr = new SolidBrush(Color.Black);
         private int LineWidth = 1;
         private Color RefColor = Color.DarkOrange;
 
+        private Color HeadBGColor = Color.FromArgb(255, 240, 240, 255);
 
 
         ReportSorter Sorter;
@@ -513,7 +517,7 @@ namespace ReporterLib
 
             HeadRect = new Rectangle(new Point(headX, headY), new Size(PrintArgs.MarginBounds.Width, 120));
 
-            gr.FillRectangle(new SolidBrush(Color.FromArgb(255, 240, 240, 255)), HeadRect);
+            gr.FillRectangle(new SolidBrush(HeadBGColor), HeadRect);
             gr.DrawRectangle(new Pen(Color.FromArgb(255,180,180,180)), HeadRect);
             int xPerc = 2;
             //string text = "AZIMUTH ALIGNMENT ERRORS ";
@@ -625,6 +629,11 @@ namespace ReporterLib
             return h;
         }
 
+        private bool EnoughSpace(int needed)
+        {
+            return (m_yPos + needed) < PrintArgs.MarginBounds.Bottom;                        
+        }
+
         private bool DrawImage(Graphics gr, DBInterface.ImageInfo image)
         {
             Image im;
@@ -643,10 +652,9 @@ namespace ReporterLib
             double w = HeadRect.Width;
             double h = w / ratio;
 
-            if(m_yPos+h>PrintArgs.MarginBounds.Bottom)
+            if(!EnoughSpace(50))
             {
-                //Image dont fit.
-                
+                //Image dont fit.                
                 return false;
             }
 
@@ -819,12 +827,11 @@ namespace ReporterLib
                 table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Bias*\n" + Project.UnitText, -1, wPerc));
-
-                int smalMarg = 4;
+                
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
 
                 foreach (DBInterface.TiltAlignmentCh ch in channels)
@@ -855,7 +862,7 @@ namespace ReporterLib
                     }
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
@@ -910,12 +917,11 @@ namespace ReporterLib
                 table.Add(new TableItem("Meas \u0394Az\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Az Err\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Az Err\n" + Project.UnitText, -1, wPerc));                
-
-                int smalMarg = 4;
+                
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 
                 foreach (DBInterface.AzimuthAlignmentCh ch in channels)
                 {
@@ -944,7 +950,7 @@ namespace ReporterLib
                     }
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
@@ -969,8 +975,7 @@ namespace ReporterLib
             if (Images != null && OnlyImagesLeft)
                 return DrawImages(gr, ref Images);
 
-            int wPerc = 7;
-            int smalMarg = 4;
+            int wPerc = 7;            
             List<TableItem> table;
 
             if (HeadPage)
@@ -1026,9 +1031,9 @@ namespace ReporterLib
                 table.Add(new TableItem("Azim\n[deg]", -1, wPerc));
                
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
                 foreach (DBInterface.TiltFlatnessPlCh ch in Channels)
                 {
@@ -1060,7 +1065,7 @@ namespace ReporterLib
                     }
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
@@ -1088,9 +1093,9 @@ namespace ReporterLib
                 table.Add(new TableItem("Azimuth\n  [deg]", 2, wPerc, Color.Black, StringAlignment.Near));
                 Channels.ForEach(c => { if (!c.IsRef) table.Add(new TableItem(c.Station + "\n" + Project.UnitText, -1, wPerc)); });
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Left + HeadRect.Width*0.11f*(ChannelErrList.Count+1), m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
 
                 int i = 0;
@@ -1112,14 +1117,14 @@ namespace ReporterLib
                         table.Add(new TableItem(errL[i].error.ToString("0.00"), -1, wPerc));
                     }
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                     err.done = true;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Left + HeadRect.Width * 0.11f * (ChannelErrList.Count + 1), m_yPos);
             }
 
-            if (m_yPos + 50 > PrintArgs.MarginBounds.Bottom)
+            if (!EnoughSpace(50))
             {
                 //Don't fit, new page.
                 return false;
@@ -1142,8 +1147,7 @@ namespace ReporterLib
             Graphics gr = PrintArgs.Graphics;
             if (Images != null && OnlyImagesLeft)
                 return DrawImages(gr, ref Images);
-
-            int smalMarg = 4;
+            
             int wPerc = 10;
             List<TableItem> table = new List<TableItem>();
 
@@ -1219,9 +1223,9 @@ namespace ReporterLib
                 table.Add(new TableItem("Ch\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Sensor\n" + Project.UnitText, -1, wPerc));
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
                 //Reference row
                 table = new List<TableItem>();
@@ -1229,7 +1233,7 @@ namespace ReporterLib
                 table.Add(new TableItem(refCh.Channel, -1, wPerc, RefColor));
                 table.Add(new TableItem(refCh.SensorSN, -1, wPerc, RefColor));
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
                 //Measured object row
                 table = new List<TableItem>();
@@ -1237,7 +1241,7 @@ namespace ReporterLib
                 table.Add(new TableItem(measCh.Channel, -1, wPerc));
                 table.Add(new TableItem(measCh.SensorSN, -1, wPerc));
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
                 m_yPos += MargY;
@@ -1261,12 +1265,11 @@ namespace ReporterLib
                 table.Add(new TableItem("Azim\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Elev1\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Elev2\n" + Project.UnitText, -1, wPerc));
-
-                smalMarg = 4;
+                
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
                 table = new List<TableItem>();
                 table.Add(new TableItem(measCh.roll.ToString("0.00"), -1, wPerc));
@@ -1281,7 +1284,7 @@ namespace ReporterLib
                 table.Add(new TableItem(measCh.elevation2.ToString("0.00"), -1, wPerc));
 
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += MargY * 2;
 
@@ -1302,9 +1305,9 @@ namespace ReporterLib
                 table.Add(new TableItem("dh\n[mm]", -1, wPerc));
 
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
 
                 foreach (DBInterface.TiltFlatnessFoChErr err in ChannelErrList[0])
@@ -1312,7 +1315,7 @@ namespace ReporterLib
                     if (err.done)
                         continue;
 
-                    if (m_yPos + 10 > PrintArgs.MarginBounds.Bottom)
+                    if (!EnoughSpace(10))
                     {
                         //Don't fit, new page.
                         return false;
@@ -1329,7 +1332,7 @@ namespace ReporterLib
                     err.done = true;
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
@@ -1380,12 +1383,11 @@ namespace ReporterLib
                 table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
-
-                int smalMarg = 4;
+                
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
 
                 foreach (DBInterface.GyroPerfCh ch in channels)
@@ -1412,7 +1414,7 @@ namespace ReporterLib
                     }
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
@@ -1457,12 +1459,11 @@ namespace ReporterLib
                 table.Add(new TableItem("Parallell\nBias*\n" + Project.UnitText, -1, wPerc+2));
                 table.Add(new TableItem("Perpendicular\nBias*\n" + Project.UnitText, -1, wPerc+5));
                 table.Add(new TableItem("Temperature\n[°C]", -1, wPerc+5));
-
-                int smalMarg = 4;
+                
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
                 foreach (DBInterface.CommonFlatCh ch in channels)
                 {
@@ -1489,7 +1490,7 @@ namespace ReporterLib
                     table.Add(new TableItem(ch.Temperature.ToString("0.00"), -1, wPerc + 5));                    
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
@@ -1545,13 +1546,11 @@ namespace ReporterLib
                 table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
-               
-
-                int smalMarg = 4;
+                               
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
 
                 foreach (DBInterface.AbsoulteModeVerifCh ch in channels)
@@ -1570,7 +1569,7 @@ namespace ReporterLib
                     
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
@@ -1625,13 +1624,11 @@ namespace ReporterLib
                 table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
-
-
-                int smalMarg = 4;
+                
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
 
                 foreach (DBInterface.RelativeModeVerifCh ch in channels)
@@ -1661,7 +1658,7 @@ namespace ReporterLib
                     }
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
@@ -1713,13 +1710,11 @@ namespace ReporterLib
                 table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
                 table.Add(new TableItem("Temperature\n[°C]", -1, wPerc+3));
-               
-
-                int smalMarg = 4;
+                               
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += smalMarg;
+                m_yPos += SmalMarg;
 
 
                 foreach (DBInterface.LiveGraphCh ch in channels)
@@ -1736,7 +1731,7 @@ namespace ReporterLib
                     table.Add(new TableItem(ch.temperature.ToString("0.00"), -1, wPerc+3));                   
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
-                    m_yPos += smalMarg;
+                    m_yPos += SmalMarg;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
@@ -1758,12 +1753,130 @@ namespace ReporterLib
         private bool PrintCalibrationData()
         {
             Graphics gr = PrintArgs.Graphics;
+
+            
             if (HeadPage)
             {
+                m_yPos = PrintArgs.MarginBounds.Top;
+
+                DAUCalib = new List<DBInterface.DAUData>();
+                DBI.GetDAUCalibration(ref DAUCalib);
+
                 SensorCalib = new List<DBInterface.SensorCalibrationInfo>();
                 DBI.GetSensorCalibration(ref SensorCalib);
+                               
+                HeadRect = new Rectangle(new Point(PrintArgs.MarginBounds.Left, PrintArgs.MarginBounds.Top), new Size(PrintArgs.MarginBounds.Width, 120));                
 
+                StringFormat sf = new StringFormat();
+                sf.Alignment = StringAlignment.Center;
+
+                gr.DrawString("Aligner 308 Calibration Data", CalibHeadFont, new SolidBrush(Color.Black), HeadRect, sf);
+                m_yPos += 2 * MargY;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += 2 * MargY;
             }
+
+
+            if(!DrawDAUCalib())
+                return false;
+
+            if (!DrawSensorCalib())
+                return false;
+
+
+
+
+
+
+            return true;
+        }
+
+        private bool DrawDAUCalib()
+        {
+            if(!DAUCalib.Any(e => !e.done))
+            {
+                return true;
+            }
+            
+            Graphics gr = PrintArgs.Graphics;
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            sf.LineAlignment = StringAlignment.Center;
+
+            Rectangle rect = new Rectangle(new Point(HeadRect.Left, m_yPos), new Size(PrintArgs.MarginBounds.Width, 40));
+            gr.FillRectangle(new SolidBrush(HeadBGColor), rect);
+            gr.DrawString("Data Acquisition Unit", CalibHeadFont, new SolidBrush(Color.Black), rect, sf);
+
+            m_yPos += rect.Height+MargY;
+
+            int wPerc = 12;
+            List<TableItem> table = new List<TableItem>();
+            table.Add(new TableItem("S/N", 2, wPerc, Color.Black, StringAlignment.Near));
+            table.Add(new TableItem("Channel", -1, wPerc));
+            table.Add(new TableItem("Roll Gain", -1, wPerc));
+            table.Add(new TableItem("Pitch Gain", -1, wPerc));
+            table.Add(new TableItem("Roll Offset\n[bits]", -1, wPerc));
+            table.Add(new TableItem("Pitch Offset\n[bits]", -1, wPerc));
+            table.Add(new TableItem("Date", -1, 15));
+
+            m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+            m_yPos += SmalMarg;
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+            m_yPos += SmalMarg;
+
+            foreach (DBInterface.DAUData dd in DAUCalib)
+            {                
+                if (!EnoughSpace(110))
+                    return false;
+
+                if (dd.done)
+                    continue;
+
+                table = new List<TableItem>();
+                table.Add(new TableItem(dd.sn.ToString(), 2, 15, Color.Black, StringAlignment.Near));
+
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+
+                foreach (DBInterface.DAUChData cd in dd.chData)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(cd.ch, 14, wPerc));
+                    table.Add(new TableItem(cd.rollGain.ToString("0.00000"), -1, wPerc));
+                    table.Add(new TableItem(cd.pitchGain.ToString("0.00000"), -1, wPerc));
+                    table.Add(new TableItem(cd.rollOffs.ToString(), -1, wPerc));
+                    table.Add(new TableItem(cd.pitchOffs.ToString(), -1, wPerc));
+                    table.Add(new TableItem(cd.time.ToString("yy/MM/dd HH:mm:ss"), -1, 15));
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);                    
+                }
+                m_yPos += SmalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += SmalMarg;
+                dd.done = true;
+
+                m_yPos += 800;
+            }
+
+            m_yPos += MargY;
+
+            return true;
+        }
+
+        private bool DrawSensorCalib()
+        {
+            if (!DAUCalib.Any(e => !e.done))
+            {
+                return true;
+            }
+
+            Graphics gr = PrintArgs.Graphics;
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+
+            Rectangle rect = new Rectangle(new Point(HeadRect.Left, m_yPos), new Size(PrintArgs.MarginBounds.Width, 40));
+            gr.FillRectangle(new SolidBrush(HeadBGColor), rect);
+            gr.DrawString("Sensor Unit", CalibHeadFont, new SolidBrush(Color.Black), rect, sf);
+
 
             return true;
         }

@@ -256,9 +256,9 @@ namespace ReporterLib
 
         public class CalibData
         {
-            public CalibData(CalType ct) { type = ct; }
-            public bool done = false;
+            public CalibData(CalType ct) { type = ct; }           
             public CalType type;
+            public DateTime time { get; set; }
             public double[] a = new double[4];
         }        
 
@@ -274,8 +274,8 @@ namespace ReporterLib
                 calData[CalType.CT_RollGain] = new CalibData(CalType.CT_RollGain);
                 calData[CalType.CT_RollOffs] = new CalibData(CalType.CT_RollOffs);
             }
-            public string sn { get; set; }
-            public DateTime time { get; set; }
+            public bool done = false;
+            public string sn { get; set; }            
             public Dictionary<CalType, CalibData> calData{ get; set; }       
         }
                
@@ -1221,7 +1221,7 @@ namespace ReporterLib
                         SensorCalibrationInfo sc = new SensorCalibrationInfo();
 
                         sc.sn = (string)dr["serialNumber"];
-                        sc.time = (DateTime)dr["time"];
+                        sc.calData[CalType.CT_PitchAz].time = (DateTime)dr["time"];
                         sc.calData[CalType.CT_PitchAz].a[0] = (double)dr["a_0"];
                         sc.calData[CalType.CT_PitchAz].a[1] = (double)dr["a_1"];
                         sc.calData[CalType.CT_PitchAz].a[2] = (double)dr["a_2"];
@@ -1231,6 +1231,85 @@ namespace ReporterLib
                     }
                 }
             }
+
+
+            foreach (SensorCalibrationInfo sc in SensCalib)
+            {
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchGainCalibration Where serialNumber='" + sc.sn+"'", Connection))
+                {
+                    using (OdbcDataReader dr = command.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {                            
+                            sc.calData[CalType.CT_PitchGain].time = (DateTime)dr["time"];
+                            sc.calData[CalType.CT_PitchGain].a[0] = (double)dr["a_0"];
+                            sc.calData[CalType.CT_PitchGain].a[1] = (double)dr["a_1"];
+                            sc.calData[CalType.CT_PitchGain].a[2] = (double)dr["a_2"];
+                            sc.calData[CalType.CT_PitchGain].a[3] = (double)dr["a_3"];                            
+                        }
+                    }
+                }
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchOffsetCalibration Where serialNumber='" + sc.sn + "'", Connection))
+                {
+                    using (OdbcDataReader dr = command.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            sc.calData[CalType.CT_PitchOffs].time = (DateTime)dr["time"];
+                            sc.calData[CalType.CT_PitchOffs].a[0] = (double)dr["a_0"];
+                            sc.calData[CalType.CT_PitchOffs].a[1] = (double)dr["a_1"];
+                            sc.calData[CalType.CT_PitchOffs].a[2] = (double)dr["a_2"];
+                            sc.calData[CalType.CT_PitchOffs].a[3] = (double)dr["a_3"];
+                        }
+                    }
+                }
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollAzimuthCalibration Where serialNumber='" + sc.sn + "'", Connection))
+                {
+                    using (OdbcDataReader dr = command.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            sc.calData[CalType.CT_RollAz].time = (DateTime)dr["time"];
+                            sc.calData[CalType.CT_RollAz].a[0] = (double)dr["a_0"];
+                            sc.calData[CalType.CT_RollAz].a[1] = (double)dr["a_1"];
+                            sc.calData[CalType.CT_RollAz].a[2] = (double)dr["a_2"];
+                            sc.calData[CalType.CT_RollAz].a[3] = (double)dr["a_3"];
+                        }
+                    }
+                }
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollGainCalibration Where serialNumber='" + sc.sn + "'", Connection))
+                {
+                    using (OdbcDataReader dr = command.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            sc.calData[CalType.CT_RollGain].time = (DateTime)dr["time"];
+                            sc.calData[CalType.CT_RollGain].a[0] = (double)dr["a_0"];
+                            sc.calData[CalType.CT_RollGain].a[1] = (double)dr["a_1"];
+                            sc.calData[CalType.CT_RollGain].a[2] = (double)dr["a_2"];
+                            sc.calData[CalType.CT_RollGain].a[3] = (double)dr["a_3"];
+                        }
+                    }
+                }
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollOffsetCalibration Where serialNumber='" + sc.sn + "'", Connection))
+                {
+                    using (OdbcDataReader dr = command.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            sc.calData[CalType.CT_RollOffs].time = (DateTime)dr["time"];
+                            sc.calData[CalType.CT_RollOffs].a[0] = (double)dr["a_0"];
+                            sc.calData[CalType.CT_RollOffs].a[1] = (double)dr["a_1"];
+                            sc.calData[CalType.CT_RollOffs].a[2] = (double)dr["a_2"];
+                            sc.calData[CalType.CT_RollOffs].a[3] = (double)dr["a_3"];
+                        }
+                    }
+                }
+
+
+
+            }
+
 
             return true;
         }

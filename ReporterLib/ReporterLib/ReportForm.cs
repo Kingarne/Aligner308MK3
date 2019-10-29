@@ -45,6 +45,7 @@ namespace ReporterLib
 
         private List<DBInterface.SensorCalibrationInfo> SensorCalib;
         private List<DBInterface.DAUData> DAUCalib;
+        public Dictionary<DBInterface.CalType, string> CalTypeMap { get; set; }
 
         private int m_page;
         private int m_yPos;
@@ -111,6 +112,15 @@ namespace ReporterLib
             PrintMeasFunc[DBInterface.MeasType.MT_VerifAbsolute] = PrintAbsoluteMode;
             PrintMeasFunc[DBInterface.MeasType.MT_VerifRelative] = PrintRelativeMode;
             PrintMeasFunc[DBInterface.MeasType.MT_LiveGraph] = PrintLiveGraph;
+
+            CalTypeMap = new Dictionary<DBInterface.CalType, string>();
+            CalTypeMap[DBInterface.CalType.CT_PitchAz] = "Pitch Azimuth";
+            CalTypeMap[DBInterface.CalType.CT_PitchGain] = "Pitch Scale Factor";
+            CalTypeMap[DBInterface.CalType.CT_PitchOffs] = "Pitch Offset";
+            CalTypeMap[DBInterface.CalType.CT_RollAz] = "Roll Azimuth";
+            CalTypeMap[DBInterface.CalType.CT_RollGain] = "Roll Scale Factor";
+            CalTypeMap[DBInterface.CalType.CT_RollOffs] = "Roll Offset";
+
 
         }
 
@@ -266,11 +276,22 @@ namespace ReporterLib
             m_document = new PrintDocument();
             m_document.PrinterSettings = m_printerSettings;
 
-            m_document.QueryPageSettings += new System.Drawing.Printing.QueryPageSettingsEventHandler(QuerySettings);
-            m_document.BeginPrint += new System.Drawing.Printing.PrintEventHandler(BeginPrint);
-            m_document.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(PrintPage);
-            m_document.EndPrint += new System.Drawing.Printing.PrintEventHandler(EndPrint);
 
+            if (PrintType == ReportType.RT_Measurement)
+            {
+                m_document.QueryPageSettings += new System.Drawing.Printing.QueryPageSettingsEventHandler(QuerySettings);
+                m_document.BeginPrint += new System.Drawing.Printing.PrintEventHandler(BeginPrint);
+                m_document.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(PrintPage);
+                m_document.EndPrint += new System.Drawing.Printing.PrintEventHandler(EndPrint);
+            }
+            else
+            {
+                m_document.QueryPageSettings += new System.Drawing.Printing.QueryPageSettingsEventHandler(QuerySettingsCalib);
+                m_document.BeginPrint += new System.Drawing.Printing.PrintEventHandler(BeginPrintCalib);
+                m_document.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(PrintPageCalib);
+                m_document.EndPrint += new System.Drawing.Printing.PrintEventHandler(EndPrintCalib);
+
+            }
 
             PrintDialog printDialog = new PrintDialog();
             printDialog.Document = m_document;
@@ -652,7 +673,7 @@ namespace ReporterLib
             double w = HeadRect.Width;
             double h = w / ratio;
 
-            if(!EnoughSpace(50))
+            if(!EnoughSpace((int)h))
             {
                 //Image dont fit.                
                 return false;
@@ -1853,8 +1874,7 @@ namespace ReporterLib
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += SmalMarg;
                 dd.done = true;
-
-                m_yPos += 800;
+               
             }
 
             m_yPos += MargY;
@@ -1862,9 +1882,17 @@ namespace ReporterLib
             return true;
         }
 
+        private string CalTypeString(DBInterface.CalType type)
+        {
+            if (!CalTypeMap.ContainsKey(type))
+                return "-";
+
+            return CalTypeMap[type];
+        }
+
         private bool DrawSensorCalib()
         {
-            if (!DAUCalib.Any(e => !e.done))
+            if (!SensorCalib.Any(e => !e.done))
             {
                 return true;
             }
@@ -1872,13 +1900,64 @@ namespace ReporterLib
             Graphics gr = PrintArgs.Graphics;
             StringFormat sf = new StringFormat();
             sf.Alignment = StringAlignment.Center;
+            sf.LineAlignment = StringAlignment.Center;
 
             Rectangle rect = new Rectangle(new Point(HeadRect.Left, m_yPos), new Size(PrintArgs.MarginBounds.Width, 40));
             gr.FillRectangle(new SolidBrush(HeadBGColor), rect);
             gr.DrawString("Sensor Unit", CalibHeadFont, new SolidBrush(Color.Black), rect, sf);
+            m_yPos += rect.Height + MargY;
 
+            int wPerc = 12;
+            List<TableItem> table = new List<TableItem>();
+            table.Add(new TableItem("S/N", 2, 10, Color.Black, StringAlignment.Near));
+            table.Add(new TableItem("Parameter", 12, 15, Color.Black, StringAlignment.Near));
+            table.Add(new TableItem("a_0", -1, wPerc));
+            table.Add(new TableItem("a_1", -1, wPerc));
+            table.Add(new TableItem("a_2", -1, wPerc));
+            table.Add(new TableItem("a_3", -1, wPerc));
+            table.Add(new TableItem("Date", -1, 15));
+
+            m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+            m_yPos += SmalMarg;
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+            m_yPos += SmalMarg;
+
+            foreach (DBInterface.SensorCalibrationInfo sc in SensorCalib)
+            {
+                if (!EnoughSpace(110))
+                    return false;
+
+                if (sc.done)
+                    continue;
+
+                table = new List<TableItem>();
+                table.Add(new TableItem(sc.sn.ToString(), 2, 5, Color.Black, StringAlignment.Near));
+
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+
+                foreach (var cd in sc.calData)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem(CalTypeString(cd.Value.type), 12, 15, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(cd.Value.a[0].ToString("0.00000"), -1, wPerc));
+                    table.Add(new TableItem(cd.Value.a[1].ToString("0.00000"), -1, wPerc));
+                    table.Add(new TableItem(cd.Value.a[2].ToString("0.00000"), -1, wPerc));
+                    table.Add(new TableItem(cd.Value.a[3].ToString("0.00000"), -1, wPerc));
+                    table.Add(new TableItem(cd.Value.time.ToString("yy/MM/dd HH:mm:ss"), -1, 15));
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+                }
+                m_yPos += SmalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += SmalMarg;
+                sc.done = true;
+
+            }
+
+            m_yPos += MargY;
 
             return true;
+
         }
 
     }

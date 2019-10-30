@@ -45,6 +45,8 @@ namespace ReporterLib
 
         private List<DBInterface.SensorCalibrationInfo> SensorCalib;
         private List<DBInterface.DAUData> DAUCalib;
+        private List<DBInterface.GunAdaptCalib> GunAdapterCalib;
+        private List<DBInterface.PlatformCorrection> PlatformCalib;
         public Dictionary<DBInterface.CalType, string> CalTypeMap { get; set; }
 
         private int m_page;
@@ -563,7 +565,7 @@ namespace ReporterLib
             DrawText("Time const:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
 
             xPerc = xPerc + 10;
-            DrawText(Measurement.Time.ToString("yy/MM/dd HH:mm:ss"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+            DrawText(Measurement.Time.ToString("yyyy/MM/dd HH:mm:ss"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
             DrawText(Project.Location, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
             DrawText(Project.Latitude.ToString("0.00") + " [deg]", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
             DrawText(Measurement.TimeConstant.ToString("0.0") + " [s]", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
@@ -1785,7 +1787,13 @@ namespace ReporterLib
 
                 SensorCalib = new List<DBInterface.SensorCalibrationInfo>();
                 DBI.GetSensorCalibration(ref SensorCalib);
-                               
+
+                GunAdapterCalib = new List<DBInterface.GunAdaptCalib>();
+                DBI.GetGunAdapter(ref GunAdapterCalib);
+
+                PlatformCalib = new List<DBInterface.PlatformCorrection>();
+                DBI.GetPlatformCorrections(ref PlatformCalib);
+
                 HeadRect = new Rectangle(new Point(PrintArgs.MarginBounds.Left, PrintArgs.MarginBounds.Top), new Size(PrintArgs.MarginBounds.Width, 120));                
 
                 StringFormat sf = new StringFormat();
@@ -1804,9 +1812,11 @@ namespace ReporterLib
             if (!DrawSensorCalib())
                 return false;
 
+            if (!DrawGunAdapterCalib())
+                return false;
 
-
-
+            if (!DrawPlatformCalib())
+                return false;
 
 
             return true;
@@ -1818,7 +1828,10 @@ namespace ReporterLib
             {
                 return true;
             }
-            
+
+            if (!EnoughSpace(50))
+                return false;
+
             Graphics gr = PrintArgs.Graphics;
             StringFormat sf = new StringFormat();
             sf.Alignment = StringAlignment.Center;
@@ -1838,7 +1851,7 @@ namespace ReporterLib
             table.Add(new TableItem("Pitch Gain", -1, wPerc));
             table.Add(new TableItem("Roll Offset\n[bits]", -1, wPerc));
             table.Add(new TableItem("Pitch Offset\n[bits]", -1, wPerc));
-            table.Add(new TableItem("Date", -1, 15));
+            table.Add(new TableItem("Date", -1, 17));
 
             m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
             m_yPos += SmalMarg;
@@ -1866,7 +1879,7 @@ namespace ReporterLib
                     table.Add(new TableItem(cd.pitchGain.ToString("0.00000"), -1, wPerc));
                     table.Add(new TableItem(cd.rollOffs.ToString(), -1, wPerc));
                     table.Add(new TableItem(cd.pitchOffs.ToString(), -1, wPerc));
-                    table.Add(new TableItem(cd.time.ToString("yy/MM/dd HH:mm:ss"), -1, 15));
+                    table.Add(new TableItem(cd.time.ToString("yyyy/MM/dd HH:mm:ss"), -1, 17));
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);                    
                 }
@@ -1897,6 +1910,9 @@ namespace ReporterLib
                 return true;
             }
 
+            if (!EnoughSpace(50))
+                return false;
+
             Graphics gr = PrintArgs.Graphics;
             StringFormat sf = new StringFormat();
             sf.Alignment = StringAlignment.Center;
@@ -1915,7 +1931,7 @@ namespace ReporterLib
             table.Add(new TableItem("a_1", -1, wPerc));
             table.Add(new TableItem("a_2", -1, wPerc));
             table.Add(new TableItem("a_3", -1, wPerc));
-            table.Add(new TableItem("Date", -1, 15));
+            table.Add(new TableItem("Date", -1, 17));
 
             m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
             m_yPos += SmalMarg;
@@ -1943,7 +1959,7 @@ namespace ReporterLib
                     table.Add(new TableItem(cd.Value.a[1].ToString("0.00000"), -1, wPerc));
                     table.Add(new TableItem(cd.Value.a[2].ToString("0.00000"), -1, wPerc));
                     table.Add(new TableItem(cd.Value.a[3].ToString("0.00000"), -1, wPerc));
-                    table.Add(new TableItem(cd.Value.time.ToString("yy/MM/dd HH:mm:ss"), -1, 15));
+                    table.Add(new TableItem(cd.Value.time.ToString("yyyy/MM/dd HH:mm:ss"), -1, 17));
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 }
@@ -1957,7 +1973,122 @@ namespace ReporterLib
             m_yPos += MargY;
 
             return true;
+        }
 
+        private bool DrawGunAdapterCalib()
+        {
+            if (!GunAdapterCalib.Any(e => !e.done))
+            {
+                return true;
+            }
+
+            if (!EnoughSpace(50))
+                return false;
+
+            Graphics gr = PrintArgs.Graphics;
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            sf.LineAlignment = StringAlignment.Center;
+
+            Rectangle rect = new Rectangle(new Point(HeadRect.Left, m_yPos), new Size(PrintArgs.MarginBounds.Width, 40));
+            gr.FillRectangle(new SolidBrush(HeadBGColor), rect);
+            gr.DrawString("Gun Adapter", CalibHeadFont, new SolidBrush(Color.Black), rect, sf);
+
+            m_yPos += rect.Height + MargY;
+
+            int wPerc = 25;
+            List<TableItem> table = new List<TableItem>();
+            table.Add(new TableItem("S/N", 2, wPerc, Color.Black, StringAlignment.Near));
+            table.Add(new TableItem("Elevation\n[mrad]", -1, wPerc));
+            table.Add(new TableItem("Azimuth\n[mrad]", -1, wPerc));
+            table.Add(new TableItem("Date", -1, wPerc));
+
+            m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+            m_yPos += SmalMarg;
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+            m_yPos += SmalMarg;
+
+            foreach (DBInterface.GunAdaptCalib ga in GunAdapterCalib)
+            {
+                if (!EnoughSpace(10))
+                    return false;
+
+                if (ga.done)
+                    continue;
+
+                table = new List<TableItem>();
+                table.Add(new TableItem(ga.sn.ToString(), 2, wPerc, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem(ga.elevation.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(ga.azimuth.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(ga.time.ToString("yyyy/MM/dd HH:mm:ss"), -1, wPerc));
+
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+                
+                m_yPos += SmalMarg;
+                ga.done = true;
+            }
+
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);          
+
+            m_yPos += MargY;
+
+            return true;
+        }
+
+        private bool DrawPlatformCalib()
+        {
+            if (!PlatformCalib.Any(e => !e.done))
+            {
+                return true;
+            }
+
+            if (!EnoughSpace(50))
+                return false;
+
+            Graphics gr = PrintArgs.Graphics;
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            sf.LineAlignment = StringAlignment.Center;
+
+            Rectangle rect = new Rectangle(new Point(HeadRect.Left, m_yPos), new Size(PrintArgs.MarginBounds.Width, 40));
+            gr.FillRectangle(new SolidBrush(HeadBGColor), rect);
+            gr.DrawString("Scale Factor and Azimuth Calibration Fixture", CalibHeadFont, new SolidBrush(Color.Black), rect, sf);
+
+            m_yPos += rect.Height + MargY;
+
+            int wPerc = 33;
+            List<TableItem> table = new List<TableItem>();
+            table.Add(new TableItem("S/N", 2, wPerc, Color.Black, StringAlignment.Near));
+            table.Add(new TableItem("Wedge Angle\n[mrad]", -1, wPerc));            
+            table.Add(new TableItem("Date", -1, wPerc));
+
+            m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+            m_yPos += SmalMarg;
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+            m_yPos += SmalMarg;
+
+            foreach (DBInterface.PlatformCorrection pc in PlatformCalib)
+            {
+                if (!EnoughSpace(10))
+                    return false;
+
+                if (pc.done)
+                    continue;
+
+                table = new List<TableItem>();
+                table.Add(new TableItem(pc.sn.ToString(), 2, wPerc, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem(pc.alpha.ToString("0.000"), -1, wPerc));              
+                table.Add(new TableItem(pc.time.ToString("yyyy/MM/dd HH:mm:ss"), -1, wPerc));
+
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);                
+                m_yPos += SmalMarg;
+                pc.done = true;
+            }
+
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+            m_yPos += MargY;
+
+            return true;
         }
 
     }

@@ -279,6 +279,26 @@ namespace ReporterLib
             public Dictionary<CalType, CalibData> calData{ get; set; }       
         }
                
+        public class GunAdaptCalib
+        {
+            public bool done = false;
+            public string sn { get; set; }
+            public DateTime time { get; set; }
+            public double elevation { get; set; }
+            public double azimuth { get; set; }
+        }
+
+        public class PlatformCorrection
+        {
+            public bool done = false;
+            public string sn { get; set; }
+            public DateTime time { get; set; }
+            public double alpha { get; set; }        
+        }
+
+
+
+
         private OdbcConnection Connection;
         public bool Open()
         {
@@ -1305,13 +1325,61 @@ namespace ReporterLib
                         }
                     }
                 }
-
-
-
             }
+            
+            return true;
+        }
 
+        public bool GetGunAdapter(ref List<GunAdaptCalib> adapters)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM GunAdapterCalibration", Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        GunAdaptCalib ga = new GunAdaptCalib();
+                        
+                        ga.sn= (string)dr["serialNumber"];
+                        ga.time = (DateTime)dr["time"];                       
+                        ga.azimuth = (double)dr["azimuth"];
+                        ga.elevation = (double)dr["elevation"];
+
+                        adapters.Add(ga);
+                    }
+                }
+            }
 
             return true;
         }
+
+        public bool GetPlatformCorrections(ref List<PlatformCorrection> platforms)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM PlatformCorrection", Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        PlatformCorrection pc = new PlatformCorrection();
+
+                        pc.sn = (string)dr["serialNumber"];
+                        pc.time = (DateTime)dr["time"];                        
+                        pc.alpha = (double)(float)dr["alpha"];
+                         
+                        platforms.Add(pc);
+                    }
+                }
+            }
+
+            return true;
+        }
+
     }
 }

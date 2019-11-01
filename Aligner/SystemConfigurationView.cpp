@@ -147,7 +147,7 @@ void SystemConfigurationView::UpdateGeneralConfiguration( void )
     m_GeneralProject.SetWindowText( (LPCTSTR)SysSetup->GetProjectName() );
 	m_GeneralShip.SetWindowText( (LPCTSTR)SysSetup->GetShipName() );
 	m_GeneralOperator.SetWindowText( (LPCTSTR)SysSetup->GetOperatorName() );
-	m_GeneralDauSN.SetWindowText( (LPCTSTR)DAU::GetDAU().GetSerialNumber() );
+	m_GeneralDauSN.SetWindowText( (LPCTSTR)SysSetup->GetDAUSerialString() );
 	m_GeneralDate.SetWindowText(SysSetup->GetProjectTime());// COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")) );
 	m_GeneralPlace.SetWindowText( (LPCTSTR)SysSetup->GetPlace() );
 

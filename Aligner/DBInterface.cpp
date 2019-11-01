@@ -76,6 +76,17 @@ int DBInterface::Open(CString connectionString)
 	return 0;
 }
 
+double Chk(double d)
+{	
+	if(_isnan(d))
+	{
+		return 0.0f;
+	}
+	
+	return d;
+}
+
+
 CString DBInterface::ToText(double d)
 {
     CString str;    
@@ -159,7 +170,7 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 		{
 			CDBVariant val;
 			rs.GetFieldValue("ID", val);
-			data.m_projectID = val.m_iVal;
+			data.m_projectID = val.m_iVal;			
 			rs.GetFieldValue("name", data.m_projectName);
 			rs.GetFieldValue("projTime", val);//oleTime);
 			data.m_time = ToDBTimestamp(val.m_pdate);
@@ -179,11 +190,33 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 			rs.GetFieldValue("imgIdx", val);
 			data.m_imgIdx = val.m_iVal;
 
-
 			projects.push_back(data);
 			
 			rs.MoveNext();
 		}
+
+		
+		
+
+		for (auto iter = projects.begin(); iter != projects.end(); iter++)
+		{
+			sql.Format("SELECT COUNT(*) from Measurement where projectID = %d",iter->m_projectID);
+			CRecordset crs(&m_db);
+			if (crs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+			{
+				for (int i = 0; i < crs.GetODBCFieldCount(); i++)
+				{
+					CODBCFieldInfo info;
+					crs.GetODBCFieldInfo(i, info);
+					TRACE("%d, %s\n", i, info.m_strName);
+				}
+
+				CDBVariant val;
+				crs.GetFieldValue((short)0, val, DEFAULT_FIELD_TYPE);
+				iter->m_numMeasurements = val.m_iVal;
+			}
+		}
+
 	}
 
 
@@ -759,12 +792,12 @@ BOOL DBInterface::UpdateAdapterCalibration(CString serial, double el, double az)
      {
          if(!rs.IsEOF())
          {
-			 sql.Format("UPDATE GunAdapterCalibration SET azimuth = %10f, elevation = %.10f, [time] = '%s' WHERE serialNumber = '%s'", az, el, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), serial);
+			 sql.Format("UPDATE GunAdapterCalibration SET azimuth = %10f, elevation = %.10f, [time] = '%s' WHERE serialNumber = '%s'", Chk(az), Chk(el), COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), serial);
 			 m_db.ExecuteSQL(sql);
 		}
          else
          {
-             sql.Format("INSERT INTO GunAdapterCalibration ( serialNumber, elevation, azimuth ) VALUES ('%s',%f,%f)",serial, el, az);
+             sql.Format("INSERT INTO GunAdapterCalibration ( serialNumber, elevation, azimuth ) VALUES ('%s',%f,%f)",serial, Chk(el), Chk(az));
              m_db.ExecuteSQL(sql);    			 
          }
      }
@@ -785,12 +818,12 @@ BOOL DBInterface::UpdateSensorCalibration(CString table, CString serial, CString
      {
          if(!rs.IsEOF())
          {
-			 sql.Format("UPDATE %s SET [time] = '%s', operator = '%s', a_0 = %.11f, a_1 = %.11f, a_2 = %.11f, a_3 = %.11f WHERE serialNumber = '%s'", table, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), op, fit.m_a_0, fit.m_a_1, fit.m_a_2, fit.m_a_3, serial);
+			 sql.Format("UPDATE %s SET [time] = '%s', operator = '%s', a_0 = %.11f, a_1 = %.11f, a_2 = %.11f, a_3 = %.11f WHERE serialNumber = '%s'", table, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), op, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3), serial);
 			 m_db.ExecuteSQL(sql);             
          }
          else 
          {
-             sql.Format("INSERT INTO %s ( serialNumber, operator, a_0, a_1, a_2, a_3) VALUES ('%s','%s',%.11f,%.11f,%.11f,%.11f)",table, serial, op, fit.m_a_0, fit.m_a_1, fit.m_a_2, fit.m_a_3);
+             sql.Format("INSERT INTO %s ( serialNumber, operator, a_0, a_1, a_2, a_3) VALUES ('%s','%s',%.11f,%.11f,%.11f,%.11f)",table, serial, op, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3));
              m_db.ExecuteSQL(sql);
 			 return TRUE;
 		 }
@@ -804,7 +837,7 @@ BOOL DBInterface::UpdateDAUChannelGain(CString serialNumber, CString channel, DA
         return FALSE;
  
      CString sql="";
-     sql.Format("UPDATE DAUSetupSensorChannel, DAUSetup SET rollGain = %f, pitchGain = %f, calibTime = '%s' WHERE [DAUSetup].[id] = foreignId And [DAUSetup].[serialNumber]='%s' And [DAUSetupSensorChannel].[name]='%s'",result.m_rollGain, result.m_pitchGain, COleDateTime::GetCurrentTime().Format( _T("%Y-%m-%d %H:%M:%S")), serialNumber, channel);
+     sql.Format("UPDATE DAUSetupSensorChannel, DAUSetup SET rollGain = %f, pitchGain = %f, calibTime = '%s' WHERE [DAUSetup].[id] = foreignId And [DAUSetup].[serialNumber]='%s' And [DAUSetupSensorChannel].[name]='%s'", Chk(result.m_rollGain), Chk(result.m_pitchGain), COleDateTime::GetCurrentTime().Format( _T("%Y-%m-%d %H:%M:%S")), serialNumber, channel);
  
 	 m_db.ExecuteSQL(sql);
 	 return TRUE;
@@ -816,7 +849,7 @@ BOOL DBInterface::UpdateDAUChannelOffset(CString serialNumber, CString channel, 
          return FALSE;
  
      CString sql="";
-     sql.Format("UPDATE DAUSetupSensorChannel, DAUSetup SET rollOffset = %d, pitchOffset = %d WHERE [DAUSetup].[id] = foreignId And [DAUSetup].[serialNumber]='%s' And [DAUSetupSensorChannel].[name]='%s'",result.m_rollOffset, result.m_pitchOffset, serialNumber, channel);
+     sql.Format("UPDATE DAUSetupSensorChannel, DAUSetup SET rollOffset = %d, pitchOffset = %d WHERE [DAUSetup].[id] = foreignId And [DAUSetup].[serialNumber]='%s' And [DAUSetupSensorChannel].[name]='%s'", Chk(result.m_rollOffset), Chk(result.m_pitchOffset), serialNumber, channel);
      
 	 m_db.ExecuteSQL(sql);
 	 return TRUE;
@@ -949,44 +982,6 @@ BOOL DBInterface::InsertMeasurement(MeasurementBase& data)
 }
 
 
-BOOL DBInterface::InsertHistoryItem(HistoryData& data)
-{
-     if(!m_db.IsOpen())
-         return FALSE;
- 
-     COleDateTime time(data.m_time);
-     CString str;
-     str.LoadString( IDS_ANGULAR_DEFINITION_PART_2 );
-     CString sql="";    
-     CString serial = DAU::GetDAU().GetSerialNumber();    
-     int projectID = SysSetup->GetProjectID();
- 
-     sql.Format("INSERT INTO History ( dauSerialNumber, timeOfMeasurement, projectID, timeConstant, calibInfo ) VALUES ('%s','%s',%d, %f, '%s')",
-         serial, time.Format( _T("%Y-%m-%d %H:%M:%S")), projectID, data.m_timeConstant, data.calibInfo);
-	 
-    m_db.ExecuteSQL(sql);  	
-	return TRUE;
-}
-  
-//A202
-BOOL DBInterface::InsertHistory2Item(DBTIMESTAMP ts)
-{
-     if(!m_db.IsOpen())
-         return FALSE;
- 
-     COleDateTime time(ts);        
-     CString sql="";
-     CString op = SysSetup->GetOperatorName();
-     CString serial = DAU::GetDAU().GetSerialNumber();
-     CString place = SysSetup->GetPlace();
-     CString project = SysSetup->GetProjectName();
- 
-     sql.Format("INSERT INTO History ( operator, dauSerialNumber, timeOfMeasurement, place, project ) VALUES ('%s','%s','%s','%s','%s')",
-         op, serial, time.Format( _T("%Y-%m-%d %H:%M:%S")), place, project);
- 
-    m_db.ExecuteSQL(sql);  	
-	return TRUE;
-}
 
 BOOL DBInterface::UpdateComment(CString table, int historyId, CString comment)
 {
@@ -1021,7 +1016,7 @@ BOOL DBInterface::InsertTiltAlignmentChannel(TiltAlignment::ChannelData data, in
  
      CString sql="";
      sql.Format("INSERT INTO TiltAlignmentChannel(foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, bias ) VALUES (%d,'%s','%s', %d, '%s','%s',%f,%f,%f,%f,%f,%f)",
-		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_bias);
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, Chk(data.m_roll), Chk(data.m_pitch), Chk(data.m_tilt), Chk(data.m_angle), Chk(data.m_elevation), Chk(data.m_bias));
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
@@ -1046,8 +1041,8 @@ BOOL DBInterface::InsertTiltAndFlatnessChannel(TiltAndFlatness::ChannelData data
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO TiltAndFlatnessChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth) VALUES (%d,'%s','%s',%d,'%s',%f,%f,%f,%f,%f,%f,%f,%f,%f)",
-         foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_standardDeviation, data.m_maximumDeviation, data.m_azimuth);
+     sql.Format("INSERT INTO TiltAndFlatnessChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f,%f,%f,%f,%f)",
+         foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, Chk(data.m_roll), Chk(data.m_pitch), Chk(data.m_tilt), Chk(data.m_angle), Chk(data.m_elevation), Chk(data.m_standardDeviation), Chk(data.m_maximumDeviation), Chk(data.m_azimuth));
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
@@ -1060,7 +1055,7 @@ BOOL DBInterface::InsertTiltAndFlatnessChannelErr(TiltAndFlatness::ChannelErrDat
  
      CString sql="";
      sql.Format("INSERT INTO TiltAndFlatnessChannelErr (foreignID, azimuth, error) VALUES (%d,%f,%f)",
-         foreignId, data.m_azimuth, data.m_error);
+         foreignId, Chk(data.m_azimuth), Chk(data.m_error));
  
     m_db.ExecuteSQL(sql); 
 	return TRUE;
@@ -1086,7 +1081,7 @@ BOOL DBInterface::InsertTiltAndFlatnessFoChannel(TiltAndFlatnessFo::ChannelData 
  
      CString sql="";
      sql.Format("INSERT INTO TiltAndFlatnessFoChannel (foreignID, station, channel, type, sensorSerialNumber, roll, pitch, tilt, angle, elevation1, elevation2, standardDeviation, bottomError, maximumDeviation, azimuth) VALUES (%d,'%s','%s',%d,'%s',%f,%f,%f,%f,%f,%f,%f,%f,%f,%f)",
-         measId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_elevation2, data.m_standardDeviation, data.m_bottomError, data.m_maximumDeviation, data.m_azimuth);
+         measId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, Chk(data.m_roll), Chk(data.m_pitch), Chk(data.m_tilt), Chk(data.m_angle), Chk(data.m_elevation), Chk(data.m_elevation2), Chk(data.m_standardDeviation), Chk(data.m_bottomError), Chk(data.m_maximumDeviation), Chk(data.m_azimuth));
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
@@ -1099,7 +1094,7 @@ BOOL DBInterface::InsertTiltAndFlatnessFoChannelErr(TiltAndFlatnessFo::ChannelEr
  
      CString sql="";
      sql.Format("INSERT INTO TiltAndFlatnessFoChannelErr (foreignID, azimuth, IndexArmLength1, IndexArmLength2, error1, error2, dh) VALUES (%d,%f,%f,%f,%f,%f,%f)",
-         measId, data.m_azimuth, data.m_indexArmLength1, data.m_indexArmLength2, data.m_error, data.m_error2, data.m_dh);
+         measId, Chk(data.m_azimuth), data.m_indexArmLength1, data.m_indexArmLength2, Chk(data.m_error), Chk(data.m_error2), Chk(data.m_dh));
  
     m_db.ExecuteSQL(sql);  	
 
@@ -1126,7 +1121,7 @@ BOOL DBInterface::InsertGyroPerformanceChannel(GyroPerformance::ChannelData data
  
      CString sql="";
      sql.Format("INSERT INTO GyroPerformanceChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f)",
-         foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle);
+         foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, Chk(data.m_roll), Chk(data.m_pitch), Chk(data.m_tilt), Chk(data.m_angle));
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
@@ -1139,7 +1134,7 @@ BOOL DBInterface::InsertAzimuthAlignment(AzimuthAlignment::Data data, int measId
  
      CString sql="";
      sql.Format("INSERT INTO AzimuthAlignment (measID, rollExcentricity, referenceChannel) VALUES (%d,%f,'%s')",
-             measId, data.m_rollExcentricity, data.m_refChannel);
+             measId, Chk(data.m_rollExcentricity), data.m_refChannel);
  
     m_db.ExecuteSQL(sql); 
 	return TRUE;
@@ -1152,7 +1147,7 @@ BOOL DBInterface::InsertAzimuthAlignmentChannel(AzimuthAlignment::ChannelData da
  
      CString sql="";
      sql.Format("INSERT INTO AzimuthAlignmentChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, nominalAzimuth, nominalAzimuthdifference, measuredAzimuthDifference, measuredNominalDifference ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f)",
-         measId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_nominalAzimuth, data.m_nominalAzimuthdifference, data.m_measuredAzimuthDifference, data.m_measuredNominalDifference);
+         measId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, Chk(data.m_nominalAzimuth), Chk(data.m_nominalAzimuthdifference), Chk(data.m_measuredAzimuthDifference), Chk(data.m_measuredNominalDifference));
      
     m_db.ExecuteSQL(sql); 
 	return TRUE;
@@ -1230,7 +1225,7 @@ BOOL DBInterface::InsertHorizonAbsoluteModeChannel(HorizonAbsoluteMode::ChannelD
  
      CString sql="";
      sql.Format("INSERT INTO VerificationAbsoluteModeChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f,%f,%f,%f,%f) ",
-		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_standardDeviation, data.m_maximumDeviation, data.m_azimuth);
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, Chk(data.m_roll), Chk(data.m_pitch), Chk(data.m_tilt), Chk(data.m_angle), Chk(data.m_elevation), Chk(data.m_standardDeviation), Chk(data.m_maximumDeviation), Chk(data.m_azimuth));
  
     m_db.ExecuteSQL(sql); 
 	return TRUE;
@@ -1256,7 +1251,7 @@ BOOL DBInterface::InsertHorizonRelativeModeChannel(HorizonRelativeMode::ChannelD
  
      CString sql="";
      sql.Format("INSERT INTO VerificationRelativeModeChannel (foreignId, station, channel, type,  sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, elevation, standardDeviation, maximumDeviation, azimuth ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f,%f,%f,%f,%f) ",
-		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_elevation, data.m_standardDeviation, data.m_maximumDeviation, data.m_azimuth);
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, Chk(data.m_roll), Chk(data.m_pitch), Chk(data.m_tilt), Chk(data.m_angle), Chk(data.m_elevation), Chk(data.m_standardDeviation), Chk(data.m_maximumDeviation), Chk(data.m_azimuth));
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;
@@ -1268,7 +1263,7 @@ BOOL DBInterface::UpdateCalibrationFlag(CString table, int id, BOOL b)
 		return FALSE;
 
 	CString sql="";
-	sql.Format("UPDATE %s SET dbUpdated = %s WHERE foreignId = %d", table, b ? "True" : "False", id );		
+	sql.Format("UPDATE %s SET dbUpdated = %s WHERE measID = %d", table, b ? "True" : "False", id );		
 
 	m_db.ExecuteSQL(sql);
 
@@ -1295,7 +1290,7 @@ BOOL DBInterface::InsertCommonFlatTiltChannel(CommonFlatTilt::ChannelData data, 
  
      CString sql="";
      sql.Format("INSERT INTO CommonFlatTiltChannel (foreignID, station, channel, sensorSerialNumber, roll, pitch, parallellBias, perpendicularBias, temperature ) VALUES (%d,'%s','%s','%s',%f,%f,%f,%f,%f) ",
-		 foreignId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_roll, data.m_pitch, data.m_parallellBias, data.m_perpendicularBias, data.m_temperature);
+		 foreignId, data.m_station, data.m_channel, data.m_sensorSerialNumber, Chk(data.m_roll), Chk(data.m_pitch), Chk(data.m_parallellBias), Chk(data.m_perpendicularBias), Chk(data.m_temperature));
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;
@@ -1321,7 +1316,7 @@ BOOL DBInterface::InsertSensorValidationChannel(SensorValidation::ChannelData da
 
 	CString sql="";
 	sql.Format("INSERT INTO SensorValidationChannel (foreignID, station, channel, sensorSerialNumber, rollSF, pitchSF, rollAzErr, pitchAzErr, temperature ) VALUES (%d,'%s','%s','%s',%f,%f,%f,%f,%f) ",
-		foreignId, data.m_station, data.m_channel, data.m_sensorSerialNumber, data.m_rollSc, data.m_pitchSc, data.m_rollAzErr, data.m_pitchAzErr, data.m_temperature);
+		foreignId, data.m_station, data.m_channel, data.m_sensorSerialNumber, Chk(data.m_rollSc), Chk(data.m_pitchSc), Chk(data.m_rollAzErr), Chk(data.m_pitchAzErr), Chk(data.m_temperature));
 
 	m_db.ExecuteSQL(sql);
 	return TRUE;
@@ -1348,7 +1343,7 @@ BOOL DBInterface::InsertLiveGraphChannel(LiveGraph::ChannelData data, int foreig
  
      CString sql="";
      sql.Format("INSERT INTO LiveGraphChannel (foreignID, station, channel, type, sensorSerialNumber, adapterSerialNumber, roll, pitch, tilt, angle, temperature ) VALUES (%d,'%s','%s',%d,'%s','%s',%f,%f,%f,%f,%f) ",
-		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, data.m_roll, data.m_pitch, data.m_tilt, data.m_angle, data.m_temperature);
+		 foreignId, data.m_station, data.m_channel, data.m_type, data.m_sensorSerialNumber, data.m_adapterSerialNumber, Chk(data.m_roll), Chk(data.m_pitch), Chk(data.m_tilt), Chk(data.m_angle), Chk(data.m_temperature));
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;
@@ -1361,7 +1356,7 @@ BOOL DBInterface::InsertLiveDataA202(LiveDataA202::Data data, int measId)
  
      CString sql="";
      sql.Format("INSERT INTO LiveDataA202 ([historyID], [ship], [samplingRate], [comment]) VALUES (%d,'%s',%f,'%s')",
-         measId, SysSetup->GetShipName(), data.m_samplingRate, data.m_comment);
+         measId, SysSetup->GetShipName(), Chk(data.m_samplingRate), data.m_comment);
  
     m_db.ExecuteSQL(sql);  
 	return TRUE;

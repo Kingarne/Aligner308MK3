@@ -41,9 +41,6 @@
 
 ULONG_PTR gdiplusToken;
 
-extern "C" __declspec(dllimport) void __stdcall DllEnsureInit( void ) ;
-extern "C" __declspec(dllimport) void __stdcall DllForceTerm( void ) ;
-
 ALIGNER_DATA g_AlignerData ;
 
 #ifdef _DEBUG
@@ -238,9 +235,6 @@ BOOL CAlignerApp::InitInstance( void )
 	}
 
 
-#ifdef BUILD_ALIGNER_308    
-        DllEnsureInit() ;
-#endif
     InitCommonControls() ;
     CWinApp::InitInstance() ;
     if (!AfxOleInit())
@@ -417,9 +411,6 @@ int CAlignerApp::ExitInstance( void )
     Database::Close() ;  
     SerialPortSet::Exit() ;
     SysSetup->SaveProjectPathToRegistry() ;
-#ifdef BUILD_ALIGNER_308
-    DllForceTerm() ;
-#endif
     return TRUE ;
 }
 
@@ -648,7 +639,7 @@ void CAlignerApp::OnFileOpen( void )
 
 		CFrameWnd *p = (CFrameWnd*)m_pMainWnd;
 		CAlignerDoc *d = (CAlignerDoc*)p->GetActiveDocument();
-		d->OpenProject();
+		d->OpenConfig();
 
 		TRACE("Proj: %s\n",dlg.m_selectedProj.m_projectName);
 		

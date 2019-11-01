@@ -724,18 +724,6 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	  m_SensorValidationChannel[1].m_pitchAzErr = g_AlignerData.Eal[1];
 	  m_SensorValidationChannel[1].m_temperature = m_InParam.pTemperature[1];// g_AlignerData.ObjNo[1]];
 
-	 /* for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
-	  {
-		  m_SensorValidationItem[i].m_station = GetUnitTypeDescription(g_AlignerData.ObjNo[i]);
-		  m_SensorValidationItem[i].m_channel = GetChannelName(g_AlignerData.ObjNo[i]);
-		  m_SensorValidationItem[i].m_sensorSerialNumber = IsSensor(g_AlignerData.ObjNo[i]) ? GetUnitTypeSerialNumber(g_AlignerData.ObjNo[i]) : DB_EMPTY_STRING;
-
-		  m_SensorValidationItem[i].m_rollSc =  g_AlignerData.ACR[i];
-		  m_SensorValidationItem[i].m_pitchSc =  g_AlignerData.ACP[i];
-		  m_SensorValidationItem[i].m_rollAzErr = GetEal(g_AlignerData.ObjNo[i]);
-		  m_SensorValidationItem[i].m_pitchAzErr= g_AlignerData.Kh * GetEac(g_AlignerData.ObjNo[i]);
-		  m_SensorValidationItem[i].m_temperature = m_InParam.pTemperature[g_AlignerData.ObjNo[i]];
-	  }*/
 
 	  //Get calibration status
 	  calibInfo.SetCalibrationTime(m_SensorValidation.m_time);
@@ -1114,6 +1102,7 @@ BOOL CResultTable::SaveToDataBase( void )
 			{
 				ASSERT(0); // This is a "badass" error.
 			}
+			m_reportMeasID = SensorValidation::GetMeasID();
 
 			for (int i = 0; i <= g_AlignerData.NoOfCorr; i++) // index 0 = reference
 			{

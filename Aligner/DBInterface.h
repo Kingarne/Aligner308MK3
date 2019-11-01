@@ -50,9 +50,7 @@ public:
 
     BOOL InsertSensorData(CString table, CString dauSN, CString SN, CString op, double temp, double val);
     BOOL InsertHistoryPrintItem(int historyId);
-    BOOL InsertHistoryItem(HistoryData& data);//DBTIMESTAMP ts);
-    BOOL InsertHistory2Item(DBTIMESTAMP ts);
-
+    
 	BOOL InsertMeasurement(MeasurementBase& data);
 
     BOOL InsertTiltAlignment(TiltAlignment::Data, int measId);

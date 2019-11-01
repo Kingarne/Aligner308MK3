@@ -102,5 +102,5 @@ public:
   afx_msg void OnCalibrationTheoadapter();
   afx_msg void OnUpdateCalibrationTheoadapter(CCmdUI *pCmdUI);
 
-  BOOL OpenProject();
+  BOOL OpenConfig();
 } ;

@@ -186,9 +186,9 @@ void CAlignerDoc::LoadSensorCalibration()
 
 
 
-BOOL CAlignerDoc::OpenProject()
+BOOL CAlignerDoc::OpenConfig()
 {
-	if (SysSetup->GetProjectName() == "")
+	if (SysSetup->GetProjectID() < 1)
 		return false;
 
 	//m_probeError = FALSE;

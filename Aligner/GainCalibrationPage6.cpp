@@ -132,14 +132,7 @@ void GainCalibrationPage6::SaveDayToDayCalibrationData( Gain6CalibrationResult &
 	{
 		CString msgCaption, text;
 
-
 		msgCaption.LoadString(IDS_QUESTION_CAPTION);
-		text.LoadString(IDS_EXIT_WITH_OPPORTUNITY_TO_SAVE);
-
-		if (IDYES != MessageBox(text, msgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1))
-		{
-			return;
-		}
 		
 		m_pResultTable->ShowReport(TRUE);
 

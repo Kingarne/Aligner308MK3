@@ -261,7 +261,7 @@ void SystemSetupDialog::OnBnClickedOk()
 	OnCbnSelchangeShipName();
 
 	if (m_proj.m_projectName == "")
-		return;
+		return;	
 
 	CDialog::OnOK();
 }

@@ -70,6 +70,8 @@ BOOL SystemSetup::DoModal( void )
     if (IDOK == dialog.DoModal())
     {
 		m_proj = dialog.m_proj ;
+		m_proj.m_dauSerial = DAU::GetDAU().m_mainBoardRegsPro.m_dauSerialNo;
+
 		m_projectPath = dialog.m_folder;
 		LoadSignFromRegistry();
 		SaveToRegistry() ;
@@ -527,6 +529,12 @@ int SystemSetup::GetDAUSerial()
 	return m_proj.m_dauSerial;
 }
 
+CString SystemSetup::GetDAUSerialString()
+{
+	CString str;
+	str.Format("%03d", m_proj.m_dauSerial);
+	return str;
+}
 
 CString SystemSetup::GetNewImageFileIndexString( void )
 {

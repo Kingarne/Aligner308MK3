@@ -45,6 +45,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_669D62171A2CB1F9C4346CA5FF814A01"
+        "OwnerKey" = "8:_6C27AB3047684979BF0FE5A78C3414BF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6C27AB3047684979BF0FE5A78C3414BF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -334,6 +340,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_669D62171A2CB1F9C4346CA5FF814A01"
+            {
+            "SourcePath" = "8:ReporterLib.tlb"
+            "TargetName" = "8:ReporterLib.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_1F2DB66C15604113B3F3E17712BA6EE9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_751CB77F729940F0A2F00D763A90558B"
             {
             "SourcePath" = "8:..\\release\\Aligner 308.exe"
@@ -547,7 +573,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Aligner 308 MK3"
         "ProductCode" = "8:{C14909B9-9B37-4B46-AE8D-02B7BD380179}"
-        "PackageCode" = "8:{85A16CA8-2B23-4F93-82A8-91191356876B}"
+        "PackageCode" = "8:{7B7D230E-B34F-4BD2-94AC-07BAE1BEAB83}"
         "UpgradeCode" = "8:{F67D46D5-197E-4356-A560-DEE7633D41A3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -594,178 +620,6 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_2A710885C2E446869D51B64E6C2A5300"
-                            {
-                            "Name" = "8:ODBC"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_D7C52CE837604208882E68F6686EF29B"
-                                    {
-                                    "Name" = "8:ODBC.INI"
-                                    "Condition" = "8:"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "DeleteAtUninstall" = "11:FALSE"
-                                    "Transitive" = "11:FALSE"
-                                        "Keys"
-                                        {
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_556B06E5311544ABB6767418EDDD36F5"
-                                            {
-                                            "Name" = "8:Aligner308"
-                                            "Condition" = "8:"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "DeleteAtUninstall" = "11:FALSE"
-                                            "Transitive" = "11:FALSE"
-                                                "Keys"
-                                                {
-                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_43E045C6C7B54775AA060A4353894A6F"
-                                                    {
-                                                    "Name" = "8:Engines"
-                                                    "Condition" = "8:"
-                                                    "AlwaysCreate" = "11:FALSE"
-                                                    "DeleteAtUninstall" = "11:FALSE"
-                                                    "Transitive" = "11:FALSE"
-                                                        "Keys"
-                                                        {
-                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_4BE1F95944124208BE9DB165184B6276"
-                                                            {
-                                                            "Name" = "8:Jet"
-                                                            "Condition" = "8:"
-                                                            "AlwaysCreate" = "11:FALSE"
-                                                            "DeleteAtUninstall" = "11:FALSE"
-                                                            "Transitive" = "11:FALSE"
-                                                                "Keys"
-                                                                {
-                                                                }
-                                                                "Values"
-                                                                {
-                                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_32FBAFE71A414D348FE430EA1468790E"
-                                                                    {
-                                                                    "Name" = "8:MaxBufferSize"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
-                                                                    "ValueTypes" = "3:3"
-                                                                    "Value" = "3:2048"
-                                                                    }
-                                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_5D297E76E8FE4390B69A1F0790C4DCC5"
-                                                                    {
-                                                                    "Name" = "8:ImplicitCommitSync"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
-                                                                    "ValueTypes" = "3:1"
-                                                                    "Value" = "8:"
-                                                                    }
-                                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_5F25AB5DCDE04BA2B8D7562458E06F44"
-                                                                    {
-                                                                    "Name" = "8:Threads"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
-                                                                    "ValueTypes" = "3:3"
-                                                                    "Value" = "3:3"
-                                                                    }
-                                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_7B1B336D590242F8BC2B429A2F3C3530"
-                                                                    {
-                                                                    "Name" = "8:UserCommitSync"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
-                                                                    "ValueTypes" = "3:1"
-                                                                    "Value" = "8:Yes"
-                                                                    }
-                                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_C424AEC63A3F4F4586E8627BE3615268"
-                                                                    {
-                                                                    "Name" = "8:PageTimeout"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
-                                                                    "ValueTypes" = "3:3"
-                                                                    "Value" = "3:5"
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        "Values"
-                                                        {
-                                                        }
-                                                    }
-                                                }
-                                                "Values"
-                                                {
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_13764E040FF141C692F1E0E3E1E78195"
-                                                    {
-                                                    "Name" = "8:Driver"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:C:\\Windows\\system32\\odbcjt32.dll"
-                                                    }
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_199D1E92BA064DC58042A979BC77D112"
-                                                    {
-                                                    "Name" = "8:UID"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:"
-                                                    }
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_3339C6C0EB1A4B53B9E67A005D95BD8D"
-                                                    {
-                                                    "Name" = "8:DBQ"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:[CommonAppDataFolder][Manufacturer]\\[ProductName]\\Aligner308.mdb"
-                                                    }
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_7EAE67BACC0A47E5B2259816E12F4843"
-                                                    {
-                                                    "Name" = "8:DriverId"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:3"
-                                                    "Value" = "3:25"
-                                                    }
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_A06325D368724CBAB11D95D69A1675CA"
-                                                    {
-                                                    "Name" = "8:SafeTransaktions"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:3"
-                                                    "Value" = "3:0"
-                                                    }
-                                                }
-                                            }
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_CBD407460F074E8495B029D8FF111673"
-                                            {
-                                            "Name" = "8:ODBC Data Sources"
-                                            "Condition" = "8:"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "DeleteAtUninstall" = "11:FALSE"
-                                            "Transitive" = "11:FALSE"
-                                                "Keys"
-                                                {
-                                                }
-                                                "Values"
-                                                {
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_8808603868174D758859D72D49017B9A"
-                                                    {
-                                                    "Name" = "8:Aligner308"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:Microsoft Access Driver (*.mdb)"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        "Values"
-                                        {
-                                        }
-                                    }
-                                }
-                                "Values"
-                                {
-                                }
-                            }
                             "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_536C36E756804EEF8079D2CFDE091DD6"
                             {
                             "Name" = "8:[Manufacturer]"
@@ -855,7 +709,7 @@
                                             "Condition" = "8:"
                                             "Transitive" = "11:FALSE"
                                             "ValueTypes" = "3:1"
-                                            "Value" = "8:[TARGETDIR]"
+                                            "Value" = "8:C:\\A308 Test Projects"
                                             }
                                             "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_74F50ABAC04545F9AC756C7B9D7EE710"
                                             {
@@ -2022,7 +1876,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6C27AB3047684979BF0FE5A78C3414BF"
             {
-            "SourcePath" = "8:..\\ReporterLib\\ReporterLib\\obj\\Release\\ReporterLib.dll"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1F2DB66C15604113B3F3E17712BA6EE9"

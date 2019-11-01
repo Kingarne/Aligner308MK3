@@ -51,10 +51,11 @@ BOOL ProjectOpenDlg::OnInitDialog()
 	m_projList.InsertColumn(2, "Operator", LVCFMT_LEFT, 100);
 	m_projList.InsertColumn(3, "Ship", LVCFMT_LEFT, 100);
 	m_projList.InsertColumn(4, "Place", LVCFMT_LEFT, 100);
-	m_projList.InsertColumn(5, "Latitude", LVCFMT_LEFT, 50);
+	m_projList.InsertColumn(5, "Latitude", LVCFMT_LEFT, 60);
+	m_projList.InsertColumn(6, "Measurement", LVCFMT_LEFT, 70);
 
 	InitProjList();
-
+	
 
 
 
@@ -81,6 +82,8 @@ void ProjectOpenDlg::InitProjList()
 		m_projList.SetItemText(i, 4, iter->m_location);
 		str.Format("%.1f", iter->m_latitude);
 		m_projList.SetItemText(i, 5, str);
+		str.Format("%d", iter->m_numMeasurements);
+		m_projList.SetItemText(i, 6, str);
 	
 		m_projList.SetItemData(i, (DWORD_PTR)&(*iter));
 	}
@@ -122,6 +125,7 @@ void ProjectOpenDlg::OnBnClickedOk()
 		return;
 
 	m_selectedProj = *((ProjectData*)m_projList.GetItemData(selected));
+	m_selectedProj.m_dauSerial = DAU::GetDAU().m_mainBoardRegsPro.m_dauSerialNo;
 
 	CDialog::OnOK();
 }

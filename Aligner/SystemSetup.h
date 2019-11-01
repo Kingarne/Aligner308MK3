@@ -65,9 +65,9 @@ class ProjectData
 {
 public:
 
-	ProjectData(void) : m_projectName(""), m_dauSerial(0), m_operatorName(""), m_shipName(""), m_latitude(0.0), m_mode(SYSTEM_SETUP_NO_MODE), m_location(""), m_unit(0), m_projectID(0)
+	ProjectData(void) : m_projectName(""), m_dauSerial(1), m_operatorName(""), m_shipName(""), m_latitude(0.0), m_mode(SYSTEM_SETUP_NO_MODE), m_location(""), m_unit(0), m_projectID(0)
 	{
-
+		TRACE("Projdata");
 	};
 	
 public:
@@ -86,6 +86,7 @@ public:
 	int m_mode;
 	int m_imgIdx;
 	CString m_config;
+	int m_numMeasurements;
 };
 
 class SystemSetup
@@ -128,6 +129,7 @@ public:
 	void SaveProjectPathToRegistry( void ) ;
 		
 	int GetDAUSerial();
+	CString GetDAUSerialString();
 	CString GetProjectTime(void);
 	CString GetOperatorName( void ) ;
 	CString GetShipName( void ) ;

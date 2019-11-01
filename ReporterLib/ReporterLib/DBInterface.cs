@@ -215,6 +215,20 @@ namespace ReporterLib
             public double azuimuth { get; set; }
         }
 
+        public class SensorValidation: AlignmentBase
+        {
+            public bool DBUpdated { get; set; }
+        }
+
+        public class SensorValidationCh : ChannelBase
+        {
+            public double rollScale { get; set; }
+            public double pitchScale { get; set; }
+            public double rollAz { get; set; }
+            public double pitchAz{ get; set; }
+            public double temperature { get; set; }
+        }       
+
         public class LiveGraph: AlignmentBase
         {
             public double sampleRate{ get; set; }            
@@ -619,6 +633,62 @@ namespace ReporterLib
             return true;
         }
 
+        public bool GetSensorvalidationMeas(ref DBInterface.Measurement meas, ref SensorValidation svm)
+        {
+
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorValidation WHERE measID=" + meas.ID.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        svm.ID = (int)dr["ID"];
+                        svm.DBUpdated = (bool)dr["dbUpdated"];
+                        string refCh = (string)dr["referenceChannel"];
+                        meas.RefChannel = refCh;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetSensorvalidationMeasCh(int foreignId, ref List<DBInterface.ChannelBase> channels)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorValidationChannel WHERE foreignID=" + foreignId.ToString(), Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        DBInterface.SensorValidationCh svCh = new DBInterface.SensorValidationCh();
+
+                        svCh.ID = (int)dr["ID"];
+                        svCh.ForeignID = (int)dr["foreignID"];
+                        svCh.Station = (string)dr["station"];
+                        svCh.Channel = (string)dr["channel"];
+                        svCh.SensorSN = (string)dr["sensorSerialNumber"];
+                        svCh.rollScale = (float)(double)dr["rollSF"];
+                        svCh.pitchScale= (float)(double)dr["pitchSF"];
+                        svCh.rollAz = (float)(double)dr["rollAzErr"];
+                        svCh.pitchAz = (float)(double)dr["pitchAzErr"];
+                        svCh.temperature = (float)(double)dr["temperature"];
+
+                        channels.Add(svCh);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+
         public bool GetCommonFlatMeas(ref DBInterface.Measurement meas, ref CommonFlat cfm)
         {
 
@@ -646,21 +716,17 @@ namespace ReporterLib
         {
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;
-
-            //using (OdbcCommand command = new OdbcCommand("SELECT * FROM CommonFlatTiltChannel INNER JOIN StationType ON CommonFlatTiltChannel.type = StationType.stationType WHERE foreignID=" + foreignId.ToString(), Connection))
+            
             using (OdbcCommand command = new OdbcCommand("SELECT * FROM CommonFlatTiltChannel WHERE foreignID=" + foreignId.ToString(), Connection))
             {
                 using (OdbcDataReader dr = command.ExecuteReader())
                 {
                     while (dr.Read())
-                    {
-                       
+                    {                       
                         DBInterface.CommonFlatCh cfCh = new DBInterface.CommonFlatCh();
 
                         cfCh.ID = (int)dr["ID"];
-                        cfCh.ForeignID = (int)dr["foreignID"];
-                        //cfCh.Type = (int)dr["type"];
-                        //cfCh.TypeText = (string)dr["stationTypeName"];
+                        cfCh.ForeignID = (int)dr["foreignID"];                    
                         cfCh.Station = (string)dr["station"];
                         cfCh.Channel = (string)dr["channel"];
                         cfCh.SensorSN = (string)dr["sensorSerialNumber"];

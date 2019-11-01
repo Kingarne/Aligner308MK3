@@ -112,7 +112,8 @@ namespace ReporterLib
             PrintMeasFunc[DBInterface.MeasType.MT_GyroPerf] = PrintGyroPerf;
             PrintMeasFunc[DBInterface.MeasType.MT_CommonFlatTilt] = PrintCommonFlat;
             PrintMeasFunc[DBInterface.MeasType.MT_VerifAbsolute] = PrintAbsoluteMode;
-            PrintMeasFunc[DBInterface.MeasType.MT_VerifRelative] = PrintRelativeMode;
+            PrintMeasFunc[DBInterface.MeasType.MT_VerifRelative] = PrintRelativeMode;            
+            PrintMeasFunc[DBInterface.MeasType.MT_SensorValidation] = PrintSensorValidation;
             PrintMeasFunc[DBInterface.MeasType.MT_LiveGraph] = PrintLiveGraph;
 
             CalTypeMap = new Dictionary<DBInterface.CalType, string>();
@@ -315,7 +316,7 @@ namespace ReporterLib
 
         private void QuerySettingsCalib(object sender, System.Drawing.Printing.QueryPageSettingsEventArgs e)
         {
-            e.PageSettings.Margins = new System.Drawing.Printing.Margins(70, 70, 70, 70);
+            e.PageSettings.Margins = new System.Drawing.Printing.Margins(70, 70, 70, 50);
         }
 
         private void EndPrintCalib(object sender, System.Drawing.Printing.PrintEventArgs e)
@@ -358,7 +359,7 @@ namespace ReporterLib
 
         private void QuerySettings(object sender, System.Drawing.Printing.QueryPageSettingsEventArgs e)
         {
-             e.PageSettings.Margins = new System.Drawing.Printing.Margins(70, 70, 70, 70);
+             e.PageSettings.Margins = new System.Drawing.Printing.Margins(70, 70, 70, 50);
         }
 
         private void EndPrint(object sender, System.Drawing.Printing.PrintEventArgs e)
@@ -429,7 +430,13 @@ namespace ReporterLib
 
         private void DrawPageNum(PrintPageEventArgs e)
         {
-            PrintArgs.Graphics.DrawString((m_page+1).ToString(), new Font("Ariel", 8, FontStyle.Bold), Brushes.Black, e.PageBounds.Width-30, e.PageBounds.Height - 30);
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+
+            RectangleF rect = new RectangleF(e.MarginBounds.Left, e.MarginBounds.Bottom, e.MarginBounds.Width, 20);
+            string str = "Schill Reglerteknik AB";
+            PrintArgs.Graphics.DrawString(str, new Font("Ariel", 8, FontStyle.Regular), Brushes.Black, rect, sf);
+            PrintArgs.Graphics.DrawString((m_page+1).ToString(), new Font("Ariel", 8, FontStyle.Bold), Brushes.Black, e.MarginBounds.Right, e.MarginBounds.Bottom);
 
         }
 
@@ -811,7 +818,7 @@ namespace ReporterLib
                     UpdateReportList();
 
                 }
-            }
+            } 
         }
 
         private bool PrintTiltAlignment()
@@ -898,7 +905,7 @@ namespace ReporterLib
 
 
 
-                DrawText("*Bias across line-of-sight.", gr, HeadFont, MainBr, new Rectangle(HeadRect.Left, PrintArgs.PageBounds.Bottom-30, HeadRect.Width, 10), 2, 0);
+                DrawText("*Bias across line-of-sight.", gr, HeadFont, MainBr, new Rectangle(HeadRect.Left, PrintArgs.PageBounds.Bottom, HeadRect.Width, 10), 2, 0);
             }
 
             if (Images != null)
@@ -1234,7 +1241,7 @@ namespace ReporterLib
                         xPerc = 60;
                         DrawText("Ix Arm Lengt 2:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
                         xPerc = xPerc + 15;
-                        DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                        DrawText(chErr.indexArmL2.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
                         yPerc += yHeadSpace;
                     }
                 }
@@ -1472,6 +1479,10 @@ namespace ReporterLib
                 Images = new List<DBInterface.ImageInfo>();
                 DBI.GetImages(Measurement.ID, ref Images);
 
+                string s = cfm.DBUpdated ? "Yes" : "No";
+                int xPerc = 60;
+                DrawText("Calibration Updated: " + s, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+
                 int wPerc = 8;
                 List<TableItem> table = new List<TableItem>();
                 table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
@@ -1700,6 +1711,86 @@ namespace ReporterLib
 
             return true;
         }
+                      
+        private bool PrintSensorValidation()
+        {
+            Graphics gr = PrintArgs.Graphics;
+            if (HeadPage)
+            {
+                DrawHeader();
+
+                DBInterface.SensorValidation svm = new DBInterface.SensorValidation();
+                DBI.GetSensorvalidationMeas(ref Measurement, ref svm);
+
+                List<DBInterface.ChannelBase> channels = new List<DBInterface.ChannelBase>();
+                DBI.GetSensorvalidationMeasCh(svm.ID, ref channels);
+                SetRefChannel(Measurement, channels);
+
+                Images = new List<DBInterface.ImageInfo>();
+                DBI.GetImages(Measurement.ID, ref Images);
+                
+                string s = svm.DBUpdated ? "Yes" : "No";                
+                int xPerc = 60;
+                DrawText("Calibration Updated: " + s, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);                
+
+                int wPerc = 12;
+                List<TableItem> table = new List<TableItem>();
+                table.Add(new TableItem("Station", 2, 20, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem("Ch", -1, 5));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));               
+                table.Add(new TableItem("Roll Scale\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch Scale\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Roll Azimuth\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Pitch Azimuth\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Temperature\n[°C]", -1, wPerc + 3));
+
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+                m_yPos += SmalMarg;
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+                m_yPos += SmalMarg;
+
+                foreach (DBInterface.SensorValidationCh ch in channels)
+                {
+                    table = new List<TableItem>();
+                    table.Add(new TableItem("Calib. SF & Az. Table", 2, 20, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(ch.Channel, -1, 5));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
+                    if (ch.IsRef)
+                    {
+                        string refStr = "Ref";
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                        table.Add(new TableItem(refStr, -1, wPerc, RefColor));
+                    }
+                    else
+                    {
+                        table.Add(new TableItem(ch.rollScale.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitchScale.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.rollAz.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitchAz.ToString("0.00"), -1, wPerc));
+                    }
+                    table.Add(new TableItem(ch.temperature.ToString("0.00"), -1, wPerc + 3));
+
+                    m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+                    m_yPos += SmalMarg;
+                }
+                
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);              
+
+                m_yPos += DrawCalibInfo(gr, Measurement, m_yPos);
+                // m_yPos += MargY;
+
+                m_yPos += DrawComment(gr, Measurement, m_yPos);
+                m_yPos += MargY;
+            }
+
+            if (Images != null)
+                return DrawImages(gr, ref Images);
+
+            return true;
+        }
+
         private bool PrintLiveGraph()
         {
             Graphics gr = PrintArgs.Graphics;

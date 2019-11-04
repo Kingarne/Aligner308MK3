@@ -98,30 +98,34 @@ BOOL CAlignerDoc::OnNewDocument( void )
     }
 	
     if (m_initialSetup)
-    {
-        m_ChannelSetupFileName = _T("ChannelSetup.dat");
+    {        
         m_initialSetup = FALSE ;
         return TRUE ;
     }
-    else
-    {
-        if (OnSetupSystem( SYSTEM_SETUP_MODE_ALIGNMENT ))
-        {
-   //         SetModifiedFlag( TRUE ) ;
-        }
-        else
-        {
-            SetModifiedFlag( FALSE ) ;
-            return FALSE ;
-        }
-    }
-	DAU::GetDAU().SetSelected(FALSE);
+    
+	NewProject(SYSTEM_SETUP_MODE_ALIGNMENT);
+   
+    return TRUE ;
+}
 
-    string directory = SysSetup->GetProjectPath() ;
-    if (SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode())
-    {
-        if (!::CreateDirectory( directory.c_str(), NULL ))
-        {
+int CAlignerDoc::NewProject(int mode)
+{
+	if (!OnSetupSystem(mode))
+	{
+		SetModifiedFlag(FALSE);
+		return FALSE;
+	}
+
+	DAU::GetDAU().Clear();
+	DAU::GetDAU().SetSelected(FALSE);
+	DAU::GetDAU().EnableErrorEvent(FALSE);
+
+	if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_ALIGNMENT)
+	{
+		string directory = SysSetup->GetProjectPath();
+
+		if (!::CreateDirectory(directory.c_str(), NULL))
+		{
 			int err = GetLastError();
 			if (err == ERROR_ALREADY_EXISTS)
 			{
@@ -131,49 +135,53 @@ BOOL CAlignerDoc::OnNewDocument( void )
 			{
 				::AfxMessageBox(_T("Unable to create project directory"));
 			}
-            OnSetupSystem( SYSTEM_SETUP_NO_MODE, FALSE ) ;
-            SetModifiedFlag( FALSE ) ;
-            return TRUE ;
-        }
-        if(theApp.IsAligner308Enabled())
-        {
-            directory = SysSetup->GetProjectPath() + _T("\\Images") ;
-            if (!::CreateDirectory( directory.c_str(), NULL ))
-            {
-                ::AfxMessageBox( _T("Unable to create project image directory") ) ; 
-                OnSetupSystem( SYSTEM_SETUP_NO_MODE, FALSE ) ;
-                SetModifiedFlag( FALSE ) ;
-                return TRUE ;
-            }
-        }
-    }
-    DAU::GetDAU().EnableErrorEvent( FALSE ) ;
-    CString fileName = SysSetup->GetProjectPath() + _T("\\") + SysSetup->GetProjectName() ;
-    fileName += theApp.IsAligner202Enabled() ? _T(".a202") : _T(".a308");
+			OnSetupSystem(SYSTEM_SETUP_NO_MODE, FALSE);
+			SetModifiedFlag(FALSE);
+			return TRUE;
+		}
 
-    CFile tester ;
-    if (tester.Open( fileName, CFile::shareDenyNone ))
-    {
-        tester.Close() ;
-        ::AfxMessageBox( _T("Folder is pre-existing!") ) ; 
-        OnSetupSystem( SYSTEM_SETUP_NO_MODE, FALSE ) ;
-        SetModifiedFlag( FALSE ) ;
-        return TRUE ;
-    }
-    SetPathName( fileName ) ;
-	SysSetup->SetImageFileIndex(0);
-	if (SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode())
-    {
+		directory = SysSetup->GetProjectPath() + _T("\\Images");
+		if (!::CreateDirectory(directory.c_str(), NULL))
+		{
+			::AfxMessageBox(_T("Unable to create project image directory"));
+			OnSetupSystem(SYSTEM_SETUP_NO_MODE, FALSE);
+			SetModifiedFlag(FALSE);
+			return TRUE;
+		}
+		SetCurrentDirectory(SysSetup->GetProjectPath());
+	}
+
+	CString fileName = SysSetup->GetProjectPath() + _T("\\") + SysSetup->GetProjectName();
+
+	SetPathName(fileName);
+
+	if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_ALIGNMENT)
+	{
 		DBInterface::Instance()->InsertProject(SysSetup->GetProject());
-       // m_XMLHandler.Store(fileName);    
-        //OnSaveDocument( fileName ) ;
-    }
-    SetCurrentDirectory( SysSetup->GetProjectPath() ) ;
-   // m_ChannelSetupFileDir = DEFAULT_FILE_DIR ;
-    CSetupLiveDataGraphDlg::m_TextFileDir = DEFAULT_FILE_DIR ;
-    CGraphView::m_GraphFileDir = DEFAULT_FILE_DIR ;
-   
-    return TRUE ;
+	}
+	else if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_CALIBRATION)
+	{
+		DBInterface::Instance()->InsertProjectCalibration(SysSetup->GetProject());
+	}
+
+	CSetupLiveDataGraphDlg::m_TextFileDir = DEFAULT_FILE_DIR;
+	CGraphView::m_GraphFileDir = DEFAULT_FILE_DIR;
+
+	return TRUE;
+}
+
+void CAlignerDoc::OnProjectCalibration(void)
+{
+	int result = NewProject(SYSTEM_SETUP_MODE_CALIBRATION);
+	
+	if (result == TRUE)
+	{
+		theApp.RenameDocument(_T("Calibration"));
+	}
+	else
+	{
+		theApp.RenameDocument(_T(""));
+	}
 }
 
 void CAlignerDoc::LoadSensorCalibration()
@@ -192,7 +200,7 @@ BOOL CAlignerDoc::OpenConfig()
 		return false;
 
 	//m_probeError = FALSE;
-	DAU::GetDAU().Close();
+	DAU::GetDAU().Clear();
 	CString str;
 	OnSetupSystem(SYSTEM_SETUP_MODE_ALIGNMENT, FALSE);
 	
@@ -223,7 +231,7 @@ void CAlignerDoc::ReOpenDocument()
 
 BOOL CAlignerDoc::OnOpenDocument( LPCTSTR lpszPathName )
 {
-    m_probeError = FALSE;
+ /*   m_probeError = FALSE;
     DAU::GetDAU().Close() ;
     CString str;
     OnSetupSystem( SYSTEM_SETUP_MODE_ALIGNMENT, FALSE ) ;
@@ -242,7 +250,7 @@ BOOL CAlignerDoc::OnOpenDocument( LPCTSTR lpszPathName )
     }
     m_ChannelSetupFileDir = DEFAULT_FILE_DIR ;
     CSetupLiveDataGraphDlg::m_TextFileDir = DEFAULT_FILE_DIR ;
-    CGraphView::m_GraphFileDir = DEFAULT_FILE_DIR ;
+    CGraphView::m_GraphFileDir = DEFAULT_FILE_DIR ;*/
     return TRUE ;
 }
 
@@ -568,55 +576,28 @@ BOOL CAlignerDoc::OnSetupSystem( int mode, BOOL showDialog )
 {
 	BOOL creationStatus = TRUE ;
 	
-	if (showDialog && !SysSetup->DoModal())
+	if (showDialog && !SysSetup->DoModal(mode))
 	{
-		
-//		SysSetup->SetMode( SYSTEM_SETUP_NO_MODE ) ;
 		return FALSE;
 	}
 
 	SysSetup->SetMode(mode);
-	if( SYSTEM_SETUP_NO_MODE != SysSetup->GetMode() )
+ 	if (!SysSetup->IsValid() && theApp.m_DAUPresent /*&& !theApp.IsAligner202Enabled()*/)
 	{
-// 		BOOL openResult = FALSE;
-// 		while( openResult == FALSE )
-// 		{
-// 		//		openResult = DAU::GetDAU().Setup( );
-// 			if( openResult == FALSE )
-// 			{
-// 				if( IDOK != ::AfxMessageBox( IDS_UNABLE_TO_PROBE_DAU_CHECK_CABLES, MB_OKCANCEL ) )
-// 				{
-// 					break;
-// 				}
-// 			}
-// 		}
-// 		if( openResult == FALSE )
-// 		{
-// 			::AfxMessageBox( IDS_UNABLE_TO_PROBE_DAU_CHECK_CABLES_AND_RESTART ) ;
-// 			SysSetup->SetMode( SYSTEM_SETUP_NO_MODE ) ;
-// 			m_probeError = TRUE;
-// 		}else
- 		if (!SysSetup->IsValid() && theApp.m_DAUPresent /*&& !theApp.IsAligner202Enabled()*/)
-		{
-			::AfxMessageBox( _T("Software mismatch!") ) ;
-			SysSetup->SetMode( SYSTEM_SETUP_NO_MODE ) ;
-		}
+		::AfxMessageBox( _T("Software mismatch!") ) ;
+		DAU::GetDAU().Clear();
+		static_cast<SystemConfigurationView *>(theApp.m_pSystemConfigurationView)->ShowAll(SW_HIDE);
+		creationStatus = FALSE;
+
+		SysSetup->SetMode( SYSTEM_SETUP_NO_MODE ) ;
 	}
-	if (SYSTEM_SETUP_MODE_CALIBRATION == SysSetup->GetMode())
+
+	if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_CALIBRATION )
 	{
-		ResetAllNomAz();
-		static_cast<SystemConfigurationView *>(theApp.m_pSystemConfigurationView)->ShowGeneralConfiguration(SW_SHOW);
+		ResetAllNomAz();	
 	}
-	else if (SYSTEM_SETUP_NO_MODE == SysSetup->GetMode())
-	{
-		DAU::GetDAU().Close() ;
-  		static_cast<SystemConfigurationView *>( theApp.m_pSystemConfigurationView ) -> ShowAll( SW_HIDE ) ;
-		creationStatus = FALSE ;
-	}
-	else 
-	{
-		static_cast<SystemConfigurationView *>( theApp.m_pSystemConfigurationView ) -> ShowGeneralConfiguration( SW_SHOW );
-	}
+
+	static_cast<SystemConfigurationView *>(theApp.m_pSystemConfigurationView)->ShowGeneralConfiguration(SW_SHOW);	
 	UpdateAllViews( NULL ) ;
 
 	return creationStatus ;
@@ -640,7 +621,9 @@ void CAlignerDoc::OnCalibrationSetup( void )
 {
     if(DAU::GetDAU().ConfigSensors())
     {
-        
+		CString xml;
+		m_XMLHandler.GetConfigXML(xml);
+		SysSetup->UpdateConfig(xml);
     }
     static_cast<SystemConfigurationView *>( theApp.m_pSystemConfigurationView )->ShowSensorConfiguration( SW_SHOW );
     UpdateAllViews( NULL ) ;
@@ -657,7 +640,7 @@ BOOL CAlignerDoc::GetCanSetupAlign( void ) const
   {
     return FALSE ;
   }
-  return DAU::GetDAU().IsOpen() && (0 < SysSetup->GetShipName().GetLength()) && (0 < SysSetup->GetOperatorName().GetLength()) && (SYSTEM_SETUP_MODE_ALIGNMENT == SysSetup->GetMode()) ;
+  return DAU::GetDAU().IsOpen() && (0 < SysSetup->GetShipName().GetLength()) && (0 < SysSetup->GetOperatorName().GetLength()) && (SysSetup->GetMode() == SYSTEM_SETUP_MODE_ALIGNMENT) ;
 }
 
 void CAlignerDoc::OnAlignmentSetup( void )
@@ -895,30 +878,7 @@ void CAlignerDoc::OnUpdateCalibrationCreatetemperaturemodel( CCmdUI *pCmdUI )
   pCmdUI -> Enable( GetCanSetupCalibrate() ) ;
 }
 
-void CAlignerDoc::OnProjectCalibration( void )
-{
-  DAU::GetDAU().Close() ;
-  DAU::GetDAU().EnableErrorEvent( FALSE ) ;
-  DAU::GetDAU().SetSelected(FALSE);
-  BOOL result;
-  if (SYSTEM_SETUP_MODE_CALIBRATION == SysSetup->GetMode())
-  {   
-    result = OnSetupSystem( SYSTEM_SETUP_NO_MODE, FALSE ) ;
-  }
-  else
-  {
-    SysSetup->SetShipName( _T("") );
-    result = OnSetupSystem( SYSTEM_SETUP_MODE_CALIBRATION ) ;
-  }
-  if( result == TRUE )
-  {
-    theApp.RenameDocument( _T("Calibration") );
-  }
-  else
-  {
-    theApp.RenameDocument( _T("") );
-  }
-}
+
 
 void CAlignerDoc::OnUpdateProjectCalibration( CCmdUI *pCmdUI )
 {  
@@ -983,7 +943,7 @@ void CAlignerDoc::OnUpdateUtilitiesViewreport( CCmdUI *pCmdUI )
   }  
   else
   {
-    pCmdUI -> Enable(SysSetup->IsOpen() && SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode()) ;
+    pCmdUI -> Enable(SysSetup->IsOpen() && (SysSetup->GetNumMeasurements() > 0) && SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode()) ;
   }
 }
 

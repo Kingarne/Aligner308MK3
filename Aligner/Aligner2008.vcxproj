@@ -472,6 +472,7 @@
     <ClCompile Include="SimulDlg.cpp" />
     <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="Splash.cpp" />
+    <ClCompile Include="SystemSetupCalibDlg.cpp" />
     <ClCompile Include="SystemSetupDlg.cpp" />
     <ClCompile Include="TheoAdapterCalibration.cpp" />
     <ClCompile Include="TheoAdapterCalibrationPage0.cpp" />
@@ -928,6 +929,7 @@ makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\ProjectData\Schill\A308\splash.bmp" />
+    <None Include="resource.hm" />
     <None Include="res\A202Splash.bmp" />
     <None Include="res\adapter_1.bmp" />
     <None Include="res\adapter_2.bmp" />

@@ -8,6 +8,8 @@ public:
 	SystemSetupDialog(ProjectData &dataSource, CWnd *pParent = NULL);
 	virtual ~SystemSetupDialog(void);
 
+
+
 	ProjectData m_proj;	
 	CString m_folder;
 	WhiteBackgroundEdit m_date;

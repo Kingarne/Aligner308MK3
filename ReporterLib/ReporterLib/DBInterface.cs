@@ -305,7 +305,7 @@ namespace ReporterLib
         public class PlatformCorrection
         {
             public bool done = false;
-            public string sn { get; set; }
+            public int sn { get; set; }
             public DateTime time { get; set; }
             public double alpha { get; set; }        
         }
@@ -1435,7 +1435,7 @@ namespace ReporterLib
                     {
                         PlatformCorrection pc = new PlatformCorrection();
 
-                        pc.sn = (string)dr["serialNumber"];
+                        pc.sn = (int)dr["serialNumber"];
                         pc.time = (DateTime)dr["time"];                        
                         pc.alpha = (double)(float)dr["alpha"];
                          

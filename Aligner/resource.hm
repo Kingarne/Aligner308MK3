@@ -1,5 +1,5 @@
 // Microsoft Visual C++ generated Help ID include file.
 // Used by Aligner.rc
 //
-#define HIDC_AMBIENT_TEMPERATURE        0x80e10498    // IDD_PROPPAGE_SMALL [English (U.S.)]
-#define HIDC_EDIT_LATITUDE              0x80d30479    // IDD_LATITUDE_DIALOG [English (U.S.)]
+#define HIDC_AMBIENT_TEMPERATURE        0x80e10498    // IDD_PROPPAGE_SMALL [English (United States)]
+#define HIDC_EDIT_LATITUDE              0x81570479    // IDD_SYSTEM_SETUP [English (United States)]

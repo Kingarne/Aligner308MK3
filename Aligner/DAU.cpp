@@ -68,7 +68,7 @@ m_overangeDetectionActive(FALSE)
 DAU::~DAU( void )
 {
   ClearConfig() ;
-  Close() ;
+  Clear() ;
 }
 
 
@@ -95,12 +95,12 @@ BOOL DAU::StopDAUComThread()
 
 BOOL DAU::StartDAUComThread()
 {
-    Close();
+    Clear();
 
   // m_comThr.SetCallback(StaticFrameCallback, this);	
     if(m_comThr.Create(0))
     {
-        Close() ;
+        Clear() ;
         //AfxGetApp()->PostThreadMessage( UM_TIMER, 0, 0 ) ;   
         return FALSE ;
     }
@@ -122,7 +122,7 @@ void DAU::ResetSensorCompensations()
 
 BOOL DAU::Setup()
 {
-  Close() ;
+  Clear() ;
   ClearConfig() ;
 
   LoadConfig();    
@@ -622,11 +622,8 @@ int DAU::HandleDigitalData(DAUFrame& frame, Digital* pDigital)
 }
 
 
-BOOL DAU::Close( void )
+BOOL DAU::Clear( void )
 {
-  m_running = FALSE ;
-  m_stop = 1 ;
-  //Sleep( 200 ) ;
   
   m_DAUFramesQue.clear();   
   return TRUE ;

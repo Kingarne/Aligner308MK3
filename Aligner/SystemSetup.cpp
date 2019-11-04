@@ -9,6 +9,7 @@
 #include "Aligner.h"
 #include <sstream>
 #include "SystemSetupDlg.h"
+#include "SystemSetupCalibDlg.h"
 
 SystemSetup* SystemSetup::m_ptInstance = NULL;
 // SystemSetup::Data SystemSetup::m_proj ;
@@ -60,31 +61,49 @@ SystemSetup* SystemSetup::Instance()
     return m_ptInstance;
 }
 
-BOOL SystemSetup::DoModal( void )
+BOOL SystemSetup::DoModal(int mode)
 {
-   // LoadLatitudeFromRegistry() ;
-   // LoadUnitsFromRegistry() ;
-   // LoadFromRegistry() ;
-    SystemSetupDialog dialog( m_proj ) ;
-	dialog.m_folder = m_projectPath;
-    if (IDOK == dialog.DoModal())
-    {
-		m_proj = dialog.m_proj ;
-		m_proj.m_dauSerial = DAU::GetDAU().m_mainBoardRegsPro.m_dauSerialNo;
-
-		m_projectPath = dialog.m_folder;
-		LoadSignFromRegistry();
-		SaveToRegistry() ;
-		SaveLatitudeToRegistry() ;
-		if (SYSTEM_SETUP_MODE_ALIGNMENT == GetMode())
+	int result = IDCANCEL;
+	if (mode == SYSTEM_SETUP_MODE_ALIGNMENT)
+	{
+		SystemSetupDialog dialog(m_proj);
+		dialog.m_folder = m_projectPath;
+		if ((result = dialog.DoModal()) == IDOK)
 		{
-			SaveUnitsToRegistry() ;
-		}		
-		SaveProjectPathToRegistry() ;			
-		return TRUE ;
-	 }
+			m_proj = dialog.m_proj;
+			m_projectPath = dialog.m_folder;
+		}
+	}
+	else if (mode == SYSTEM_SETUP_MODE_CALIBRATION)
+	{
+		SystemSetupCalibDialog dialog(m_proj);
+		dialog.m_folder = m_projectPath;
+		if ((result = dialog.DoModal()) == IDOK)
+		{
+			m_proj = dialog.m_proj;
+			m_projectPath = dialog.m_folder;
+		}
+	}
+
+	if (result == IDOK)
+	{
+		m_proj.m_dauSerial = DAU::GetDAU().m_mainBoardRegsPro.m_dauSerialNo;
+			
+		SaveToRegistry();
+		SaveLatitudeToRegistry();
+		if (GetMode() == SYSTEM_SETUP_MODE_ALIGNMENT)
+		{
+			SaveUnitsToRegistry();
+		}
+		SaveProjectPathToRegistry();
+	}
   
-	return FALSE ;
+	return result == IDOK ;
+}
+
+int SystemSetup::GetNumMeasurements()
+{
+	return m_proj.m_numMeasurements;
 }
 
 bool SystemSetup::IsOpen()
@@ -124,6 +143,7 @@ void SystemSetup::LoadProjectFromRegistry()
 	LoadLatitudeFromRegistry();
 	LoadUnitsFromRegistry();
 	LoadFromRegistry();
+	LoadSignFromRegistry();
 }
 
 void SystemSetup::LoadFromRegistry() 
@@ -605,6 +625,6 @@ CString SystemSetup::GetConfigXML()
 }
 
 void SystemSetup::UpdateConfig(CString xml)
-{
-	DBInterface::Instance()->UpdateProjectConfig(m_proj.m_projectID, xml);
+{	
+	DBInterface::Instance()->UpdateProjectConfig(m_proj.m_projectID, xml, GetMode());
 }

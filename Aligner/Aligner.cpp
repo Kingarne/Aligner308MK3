@@ -640,6 +640,8 @@ void CAlignerApp::OnFileOpen( void )
 		CFrameWnd *p = (CFrameWnd*)m_pMainWnd;
 		CAlignerDoc *d = (CAlignerDoc*)p->GetActiveDocument();
 		d->OpenConfig();
+		d->SetPathName(dlg.m_selectedProj.m_projectName);
+
 
 		TRACE("Proj: %s\n",dlg.m_selectedProj.m_projectName);
 		

@@ -210,7 +210,7 @@
 #define IDD_AZ_ALIGN_NOTE_DIALOG        547
 #define IDD_GAIN_CALIBRATION_PAGE_6     548
 #define IDD_PROJECT_OPEN_DLG            562
-#define IDB_BITMAP2                     567
+#define IDD_SYSTEM_SETUP_CALIBRATION    563
 #define IDB_SPLASH_MK3                  567
 #define IDC_BROWSE                      1000
 #define IDC_DAU_CAL_PRINT               1000
@@ -1006,6 +1006,7 @@
 #define IDC_STATIC_GATC                 1657
 #define IDC_AUTO_CLOSE_CHECK            1658
 #define IDC_TIME_CONST_EDIT             1659
+#define IDC_PLATFORM_COMBO              1660
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1426,7 +1427,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        568
 #define _APS_NEXT_COMMAND_VALUE         32822
-#define _APS_NEXT_CONTROL_VALUE         1660
+#define _APS_NEXT_CONTROL_VALUE         1661
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

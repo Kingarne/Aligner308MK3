@@ -81,6 +81,7 @@ protected:
 
   void StoreChSetup(CArchive& archive, int ver);
   int LoadChSetup(CArchive& archive, int ver);
+  int NewProject(int mode);
 
 public:
 	afx_msg void OnCalibrationDailyazimutherrortest();
@@ -89,9 +90,7 @@ public:
 private:
   BOOL m_initialSetup ;
   XMLHandler m_XMLHandler;
- // std::set<LONG> m_projectMeasurments ;
-  CString m_ChannelSetupFileDir ;
-  CString m_ChannelSetupFileName ;
+
 #ifdef _DEBUG
   virtual void AssertValid( void ) const ;
   virtual void Dump( CDumpContext& dc ) const ;

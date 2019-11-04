@@ -29,7 +29,8 @@ public:
     BOOL GetStationParallaxes(CString station, ParallaxData &data);        
     BOOL GetUniqueSensorSN(CString table, vector<CString>& serial);
     BOOL GetPlatformCorrectionAngle(CString serial, double& alpha);
-    BOOL GetLastCounter(int& id);
+	BOOL GetPlatforms(vector<Platform>& platforms);
+	BOOL GetLastCounter(int& id);
 
     BOOL GetChannelCalibTime(CString ch, int dauId, DBTIMESTAMP& time);
     BOOL GetAdapterCalibTime(CString ad, DBTIMESTAMP& time);
@@ -42,11 +43,12 @@ public:
     BOOL UpdateDAUChannelOffset(CString serialNumber, CString channel, DAUOffsetCalibrationResult &result);
     BOOL UpdateDAUChannelGain(CString serialNumber, CString channel, DAUScaleCalibrationResult &result);
     BOOL UpdateComment(CString table, int historyId, CString comment);
-	BOOL UpdateProjectConfig(int projectID, CString xml);
+	BOOL UpdateProjectConfig(int projectID, CString xml, int mode);
 
 	BOOL UpdateCalibrationFlag(CString table, int id, BOOL b);
 
 	BOOL InsertProject(ProjectData& project);
+	BOOL InsertProjectCalibration(ProjectData& project);
 
     BOOL InsertSensorData(CString table, CString dauSN, CString SN, CString op, double temp, double val);
     BOOL InsertHistoryPrintItem(int historyId);

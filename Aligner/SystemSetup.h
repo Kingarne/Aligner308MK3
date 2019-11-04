@@ -61,6 +61,14 @@ struct Ship
 	int m_classID;
 };
 
+struct Platform
+{
+	int m_ID;
+	int m_sn;
+	DBTIMESTAMP m_time;
+	double m_alpha;
+};
+
 class ProjectData
 {
 public:
@@ -87,6 +95,8 @@ public:
 	int m_imgIdx;
 	CString m_config;
 	int m_numMeasurements;
+
+	Platform m_platform;
 };
 
 class SystemSetup
@@ -109,7 +119,7 @@ public:
 	ProjectData GetProject() { return m_proj; }
 
 	bool IsOpen();
-	BOOL DoModal( void ) ;
+	BOOL DoModal( int mode ) ;
 	void LoadSignFromRegistry(void);
 	void LoadProjectFromRegistry();
 	void LoadFromRegistry() ;
@@ -140,6 +150,7 @@ public:
 	CString GetPlace( void ) ;
 	double GetLatitude( void ) ;
 	double GetLatitudeCompensation( void ) ;
+	int GetNumMeasurements();
 	int GetMode( void ) ;
 	int GetUnits( void ) ;
 	int GetSignDef(void);

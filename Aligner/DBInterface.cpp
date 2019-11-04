@@ -111,6 +111,26 @@ CString DBInterface::ToText(double d)
 //     return !records.IsEOF();
 // }
 
+BOOL DBInterface::InsertProjectCalibration(ProjectData& project)
+{
+	if (!m_db.IsOpen())
+		return FALSE;
+
+	COleDateTime time(project.m_time);
+
+	CString sql = "";
+	sql.Format("INSERT INTO ProjectCalibration( name, dauSerial, operator, location, latitude, projTime, signDef ) VALUES ('%s',%d, '%s','%s', %.2f, '%s', %d)",
+		project.m_projectName, SysSetup->GetDAUSerial(), project.m_operatorName, project.m_location, project.m_latitude, time.Format(_T("%Y-%m-%d %H:%M:%S")), project.m_signDef);
+
+	m_db.ExecuteSQL(sql);
+
+	int id;
+	GetLastCounter(id);
+	SysSetup->SetProjectID(id);
+
+	return TRUE;
+}
+
 
 BOOL DBInterface::InsertProject(ProjectData& project)
 {
@@ -132,13 +152,14 @@ BOOL DBInterface::InsertProject(ProjectData& project)
 	return TRUE;
 }
 
-BOOL DBInterface::UpdateProjectConfig(int projectID, CString xml)
+BOOL DBInterface::UpdateProjectConfig(int projectID, CString xml, int mode)
 {
 	if (!m_db.IsOpen())
 		return FALSE;
 
+	CString table = (mode == SYSTEM_SETUP_MODE_ALIGNMENT) ? "Project" : "ProjectCalibration";
 	CString sql;
-	sql.Format("UPDATE Project SET Config='%s' WHERE ID=%d",xml,projectID);
+	sql.Format("UPDATE %s SET Config='%s' WHERE ID=%d",table,xml,projectID);
 
 	m_db.ExecuteSQL(sql);
 
@@ -189,7 +210,7 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 			rs.GetFieldValue("config", data.m_config);
 			rs.GetFieldValue("imgIdx", val);
 			data.m_imgIdx = val.m_iVal;
-
+			data.m_mode = SYSTEM_SETUP_MODE_ALIGNMENT;
 			projects.push_back(data);
 			
 			rs.MoveNext();
@@ -529,6 +550,41 @@ BOOL DBInterface::GetShip(CString name, Ship& ship)
 }
 
 
+
+BOOL DBInterface::GetPlatforms(vector<Platform>& platforms)
+{
+	if (!m_db.IsOpen())
+		return FALSE;
+
+	CString sql = "SELECT * FROM PlatformCorrection";
+
+	int nVal;
+	CString strVal;
+
+	Platform platform;
+
+	CRecordset rs(&m_db);
+	if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+	{
+		while (!rs.IsEOF())
+		{
+			CDBVariant val;
+			rs.GetFieldValue("Id", val);
+			platform.m_ID = val.m_iVal;
+			rs.GetFieldValue("serialNumber", val);
+			platform.m_sn = val.m_iVal;
+			rs.GetFieldValue("alpha", val);
+			platform.m_alpha= val.m_fltVal;
+			rs.GetFieldValue("time", val);
+			platform.m_time = ToDBTimestamp(val.m_pdate);
+
+			platforms.push_back(platform);
+
+			rs.MoveNext();
+		}
+	}
+	return TRUE;
+}
 
 
 BOOL DBInterface::GetShips(vector<Ship>& ships)

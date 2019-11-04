@@ -553,6 +553,9 @@
     <ClCompile Include="SystemSetupDlg.cpp">
       <Filter>Source Files\Application</Filter>
     </ClCompile>
+    <ClCompile Include="SystemSetupCalibDlg.cpp">
+      <Filter>Source Files\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorStatic.h">
@@ -1180,6 +1183,9 @@
     </None>
     <None Include="res\splash.bmp">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource.hm">
+      <Filter>Header Files\Application</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -64,7 +64,7 @@ public:
     BOOL StopDAUComThread();
     BOOL Setup() ;
     BOOL IsOpen( void ) const ;
-    BOOL Close( void ) ;
+    BOOL Clear( void ) ;
     BOOL Start();
     BOOL Restart(BOOL showMsg=FALSE);
     BOOL StartWithTest( int testVoltage );

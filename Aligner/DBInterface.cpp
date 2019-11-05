@@ -778,8 +778,9 @@ BOOL DBInterface::GetSensorData(CString table, CString SN, vector<SelectedData>&
          return FALSE;
  
      CString sql="";
-     sql.Format("SELECT * FROM %s WHERE serialNumber = '%s' ORDER BY timeStamp DESC",table, SN);	
-     
+     sql.Format("SELECT * FROM %s LEFT JOIN ProjectCalibration ON %s.calProjId = ProjectCalibration.ID WHERE serialNumber = '%s' ORDER BY timeStamp DESC",table,table, SN);	
+	 //sql.Format("SELECT * FROM %s WHERE serialNumber = '%s' ORDER BY timeStamp DESC", table, SN);
+	 
      double date;
      COleDateTime oleTime;
  
@@ -790,8 +791,9 @@ BOOL DBInterface::GetSensorData(CString table, CString SN, vector<SelectedData>&
          {
 			 CDBVariant val;
              SelectedData selData;    
-             //rs.GetFieldValue("dauSerialNumber", selData.m_dauSerialNumber);                    
-             //rs.GetFieldValue("operator", selData.m_operatorName);                    
+             rs.GetFieldValue("name", selData.m_projName);                    
+			 rs.GetFieldValue("dauSerial", selData.m_dauSerialNumber);
+             rs.GetFieldValue("operator", selData.m_operatorName);
              rs.GetFieldValue("temperature", val);
 			 selData.m_temperature = val.m_dblVal;
              rs.GetFieldValue("timeStamp", val);

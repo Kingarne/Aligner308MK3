@@ -34,14 +34,17 @@ struct SelectedData
     DBTIMESTAMP m_time ;
     double m_temperature ;
     CString m_dauSerialNumber ;
+	CString m_projName;
+
 public:
-    SelectedData( BOOL use, const CString &operatorName, double value, const DBTIMESTAMP &time, double temperature, const CString dauSerialNumber ) {
+    SelectedData( BOOL use, const CString &operatorName, double value, const DBTIMESTAMP &time, double temperature, const CString dauSerialNumber, const CString proj ) {
         m_use = use ;
         m_operatorName = operatorName ;
         m_value = value ;
         m_time = time ;
         m_temperature = temperature ; 
         m_dauSerialNumber = dauSerialNumber ;
+		m_projName = proj;
     }
 
     SelectedData( void ) {
@@ -51,6 +54,7 @@ public:
         //m_time =  ;
         m_temperature = 0 ; 
         m_dauSerialNumber = _T("") ;
+		m_projName = "";
     }
 } ;
 

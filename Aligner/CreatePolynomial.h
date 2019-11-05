@@ -66,4 +66,6 @@ private:
   LeastSquare m_leastSquare ;
   Polynomial m_fit ;
   CString m_polynomialText ;
+public:
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 } ;

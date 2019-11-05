@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CreatePolynomial, CDialog)
 	ON_CBN_SELCHANGE(IDC_SERIAL_NUMBER, OnCbnSelchangeSerialNumber)
     ON_CBN_SELCHANGE(IDC_AXIS, OnCbnSelchangeAxis)
     ON_BN_CLICKED(ID_PRINT_GRAPH, OnBnClickedPrintGraph)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -619,27 +620,32 @@ void CreatePolynomial::ClassicRead( VARIANT *pBookmark, short column, VARIANT *p
 
   case 1:
     pValue -> vt = VT_R8 ;
-    pValue -> dblVal = m_selectedData [pBookmark -> lVal].m_temperature ;
+    pValue -> dblVal = m_selectedData [pBookmark->lVal].m_temperature ;
     break ;
 
   case 2:
     pValue -> vt = VT_R8 ;
-    pValue -> dblVal = m_selectedData [pBookmark -> lVal].m_value ;
+    pValue -> dblVal = m_selectedData [pBookmark->lVal].m_value ;
     break ;
   
   case 3:
     pValue -> vt = VT_DATE ;
-    pValue -> date = ATL::COleDateTime(  m_selectedData [pBookmark -> lVal].m_time ) ;
+    pValue -> date = ATL::COleDateTime(  m_selectedData [pBookmark->lVal].m_time ) ;
     break ;
 
   case 4:
-    pValue -> vt = VT_BSTR ;
-    pValue -> bstrVal = _bstr_t( m_selectedData [pBookmark -> lVal].m_operatorName).copy() ;
-    break ;
+	  pValue->vt = VT_BSTR;
+	  pValue->bstrVal = _bstr_t(m_selectedData[pBookmark->lVal].m_projName).copy();
+	  break;
 
   case 5:
     pValue -> vt = VT_BSTR ;
-    pValue -> bstrVal = _bstr_t( m_selectedData [pBookmark -> lVal].m_dauSerialNumber).copy() ;
+    pValue -> bstrVal = _bstr_t( m_selectedData [pBookmark->lVal].m_operatorName).copy() ;
+    break ;
+
+  case 6:
+    pValue -> vt = VT_BSTR ;
+    pValue -> bstrVal = _bstr_t( m_selectedData [pBookmark->lVal].m_dauSerialNumber).copy() ;
     break ;
 
   default:
@@ -778,4 +784,12 @@ void CreatePolynomial::SortInTime( vector<SelectedData> &data )
       }
     }
   }
+}
+
+
+void CreatePolynomial::OnSize(UINT nType, int cx, int cy)
+{
+	CDialog::OnSize(nType, cx, cy);
+
+	// TODO: Add your message handler code here
 }

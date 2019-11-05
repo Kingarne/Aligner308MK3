@@ -211,7 +211,6 @@
 #define IDD_GAIN_CALIBRATION_PAGE_6     548
 #define IDD_PROJECT_OPEN_DLG            562
 #define IDD_SYSTEM_SETUP_CALIBRATION    563
-#define IDD_PROJECT_OPEN_DLG1           564
 #define IDD_PROJECT_CALIB_OPEN_DLG      564
 #define IDB_SPLASH_MK3                  567
 #define IDC_BROWSE                      1000
@@ -1009,6 +1008,7 @@
 #define IDC_AUTO_CLOSE_CHECK            1658
 #define IDC_TIME_CONST_EDIT             1659
 #define IDC_PLATFORM_COMBO              1660
+#define IDC_VIEW_ALL                    1661
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1428,9 +1428,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        568
+#define _APS_NEXT_RESOURCE_VALUE        569
 #define _APS_NEXT_COMMAND_VALUE         32823
-#define _APS_NEXT_CONTROL_VALUE         1661
+#define _APS_NEXT_CONTROL_VALUE         1662
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

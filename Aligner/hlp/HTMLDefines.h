@@ -178,7 +178,6 @@
 #define HIDD_GAIN_CALIBRATION_PAGE_6            0x20224
 #define HIDD_PROJECT_OPEN_DLG                   0x20232
 #define HIDD_SYSTEM_SETUP_CALIBRATION           0x20233
-#define HIDD_PROJECT_OPEN_DLG1                  0x20234
 #define HIDD_PROJECT_CALIB_OPEN_DLG             0x20234
  
 // Frame Controls (IDW_*) 

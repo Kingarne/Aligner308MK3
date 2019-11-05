@@ -25,7 +25,7 @@ public:
     BOOL GetStationsOnShip(vector<CString>& ships, CString ship);
     BOOL GetAdapterCalibration(CString adaperSN, AdapterCalibrationData &data);
     BOOL GetSensorCalibrationData(CString calibName, CString SN, SensorTemperatureCalibrationData &data);
-    BOOL GetSensorData(CString table, CString SN, vector<SelectedData>& data);
+    BOOL GetSensorData(CString table, CString SN, vector<SelectedData>& data, CString projName);
     BOOL GetStationParallaxes(CString station, ParallaxData &data);        
     BOOL GetUniqueSensorSN(CString table, vector<CString>& serial);
     BOOL GetPlatformCorrectionAngle(CString serial, double& alpha);

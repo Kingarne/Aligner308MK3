@@ -8,6 +8,7 @@
 IMPLEMENT_DYNAMIC(CreatePolynomial, CDialog)
 
 CreatePolynomial::CreatePolynomial(CWnd* pParent /*=NULL*/)	: CDialog(CreatePolynomial::IDD, pParent)
+, m_viewAll(FALSE)
 {
   // Empty
 }
@@ -19,18 +20,19 @@ CreatePolynomial::~CreatePolynomial( void )
 
 void CreatePolynomial::DoDataExchange( CDataExchange *pDX )
 {
-    CDialog::DoDataExchange( pDX ) ;
-    DDX_Control(pDX, IDC_GRID, m_grid) ;
-    DDX_Control(pDX, IDC_CHART_CONTROL, m_graph) ;
-	DDX_Control(pDX, IDC_SERIAL_NUMBER, m_serial) ;
-	DDX_Control(pDX, IDC_APPROXIMATION_ORDER, m_order) ;
-	DDX_Control(pDX, IDC_AXIS, m_axis) ;
-	DDX_Control(pDX, IDC_APPROXIMATION_TYPE, m_type) ;
-    if (!pDX -> m_bSaveAndValidate)
-    {
-        m_pGrid = m_grid.GetControlUnknown() ;
-        m_pGraph = m_graph.GetControlUnknown() ;
-    }
+	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_GRID, m_grid);
+	DDX_Control(pDX, IDC_CHART_CONTROL, m_graph);
+	DDX_Control(pDX, IDC_SERIAL_NUMBER, m_serial);
+	DDX_Control(pDX, IDC_APPROXIMATION_ORDER, m_order);
+	DDX_Control(pDX, IDC_AXIS, m_axis);
+	DDX_Control(pDX, IDC_APPROXIMATION_TYPE, m_type);
+	if (!pDX->m_bSaveAndValidate)
+	{
+		m_pGrid = m_grid.GetControlUnknown();
+		m_pGraph = m_graph.GetControlUnknown();
+	}
+	DDX_Check(pDX, IDC_VIEW_ALL, m_viewAll);
 }
 
 BEGIN_MESSAGE_MAP(CreatePolynomial, CDialog)
@@ -41,11 +43,19 @@ BEGIN_MESSAGE_MAP(CreatePolynomial, CDialog)
     ON_CBN_SELCHANGE(IDC_AXIS, OnCbnSelchangeAxis)
     ON_BN_CLICKED(ID_PRINT_GRAPH, OnBnClickedPrintGraph)
 	ON_WM_SIZE()
+	ON_BN_CLICKED(IDC_VIEW_ALL, &CreatePolynomial::OnBnClickedViewAll)
 END_MESSAGE_MAP()
 
 
 void CreatePolynomial::SetupData( void )
 {
+	UpdateData(TRUE);
+	CString projname = "";
+	if (m_viewAll == false)
+	{
+		projname = SysSetup->GetProjectName();
+	}
+
     if (0 <= m_serial.GetCurSel())
     {
         CString serialNumber ;
@@ -54,38 +64,38 @@ void CreatePolynomial::SetupData( void )
         {
             case 0:
             {
-                DBInterface::Instance()->GetSensorData("SensorRollOffsetData", serialNumber, m_selectedData);
+                DBInterface::Instance()->GetSensorData("SensorRollOffsetData", serialNumber, m_selectedData, projname);
                 //GetDataFromSN( SensorRollOffsetDataFromSN(), serialNumber, m_selectedData ) ;
             }
             break ;
 
             case 1:
             {
-                DBInterface::Instance()->GetSensorData("SensorPitchOffsetData", serialNumber, m_selectedData);                
+                DBInterface::Instance()->GetSensorData("SensorPitchOffsetData", serialNumber, m_selectedData, projname);
             }
             break ;
 
             case 2:
             {
-                DBInterface::Instance()->GetSensorData("SensorRollGainData", serialNumber, m_selectedData);                                
+                DBInterface::Instance()->GetSensorData("SensorRollGainData", serialNumber, m_selectedData, projname);
             }
             break ;
 
             case 3:
             {
-                DBInterface::Instance()->GetSensorData("SensorPitchGainData", serialNumber, m_selectedData);                                                
+                DBInterface::Instance()->GetSensorData("SensorPitchGainData", serialNumber, m_selectedData, projname);
             }
             break ;
 
             case 4:
             {
-                DBInterface::Instance()->GetSensorData("SensorRollAzimuthData", serialNumber, m_selectedData);                                                                
+                DBInterface::Instance()->GetSensorData("SensorRollAzimuthData", serialNumber, m_selectedData, projname);
             }
             break ;
 
             case 5:
             {
-                DBInterface::Instance()->GetSensorData("SensorPitchAzimuthData", serialNumber, m_selectedData);                                                                                
+                DBInterface::Instance()->GetSensorData("SensorPitchAzimuthData", serialNumber, m_selectedData, projname);
             }
             break ;
 
@@ -431,6 +441,15 @@ void CreatePolynomial::OnCbnSelchangeAxis( void )
   m_pGrid -> Close() ;
   m_pGrid -> ReOpen( _variant_t(0L, VT_I4) ) ;
   SetupPolynomial() ;
+}
+
+void CreatePolynomial::OnBnClickedViewAll()
+{
+	SetupSerial();
+	SetupData();
+	m_pGrid->Close();
+	m_pGrid->ReOpen(_variant_t(0L, VT_I4));
+	SetupPolynomial();
 }
 
 void CreatePolynomial::OnCbnSelchangeApproximationOrder( void )
@@ -790,6 +809,29 @@ void CreatePolynomial::SortInTime( vector<SelectedData> &data )
 void CreatePolynomial::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
+	
+	CWnd* pWnd1 = GetDlgItem(IDC_CHART_CONTROL);
+	if (!pWnd1 || !pWnd1->m_hWnd)
+		return;
 
-	// TODO: Add your message handler code here
+	CWnd* pWnd2 = GetDlgItem(IDC_GRID);
+
+	CRect rect;
+	pWnd1->GetWindowRect(&rect);
+	ScreenToClient(rect);
+	pWnd1->MoveWindow(rect.left, rect.top, cx - rect.left - 10, cy/2- rect.top);
+
+	pWnd2->GetWindowRect(&rect);
+	ScreenToClient(rect);
+	pWnd2->MoveWindow(rect.left, cy/2+5, cx - rect.left - 10, cy/2-30);
+
+	CWnd* pWnd3 = GetDlgItem(IDOK);
+	pWnd3->GetWindowRect(&rect);
+	ScreenToClient(rect);
+	pWnd3->MoveWindow(cx-70, cy-40, rect.Width(), rect.Height());
+
+
 }
+
+
+

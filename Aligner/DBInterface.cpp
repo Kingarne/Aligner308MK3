@@ -770,7 +770,7 @@ BOOL DBInterface::GetSensorCalibrationData(CString calibName, CString SN, Sensor
     return TRUE;
 }
 
-BOOL DBInterface::GetSensorData(CString table, CString SN, vector<SelectedData>& data)
+BOOL DBInterface::GetSensorData(CString table, CString SN, vector<SelectedData>& data, CString projName)
 {
      data.clear();
  
@@ -778,7 +778,14 @@ BOOL DBInterface::GetSensorData(CString table, CString SN, vector<SelectedData>&
          return FALSE;
  
      CString sql="";
-     sql.Format("SELECT * FROM %s LEFT JOIN ProjectCalibration ON %s.calProjId = ProjectCalibration.ID WHERE serialNumber = '%s' ORDER BY timeStamp DESC",table,table, SN);	
+	 if (projName != "")
+	 {
+		 sql.Format("SELECT * FROM %s LEFT JOIN ProjectCalibration ON %s.calProjId = ProjectCalibration.ID WHERE serialNumber = '%s' AND ProjectCalibration.name = '%s' ORDER BY timeStamp DESC", table, table, SN, projName);
+	 }
+	 else
+	 {
+		 sql.Format("SELECT * FROM %s LEFT JOIN ProjectCalibration ON %s.calProjId = ProjectCalibration.ID WHERE serialNumber = '%s' ORDER BY timeStamp DESC", table, table, SN);
+	 }
 	 //sql.Format("SELECT * FROM %s WHERE serialNumber = '%s' ORDER BY timeStamp DESC", table, SN);
 	 
      double date;

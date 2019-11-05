@@ -211,6 +211,8 @@
 #define IDD_GAIN_CALIBRATION_PAGE_6     548
 #define IDD_PROJECT_OPEN_DLG            562
 #define IDD_SYSTEM_SETUP_CALIBRATION    563
+#define IDD_PROJECT_OPEN_DLG1           564
+#define IDD_PROJECT_CALIB_OPEN_DLG      564
 #define IDB_SPLASH_MK3                  567
 #define IDC_BROWSE                      1000
 #define IDC_DAU_CAL_PRINT               1000
@@ -1420,13 +1422,14 @@
 #define ID_ALIGNMENT_SETUP              32818
 #define ID_UTILITIES_COMSETUP           32819
 #define ID_CALIBRATION_THEOADAPTER      32821
+#define ID_PROJECT_OPENCALIBRATION      32822
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        568
-#define _APS_NEXT_COMMAND_VALUE         32822
+#define _APS_NEXT_COMMAND_VALUE         32823
 #define _APS_NEXT_CONTROL_VALUE         1661
 #define _APS_NEXT_SYMED_VALUE           108
 #endif

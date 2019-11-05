@@ -24,6 +24,7 @@
 #include ".\alignerdoc.h"
 #include "ComSettingsDlg.h"
 #include "ReportManager.h"
+#include "ProjectOpenCalibDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -76,6 +77,7 @@ BEGIN_MESSAGE_MAP(CAlignerDoc, CDocument)
   ON_COMMAND(ID_UTILITIES_COMSETUP, OnUtilitiesComsetup)
   ON_COMMAND(ID_CALIBRATION_THEOADAPTER, &CAlignerDoc::OnCalibrationTheoadapter)
   ON_UPDATE_COMMAND_UI(ID_CALIBRATION_THEOADAPTER, &CAlignerDoc::OnUpdateCalibrationTheoadapter)
+	ON_COMMAND(ID_PROJECT_OPENCALIBRATION, &CAlignerDoc::OnProjectOpencalibration)
 END_MESSAGE_MAP()
 
 CAlignerDoc::CAlignerDoc( void )
@@ -184,6 +186,23 @@ void CAlignerDoc::OnProjectCalibration(void)
 	}
 }
 
+void CAlignerDoc::OnProjectOpencalibration()
+{
+	ProjectOpenCalibDlg dlg;
+	if (dlg.DoModal() == IDOK)
+	{
+		SystemSetup::Instance()->SetProject(dlg.m_selectedProj);
+
+		OpenConfig();
+		SetPathName(dlg.m_selectedProj.m_projectName);
+
+
+		TRACE("Proj: %s\n", dlg.m_selectedProj.m_projectName);
+
+	}
+}
+
+
 void CAlignerDoc::LoadSensorCalibration()
 {
 	for (int i = 0; i < DAU::GetDAU().GetSensorCount(); i++)
@@ -199,23 +218,17 @@ BOOL CAlignerDoc::OpenConfig()
 	if (SysSetup->GetProjectID() < 1)
 		return false;
 
-	//m_probeError = FALSE;
 	DAU::GetDAU().Clear();
 	CString str;
-	OnSetupSystem(SYSTEM_SETUP_MODE_ALIGNMENT, FALSE);
+	//OnSetupSystem(SYSTEM_SETUP_MODE_ALIGNMENT, FALSE);
 	
 	if (m_XMLHandler.ParseConfig(SysSetup->GetConfigXML()))
 	{
 
 	}
-	else
-	{
-		//OnSetupSystem(SYSTEM_SETUP_NO_MODE, FALSE);
-	//	return TRUE;	
-	}
+	
 	static_cast<SystemConfigurationView *>(theApp.m_pSystemConfigurationView)->ShowAll(SW_SHOW);
 
-	//m_ChannelSetupFileDir = DEFAULT_FILE_DIR;
 	CSetupLiveDataGraphDlg::m_TextFileDir = DEFAULT_FILE_DIR;
 	CGraphView::m_GraphFileDir = DEFAULT_FILE_DIR;
 	return TRUE;
@@ -1117,4 +1130,6 @@ void CAlignerDoc::OnUtilitiesComsetup()
         DAU::GetDAU().UpdateSyncroSettings();
     }
 }
+
+
 

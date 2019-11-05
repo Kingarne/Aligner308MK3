@@ -37,7 +37,8 @@ public:
     BOOL GetSensorCalibTime(CString se, DBTIMESTAMP& time);
 	
 	BOOL GetProjects(vector<ProjectData>& projects);
-
+	BOOL GetCalibrationProjects(vector<ProjectData>& projects);
+	
     BOOL UpdateAdapterCalibration(CString serial, double el, double az);
     BOOL UpdateSensorCalibration(CString table, CString serial, CString op, Polynomial& fit);//double a0, double a1, double a2, double a3);
     BOOL UpdateDAUChannelOffset(CString serialNumber, CString channel, DAUOffsetCalibrationResult &result);

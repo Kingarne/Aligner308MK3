@@ -556,6 +556,9 @@
     <ClCompile Include="SystemSetupCalibDlg.cpp">
       <Filter>Source Files\Application</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectOpenCalibDlg.cpp">
+      <Filter>Source Files\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorStatic.h">

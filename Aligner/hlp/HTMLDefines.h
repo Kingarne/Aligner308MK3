@@ -65,6 +65,7 @@
 #define HID_ALIGNMENT_SETUP                     0x18032
 #define HID_UTILITIES_COMSETUP                  0x18033
 #define HID_CALIBRATION_THEOADAPTER             0x18035
+#define HID_PROJECT_OPENCALIBRATION             0x18036
  
 // Prompts (IDP_*) 
  
@@ -177,6 +178,8 @@
 #define HIDD_GAIN_CALIBRATION_PAGE_6            0x20224
 #define HIDD_PROJECT_OPEN_DLG                   0x20232
 #define HIDD_SYSTEM_SETUP_CALIBRATION           0x20233
+#define HIDD_PROJECT_OPEN_DLG1                  0x20234
+#define HIDD_PROJECT_CALIB_OPEN_DLG             0x20234
  
 // Frame Controls (IDW_*) 
 // This is a part of the Microsoft Foundation Classes C++ library.

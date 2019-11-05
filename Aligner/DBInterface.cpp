@@ -119,8 +119,8 @@ BOOL DBInterface::InsertProjectCalibration(ProjectData& project)
 	COleDateTime time(project.m_time);
 
 	CString sql = "";
-	sql.Format("INSERT INTO ProjectCalibration( name, dauSerial, operator, location, latitude, projTime, signDef ) VALUES ('%s',%d, '%s','%s', %.2f, '%s', %d)",
-		project.m_projectName, SysSetup->GetDAUSerial(), project.m_operatorName, project.m_location, project.m_latitude, time.Format(_T("%Y-%m-%d %H:%M:%S")), project.m_signDef);
+	sql.Format("INSERT INTO ProjectCalibration( name, dauSerial, operator, location, latitude, projTime, signDef, platformSN ) VALUES ('%s',%d, '%s','%s', %.2f, '%s', %d, %d)",
+		project.m_projectName, SysSetup->GetDAUSerial(), project.m_operatorName, project.m_location, project.m_latitude, time.Format(_T("%Y-%m-%d %H:%M:%S")), project.m_signDef, project.m_platform.m_sn);
 
 	m_db.ExecuteSQL(sql);
 
@@ -163,6 +163,58 @@ BOOL DBInterface::UpdateProjectConfig(int projectID, CString xml, int mode)
 
 	m_db.ExecuteSQL(sql);
 
+	return true;
+}
+
+BOOL DBInterface::GetCalibrationProjects(vector<ProjectData>& projects)
+{
+	if (!m_db.IsOpen())
+		return FALSE;
+
+	CString sql = "";
+	sql.Format("SELECT * FROM ProjectCalibration");
+
+	ProjectData data;
+
+	CRecordset rs(&m_db);
+	if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+	{
+		//TRACE("count: %d, %d\n", rs.GetRecordCount(), rs.GetODBCFieldCount());
+		/*for (int i = 0; i < rs.GetODBCFieldCount(); i++)
+		{
+			CODBCFieldInfo info;
+			rs.GetODBCFieldInfo(i, info);
+			TRACE("%d, %s\n", i, info.m_strName);
+		}*/
+
+		while (!rs.IsEOF())
+		{
+			CDBVariant val;
+			rs.GetFieldValue("ID", val);
+			data.m_projectID = val.m_iVal;
+			rs.GetFieldValue("name", data.m_projectName);
+			rs.GetFieldValue("projTime", val);//oleTime);
+			data.m_time = ToDBTimestamp(val.m_pdate);
+			rs.GetFieldValue("operator", data.m_operatorName);
+			rs.GetFieldValue("location", data.m_location);
+			rs.GetFieldValue("latitude", val);
+			data.m_latitude = val.m_dblVal;
+			
+			rs.GetFieldValue("signDef", val);
+			data.m_signDef = val.m_iVal;
+			
+			rs.GetFieldValue("platformSN", val);
+			data.m_platform.m_sn = val.m_iVal;
+
+			CString str;
+			rs.GetFieldValue("config", data.m_config);
+			
+			data.m_mode = SYSTEM_SETUP_MODE_CALIBRATION;
+			projects.push_back(data);
+
+			rs.MoveNext();
+		}
+	}
 	return true;
 }
 
@@ -738,8 +790,8 @@ BOOL DBInterface::GetSensorData(CString table, CString SN, vector<SelectedData>&
          {
 			 CDBVariant val;
              SelectedData selData;    
-             rs.GetFieldValue("dauSerialNumber", selData.m_dauSerialNumber);                    
-             rs.GetFieldValue("operator", selData.m_operatorName);                    
+             //rs.GetFieldValue("dauSerialNumber", selData.m_dauSerialNumber);                    
+             //rs.GetFieldValue("operator", selData.m_operatorName);                    
              rs.GetFieldValue("temperature", val);
 			 selData.m_temperature = val.m_dblVal;
              rs.GetFieldValue("timeStamp", val);

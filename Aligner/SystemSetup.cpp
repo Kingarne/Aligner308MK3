@@ -478,6 +478,13 @@ CString SystemSetup::GetShipName( void )
   return m_proj.m_shipName ;
 }
 
+CString SystemSetup::GetPlatformSN(void)
+{
+	CString str;
+	str.Format("%03d", m_proj.m_platform.m_sn);
+	return str;
+}
+
 double SystemSetup::GetLatitude( void )
 {
   return m_proj.m_latitude ;

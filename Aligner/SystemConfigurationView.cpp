@@ -83,6 +83,16 @@ void SystemConfigurationView::ShowGeneralConfiguration( int nCmdShow )
 	GetDlgItem( IDC_SYSTEM_CONFIG_GENERAL_DATE_TEXT )->ShowWindow( nCmdShow );
 	GetDlgItem( IDC_SYSTEM_CONFIG_GENERAL_PLACE_TEXT )->ShowWindow( nCmdShow );
 
+	if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_ALIGNMENT)
+	{
+		GetDlgItem(IDC_SYSTEM_CONFIG_GENERAL_SHIP_TEXT)->SetWindowText("Ship:");
+	}
+	else if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_CALIBRATION)
+	{
+		GetDlgItem(IDC_SYSTEM_CONFIG_GENERAL_SHIP_TEXT)->SetWindowText("Platform:");
+	}
+
+
     if( theApp.IsAligner202Enabled() == FALSE )
     {
 	    GetDlgItem( IDC_SYSTEM_CONFIG_GENERAL_LATITUDE_TEXT )->ShowWindow( nCmdShow );
@@ -144,12 +154,21 @@ void SystemConfigurationView::ShowSyncroConfiguration( int nCmdShow )
 
 void SystemConfigurationView::UpdateGeneralConfiguration( void )
 {
-    m_GeneralProject.SetWindowText( (LPCTSTR)SysSetup->GetProjectName() );
-	m_GeneralShip.SetWindowText( (LPCTSTR)SysSetup->GetShipName() );
+    m_GeneralProject.SetWindowText( (LPCTSTR)SysSetup->GetProjectName() );	
 	m_GeneralOperator.SetWindowText( (LPCTSTR)SysSetup->GetOperatorName() );
 	m_GeneralDauSN.SetWindowText( (LPCTSTR)SysSetup->GetDAUSerialString() );
 	m_GeneralDate.SetWindowText(SysSetup->GetProjectTime());// COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")) );
 	m_GeneralPlace.SetWindowText( (LPCTSTR)SysSetup->GetPlace() );
+
+	if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_ALIGNMENT)
+	{
+		m_GeneralShip.SetWindowText((LPCTSTR)SysSetup->GetShipName());
+	}
+	else if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_CALIBRATION)
+	{
+		m_GeneralShip.SetWindowText((LPCTSTR)SysSetup->GetPlatformSN());
+	}
+
 
     if( theApp.IsAligner202Enabled() == FALSE )
     {

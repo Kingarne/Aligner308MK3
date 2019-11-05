@@ -143,6 +143,7 @@ public:
 	CString GetProjectTime(void);
 	CString GetOperatorName( void ) ;
 	CString GetShipName( void ) ;
+	CString GetPlatformSN(void);
 	CString GetProjectName( void ) ;
 	int GetProjectID(void);
 	CString GetProjectPath( void ) ;
@@ -162,6 +163,8 @@ public:
 	map<int, ValidSyncroInfo> m_validSyncroTypes;
 	double GetRefVoltage(CString name);   
 	CString GetConfigXML();
+
+
 	void UpdateConfig(CString xml);
 
 	void SetDAUSerial(int serial);

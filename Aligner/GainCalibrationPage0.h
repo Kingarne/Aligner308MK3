@@ -28,4 +28,6 @@ private:
 private:
   CComboBox m_reference ;
   CComboBox m_table ;
+
+  vector<Platform> m_platforms;
 } ;

@@ -1731,7 +1731,9 @@ namespace ReporterLib
                 
                 string s = svm.DBUpdated ? "Yes" : "No";                
                 int xPerc = 60;
-                DrawText("Calibration Updated: " + s, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);                
+                DrawText("Platform S/N: " + svm.PlatformSN.ToString("000"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                DrawText("Calibration Updated: " + s, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc+yHeadSpace);
+
 
                 int wPerc = 12;
                 List<TableItem> table = new List<TableItem>();

@@ -217,6 +217,7 @@ namespace ReporterLib
 
         public class SensorValidation: AlignmentBase
         {
+            public int PlatformSN { get; set; }
             public bool DBUpdated { get; set; }
         }
 
@@ -647,6 +648,7 @@ namespace ReporterLib
                     {
                         svm.ID = (int)dr["ID"];
                         svm.DBUpdated = (bool)dr["dbUpdated"];
+                        svm.PlatformSN = (int)dr["platformSN"]; 
                         string refCh = (string)dr["referenceChannel"];
                         meas.RefChannel = refCh;
                     }

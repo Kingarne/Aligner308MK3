@@ -50,15 +50,16 @@ BOOL GainCalibrationPage0::InitReference( void )
 //UNIQUE_SN(PlatformCorrection)     { UNIQUE_SN_BODY } ;
 
 BOOL GainCalibrationPage0::InitTable( void )
-{
-    vector<CString> serialNumbers;
-    DBInterface::Instance()->GetUniqueSensorSN("PlatformCorrection", serialNumbers); 
-    vector<CString>::iterator iter;
-    for(iter=serialNumbers.begin();iter!=serialNumbers.end();iter++)
-    {
-        TRACE("SN:%s\n",*iter);
-        m_table.AddString( *iter ) ;
-    }
+{	
+	DBInterface::Instance()->GetPlatforms(m_platforms);
+    
+    for(auto iter= m_platforms.begin();iter!= m_platforms.end();iter++)
+    {     
+		CString str;
+		str.Format("%03d",iter->m_sn);
+		int i = m_table.AddString( str ) ;
+		m_table.SetItemData(i, (DWORD_PTR)&(*iter));
+	}
   
     switch (m_table.GetCount())
     {
@@ -93,6 +94,10 @@ BOOL GainCalibrationPage0::OnInitDialog( void )
     // TODO: General Failure should handle this!
     ASSERT(0) ;
   }
+
+  CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent());
+  pSheet->m_alpha = 0.0f;
+  g_AlignerData.PlatformSN = 0;
   
   CWnd* pWnd = GetDlgItem(IDC_TIME_CONST_EDIT);
   CString tcStr; tcStr.Format("%.1f", g_AlignerData.TaoTilt);
@@ -103,10 +108,26 @@ BOOL GainCalibrationPage0::OnInitDialog( void )
 
 BOOL GainCalibrationPage0::OnSetActive( void )
 {
-    CPropertySheet *pSheet = static_cast<CPropertySheet *>(GetParent()) ;
+	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent());
     ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CPropertySheet) )) ;
     pSheet -> SetWizardButtons( PSWIZB_NEXT ) ;
     MoveDlgToRightSideOfApp(pSheet);
+		
+	
+	if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_CALIBRATION)
+	{
+		CWnd* pWnd = GetDlgItem(IDC_TABLE_SERIAL_NUMBER);
+		pWnd->ShowWindow(SW_HIDE);
+		pWnd = GetDlgItem(IDC_TABLE_STATIC);
+		pWnd->ShowWindow(SW_HIDE);		
+		pSheet->m_alpha = SysSetup->GetProject().m_platform.m_alpha / 1000.0f;
+		g_AlignerData.PlatformSN = SysSetup->GetProject().m_platform.m_sn;
+	}
+	else
+	{
+		
+	}
+
     return __super::OnSetActive() ;
 }
 
@@ -119,7 +140,7 @@ LRESULT GainCalibrationPage0::OnWizardNext( void )
     ::AfxMessageBox( IDS_SELECT_REFERENCE ) ;
     return -1 ;
   }
-  if ( (pSheet -> m_alpha == 0) || ( CB_ERR == m_table.GetCurSel() ) )
+  if ( (pSheet -> m_alpha == 0))
   {
     ::AfxMessageBox( IDS_SELECT_TABLE ) ;
     return -1 ;
@@ -147,13 +168,11 @@ LRESULT GainCalibrationPage0::OnWizardNext( void )
 }
 
 void GainCalibrationPage0::OnCbnSelchangeTableSerialNumber( void )
-{
-    double alpha = 0.0f;
-    CString serialNumber ;
-    m_table.GetWindowText( serialNumber ) ;
-    DBInterface::Instance()->GetPlatformCorrectionAngle(serialNumber, alpha);
-    
+{	
+	Platform pl = *((Platform*)m_table.GetItemData(m_table.GetCurSel()));
+
     CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
     ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
-    pSheet->m_alpha = alpha / 1000.0f ;
+    pSheet->m_alpha = pl.m_alpha / 1000.0f ;
+	g_AlignerData.PlatformSN = pl.m_sn;
 }

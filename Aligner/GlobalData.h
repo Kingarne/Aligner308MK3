@@ -133,6 +133,7 @@ typedef struct
     double ZPar[SIZE_OF_ARRAYS];
 	int debugFlag;
     map<int, LiveGraphInfo> liveGraphMap;
+	int PlatformSN;
 
 public:
 

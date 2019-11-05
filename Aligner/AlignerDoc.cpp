@@ -900,7 +900,7 @@ void CAlignerDoc::OnUpdateProjectCalibration( CCmdUI *pCmdUI )
         inConfig = static_cast<SystemConfigurationView *>( theApp.m_pSystemConfigurationView )->IsWindowVisible( );
     
     pCmdUI -> Enable( inConfig && !IsModified() && theApp.m_DAUPresent) ;
-    pCmdUI -> SetCheck( SYSTEM_SETUP_MODE_CALIBRATION == SysSetup->GetMode() ) ;
+//    pCmdUI -> SetCheck( SYSTEM_SETUP_MODE_CALIBRATION == SysSetup->GetMode() ) ;
 }
 
 void CAlignerDoc::OnUpdateFileOpen( CCmdUI *pCmdUI )
@@ -1119,7 +1119,7 @@ void CAlignerDoc::OnCalibrationDailyazimutherrortest()
 
 void CAlignerDoc::OnUpdateCalibrationDailyazimutherrortest( CCmdUI *pCmdUI )
 {
-  pCmdUI -> Enable(!theApp.IsLiveDataViewActivated() && 2 <= DAU::GetDAU().GetConnectedSensorCount()) ;
+  pCmdUI -> Enable(!theApp.IsLiveDataViewActivated() && 2 <= DAU::GetDAU().GetConnectedSensorCount() && theApp.GetCanAlign()) ;
 }
 
 void CAlignerDoc::OnUtilitiesComsetup()

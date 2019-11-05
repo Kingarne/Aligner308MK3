@@ -445,6 +445,7 @@ public:
 	class Data : public MeasurementBase
 	{
 	public:
+		int platformSN;
 	};
 
 	static BOOL UpdateCalibrationFlag(BOOL b);

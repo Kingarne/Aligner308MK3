@@ -703,6 +703,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	  m_SensorValidation.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
 	  m_SensorValidation.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;	  
 	  m_SensorValidation.m_time = m_InParam.Time;
+	  m_SensorValidation.platformSN = g_AlignerData.PlatformSN;
 
 	  m_SensorValidationChannel[0].m_station = GetUnitTypeDescription(g_AlignerData.RefObjNo);
 	  m_SensorValidationChannel[0].m_channel = GetChannelName(g_AlignerData.RefObjNo);

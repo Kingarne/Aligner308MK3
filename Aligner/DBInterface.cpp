@@ -909,12 +909,12 @@ BOOL DBInterface::UpdateAdapterCalibration(CString serial, double el, double az)
      {
          if(!rs.IsEOF())
          {
-			 sql.Format("UPDATE GunAdapterCalibration SET azimuth = %10f, elevation = %.10f, [time] = '%s' WHERE serialNumber = '%s'", Chk(az), Chk(el), COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), serial);
+			 sql.Format("UPDATE GunAdapterCalibration SET azimuth = %10f, elevation = %.10f, [time] = '%s', calProjId = %d WHERE serialNumber = '%s'", Chk(az), Chk(el), COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), SysSetup->GetProjectID(), serial);
 			 m_db.ExecuteSQL(sql);
 		}
          else
          {
-             sql.Format("INSERT INTO GunAdapterCalibration ( serialNumber, elevation, azimuth ) VALUES ('%s',%f,%f)",serial, Chk(el), Chk(az));
+             sql.Format("INSERT INTO GunAdapterCalibration ( serialNumber, elevation, azimuth, calProjId ) VALUES ('%s',%f,%f,%d)",serial, Chk(el), Chk(az), SysSetup->GetProjectID());
              m_db.ExecuteSQL(sql);    			 
          }
      }
@@ -935,12 +935,12 @@ BOOL DBInterface::UpdateSensorCalibration(CString table, CString serial, CString
      {
          if(!rs.IsEOF())
          {
-			 sql.Format("UPDATE %s SET [time] = '%s', operator = '%s', a_0 = %.11f, a_1 = %.11f, a_2 = %.11f, a_3 = %.11f WHERE serialNumber = '%s'", table, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), op, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3), serial);
+			 sql.Format("UPDATE %s SET [time] = '%s', operator = '%s', a_0 = %.11f, a_1 = %.11f, a_2 = %.11f, a_3 = %.11f, calProjId = %d WHERE serialNumber = '%s'", table, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), op, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3), SysSetup->GetProjectID(), serial);
 			 m_db.ExecuteSQL(sql);             
          }
          else 
          {
-             sql.Format("INSERT INTO %s ( serialNumber, operator, a_0, a_1, a_2, a_3) VALUES ('%s','%s',%.11f,%.11f,%.11f,%.11f)",table, serial, op, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3));
+             sql.Format("INSERT INTO %s ( serialNumber, operator, a_0, a_1, a_2, a_3, calProjId) VALUES ('%s','%s',%.11f,%.11f,%.11f,%.11f,%d)",table, serial, op, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3), SysSetup->GetProjectID());
              m_db.ExecuteSQL(sql);
 			 return TRUE;
 		 }
@@ -988,7 +988,7 @@ BOOL DBInterface::AddSensorCalibrationA0(CString table, CString serial, CString 
      {
          if(!rs.IsEOF())
          {
-			 sql.Format("UPDATE %s SET [time] = '%s', operator = '%s', a_0 = %.11f WHERE serialNumber='%s'", table, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), op, data.m_offset + a0, serial);
+			 sql.Format("UPDATE %s SET [time] = '%s', a_0 = %.11f WHERE serialNumber='%s'", table, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), data.m_offset + a0, serial);
 			 m_db.ExecuteSQL(sql);
 			 /*rs.Edit();				
              rs.SetFieldValue("time", COleDateTime::GetCurrentTime());			
@@ -1008,7 +1008,7 @@ BOOL DBInterface::InsertSensorData(CString table, CString dauSN, CString SN, CSt
 		return FALSE;
  
     CString sql="";
-    sql.Format("INSERT INTO %s ( serialNumber, dauSerialNumber, operator, temperature, calibrationValue ) VALUES ('%s','%s','%s',%f,%f)",table, SN, dauSN, op, temp, val);
+    sql.Format("INSERT INTO %s ( serialNumber, temperature, calibrationValue, calProjId ) VALUES ('%s',%f,%f,%d)",table, SN, temp, val, SysSetup->GetProjectID());
  
     m_db.ExecuteSQL(sql);  	
 	return TRUE;
@@ -1419,8 +1419,7 @@ BOOL DBInterface::InsertSensorValidation(SensorValidation::Data data, int measId
 		return FALSE;
 
 	CString sql="";
-	sql.Format("INSERT INTO SensorValidation (measID, referenceChannel, dbUpdated ) VALUES (%d,'%s',False)",
-		measId, data.m_refChannel);
+	sql.Format("INSERT INTO SensorValidation (measID, referenceChannel, platformSN, dbUpdated ) VALUES (%d,'%s',%d,False)", measId, data.m_refChannel, data.platformSN);
 
 	m_db.ExecuteSQL(sql);
 	return TRUE;

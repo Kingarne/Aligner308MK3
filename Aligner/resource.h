@@ -1009,6 +1009,7 @@
 #define IDC_TIME_CONST_EDIT             1659
 #define IDC_PLATFORM_COMBO              1660
 #define IDC_VIEW_ALL                    1661
+#define IDC_TABLE_STATIC                1662
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1430,7 +1431,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        569
 #define _APS_NEXT_COMMAND_VALUE         32823
-#define _APS_NEXT_CONTROL_VALUE         1662
+#define _APS_NEXT_CONTROL_VALUE         1663
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

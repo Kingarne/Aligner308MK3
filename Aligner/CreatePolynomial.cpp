@@ -428,19 +428,19 @@ BOOL CreatePolynomial::OnInitDialog( void )
 
 void CreatePolynomial::OnCbnSelchangeApproximationType( void )
 {
-  SetupSerial() ;
-  SetupData() ;
-  m_pGrid -> Close() ;
-  m_pGrid -> ReOpen( _variant_t(0L, VT_I4) ) ;
-  SetupPolynomial() ;
+	SetupSerial() ;
+	SetupData() ;
+	m_pGrid -> Close() ;
+	m_pGrid -> ReOpen( _variant_t(0L, VT_I4) ) ;
+	SetupPolynomial() ;
 }
 
 void CreatePolynomial::OnCbnSelchangeAxis( void )
 {
-  SetupData() ;
-  m_pGrid -> Close() ;
-  m_pGrid -> ReOpen( _variant_t(0L, VT_I4) ) ;
-  SetupPolynomial() ;
+	SetupData() ;
+	m_pGrid -> Close() ;
+	m_pGrid -> ReOpen( _variant_t(0L, VT_I4) ) ;
+	SetupPolynomial() ;
 }
 
 void CreatePolynomial::OnBnClickedViewAll()

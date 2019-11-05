@@ -135,8 +135,8 @@ BEGIN
         MENUITEM "&New",                        ID_FILE_NEW
         MENUITEM "&Save",                       ID_FILE_SAVE
         MENUITEM SEPARATOR
-        MENUITEM "New &Calibration",            ID_PROJECT_CALIBRATION
         MENUITEM "O&pen Calibration",           ID_PROJECT_OPENCALIBRATION
+        MENUITEM "New &Calibration",            ID_PROJECT_CALIBRATION
         MENUITEM SEPARATOR
         MENUITEM "E&xit",                       57665
     END
@@ -755,7 +755,7 @@ BEGIN
     COMBOBOX        IDC_REFERENCE_SERIAL_NUMBER,13,68,37,72,CBS_DROPDOWNLIST | CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP,WS_EX_RIGHT
     CONTROL         IDB_GAIN_1,IDC_STATIC,"Static",SS_BITMAP,173,8,115,79
     LTEXT           "Put the platform so that the flat reference surface is to the right (east). Then put a Sensor Unit  to be used as a reference on the flat surface with LOS directed north and let it remain in this position throughout the whole procedure.",IDC_STATIC,7,4,134,51
-    GROUPBOX        "Table S/N",IDC_STATIC,61,57,50,30
+    GROUPBOX        "Table S/N",IDC_TABLE_STATIC,61,57,50,30
     COMBOBOX        IDC_TABLE_SERIAL_NUMBER,67,68,37,72,CBS_DROPDOWNLIST | CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP,WS_EX_RIGHT
     GROUPBOX        "Time Const.[s]",IDC_STATIC,115,57,55,30
     EDITTEXT        IDC_TIME_CONST_EDIT,123,68,40,14,ES_AUTOHSCROLL

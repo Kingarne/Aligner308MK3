@@ -231,7 +231,7 @@ void GainCalibrationPage6::OnInitGrid( void )
 
 //  double denom = -r_s_2*p_s_4+r_s_1*p_s_4-r_s_1*p_s_3+r_s_2*p_s_3-r_s_4*p_s_1+r_s_4*p_s_2+r_s_3*p_s_1-r_s_3*p_s_2 ;
   double denom = 1.0 ;
-  double alpha = pSheet -> m_alpha ;
+  double alpha = pSheet->m_alpha ;
 
   if (0 != denom)
   {

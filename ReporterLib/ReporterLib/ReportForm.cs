@@ -2018,13 +2018,14 @@ namespace ReporterLib
 
             int wPerc = 12;
             List<TableItem> table = new List<TableItem>();
-            table.Add(new TableItem("S/N", 2, 10, Color.Black, StringAlignment.Near));
-            table.Add(new TableItem("Parameter", 12, 15, Color.Black, StringAlignment.Near));
+            table.Add(new TableItem("S/N", 2, 6, Color.Black, StringAlignment.Near));
+            table.Add(new TableItem("Parameter", 8, 15, Color.Black, StringAlignment.Near));
             table.Add(new TableItem("a_0", -1, wPerc));
             table.Add(new TableItem("a_1", -1, wPerc));
             table.Add(new TableItem("a_2", -1, wPerc));
             table.Add(new TableItem("a_3", -1, wPerc));
             table.Add(new TableItem("Date", -1, 17));
+            table.Add(new TableItem("Platform", -1, wPerc));
 
             m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
             m_yPos += SmalMarg;
@@ -2040,19 +2041,21 @@ namespace ReporterLib
                     continue;
 
                 table = new List<TableItem>();
-                table.Add(new TableItem(sc.sn.ToString(), 2, 5, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem(sc.sn.ToString(), 2, 6, Color.Black, StringAlignment.Near));
 
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
 
                 foreach (var cd in sc.calData)
                 {
                     table = new List<TableItem>();
-                    table.Add(new TableItem(CalTypeString(cd.Value.type), 12, 15, Color.Black, StringAlignment.Near));
+                    table.Add(new TableItem(CalTypeString(cd.Value.type), 8, 15, Color.Black, StringAlignment.Near));
                     table.Add(new TableItem(cd.Value.a[0].ToString("0.00000"), -1, wPerc));
                     table.Add(new TableItem(cd.Value.a[1].ToString("0.00000"), -1, wPerc));
-                    table.Add(new TableItem(cd.Value.a[2].ToString("0.00000"), -1, wPerc));
-                    table.Add(new TableItem(cd.Value.a[3].ToString("0.00000"), -1, wPerc));
+                    table.Add(new TableItem(cd.Value.a[2].ToString("0.000e+00"), -1, wPerc));
+                    table.Add(new TableItem(cd.Value.a[3].ToString("0.000e+00"), -1, wPerc));
                     table.Add(new TableItem(cd.Value.time.ToString("yyyy/MM/dd HH:mm:ss"), -1, 17));
+                    string platform = (cd.Value.platformSN > 0) ? cd.Value.platformSN.ToString("000") : "-";
+                    table.Add(new TableItem(platform, -1, wPerc));
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 }
@@ -2169,7 +2172,7 @@ namespace ReporterLib
                     continue;
 
                 table = new List<TableItem>();
-                table.Add(new TableItem(pc.sn.ToString(), 2, wPerc, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem(pc.sn.ToString("000"), 2, wPerc, Color.Black, StringAlignment.Near));
                 table.Add(new TableItem(pc.alpha.ToString("0.000"), -1, wPerc));              
                 table.Add(new TableItem(pc.time.ToString("yyyy/MM/dd HH:mm:ss"), -1, wPerc));
 

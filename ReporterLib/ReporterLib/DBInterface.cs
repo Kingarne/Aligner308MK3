@@ -275,6 +275,7 @@ namespace ReporterLib
             public CalType type;
             public DateTime time { get; set; }
             public double[] a = new double[4];
+            public int platformSN { get; set; }
         }        
 
         public class SensorCalibrationInfo
@@ -1300,12 +1301,18 @@ namespace ReporterLib
             if (Connection.State != System.Data.ConnectionState.Open)
                 return false;            
 
-            using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchAzimuthCalibration", Connection))
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchAzimuthCalibration LEFT JOIN ProjectCalibration ON SensorPitchAzimuthCalibration.calProjId = ProjectCalibration.ID", Connection))
             {
                 using (OdbcDataReader dr = command.ExecuteReader())
                 {
                     while (dr.Read())
                     {
+                        for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            string name = dr.GetName(i);
+                            string typ = dr.GetDataTypeName(i);
+                        }
+
                         SensorCalibrationInfo sc = new SensorCalibrationInfo();
 
                         sc.sn = (string)dr["serialNumber"];
@@ -1314,6 +1321,10 @@ namespace ReporterLib
                         sc.calData[CalType.CT_PitchAz].a[1] = (double)dr["a_1"];
                         sc.calData[CalType.CT_PitchAz].a[2] = (double)dr["a_2"];
                         sc.calData[CalType.CT_PitchAz].a[3] = (double)dr["a_3"];
+                        sc.calData[CalType.CT_PitchAz].platformSN = 0;
+                        var v = dr["platformSN"];
+                        if(v != System.DBNull.Value)
+                            sc.calData[CalType.CT_PitchAz].platformSN = (int)v;
 
                         SensCalib.Add(sc);
                     }
@@ -1323,7 +1334,7 @@ namespace ReporterLib
 
             foreach (SensorCalibrationInfo sc in SensCalib)
             {
-                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchGainCalibration Where serialNumber='" + sc.sn+"'", Connection))
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchGainCalibration LEFT JOIN ProjectCalibration ON SensorPitchGainCalibration.calProjId = ProjectCalibration.ID Where serialNumber='" + sc.sn+"'", Connection))
                 {
                     using (OdbcDataReader dr = command.ExecuteReader())
                     {
@@ -1333,11 +1344,15 @@ namespace ReporterLib
                             sc.calData[CalType.CT_PitchGain].a[0] = (double)dr["a_0"];
                             sc.calData[CalType.CT_PitchGain].a[1] = (double)dr["a_1"];
                             sc.calData[CalType.CT_PitchGain].a[2] = (double)dr["a_2"];
-                            sc.calData[CalType.CT_PitchGain].a[3] = (double)dr["a_3"];                            
+                            sc.calData[CalType.CT_PitchGain].a[3] = (double)dr["a_3"];
+                            sc.calData[CalType.CT_PitchGain].platformSN = 0;
+                            var v = dr["platformSN"];
+                            if (v != System.DBNull.Value)
+                                sc.calData[CalType.CT_PitchGain].platformSN = (int)v;
                         }
                     }
                 }
-                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchOffsetCalibration Where serialNumber='" + sc.sn + "'", Connection))
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorPitchOffsetCalibration LEFT JOIN ProjectCalibration ON SensorPitchOffsetCalibration.calProjId = ProjectCalibration.ID Where serialNumber='" + sc.sn + "'", Connection))
                 {
                     using (OdbcDataReader dr = command.ExecuteReader())
                     {
@@ -1348,10 +1363,14 @@ namespace ReporterLib
                             sc.calData[CalType.CT_PitchOffs].a[1] = (double)dr["a_1"];
                             sc.calData[CalType.CT_PitchOffs].a[2] = (double)dr["a_2"];
                             sc.calData[CalType.CT_PitchOffs].a[3] = (double)dr["a_3"];
+                            sc.calData[CalType.CT_PitchOffs].platformSN = 0;
+                            var v = dr["platformSN"];
+                            if (v != System.DBNull.Value)
+                                sc.calData[CalType.CT_PitchOffs].platformSN = (int)v;
                         }
                     }
                 }
-                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollAzimuthCalibration Where serialNumber='" + sc.sn + "'", Connection))
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollAzimuthCalibration LEFT JOIN ProjectCalibration ON SensorRollAzimuthCalibration.calProjId = ProjectCalibration.ID Where serialNumber='" + sc.sn + "'", Connection))
                 {
                     using (OdbcDataReader dr = command.ExecuteReader())
                     {
@@ -1362,10 +1381,14 @@ namespace ReporterLib
                             sc.calData[CalType.CT_RollAz].a[1] = (double)dr["a_1"];
                             sc.calData[CalType.CT_RollAz].a[2] = (double)dr["a_2"];
                             sc.calData[CalType.CT_RollAz].a[3] = (double)dr["a_3"];
+                            sc.calData[CalType.CT_RollAz].platformSN = 0;
+                            var v = dr["platformSN"];
+                            if (v != System.DBNull.Value)
+                                sc.calData[CalType.CT_RollAz].platformSN = (int)v;
                         }
                     }
                 }
-                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollGainCalibration Where serialNumber='" + sc.sn + "'", Connection))
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollGainCalibration LEFT JOIN ProjectCalibration ON SensorRollGainCalibration.calProjId = ProjectCalibration.ID Where serialNumber='" + sc.sn + "'", Connection))
                 {
                     using (OdbcDataReader dr = command.ExecuteReader())
                     {
@@ -1376,10 +1399,14 @@ namespace ReporterLib
                             sc.calData[CalType.CT_RollGain].a[1] = (double)dr["a_1"];
                             sc.calData[CalType.CT_RollGain].a[2] = (double)dr["a_2"];
                             sc.calData[CalType.CT_RollGain].a[3] = (double)dr["a_3"];
+                            sc.calData[CalType.CT_RollGain].platformSN = 0;
+                            var v = dr["platformSN"];
+                            if (v != System.DBNull.Value)
+                                sc.calData[CalType.CT_RollGain].platformSN = (int)v;
                         }
                     }
                 }
-                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollOffsetCalibration Where serialNumber='" + sc.sn + "'", Connection))
+                using (OdbcCommand command = new OdbcCommand("SELECT * FROM SensorRollOffsetCalibration LEFT JOIN ProjectCalibration ON SensorRollOffsetCalibration.calProjId = ProjectCalibration.ID Where serialNumber='" + sc.sn + "'", Connection))
                 {
                     using (OdbcDataReader dr = command.ExecuteReader())
                     {
@@ -1390,6 +1417,10 @@ namespace ReporterLib
                             sc.calData[CalType.CT_RollOffs].a[1] = (double)dr["a_1"];
                             sc.calData[CalType.CT_RollOffs].a[2] = (double)dr["a_2"];
                             sc.calData[CalType.CT_RollOffs].a[3] = (double)dr["a_3"];
+                            sc.calData[CalType.CT_RollOffs].platformSN = 0;
+                            var v = dr["platformSN"];
+                            if (v != System.DBNull.Value)
+                                sc.calData[CalType.CT_RollOffs].platformSN = (int)v;
                         }
                     }
                 }

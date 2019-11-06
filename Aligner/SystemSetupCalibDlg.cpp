@@ -202,6 +202,12 @@ void SystemSetupCalibDialog::OnBnClickedOk()
 	if (m_proj.m_projectName == "")
 		return;	
 
+	if (DBInterface::Instance()->ProjectExist(m_proj.m_projectName, "ProjectCalibration"))
+	{
+		::AfxMessageBox(_T("Project already exist."));
+		return;
+	}
+
 	OnCbnSelchangePlatform();
 
 	CDialog::OnOK();

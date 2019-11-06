@@ -131,6 +131,26 @@ BOOL DBInterface::InsertProjectCalibration(ProjectData& project)
 	return TRUE;
 }
 
+BOOL DBInterface::ProjectExist(CString name, CString table)
+{
+	if (!m_db.IsOpen())
+		return FALSE;
+
+	CString sql = "";
+	sql.Format("SELECT name FROM %s WHERE name='%s'", table, name);
+
+
+	CRecordset rs(&m_db);
+	if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::executeDirect))
+	{
+		if (!rs.IsEOF())
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 
 BOOL DBInterface::InsertProject(ProjectData& project)
 {
@@ -935,12 +955,12 @@ BOOL DBInterface::UpdateSensorCalibration(CString table, CString serial, CString
      {
          if(!rs.IsEOF())
          {
-			 sql.Format("UPDATE %s SET [time] = '%s', operator = '%s', a_0 = %.11f, a_1 = %.11f, a_2 = %.11f, a_3 = %.11f, calProjId = %d WHERE serialNumber = '%s'", table, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), op, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3), SysSetup->GetProjectID(), serial);
+			 sql.Format("UPDATE %s SET [time] = '%s', a_0 = %.11f, a_1 = %.11f, a_2 = %.11f, a_3 = %.11f, calProjId = %d WHERE serialNumber = '%s'", table, COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3), SysSetup->GetProjectID(), serial);
 			 m_db.ExecuteSQL(sql);             
          }
          else 
          {
-             sql.Format("INSERT INTO %s ( serialNumber, operator, a_0, a_1, a_2, a_3, calProjId) VALUES ('%s','%s',%.11f,%.11f,%.11f,%.11f,%d)",table, serial, op, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3), SysSetup->GetProjectID());
+             sql.Format("INSERT INTO %s ( serialNumber, a_0, a_1, a_2, a_3, calProjId) VALUES ('%s',%.11f,%.11f,%.11f,%.11f,%d)",table, serial, Chk(fit.m_a_0), Chk(fit.m_a_1), Chk(fit.m_a_2), Chk(fit.m_a_3), SysSetup->GetProjectID());
              m_db.ExecuteSQL(sql);
 			 return TRUE;
 		 }

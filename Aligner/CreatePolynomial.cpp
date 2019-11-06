@@ -445,11 +445,12 @@ void CreatePolynomial::OnCbnSelchangeAxis( void )
 
 void CreatePolynomial::OnBnClickedViewAll()
 {
+	UpdateData(TRUE);
 	SetupSerial();
 	SetupData();
 	m_pGrid->Close();
 	m_pGrid->ReOpen(_variant_t(0L, VT_I4));
-	SetupPolynomial();
+	SetupPolynomial();	
 }
 
 void CreatePolynomial::OnCbnSelchangeApproximationOrder( void )
@@ -678,6 +679,9 @@ void CreatePolynomial::ClassicWrite( VARIANT *pBookmark, short column, VARIANT *
   if (VT_I4 == pBookmark -> vt)
 	{
 		ASSERT(VT_BSTR == pValue -> vt) ;
+		if (m_selectedData[pBookmark->lVal].m_projName != SysSetup->GetProjectName())
+			return;
+
 		m_selectedData [pBookmark -> lVal].m_use = _variant_t(pValue) == _variant_t(L"0") ? 0 : -1 ;
 		SetupPolynomial() ;
 	}
@@ -823,12 +827,12 @@ void CreatePolynomial::OnSize(UINT nType, int cx, int cy)
 
 	pWnd2->GetWindowRect(&rect);
 	ScreenToClient(rect);
-	pWnd2->MoveWindow(rect.left, cy/2+5, cx - rect.left - 10, cy/2-30);
+	pWnd2->MoveWindow(rect.left, cy/2+5, cx - rect.left - 10, cy/2-40);
 
 	CWnd* pWnd3 = GetDlgItem(IDOK);
 	pWnd3->GetWindowRect(&rect);
 	ScreenToClient(rect);
-	pWnd3->MoveWindow(cx-70, cy-40, rect.Width(), rect.Height());
+	pWnd3->MoveWindow(cx-70, cy-30, rect.Width(), rect.Height());
 
 
 }

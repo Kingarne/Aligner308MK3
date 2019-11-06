@@ -195,11 +195,18 @@ void SystemSetupDialog::OnBnClickedBrowseButton(void)
 void SystemSetupDialog::OnBnClickedOk()
 {
 	UpdateData(TRUE);
+	
+	if (m_proj.m_projectName == "")
+		return;	
+
+	if (DBInterface::Instance()->ProjectExist(m_proj.m_projectName, "Project"))
+	{
+		::AfxMessageBox(_T("Project already exist."));
+		return;
+	}
 
 	OnCbnSelchangeShipName();
 
-	if (m_proj.m_projectName == "")
-		return;	
 
 	CDialog::OnOK();
 }

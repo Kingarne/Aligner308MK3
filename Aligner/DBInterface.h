@@ -48,6 +48,7 @@ public:
 
 	BOOL UpdateCalibrationFlag(CString table, int id, BOOL b);
 
+	BOOL ProjectExist(CString name, CString table);
 	BOOL InsertProject(ProjectData& project);
 	BOOL InsertProjectCalibration(ProjectData& project);
 

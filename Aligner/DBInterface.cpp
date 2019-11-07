@@ -941,7 +941,7 @@ BOOL DBInterface::UpdateAdapterCalibration(CString serial, double el, double az)
     return TRUE;	
 }
 
-BOOL DBInterface::UpdateSensorCalibration(CString table, CString serial, CString op, Polynomial& fit)//double a0, double a1, double a2, double a3)
+BOOL DBInterface::UpdateSensorCalibration(CString table, CString serial, Polynomial& fit)//double a0, double a1, double a2, double a3)
 {
      if(!m_db.IsOpen())
          return FALSE;
@@ -992,7 +992,7 @@ BOOL DBInterface::UpdateDAUChannelOffset(CString serialNumber, CString channel, 
 	 return TRUE;
 }
 
-BOOL DBInterface::AddSensorCalibrationA0(CString table, CString serial, CString op, double a0)
+BOOL DBInterface::AddSensorCalibrationA0(CString table, CString serial, double a0)
 {
      SensorTemperatureCalibrationData data( 0, 0, 0, 0 );
      DBInterface::Instance()->GetSensorCalibrationData(table, serial, data) ;

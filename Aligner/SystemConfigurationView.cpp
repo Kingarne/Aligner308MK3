@@ -257,19 +257,20 @@ void SystemConfigurationView::OnActivateView(BOOL bActivate, CView* pActivateVie
 
 void SystemConfigurationView::OnTimer( UINT nIDEvent )
 {
-	m_GeneralDate.SetWindowText( COleDateTime::GetCurrentTime().Format( _T("%Y-%m-%d %H:%M:%S") ) );
+	//m_GeneralDate.SetWindowText( COleDateTime::GetCurrentTime().Format( _T("%Y-%m-%d %H:%M:%S") ) );
+	m_sensorGrid.UpdateGrid();
 }
 
 void SystemConfigurationView::OnShowWindow(BOOL bShow, UINT nStatus)
 {
-  __super::OnShowWindow(bShow, nStatus) ;
+	__super::OnShowWindow(bShow, nStatus) ;
   
-  /*if (bShow)
-  {
-    SetTimer( m_timerId, 1000, NULL ) ;
-  }
-  else
-  {
-    KillTimer( m_timerId ) ;
-  }*/
+	if (bShow)
+	{
+		SetTimer( m_timerId, 1000, NULL ) ;
+	}
+	else
+	{
+		KillTimer( m_timerId ) ;
+	}
 }

@@ -41,6 +41,7 @@ protected:
   void UnboundGetRelativeBookmark( VARIANT* StartLocation, long offset, VARIANT* NewLocation, long* ApproximatePosition ) ;
   void SetNewLocation( VARIANT *pNewLocation, int location ) ;
   void AfterColUpdate( short index ) ;
+  
 private:
   void InitGraph( void ) ;
   void ClearGraph( void ) ;
@@ -66,6 +67,8 @@ private:
   LeastSquare m_leastSquare ;
   Polynomial m_fit ;
   CString m_polynomialText ;
+  bool m_validModel;
+
 public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	BOOL m_viewAll;

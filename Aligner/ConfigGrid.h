@@ -1,8 +1,9 @@
 #pragma once
 #include "gridctrl.h"
 
-#define USED_COLOR	    RGB(255,255,255)
-#define UNUSED_COLOR	::GetSysColor(COLOR_BTNFACE)
+#define USED_COLOR			RGB(255,255,255)
+#define UNUSED_COLOR		::GetSysColor(COLOR_BTNFACE)
+#define UNCONNECTED_COLOR	RGB(255,225,225)
 
 struct Column{
 	Column(CString head, int w):header(head),width(w){}
@@ -10,7 +11,7 @@ struct Column{
 	int width;
 };
 
-enum SensorColumnName{SColCh, SColSensor, SColStation, SColType, SColNomAz, SColAdapter, SColElevErr, SColAzErr,
+enum SensorColumnName{SColCh, SColSensor, SColStation, SColType, SColRoll, SColPitch, SColTmpr, SColNomAz, SColAdapter, SColElevErr, SColAzErr,
     SColPlxX, SColPlxY, SColPlxZ, SColPlxdX, SColPlxdY, SColPlxdZ};
 
 class SensorGrid : public CGridCtrl

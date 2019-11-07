@@ -40,7 +40,7 @@ public:
 	BOOL GetCalibrationProjects(vector<ProjectData>& projects);
 	
     BOOL UpdateAdapterCalibration(CString serial, double el, double az);
-    BOOL UpdateSensorCalibration(CString table, CString serial, CString op, Polynomial& fit);//double a0, double a1, double a2, double a3);
+    BOOL UpdateSensorCalibration(CString table, CString serial, Polynomial& fit);//double a0, double a1, double a2, double a3);
     BOOL UpdateDAUChannelOffset(CString serialNumber, CString channel, DAUOffsetCalibrationResult &result);
     BOOL UpdateDAUChannelGain(CString serialNumber, CString channel, DAUScaleCalibrationResult &result);
     BOOL UpdateComment(CString table, int historyId, CString comment);
@@ -95,7 +95,7 @@ public:
     BOOL InsertGraph(int historyId, CString file, int include);
     BOOL DeleteGraph(CString file);
 
-    BOOL AddSensorCalibrationA0(CString table, CString serial, CString op, double a0);	
+    BOOL AddSensorCalibrationA0(CString table, CString serial, double a0);	
 
     CString ToText(double d);
     CString ToText(LONG l);

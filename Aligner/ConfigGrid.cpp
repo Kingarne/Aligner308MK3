@@ -27,6 +27,9 @@ void SensorGrid::Init()
 	columns.push_back(Column("Sensor",60));
 	columns.push_back(Column("Station",130));
 	columns.push_back(Column("Type",60));
+	columns.push_back(Column("Roll", 50));
+	columns.push_back(Column("Pitch", 50));
+	columns.push_back(Column("Tempr.", 50));
 	columns.push_back(Column("Nominal\nAzimuth",60));
 	columns.push_back(Column("Adapter",60));
 	columns.push_back(Column("Elev. Error\n[mrad]",60));
@@ -171,9 +174,34 @@ void SensorGrid::UpdateGrid()
             SetItemText(row, SColSensor, pSensor->GetSerialNumber());             
             SetItemText(row, SColStation, pSensor->m_description );             
             SetItemText(row, SColType, UnitType::GetUnitText(pSensor->GetType()) );             
-            text.Format( _T("%+6.1f°"), pSensor->GetNominalAzimuth() );
-            SetItemText(row, SColNomAz, text);             
+           
+			double roll = -SysSetup->GetSignDef() * pSensor->GetRoll() * 1000.0f;
+			text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? roll : MRADIANS_TO_ARCMIN(roll));
+			SetItemText(row, SColRoll, text);
+			
+			double pitch = -SysSetup->GetSignDef() * pSensor->GetPitch() * 1000.0f;
+			text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? roll : MRADIANS_TO_ARCMIN(roll));
+			SetItemText(row, SColPitch, text);
+						
+			
+			if (pSensor->GetTemperature() < 68.4f)
+			{
+				text.Format(_T("%.1f°"), pSensor->GetTemperature());
+				SetItemText(row, SColTmpr, text);
+			}
+			else
+			{
+				SetRowBGColor(row, UNCONNECTED_COLOR);
+				SetItemText(row, SColTmpr, "-");
+			}
+
+
+			text.Format( _T("%+6.1f°"), pSensor->GetNominalAzimuth() );
+			SetItemText(row, SColNomAz, text);             
  
+			
+
+
             if( UnitType::TypeHasAdapter(pSensor->GetType()))
             {
                 SetItemText(row, SColAdapter, pSensor->GetAdapterSerialNumber() );                              

@@ -174,46 +174,54 @@ void CreatePolynomial::SetupSerial( void )
 	}
 }
 
+
 void CreatePolynomial::SetupPolynomial( void )
 {
     ClearGraph() ;
     m_polynomialText = _T("") ;
+	m_pGraph->GetHeader()->GetText()->PutText(_bstr_t(m_polynomialText));
+	m_validModel = true;
     m_leastSquare.Clear() ;
+
     double minT = DBL_MAX ;
     double maxT = DBL_MIN ;
     for (vector<SelectedData>::iterator i = m_selectedData.begin() ; i != m_selectedData.end() ; i++)
     {
         int point ;
-        if (i -> m_use)
+        if (i->m_use)
         {
-        m_leastSquare.Add( i -> m_temperature, i -> m_value ) ;
-        m_pData -> PutNumPoints( 1L, point = m_pData -> GetNumPoints( 1L ) + 1 ) ;
-        m_pData -> PutX( 1L, point, i -> m_temperature ) ;
-        switch (m_type.GetCurSel())
-        {
-        case 0:
-            m_pData -> PutY( 1L, point, i -> m_value ) ;
-            break ;
+			if (i->m_projName != SysSetup->GetProjectName())
+				m_validModel = false;
 
-        case 1:
-            m_pData -> PutY( 1L, point, i -> m_value ) ;
-            break ;
+			m_leastSquare.Add( i -> m_temperature, i -> m_value ) ;
+			m_pData -> PutNumPoints( 1L, point = m_pData -> GetNumPoints( 1L ) + 1 ) ;
+			m_pData -> PutX( 1L, point, i -> m_temperature ) ;
+			switch (m_type.GetCurSel())
+			{
+			case 0:
+				m_pData -> PutY( 1L, point, i -> m_value ) ;
+				break ;
 
-        case 2:
-            m_pData -> PutY( 1L, point, i -> m_value ) ;
-            break ;
+			case 1:
+				m_pData -> PutY( 1L, point, i -> m_value ) ;
+				break ;
 
-        default:
-            ASSERT(0) ;
-            break ;
-        }
-        minT = min( minT, i -> m_temperature ) ;
-        maxT = max( maxT, i -> m_temperature ) ;
+			case 2:
+				m_pData -> PutY( 1L, point, i -> m_value ) ;
+				break ;
+
+			default:
+				ASSERT(0) ;
+				break ;
+			}
+			minT = min( minT, i -> m_temperature ) ;
+			maxT = max( maxT, i -> m_temperature ) ;
         }
     }
 
     if (maxT < minT)
     {
+		m_validModel = false;
         return ;
     }
     //  minT -= 10.0 ;
@@ -231,11 +239,11 @@ void CreatePolynomial::SetupPolynomial( void )
         m_polynomialText += serial ;
         if (0 == m_axis.GetCurSel())
         {
-            m_polynomialText += _T(" roll ") ;
+            m_polynomialText += _T(":  Roll ") ;
         }
         else
         {
-            m_polynomialText += _T(" pitch ") ;
+            m_polynomialText += _T(":  Pitch ") ;
 
         }
         m_pData -> PutIsBatched( TRUE ) ;
@@ -318,21 +326,24 @@ void CreatePolynomial::SetupPolynomial( void )
         }
         if (1 == m_type.GetCurSel())
         {
-            polynomialText.Format( _T(" sigma=%6.3f%% "), sigma * 100) ;
+            polynomialText.Format( _T(", sigma=%6.3f%% "), sigma * 100) ;
         }
         else
         {
-            polynomialText.Format( _T(" sigma=%6.3f "), sigma ) ;
+            polynomialText.Format( _T(", sigma=%6.3f "), sigma ) ;
         }
         if (-1 != sigma)
         {
-            m_polynomialText += polynomialText ;
+            m_polynomialText += polynomialText ; 
         }
         else
         {
             m_polynomialText += _T(" ");
         }
-        m_polynomialText += COleDateTime::GetCurrentTime().Format( _T("%x %X") ) ;
+        
+		m_polynomialText += _T("  (");
+		m_polynomialText += COleDateTime::GetCurrentTime().Format( _T("%x %X") ) ;
+		m_polynomialText += _T(")");
         m_pGraph -> GetHeader() -> GetText() -> PutText( _bstr_t( m_polynomialText ) ) ;
         m_pData -> PutIsBatched( FALSE ) ;
     }
@@ -468,30 +479,43 @@ void CreatePolynomial::OnCbnSelchangeSerialNumber( void )
 
 BOOL CreatePolynomial::UpdateRollOffsetCalibrationData( CString &serialNumber, double a_0 )
 {
-	return DBInterface::Instance()->AddSensorCalibrationA0("SensorRollOffsetCalibration", serialNumber, SysSetup->GetOperatorName(), a_0) ;   
+	return DBInterface::Instance()->AddSensorCalibrationA0("SensorRollOffsetCalibration", serialNumber, a_0) ;   
 }
 
 BOOL CreatePolynomial::UpdatePitchOffsetCalibrationData( CString &serialNumber, double a_0 )
 {
-	return DBInterface::Instance()->AddSensorCalibrationA0("SensorPitchOffsetCalibration", serialNumber, SysSetup->GetOperatorName(), a_0) ;
+	return DBInterface::Instance()->AddSensorCalibrationA0("SensorPitchOffsetCalibration", serialNumber, a_0) ;
 }
 
 BOOL CreatePolynomial::UpdateRollAzimuthCalibrationData( CString &serialNumber, double a_0 )
 {
-    return DBInterface::Instance()->AddSensorCalibrationA0("SensorRollAzimuthCalibration", serialNumber, SysSetup->GetOperatorName(), a_0) ;    
+    return DBInterface::Instance()->AddSensorCalibrationA0("SensorRollAzimuthCalibration", serialNumber, a_0) ;    
 }
 
 BOOL CreatePolynomial::UpdatePitchAzimuthCalibrationData( CString &serialNumber, double a_0 )
 {
-	return DBInterface::Instance()->AddSensorCalibrationA0("SensorPitchAzimuthCalibration", serialNumber, SysSetup->GetOperatorName(), a_0) ;      
+	return DBInterface::Instance()->AddSensorCalibrationA0("SensorPitchAzimuthCalibration", serialNumber, a_0) ;      
 }
 
 void CreatePolynomial::OnBnClickedSave( void )
 {
-    if (IDOK != ::AfxMessageBox( _T("This will generate a new calibration model!\nContinue?"), MB_ICONWARNING | MB_OKCANCEL ))
-    {
-        return ;
-    }
+	if (!m_validModel)
+	{
+		if (::AfxMessageBox(_T("The model contains data that is not part of this calibration project!\nContinue to generate a new calibration model?"), MB_ICONWARNING | MB_YESNO) != IDYES)
+		{
+			return;
+		}	
+	}
+	else
+	{
+		if (IDOK != ::AfxMessageBox(_T("This will generate a new calibration model!\nContinue?"), MB_ICONWARNING | MB_OKCANCEL))
+		{
+			return;
+		}
+
+	}
+
+  
     if (0 <= m_fit.GetOrder())
     {
         BOOL result = FALSE;
@@ -500,27 +524,27 @@ void CreatePolynomial::OnBnClickedSave( void )
         switch (2 * m_type.GetCurSel() + m_axis.GetCurSel())
         {
         case 0:
-            result = DBInterface::Instance()->UpdateSensorCalibration("SensorRollOffsetCalibration", serialNumber, SysSetup->GetOperatorName(), m_fit);        
+            result = DBInterface::Instance()->UpdateSensorCalibration("SensorRollOffsetCalibration", serialNumber, m_fit);        
         break ;
 
         case 1:
-            result = DBInterface::Instance()->UpdateSensorCalibration("SensorPitchOffsetCalibration", serialNumber, SysSetup->GetOperatorName(), m_fit);        
+            result = DBInterface::Instance()->UpdateSensorCalibration("SensorPitchOffsetCalibration", serialNumber, m_fit);        
         break ;
 
         case 2:
-            result = DBInterface::Instance()->UpdateSensorCalibration("SensorRollGainCalibration", serialNumber, SysSetup->GetOperatorName(), m_fit);        
+            result = DBInterface::Instance()->UpdateSensorCalibration("SensorRollGainCalibration", serialNumber, m_fit);        
         break ;
 
         case 3:
-            result = DBInterface::Instance()->UpdateSensorCalibration("SensorPitchGainCalibration", serialNumber, SysSetup->GetOperatorName(), m_fit);        
+            result = DBInterface::Instance()->UpdateSensorCalibration("SensorPitchGainCalibration", serialNumber, m_fit);        
         break ;
 
         case 4:
-            result = DBInterface::Instance()->UpdateSensorCalibration("SensorRollAzimuthCalibration", serialNumber, SysSetup->GetOperatorName(), m_fit);        
+            result = DBInterface::Instance()->UpdateSensorCalibration("SensorRollAzimuthCalibration", serialNumber, m_fit);        
         break ;
 
         case 5:
-            result = DBInterface::Instance()->UpdateSensorCalibration("SensorPitchAzimuthCalibration", serialNumber, SysSetup->GetOperatorName(), m_fit);        
+            result = DBInterface::Instance()->UpdateSensorCalibration("SensorPitchAzimuthCalibration", serialNumber, m_fit);        
         break ;
 
         default:
@@ -679,10 +703,10 @@ void CreatePolynomial::ClassicWrite( VARIANT *pBookmark, short column, VARIANT *
   if (VT_I4 == pBookmark -> vt)
 	{
 		ASSERT(VT_BSTR == pValue -> vt) ;
-		if (m_selectedData[pBookmark->lVal].m_projName != SysSetup->GetProjectName())
+/*		if (m_selectedData[pBookmark->lVal].m_projName != SysSetup->GetProjectName())
 			return;
-
-		m_selectedData [pBookmark -> lVal].m_use = _variant_t(pValue) == _variant_t(L"0") ? 0 : -1 ;
+			*/
+		m_selectedData [pBookmark->lVal].m_use = _variant_t(pValue) == _variant_t(L"0") ? 0 : -1 ;
 		SetupPolynomial() ;
 	}
 }

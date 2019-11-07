@@ -505,9 +505,45 @@ void CSetupFoundationMeasureDlg::OnBnClickedOk()
     SetZeroRef( 1, m_refAngle );
     FoundationStraightEdgeAngle = m_refAngle;
 
+	if (!CheckAllSensorsConnected())
+	{
+		m_Text.Format("Unconnected sensor detected! Continue anyway?");
+		if (MessageBox(m_Text, m_MsgCaption, MB_ICONWARNING | MB_YESNO) != IDYES)
+			return;
+	}
+
+
 	OnOK();
 }
 
+bool CSetupFoundationMeasureDlg::CheckSensorsConnected(int index)
+{
+	if (IsSensor(index))
+	{
+		int i = CONVERT_ARRAY_INDEX_TO_SENSOR_CHANNEL(index);
+
+		double tempr = DAU::GetDAU().GetSensor(i)->GetTemperature();
+		if (tempr > 68.3f)
+			return false;
+	}
+
+	return true;
+}
+
+bool CSetupFoundationMeasureDlg::CheckAllSensorsConnected()
+{
+	if (!CheckSensorsConnected(g_AlignerData.RefObjNo))
+		return false;
+
+	for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
+	{
+		if (!CheckSensorsConnected(g_AlignerData.ObjNo[i]))
+			return false;
+
+	}
+
+	return true;
+}
 
 void CSetupFoundationMeasureDlg::OnBnClickedCh1()
 {

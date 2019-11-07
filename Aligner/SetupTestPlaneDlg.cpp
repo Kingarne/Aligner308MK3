@@ -869,24 +869,45 @@ void CSetupTestPlaneDlg::OnBnClickedOk()
   g_AlignerData.NoOfCorr = m_NoOfCorr;
   memcpy( g_AlignerData.ObjNo, m_ObjNo, SIZE_OF_ARRAYS * sizeof( int ) );
   
-//   if( m_EnableZPar == TRUE )
-//   {
-//     //store Z-par
-//     SetZPar( 1, m_ZParCh[1] );
-//     SetZPar( 2, m_ZParCh[2] );
-//     SetZPar( 3, m_ZParCh[3] );
-//     SetZPar( 4, m_ZParCh[4] );
-//     SetZPar( 5, m_ZParCh[5] );
-//     SetZPar( 6, m_ZParCh[6] );
-//     SetZPar( 7, m_ZParCh[7] );
-//     SetZPar( 8, m_ZParCh[8] );
-//     SetZPar( 9, m_ZParCh[9] );
-//     SetZPar( 10, m_ZParCh[10] );
-//     SetZPar( 11, m_ZParCh[11] );
-//   }
+  if (!CheckAllSensorsConnected())
+  {
+	  m_Text.Format("Unconnected sensor detected! Continue anyway?");
+	  if (MessageBox(m_Text, m_MsgCaption, MB_ICONWARNING | MB_YESNO) != IDYES)
+		  return;
+  }
 
   OnOK();
 }
+
+bool CSetupTestPlaneDlg::CheckSensorsConnected(int index)
+{
+	if (IsSensor(index))
+	{
+		int i = CONVERT_ARRAY_INDEX_TO_SENSOR_CHANNEL(index);
+
+		double tempr = DAU::GetDAU().GetSensor(i)->GetTemperature();
+		if (tempr > 68.3f)
+			return false;
+	}
+
+	return true;
+}
+
+bool CSetupTestPlaneDlg::CheckAllSensorsConnected()
+{
+	if (!CheckSensorsConnected(g_AlignerData.RefObjNo))
+		return false;
+
+	for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
+	{
+		if (!CheckSensorsConnected(g_AlignerData.ObjNo[i]))
+			return false;
+
+	}
+
+	return true;
+}
+
 
 void CSetupTestPlaneDlg::OnBnClickedTestCh1()
 {

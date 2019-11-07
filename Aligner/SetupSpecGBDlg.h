@@ -19,18 +19,20 @@ public:
 	enum { IDD = IDD_SETUP_SPEC_GB };
 
 private:
-  CString m_Text, m_MsgCaption;
-  CString m_ChText[SIZE_OF_ARRAYS];
-  int m_SelectedReference;
+	CString m_Text, m_MsgCaption;
+	CString m_ChText[SIZE_OF_ARRAYS];
+	int m_SelectedReference;
 	int m_ObjNo[SIZE_OF_ARRAYS];
 	int m_NoOfCorr;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  BOOL OnInitDialog();
-  void ReferenceSelected();
-  void TestEnabled();
+	BOOL OnInitDialog();
+	void ReferenceSelected();
+	void TestEnabled();
 	void SetObjectData();
+	bool CheckSensorsConnected(int index);
+	bool CheckAllSensorsConnected();
 
 	DECLARE_MESSAGE_MAP()
   afx_msg void OnBnClickedCh1();

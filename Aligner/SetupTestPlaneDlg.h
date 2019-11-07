@@ -37,15 +37,17 @@ private:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  BOOL OnInitDialog();
-  void ReferenceSelected();
-  void TestEnabled();
-  void SetObjectData();
-  BOOL CheckNoOfConnectedObjects();
+	BOOL OnInitDialog();
+	void ReferenceSelected();
+	void TestEnabled();
+	void SetObjectData();
+	BOOL CheckNoOfConnectedObjects();
 	void ShowAllZPar( BOOL Show );
 	void DisableAllZPar( BOOL Disable );
 	void EnableDisableZPar( BOOL DoIt, BOOL enable, int iD );
 	void HideAllReferenceItems();
+	bool CheckSensorsConnected(int index);
+	bool CheckAllSensorsConnected();
 
 	DECLARE_MESSAGE_MAP()
   afx_msg void OnBnClickedCh1();

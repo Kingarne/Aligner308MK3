@@ -496,7 +496,43 @@ void CSetupSpecGBDlg::OnBnClickedOk()
   g_AlignerData.NoOfCorr = m_NoOfCorr;
   memcpy( g_AlignerData.ObjNo, m_ObjNo, SIZE_OF_ARRAYS * sizeof( int ) );
 
+  if (!CheckAllSensorsConnected())
+  {
+	  m_Text.Format("Unconnected sensor detected! Continue anyway?");
+	  if (MessageBox(m_Text, m_MsgCaption, MB_ICONWARNING | MB_YESNO) != IDYES)
+		  return;
+  }
+
   OnOK();
+}
+
+bool CSetupSpecGBDlg::CheckSensorsConnected(int index)
+{
+	if (IsSensor(index))
+	{
+		int i = CONVERT_ARRAY_INDEX_TO_SENSOR_CHANNEL(index);
+
+		double tempr = DAU::GetDAU().GetSensor(i)->GetTemperature();
+		if (tempr > 68.3f)
+			return false;
+	}
+
+	return true;
+}
+
+bool CSetupSpecGBDlg::CheckAllSensorsConnected()
+{
+	if (!CheckSensorsConnected(g_AlignerData.RefObjNo))
+		return false;
+
+	for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
+	{
+		if (!CheckSensorsConnected(g_AlignerData.ObjNo[i]))
+			return false;
+
+	}
+
+	return true;
 }
 
 void CSetupSpecGBDlg::OnBnClickedTestCh()

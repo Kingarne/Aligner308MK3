@@ -51,6 +51,8 @@ protected:
     int GetNoOfToBeTested();
     void CommonFlatTestCheck( int channelNo );
     void InitMaps();
+	bool CheckSensorsConnected(int index);
+	bool CheckAllSensorsConnected();
 
 	DECLARE_MESSAGE_MAP()
     afx_msg void OnBnClickedCh1();

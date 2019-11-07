@@ -122,7 +122,7 @@ void CSetupMeasureDlg::CommonFlatTestCheck( int channelNo )
     {
       m_TestCh[ channelNo ] = FALSE;
       m_Text.LoadString( IDS_TO_MANY_CHANNELS_SELECTED_FOR_COMMON_FLAT_TEST );
-      m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
+      
       MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
     }
     UpdateData( FALSE );
@@ -184,10 +184,11 @@ BOOL CSetupMeasureDlg::OnInitDialog()
 {
   CDialog::OnInitDialog();
 
+  m_MsgCaption.LoadString(IDS_INFORMATION_CAPTION);
+
   if( GetNoOfConnectedStations() < 2 )
   {
-    m_Text.LoadString( IDS_CONNECT_TWO_STATIONS );
-    m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
+    m_Text.LoadString( IDS_CONNECT_TWO_STATIONS );    
     MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
     EndDialog( IDCANCEL );
     return FALSE;
@@ -922,6 +923,8 @@ void CSetupMeasureDlg::OnBnClickedCancel()
 
 void CSetupMeasureDlg::OnBnClickedOk()
 {
+	
+
   //validate m_SelectedReference
   if( m_Fou == TRUE )
   {
@@ -930,7 +933,7 @@ void CSetupMeasureDlg::OnBnClickedOk()
     {
       m_Text.LoadString( IDS_SETUP_MEASURE_SPECIFY_FIX_REFERENCE );
       SetDlgItemText( IDC_TEXT_5, m_Text );
-      m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
+      
       MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
       return;
     }
@@ -948,7 +951,6 @@ void CSetupMeasureDlg::OnBnClickedOk()
         m_Text.LoadString( IDS_SPECIFY_REFERENCE_STATION );
       }
       SetDlgItemText( IDC_TEXT_5, m_Text );
-      m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
       MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
       return;
     }
@@ -964,8 +966,7 @@ void CSetupMeasureDlg::OnBnClickedOk()
 	}
 
   if( testChannelSelected == FALSE )
-  {
-    m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
+  {    
     m_Text.LoadString( IDS_SETUP_MEASURE_SETUP_ONE_TO_TEST );
     MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
     return;
@@ -992,7 +993,7 @@ void CSetupMeasureDlg::OnBnClickedOk()
 
     if( planeOrGunConnected == FALSE )
     {
-      m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
+      
       m_Text.LoadString( IDS_SETUP_AT_LEAST_ONE_P_G_STATION );
       MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
       return;
@@ -1014,7 +1015,43 @@ void CSetupMeasureDlg::OnBnClickedOk()
         }
     }
 
+	if (!CheckAllSensorsConnected())
+	{
+		m_Text.Format("Unconnected sensor detected! Continue anyway?");
+		if (MessageBox(m_Text, m_MsgCaption, MB_ICONWARNING | MB_YESNO) != IDYES)
+			return;
+	}
+
     OnOK();
+}
+
+bool CSetupMeasureDlg::CheckSensorsConnected(int index)
+{
+	if (IsSensor(index))
+	{
+		int i = CONVERT_ARRAY_INDEX_TO_SENSOR_CHANNEL(index);
+
+		double tempr = DAU::GetDAU().GetSensor(i)->GetTemperature();
+		if (tempr > 68.3f)
+			return false;
+	}
+
+	return true;
+}
+
+bool CSetupMeasureDlg::CheckAllSensorsConnected()
+{
+	if (!CheckSensorsConnected(g_AlignerData.RefObjNo))
+		return false;
+
+	for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
+	{
+		if (!CheckSensorsConnected(g_AlignerData.ObjNo[i]))
+			return false;
+		
+	}
+	   
+	return true;
 }
 
 void CSetupMeasureDlg::OnBnClickedTestCh1()

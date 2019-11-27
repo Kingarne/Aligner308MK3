@@ -207,7 +207,7 @@ BOOL CSetupDriftDlg::OnInitDialog()
     }
 
     //check which channels are connected
-    if( IsConnected( tmpStr ) == TRUE )
+    if( IsConnected( tmpStr ) && IsFixed(tmpStr) )
     {
       NoOfConnectedRefPlanes++;
       //Enable text for the connected channels and 

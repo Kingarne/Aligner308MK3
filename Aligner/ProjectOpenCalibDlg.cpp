@@ -12,7 +12,7 @@
 IMPLEMENT_DYNAMIC(ProjectOpenCalibDlg, CDialog)
 
 ProjectOpenCalibDlg::ProjectOpenCalibDlg(CWnd* pParent /*=nullptr*/)
-	: CDialog(IDD_PROJECT_OPEN_DLG, pParent)
+	: CDialog(IDD_PROJECT_CALIB_OPEN_DLG, pParent)
 {
 
 }

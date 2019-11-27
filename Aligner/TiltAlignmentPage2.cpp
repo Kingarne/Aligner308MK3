@@ -52,7 +52,7 @@ void CTiltAlignmentPage2::ShowGraphButtons()
 //    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
 //	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	CString graphFileName;
-
+	 
 	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName, FALSE ) == TRUE )
 	{
 	//	m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
@@ -255,7 +255,11 @@ BOOL CTiltAlignmentPage2::OnWizardFinish()
 			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
 			m_pParent->ExitResultTable(res != IDYES);
 
-			AdjustIfAfterCommonFlatTest();
+			if (res == IDYES)
+			{
+				AdjustIfAfterCommonFlatTest();
+			}
+
 			return CPropertyPage::OnWizardFinish();	
 		}
         break;

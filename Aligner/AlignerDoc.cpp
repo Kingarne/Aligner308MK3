@@ -956,7 +956,7 @@ void CAlignerDoc::OnUpdateUtilitiesViewreport( CCmdUI *pCmdUI )
   }  
   else
   {
-    pCmdUI -> Enable(SysSetup->IsOpen() && (SysSetup->GetNumMeasurements() > 0) && SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode()) ;
+    pCmdUI -> Enable(SysSetup->IsOpen() && /*(SysSetup->GetNumMeasurements() > 0) &&*/ SYSTEM_SETUP_MODE_CALIBRATION != SysSetup->GetMode()) ;
   }
 }
 

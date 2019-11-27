@@ -132,6 +132,17 @@ namespace ReporterLib
         {
             m_printerSettings = new PrinterSettings();
 
+            double[] zoom = new double[] { 0.6f, 0.8f, 1.0f, 1.2f, 1.4f, 1.6f };
+             
+            foreach (double d in zoom)
+            {
+                int i = zoomComboBox.Items.Add((d*100.0).ToString("0") + "%");
+                //zoomComboBox.Items[i]
+            }
+            zoomComboBox.SelectedIndex = 2;
+
+
+
             Project = new DBInterface.Project();
             DBI.GetProject(ProjectId, ref Project);
 
@@ -739,19 +750,18 @@ namespace ReporterLib
 
             if (m_page > 1)
             {
-                float col = (float)printPreviewControl.Size.Width / printPreviewControl.Size.Height / 0.7f;
+                float col = printPreviewControl.Size.Width / (printPreviewControl.Document.DefaultPageSettings.PaperSize.Width * (float)printPreviewControl.Zoom) ;
+               
+                //float col = (float)printPreviewControl.Size.Width / printPreviewControl.Size.Height * (float)printPreviewControl.Zoom / 0.7f;
                 int c = (int)col;
                 if (c < 1) c = 1;
-                newColumns = Math.Min(m_page, c);
-                //if ((float)printPreviewControl.Size.Width / printPreviewControl.Size.Height > 1.5f)
-                {
-
-                }
+                newColumns = Math.Min(m_page, c);             
             }
 
             if (newColumns != oldColumns)
             {
                 printPreviewControl.Columns = newColumns;
+              
                 printPreviewControl.Update();
             }
 
@@ -1407,8 +1417,7 @@ namespace ReporterLib
                 List<TableItem> table = new List<TableItem>();
                 table.Add(new TableItem("Station", 2, 25, Color.Black, StringAlignment.Near));
                 table.Add(new TableItem("Ch", -1, 5));
-                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));
-                table.Add(new TableItem("Adapt.\n(s/n)", -1, wPerc));
+                table.Add(new TableItem("Sensor\n(s/n)", -1, wPerc));               
                 table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
@@ -1425,8 +1434,7 @@ namespace ReporterLib
                     table = new List<TableItem>();
                     table.Add(new TableItem(ch.Station, 2, 25, Color.Black, StringAlignment.Near));
                     table.Add(new TableItem(ch.Channel, -1, 5));
-                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));
-                    table.Add(new TableItem(ch.AdapterSN, -1, wPerc));
+                    table.Add(new TableItem(ch.SensorSN, -1, wPerc));                   
                     if (ch.IsRef)
                     {
                         string refStr = "Ref";
@@ -1757,20 +1765,20 @@ namespace ReporterLib
                     table.Add(new TableItem("Calib. SF & Az. Table", 2, 20, Color.Black, StringAlignment.Near));
                     table.Add(new TableItem(ch.Channel, -1, 5));
                     table.Add(new TableItem(ch.SensorSN, -1, wPerc));
-                    if (ch.IsRef)
-                    {
+                    if (ch.IsRef) 
+                    { 
                         string refStr = "Ref";
                         table.Add(new TableItem(refStr, -1, wPerc, RefColor));
                         table.Add(new TableItem(refStr, -1, wPerc, RefColor));
                         table.Add(new TableItem(refStr, -1, wPerc, RefColor));
                         table.Add(new TableItem(refStr, -1, wPerc, RefColor));
                     }
-                    else
+                    else 
                     {
-                        table.Add(new TableItem(ch.rollScale.ToString("0.00"), -1, wPerc));
-                        table.Add(new TableItem(ch.pitchScale.ToString("0.00"), -1, wPerc));
-                        table.Add(new TableItem(ch.rollAz.ToString("0.00"), -1, wPerc));
-                        table.Add(new TableItem(ch.pitchAz.ToString("0.00"), -1, wPerc));
+                        table.Add(new TableItem(ch.rollScale.ToString("0.00000"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitchScale.ToString("0.00000"), -1, wPerc));
+                        table.Add(new TableItem(ch.rollAz.ToString("0.00000"), -1, wPerc));
+                        table.Add(new TableItem(ch.pitchAz.ToString("0.00000"), -1, wPerc));
                     }
                     table.Add(new TableItem(ch.temperature.ToString("0.00"), -1, wPerc + 3));
 
@@ -2078,7 +2086,7 @@ namespace ReporterLib
                 return true;
             }
 
-            if (!EnoughSpace(50))
+            if (!EnoughSpace(100))
                 return false;
 
             Graphics gr = PrintArgs.Graphics;
@@ -2138,7 +2146,7 @@ namespace ReporterLib
                 return true;
             }
 
-            if (!EnoughSpace(50))
+            if (!EnoughSpace(100))
                 return false;
 
             Graphics gr = PrintArgs.Graphics;
@@ -2187,6 +2195,20 @@ namespace ReporterLib
             return true;
         }
 
+        private void zoomComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                double zoom = double.Parse(zoomComboBox.Items[zoomComboBox.SelectedIndex].ToString().TrimEnd('%'));
+
+                printPreviewControl.Zoom = zoom/100.0f;
+                printPreviewControl.Update();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }
  

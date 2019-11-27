@@ -992,6 +992,8 @@
 #define IDC_AZIM                        1641
 #define IDC_SET_AZ_BUTTON               1642
 #define IDC_RESOLUTION_TITLE            1643
+#define IDC_SET_AZ_BUTTON2              1643
+#define IDC_EXP_SENS_BUTTON             1643
 #define IDC_SYNCRO_DESCRIPTION_TITLE    1644
 #define IDC_CHANNEL_LIVE_GRID           1645
 #define IDC_CHANNEL_LIVE_DIG_GRID       1646

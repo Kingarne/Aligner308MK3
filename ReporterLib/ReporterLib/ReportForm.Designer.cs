@@ -37,6 +37,8 @@
             this.allButton = new System.Windows.Forms.Button();
             this.noneButton = new System.Windows.Forms.Button();
             this.delButton = new System.Windows.Forms.Button();
+            this.zoomComboBox = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,10 +57,11 @@
             this.printPreviewControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.printPreviewControl.AutoZoom = false;
             this.printPreviewControl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.printPreviewControl.Location = new System.Drawing.Point(285, 12);
+            this.printPreviewControl.Location = new System.Drawing.Point(285, 32);
             this.printPreviewControl.Name = "printPreviewControl";
-            this.printPreviewControl.Size = new System.Drawing.Size(457, 692);
+            this.printPreviewControl.Size = new System.Drawing.Size(457, 672);
             this.printPreviewControl.TabIndex = 2;
             this.printPreviewControl.UseAntiAlias = true;
             this.printPreviewControl.Click += new System.EventHandler(this.printPreviewControl_Click);
@@ -134,11 +137,31 @@
             this.delButton.UseVisualStyleBackColor = true;
             this.delButton.Click += new System.EventHandler(this.delButton_Click);
             // 
+            // zoomComboBox
+            // 
+            this.zoomComboBox.FormattingEnabled = true;
+            this.zoomComboBox.Location = new System.Drawing.Point(320, 8);
+            this.zoomComboBox.Name = "zoomComboBox";
+            this.zoomComboBox.Size = new System.Drawing.Size(55, 21);
+            this.zoomComboBox.TabIndex = 9;
+            this.zoomComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomComboBox_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(282, 11);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(34, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Zoom";
+            // 
             // ReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 716);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.zoomComboBox);
             this.Controls.Add(this.delButton);
             this.Controls.Add(this.noneButton);
             this.Controls.Add(this.allButton);
@@ -154,6 +177,7 @@
             this.SizeChanged += new System.EventHandler(this.ReportForm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -167,5 +191,7 @@
         private System.Windows.Forms.Button allButton;
         private System.Windows.Forms.Button noneButton;
         private System.Windows.Forms.Button delButton;
+        private System.Windows.Forms.ComboBox zoomComboBox;
+        private System.Windows.Forms.Label label1;
     }
 }

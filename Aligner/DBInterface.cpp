@@ -163,7 +163,9 @@ BOOL DBInterface::InsertProject(ProjectData& project)
 	sql.Format("INSERT INTO Project( name, dauSerial, operator, location, shipId, latitude, unit, imgIdx, projTime, signDef ) VALUES ('%s',%d, '%s','%s', %d, %.2f, %d, %d, '%s', %d)",
 		project.m_projectName, SysSetup->GetDAUSerial(), project.m_operatorName, project.m_location, project.m_shipID, project.m_latitude, project.m_unit, 0, time.Format(_T("%Y-%m-%d %H:%M:%S")), project.m_signDef);
 
+	m_db.BeginTrans();
 	m_db.ExecuteSQL(sql);
+	m_db.CommitTrans();
 
 	int id;
 	GetLastCounter(id);

@@ -132,13 +132,21 @@ void GainCalibrationPage6::SaveDayToDayCalibrationData( Gain6CalibrationResult &
 	{
 		CString msgCaption, text;
 
-		msgCaption.LoadString(IDS_QUESTION_CAPTION);
-		
 		m_pResultTable->ShowReport(TRUE);
 
-		text.LoadString( IDS_AUTOMATICALLY_ADJUST_CALIBRATION_DATA );
-		msgCaption.LoadString( IDS_QUESTION_CAPTION );
+		msgCaption.LoadString(IDS_QUESTION_CAPTION);
 
+		text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
+		int res = MessageBox(text, msgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
+		if (res != IDYES)
+		{		
+			m_pResultTable->DeleteLast();
+			delete m_pResultTable;
+			m_pResultTable = NULL;
+			return;
+		}
+		
+		text.LoadString(IDS_AUTOMATICALLY_ADJUST_CALIBRATION_DATA);
 		if( IDYES == MessageBox( text, msgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
 		{
 		  BOOL doIt = TRUE;
@@ -176,15 +184,8 @@ void GainCalibrationPage6::SaveDayToDayCalibrationData( Gain6CalibrationResult &
 		  //m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 				
 		}
-		//m_deleteReport = TRUE;
-		text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
-		if (IDYES != MessageBox(text, msgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1))
-		{
-		//	m_pResultTable->CloseReport();
-			return;
-		}
-		//m_pResultTable->CloseReport();
-		//theApp.AddToDocument(m_pResultTable->m_reportHistoryMainID);
+		
+
 		delete m_pResultTable;
 		m_pResultTable = NULL;
 	  }

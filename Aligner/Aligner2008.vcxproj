@@ -456,12 +456,13 @@
     <ClCompile Include="DebugGrid.cpp" />
     <ClCompile Include="FTD2Api.cpp" />
     <ClCompile Include="GainCalibrationPage6.cpp" />
-    <ClCompile Include="GridCell.cpp" />
-    <ClCompile Include="GridCellBase.cpp" />
-    <ClCompile Include="GridCtrl.cpp" />
-    <ClCompile Include="GridDropTarget.cpp" />
+    <ClCompile Include="GridCtrl\GridCell.cpp" />
+    <ClCompile Include="GridCtrl\GridCellBase.cpp" />
+    <ClCompile Include="GridCtrl\GridCtrl.cpp" />
+    <ClCompile Include="GridCtrl\GridDropTarget.cpp" />
+    <ClCompile Include="GridCtrl\InPlaceEdit.cpp" />
+    <ClCompile Include="GridCtrl\TitleTip.cpp" />
     <ClCompile Include="InfoDlg.cpp" />
-    <ClCompile Include="InPlaceEdit.cpp" />
     <ClCompile Include="ProjectOpenCalibDlg.cpp" />
     <ClCompile Include="ProjectOpenDlg.cpp" />
     <ClCompile Include="Registry.cpp" />
@@ -499,7 +500,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TitleTip.cpp" />
     <ClCompile Include="XMLHandler.cpp" />
     <ClCompile Include="AdapterCalibration.cpp" />
     <ClCompile Include="AdapterCalibrationPage0.cpp" />

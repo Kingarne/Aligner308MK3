@@ -1113,3 +1113,85 @@ void ChannelLiveDigGrid::UpdateGrid()
 
 
 
+BEGIN_MESSAGE_MAP(SensorGrid, CGridCtrl)
+	ON_WM_MOUSEMOVE()
+END_MESSAGE_MAP()
+
+
+void SensorGrid::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+ CGridCtrl::OnMouseMove(nFlags, point);
+	CCellID idCurrentCell;
+	idCurrentCell = GetCellFromPt(point);
+	CGridCellBase* pCell = GetCell(idCurrentCell.row, idCurrentCell.col);
+	if (!pCell)
+		return;
+
+	CRect TextRect, CellRect;
+	GetCellRect(idCurrentCell.row, idCurrentCell.col, &TextRect);
+	pCell->GetTipTextRect(&TextRect);
+	GetCellRect(idCurrentCell.row, idCurrentCell.col, CellRect);
+
+	if (idCurrentCell.col != 1 || idCurrentCell.row == 0)
+		return;
+
+	TextRect.right = TextRect.left + 2; //So that we allways display tip.
+	CString str = pCell->GetText();
+	if (str == "")
+		return;
+
+	Sensor* pSensor = DAU::GetDAU().GetSensorFromSN(str);
+	if (!pSensor)
+		return;
+
+	CString info = GetCalibrationInfo(*pSensor);
+
+	m_TitleTip.Show(TextRect, info, 0, CellRect,
+		pCell->GetFont(), GetTitleTipTextClr(), GetTitleTipBackClr());
+
+	TRACE("Move:%d,%d\n", idCurrentCell.row, idCurrentCell.col);
+
+}
+
+CString SensorGrid::GetCalibrationInfo(Sensor& sensor)
+{
+	CString info, str;
+	str.Format("Sensor:%s\n\n", sensor.GetSerialNumber());
+	info += str;
+	str.Format("                           A0               A1              A2             A3                    Date\n");
+	info += str;
+
+	SensorTemperatureCalibrationData cal = sensor.m_rollOffsetTemperatureCalibration;
+	str.Format(" Roll Offset: %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+	info += str;
+
+	cal = sensor.m_rollGainTemperatureCalibration;
+	str.Format(" Roll Scale:   %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+	info += str;
+
+	cal = sensor.m_rollAzimuthTemperatureCalibration;
+	str.Format(" Roll Azim:    %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+	info += str + "\n";
+
+	cal = sensor.m_pitchOffsetTemperatureCalibration;
+	str.Format(" Pitch Offset:  %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+	info += str;
+
+	cal = sensor.m_pitchGainTemperatureCalibration;
+	str.Format(" Pitch Scale:    %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+	info += str;
+
+	cal = sensor.m_pitchAzimuthTemperatureCalibration;
+	str.Format(" Pitch Azim:     %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+	info += str;
+
+
+	return info;
+}

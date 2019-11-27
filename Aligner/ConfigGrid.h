@@ -1,5 +1,5 @@
 #pragma once
-#include "gridctrl.h"
+#include ".\gridctrl\gridctrl.h"
 
 #define USED_COLOR			RGB(255,255,255)
 #define UNUSED_COLOR		::GetSysColor(COLOR_BTNFACE)
@@ -36,6 +36,11 @@ private:
 
     void SetRowBGColor(int row, COLORREF col);
     void UpdateHeader();
+	CString GetCalibrationInfo(Sensor& sensor);
+
+public:
+	DECLARE_MESSAGE_MAP()
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 enum GyroColumnName{GColCh, GColStation, GColType, GColNomAz, GColGearing};

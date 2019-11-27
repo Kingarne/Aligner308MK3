@@ -144,6 +144,7 @@ public:
     bool IsBuddyChannelUsed(CString str);
     set<CString> m_usedBuddyChannelSet;	    
     Syncro* GetHighSeaCompGyro();
+	Sensor *GetSensorFromSN(const CString &sn);
 
 	int m_timerIntervall;
 	BOOL CheckDataRate(int numframesHandled);

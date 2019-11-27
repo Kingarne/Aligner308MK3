@@ -256,8 +256,8 @@ static void SaveCalibrationData( TiltCalibrationResult &result, CString serialNu
 {
     if (result.m_saveResult)
     {
-        DBInterface::Instance()->InsertSensorData("SensorRollOffsetData", DAU::GetDAU().GetSerialNumber(), serialNumber, SysSetup->GetOperatorName(), result.m_temperature, result.m_sensorRollOffset); 
-        DBInterface::Instance()->InsertSensorData("SensorPitchOffsetData", DAU::GetDAU().GetSerialNumber(), serialNumber, SysSetup->GetOperatorName(), result.m_temperature, result.m_sensorPitchOffset); 
+        DBInterface::Instance()->InsertSensorData("SensorRollOffsetData", serialNumber, result.m_temperature, result.m_sensorRollOffset); 
+        DBInterface::Instance()->InsertSensorData("SensorPitchOffsetData", serialNumber, result.m_temperature, result.m_sensorPitchOffset); 
     }
 }
 

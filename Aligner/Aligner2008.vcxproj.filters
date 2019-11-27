@@ -68,6 +68,9 @@
     <Filter Include="Reports">
       <UniqueIdentifier>{a4caf1be-df6c-46ec-83b9-137b2953689e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GridCtrl">
+      <UniqueIdentifier>{6d3bf557-7683-40e7-a05a-01f68f8403d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorStatic.cpp">
@@ -95,21 +98,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FTD2Api.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GridCell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GridCellBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GridCtrl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GridDropTarget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InPlaceEdit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Registry.cpp">
@@ -146,9 +134,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tinyxmlparser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleTip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="XMLHandler.cpp">
@@ -558,6 +543,24 @@
     </ClCompile>
     <ClCompile Include="ProjectOpenCalibDlg.cpp">
       <Filter>Source Files\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="GridCtrl\GridCell.cpp">
+      <Filter>Source Files\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="GridCtrl\GridCellBase.cpp">
+      <Filter>Source Files\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="GridCtrl\GridCtrl.cpp">
+      <Filter>Source Files\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="GridCtrl\GridDropTarget.cpp">
+      <Filter>Source Files\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="GridCtrl\InPlaceEdit.cpp">
+      <Filter>Source Files\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="GridCtrl\TitleTip.cpp">
+      <Filter>Source Files\GridCtrl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

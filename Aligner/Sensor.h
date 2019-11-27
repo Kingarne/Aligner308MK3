@@ -58,22 +58,23 @@ public:
 
 struct SensorTemperatureCalibrationData
 {
-  double m_offset ;
-  double m_linear ;
-  double m_quadratic ;
-  double m_cubic ;
+	DBTIMESTAMP time;
+	double m_offset ;
+	double m_linear ;
+	double m_quadratic ;
+	double m_cubic ;
 public:
-  SensorTemperatureCalibrationData( double offset, double linear, double quadratic, double cubic )
-  {
-    m_offset = offset ;
-    m_linear = linear ;
-    m_quadratic = quadratic ;
-    m_cubic = cubic ; 
-  }
+	SensorTemperatureCalibrationData( double offset, double linear, double quadratic, double cubic )
+	{
+		m_offset = offset ;
+		m_linear = linear ;
+		m_quadratic = quadratic ;
+		m_cubic = cubic ; 
+	}
 public:
-  double operator()( double temperature ) {
-    return m_offset + temperature * (m_linear + temperature * (m_quadratic + temperature * m_cubic)) ;
-  }
+	double operator()( double temperature ) {
+	return m_offset + temperature * (m_linear + temperature * (m_quadratic + temperature * m_cubic)) ;
+	}
 } ;
 
 struct AdapterCalibrationData
@@ -152,14 +153,15 @@ public:
     void SetCentrifugRollComp(double compVal);
 	void Dump(ofstream& dump);
 
-private:
     SensorTemperatureCalibrationData m_rollOffsetTemperatureCalibration ;
     SensorTemperatureCalibrationData m_rollGainTemperatureCalibration ;
     SensorTemperatureCalibrationData m_rollAzimuthTemperatureCalibration ;
     SensorTemperatureCalibrationData m_pitchOffsetTemperatureCalibration ;
     SensorTemperatureCalibrationData m_pitchGainTemperatureCalibration ;
     SensorTemperatureCalibrationData m_pitchAzimuthTemperatureCalibration ;
-    ChannelCalibrationData m_rollChannelCalibration ;
+private:
+
+	ChannelCalibrationData m_rollChannelCalibration ;
     ChannelCalibrationData m_pitchChannelCalibration ;
     SensorCalibrationData m_rollCalibration ;
     SensorCalibrationData m_pitchCalibration ;

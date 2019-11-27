@@ -1,5 +1,5 @@
 #pragma once
-#include "gridctrl.h"
+#include ".\gridctrl\gridctrl.h"
 
 #define USED_COLOR	    RGB(255,255,255)
 #define UNUSED_COLOR	::GetSysColor(COLOR_BTNFACE)

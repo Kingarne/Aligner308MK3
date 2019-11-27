@@ -52,7 +52,7 @@ public:
 	BOOL InsertProject(ProjectData& project);
 	BOOL InsertProjectCalibration(ProjectData& project);
 
-    BOOL InsertSensorData(CString table, CString dauSN, CString SN, CString op, double temp, double val);
+    BOOL InsertSensorData(CString table, CString SN, double temp, double val);
     BOOL InsertHistoryPrintItem(int historyId);
     
 	BOOL InsertMeasurement(MeasurementBase& data);

@@ -110,6 +110,7 @@ void CreatePolynomial::SetupData( void )
 
 void GetUniqueSerialNumbers( CString table, CComboBox &serial, CString current )
 {
+	serial.ResetContent();
     vector<CString> serialNumbers;
     DBInterface::Instance()->GetUniqueSensorSN(table, serialNumbers);          
     

@@ -988,7 +988,16 @@ void DAU::SetPropertyPageBuddies(map<CString, CPropertyPage*>& syncMap)
     }
 }
 
+Sensor *DAU::GetSensorFromSN(const CString &sn)
+{
+	for (auto it = m_sensorMap.begin(); it != m_sensorMap.end(); it++)
+	{
+		if (sn == it->second->GetSerialNumber())
+			return it->second;
+	}
 
+	return NULL;
+}
 
 //*******************************************************************************//
 //***															ConfigSensors																***//

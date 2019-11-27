@@ -118,11 +118,11 @@ static void SaveCalibrationData( Gain6CalibrationResult &result, CString serialN
 {
   if (result.m_saveResult)
   {
-    DBInterface::Instance()->InsertSensorData("SensorPitchGainData", DAU::GetDAU().GetSerialNumber(), serialNumber, SysSetup->GetOperatorName(), result.m_pitchTemperature, result.m_sensorPitchGain);
-    DBInterface::Instance()->InsertSensorData("SensorRollGainData", DAU::GetDAU().GetSerialNumber(), serialNumber, SysSetup->GetOperatorName(), result.m_rollTemperature, result.m_sensorRollGain);
+    DBInterface::Instance()->InsertSensorData("SensorPitchGainData", serialNumber, result.m_pitchTemperature, result.m_sensorPitchGain);
+    DBInterface::Instance()->InsertSensorData("SensorRollGainData", serialNumber, result.m_rollTemperature, result.m_sensorRollGain);
     //Note: temperature correct, shall be swapped.
-    DBInterface::Instance()->InsertSensorData("SensorPitchAzimuthData", DAU::GetDAU().GetSerialNumber(), serialNumber, SysSetup->GetOperatorName(), result.m_rollTemperature, result.m_sensorPitchAzimuth);
-    DBInterface::Instance()->InsertSensorData("SensorRollAzimuthData", DAU::GetDAU().GetSerialNumber(), serialNumber, SysSetup->GetOperatorName(), result.m_pitchTemperature, result.m_sensorRollAzimuth);
+    DBInterface::Instance()->InsertSensorData("SensorPitchAzimuthData", serialNumber, result.m_rollTemperature, result.m_sensorPitchAzimuth);
+    DBInterface::Instance()->InsertSensorData("SensorRollAzimuthData",  serialNumber, result.m_pitchTemperature, result.m_sensorRollAzimuth);
   }
 }
 

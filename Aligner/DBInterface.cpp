@@ -1024,7 +1024,7 @@ BOOL DBInterface::AddSensorCalibrationA0(CString table, CString serial, double a
     return TRUE;	
 }
 
-BOOL DBInterface::InsertSensorData(CString table, CString dauSN, CString SN, CString op, double temp, double val)
+BOOL DBInterface::InsertSensorData(CString table, CString SN, double temp, double val)
 {
     if(!m_db.IsOpen())
 		return FALSE;

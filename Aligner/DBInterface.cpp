@@ -769,7 +769,7 @@ BOOL DBInterface::GetSensorCalibrationData(CString calibName, CString SN, Sensor
  
      CString sql="";
 
-     sql.Format("SELECT a_0, a_1, a_2, a_3 FROM %s WHERE serialNumber ='%s'",calibName, SN);	
+     sql.Format("SELECT * FROM %s WHERE serialNumber ='%s'",calibName, SN);	
     
      int id;
      
@@ -787,6 +787,8 @@ BOOL DBInterface::GetSensorCalibrationData(CString calibName, CString SN, Sensor
 			 data.m_quadratic = val.m_dblVal;
              rs.GetFieldValue("a_3", val);
 			 data.m_cubic = val.m_dblVal;
+			 rs.GetFieldValue("time", val);
+			 data.time = ToDBTimestamp(val.m_pdate);
          }
      }
     return TRUE;

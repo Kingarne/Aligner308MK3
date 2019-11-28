@@ -8,7 +8,7 @@
 //
 
 //////////////////////////////////////////////////
-// CMemDC2 - memory DC
+// MemDC - memory DC
 //
 // Author: Keith Rule
 // Email:  keithr@europa.com
@@ -23,12 +23,12 @@
 //
 // This class implements a memory Device Context
 
-class CMemDC2 : public CDC
+class MemDC : public CDC
 {
 public:
 
     // constructor sets up the memory DC
-    CMemDC2(CDC* pDC) : CDC()
+    MemDC(CDC* pDC) : CDC()
     {
         ASSERT(pDC != NULL);
 
@@ -66,7 +66,7 @@ public:
     }
 
     // Destructor copies the contents of the mem DC to the original DC
-    ~CMemDC2()
+    ~MemDC()
     {
         if (m_bMemDC)
         {
@@ -85,14 +85,14 @@ public:
     }
 
     // Allow usage as a pointer
-    CMemDC2* operator->() {return this;}
+    MemDC* operator->() {return this;}
         
     // Allow usage as a pointer
-    operator CMemDC2*() {return this;}
+    operator MemDC*() {return this;}
 
 private:
     CBitmap  m_bitmap;      // Offscreen bitmap
-    CBitmap* m_pOldBitmap;  // bitmap originally found in CMemDC
+    CBitmap* m_pOldBitmap;  // bitmap originally found in MemDC
     CDC*     m_pDC;         // Saves CDC passed in constructor
     CRect    m_rect;        // Rectangle of drawing area.
     BOOL     m_bMemDC;      // TRUE if CDC really is a Memory DC.

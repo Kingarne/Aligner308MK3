@@ -861,6 +861,7 @@ inline CGridCellBase* CGridCtrl::GetCell(int nRow, int nCol) const
 			if (m_pfnCallback)
 				m_pfnCallback(&gvdi, m_lParam);
 			else
+				
 				SendDisplayRequestToParent(&gvdi);
 			gvdi.item.row = nRow;        
 			gvdi.item.col = nCol;

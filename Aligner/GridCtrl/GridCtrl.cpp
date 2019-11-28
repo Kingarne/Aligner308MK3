@@ -4,7 +4,7 @@
 //
 // Written by Chris Maunder <chris@codeproject.com>
 // Copyright (c) 1998-2005. All Rights Reserved.
-/
+//
 // The code contained in this file was based on the original
 // WorldCom Grid control written by Joe Willcoxson,
 //        mailto:chinajoe@aol.com
@@ -617,7 +617,7 @@ void CGridCtrl::OnPaint()
 
     if (m_bDoubleBuffer)    // Use a memory DC to remove flicker
     {
-        CMemDC2 MemDC(&dc);
+        MemDC MemDC(&dc);
         OnDraw(&MemDC);
     }
     else                    // Draw raw - this helps in debugging vis problems.

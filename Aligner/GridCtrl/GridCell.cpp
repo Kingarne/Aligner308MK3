@@ -238,10 +238,10 @@ CGridDefaultCell::CGridDefaultCell()
         GetVersionEx ((OSVERSIONINFO *)&osvi);
     }
     
-    //if (osvi.dwMajorVersion > 5)
+    if (osvi.dwMajorVersion > 5)
     	ncm.cbSize = sizeof(NONCLIENTMETRICS);
-    //else
-	//    ncm.cbSize = sizeof(NONCLIENTMETRICS) - sizeof(ncm.iPaddedBorderWidth);
+    else
+	    ncm.cbSize = sizeof(NONCLIENTMETRICS) - sizeof(ncm.iPaddedBorderWidth);
 #endif
     VERIFY(SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &ncm, 0));
 

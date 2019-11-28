@@ -180,6 +180,8 @@ void CTitleTip::Show(CRect rectTitle, LPCTSTR lpszTitleText, int xoffset /*=0*/,
     }
 
 	CSize size = dc.GetTextExtent( strTitle );
+	CRect textRectCalc(0,0,rectTitle.Width(), rectTitle.Height());
+	int newHeight = dc.DrawText( strTitle, textRectCalc, DT_CALCRECT );
 
     TEXTMETRIC tm;
     dc.GetTextMetrics(&tm);
@@ -187,8 +189,10 @@ void CTitleTip::Show(CRect rectTitle, LPCTSTR lpszTitleText, int xoffset /*=0*/,
 
 	CRect rectDisplay = rectTitle;
 	rectDisplay.left += xoffset;
-	rectDisplay.right = rectDisplay.left + size.cx + xoffset;
-    
+	//rectDisplay.right = rectDisplay.left + size.cx + xoffset;
+	rectDisplay.right = rectDisplay.left + textRectCalc.Width() + xoffset + 4;
+    rectDisplay.bottom = rectDisplay.top + newHeight + 4;
+
     // Do not display if the text fits within available space
     if ( rectDisplay.right > rectTitle.right-xoffset )
     {
@@ -213,7 +217,9 @@ void CTitleTip::Show(CRect rectTitle, LPCTSTR lpszTitleText, int xoffset /*=0*/,
             dc.SetTextColor(crTextClr);//FA
 
         dc.SetBkMode( TRANSPARENT );
-        dc.TextOut( 0, 0, strTitle );
+        //dc.TextOut( 0, 0, strTitle );
+		CRect textRect(2,0,rectDisplay.Width(), rectDisplay.Height());
+		dc.DrawText( strTitle, textRect, DT_LEFT );
         SetCapture();
     }
     

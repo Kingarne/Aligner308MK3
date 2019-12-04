@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ReporterLib
 {
@@ -31,10 +32,10 @@ namespace ReporterLib
             reportForm.PrintType = ReportForm.ReportType.RT_Measurement;
             reportForm.ProjectId = projectId;
             reportForm.SetMeasId(measId);
-            reportForm.ShowDialog();
+            DialogResult res =  reportForm.ShowDialog();
 
 
-            return 0;
+            return (res == DialogResult.OK) ? 1 : 0;
         }
 
         public int OpenCalibrationData(int projectId)
@@ -52,7 +53,7 @@ namespace ReporterLib
             reportForm.ShowDialog();
 
 
-            return 0;
+            return 1;
         }
 
 

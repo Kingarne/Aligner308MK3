@@ -47,10 +47,6 @@ void CTiltFlatnessTestPage3::DisableAllButtons()
   GetDlgItem( IDC_PRINT_GRAPH )->EnableWindow( FALSE );
   //GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
 	GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_RESULT_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_POLAR_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_RESULT_TABLE )->EnableWindow( FALSE );
 	GetDlgItem( IDC_TILT_FLATNESS_TEST_PAGE3_AZIMUTH_ANGLE )->EnableWindow( FALSE );
 }
 
@@ -543,10 +539,7 @@ void CTiltFlatnessTestPage3::MeasureRollPathContinue()
         GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( FALSE );
     }
     GetDlgItem( IDC_TILT_FLATNESS_TEST_SHOW_GROUP )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_RESULT_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_ERROR_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_SHOW );
+      
     m_pParent->SetWizardButtons( PSWIZB_FINISH );
 }
 
@@ -569,10 +562,7 @@ void CTiltFlatnessTestPage3::HideAll()
   GetDlgItem( IDC_TILT_FLATNESS_TEST_PAGE3_AZIMUTH_ANGLE )->ShowWindow( SW_HIDE );
   GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );
   GetDlgItem( IDC_TILT_FLATNESS_TEST_SHOW_GROUP )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SHOW_RESULT_GRAPH )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SHOW_ERROR_GRAPH )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_HIDE );
+ 
 }
 
 	/***************************************************************************/

@@ -33,17 +33,14 @@ CAlignmentWizard::CAlignmentWizard( UINT nIDCaption,  CWnd* pWndParent )
 CAlignmentWizard::~CAlignmentWizard()
 {
   // Empty
+	
 }
 
-void CAlignmentWizard::ExitResultTable( BOOL DeleteReport)
+void CAlignmentWizard::ExitResultTable(bool b )
 {
 	if( m_pResultTable != NULL )
 	{
-        if( DeleteReport == TRUE )
-        {
-            m_pResultTable->DeleteLast();
-        }
-  
+     
 		delete m_pResultTable;
 		m_pResultTable = NULL;
 	}

@@ -61,12 +61,8 @@ public:
 	virtual ~CResultTable();
 
     BOOL DeleteLast( void );
-	//BOOL CloseReport( void );
-	BOOL ShowReport( BOOL CloseFirst );	
-	//BOOL UpdateComment( void );
+	BOOL ShowReport( bool b=true );	
 	BOOL AddGraph( CString fileName, BOOL includeToResultTable );
-//	BOOL ResetMainID( void );
-   // long GetMainID( void );
     
     BOOL OpenMainReport();
     BOOL OpenCalibrationReport();
@@ -79,17 +75,12 @@ public:
 
 protected:
 
-	//BOOL CreateEmptyReport( void );
     BOOL InitiateReport( InParam* pInParam );
     BOOL SaveToDataBase( void );
 	BOOL OpenReport( BOOL SaveToDB );
 	BOOL IsReportOpen( void );
-	//BOOL ShowPresentDialog( BOOL Show );
-
     
     CAlignmentWizard* m_pParent;
-    //CPresentDialog* m_pPresentDlg;
-	//HANDLE m_hReportWindow;
 
 	TiltAlignment::Data m_TiltAlignment;
 	TiltAlignment::ChannelData m_TiltAlignmentChannel[SIZE_OF_ARRAYS];
@@ -121,14 +112,6 @@ protected:
 	SensorValidation::Data m_SensorValidation;
 	SensorValidation::ChannelData m_SensorValidationChannel[SIZE_OF_ARRAYS];
 
-	/*AzimuthVerificationBenchmarkHistory::Data m_AzimuthVerificationBenchmarkData;
-	AzimuthVerificationBenchmarkHistory::ItemData m_AzimuthVerificationBenchmarkItem[SIZE_OF_ARRAYS];
-	AzimuthVerificationGyrostabilityHistory::Data m_AzimuthVerificationGyrostabData;
-	AzimuthVerificationGyrostabilityHistory::ItemData m_AzimuthVerificationGyrostabItem[SIZE_OF_ARRAYS];
-	*/
-	
 	LiveGraph::Data m_LiveGraph;
 	LiveGraph::ChannelData m_LiveGraphChannel[SIZE_OF_ARRAYS];
-	//LiveDataA202ErrorsHistory::Data m_LiveDataA202Data;
-	//LiveDataA202ErrorsHistory::ItemData m_LiveDataA202Item[SIZE_OF_ARRAYS];
 };

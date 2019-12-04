@@ -38,19 +38,12 @@ void CTiltAlignmentPage2::HideAllText()
 
 void CTiltAlignmentPage2::HideAll()
 {
-    HideAllText();
-    GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_GROUP )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_HIDE );
+	HideAllText();
+	GetDlgItem(IDC_START_MEASURE)->ShowWindow(SW_HIDE);
 }
 
-void CTiltAlignmentPage2::ShowGraphButtons()
+void CTiltAlignmentPage2::StoreGraph()
 {
-    GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-//    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	CString graphFileName;
 	 
 	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName, FALSE ) == TRUE )
@@ -61,18 +54,12 @@ void CTiltAlignmentPage2::ShowGraphButtons()
 
 void CTiltAlignmentPage2::HideGraphButtons()
 {
-    GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-//    GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+    
 }
 
 void CTiltAlignmentPage2::DisableAllButtons()
 {
-    GetDlgItem( IDC_PRINT_GRAPH )->EnableWindow( FALSE );
-//    GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-    GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
-    GetDlgItem( IDC_SHOW_POLAR_GRAPH )->EnableWindow( FALSE );
-    GetDlgItem( IDC_SHOW_RESULT_TABLE )->EnableWindow( FALSE );
+    GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );  
 }
 
 void CTiltAlignmentPage2::InitResultTable( void )
@@ -105,12 +92,8 @@ void CTiltAlignmentPage2::InitResultTable( void )
 }
 
 BEGIN_MESSAGE_MAP(CTiltAlignmentPage2, CPropertyPage)
-    ON_BN_CLICKED(IDC_START_MEASURE, OnBnClickedStartMeasure)
-    ON_BN_CLICKED(IDC_SHOW_POLAR_GRAPH, OnBnClickedShowPolarGraph)
-    ON_BN_CLICKED(IDC_SHOW_RESULT_TABLE, OnBnClickedShowResultTable)
-    ON_BN_CLICKED(IDC_PRINT_GRAPH, OnBnClickedPrintGraph)
-    ON_BN_CLICKED(IDC_SAVE_GRAPH, OnBnClickedSaveGraph)
-	ON_WM_TIMER()
+    ON_BN_CLICKED(IDC_START_MEASURE, OnBnClickedStartMeasure)    
+    ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CTiltAlignmentPage2 message handlers
@@ -242,20 +225,13 @@ BOOL CTiltAlignmentPage2::OnWizardFinish()
     switch( m_pParent->m_Status )
     {
         case STATUS_PAGE_READY:
-		{
-			m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
-		
-			OnBnClickedShowPolarGraph();
+		{			
+			ShowPolarGraph();
 		
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-			m_pParent->m_pResultTable->ShowReport(TRUE);
-			m_pParent->m_deleteReport = TRUE;
-			m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
+			int keep = m_pParent->m_pResultTable->ShowReport(TRUE);
 
-			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
-			m_pParent->ExitResultTable(res != IDYES);
-
-			if (res == IDYES)
+			if (keep)
 			{
 				AdjustIfAfterCommonFlatTest();
 			}
@@ -940,12 +916,12 @@ void CTiltAlignmentPage2::CheckMeasureResult()
     case BED_PLANE_0_MEASURE_1:
     case BED_PLANE_1_MEASURE_1:
     case BED_PLANE_2_MEASURE_1:
-		    ShowGraphButtons();
+		   StoreGraph();
         break;
     case BED_PLANE_1_MEASURE_2:
     case BED_PLANE_2_MEASURE_2:
     case BED_PLANE_2_MEASURE_3:
-		    ShowGraphButtons();
+		StoreGraph();
         break;
     case FUNCTIONS_READY:
 		{
@@ -966,10 +942,7 @@ void CTiltAlignmentPage2::CheckMeasureResult()
 			GetDlgItem( IDC_IMAGE_1 )->ShowWindow( SW_HIDE );
 			GetDlgItem( IDC_IMAGE_2 )->ShowWindow( SW_HIDE );
 			GetDlgItem( IDC_IMAGE_3 )->ShowWindow( SW_HIDE );
-			ShowGraphButtons();
-			GetDlgItem( IDC_SHOW_GROUP )->ShowWindow( SW_SHOW );
-			GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_SHOW );
-			GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_SHOW );
+			StoreGraph();
 			m_pParent->SetWizardButtons( PSWIZB_FINISH );
 		}
     break;
@@ -1101,10 +1074,8 @@ BOOL CTiltAlignmentPage2::CallMeasure( double *pRoll, double *pPitch )
     return TRUE;
 }
 
-void CTiltAlignmentPage2::OnBnClickedShowPolarGraph()
+void CTiltAlignmentPage2::ShowPolarGraph()
 {
-	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
-		
 	//init the graph
     m_pParent->m_pGraph->InitDefaultPolarGraph( g_AlignerData.NoOfCorr );
 
@@ -1117,10 +1088,6 @@ void CTiltAlignmentPage2::OnBnClickedShowPolarGraph()
 
 		    if( m_pParent->m_CommonFlatTest == TRUE )
 		    {
-			    //CString tmpStr, sensorSN;
-			    //AfxFormatString1( sensorSN, IDS_SN_XXX, GetSensorSerialNumber( g_AlignerData.ObjNo[i] ) );
-			    //AfxFormatString2( tmpStr, IDS_SENSOR_NAME_TO_DEVICE, sensorSN, (GetUnitTypeDescription( i )).Left( MAX_NO_OF_CHAR_IN_LEGEND_LABEL ) );
-			    //m_pParent->m_pGraph->SetSerieLabel( i, tmpStr );
 			    CString sensorSN;
 			    AfxFormatString1( sensorSN, IDS_SN_XXX, GetSensorSerialNumber( g_AlignerData.ObjNo[i] ) );
 			    m_pParent->m_pGraph->SetSerieLabel( i, sensorSN );
@@ -1142,25 +1109,6 @@ void CTiltAlignmentPage2::OnBnClickedShowPolarGraph()
 	m_pParent->SavePolarGraphFile();
 }
 
-void CTiltAlignmentPage2::OnBnClickedShowResultTable()
-{
-	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-	
-    OnBnClickedShowPolarGraph();
-    m_pParent->m_pResultTable->ShowReport( FALSE );
-	m_pParent->m_deleteReport = TRUE;
-}
-
-void CTiltAlignmentPage2::OnBnClickedPrintGraph()
-{
-  m_pParent->m_pGraph->PrintLiveGraph();
-}
-
-void CTiltAlignmentPage2::OnBnClickedSaveGraph()
-{
-	//GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-	//m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
-}
 
 void CTiltAlignmentPage2::StartMeasure( void )
 {

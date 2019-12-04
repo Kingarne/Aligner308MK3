@@ -79,7 +79,7 @@ protected:
     BOOL CallMeasure( double *pRoll, double *pPitch );
     void HideAll();
     void HideAllText();
-    void ShowGraphButtons();
+    void StoreGraph();
     void HideGraphButtons();
 	void DisableAllButtons();
 	void InitResultTable( void );
@@ -89,12 +89,10 @@ protected:
 	void StopTimer( BOOL measure );
     //void SetupCurrentAz();
 private:
-    afx_msg void OnBnClickedStartMeasure();
-    afx_msg void OnBnClickedShowPolarGraph();
-    afx_msg void OnBnClickedShowResultTable();
-    afx_msg void OnBnClickedPrintGraph();
-    afx_msg void OnBnClickedSaveGraph();
-	afx_msg void OnTimer(UINT nIDEvent);
+
+	void ShowPolarGraph();
+	afx_msg void OnBnClickedStartMeasure();
+    afx_msg void OnTimer(UINT nIDEvent);
 private:
     void AdjustIfAfterCommonFlatTest( void ) ;
 };

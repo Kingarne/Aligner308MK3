@@ -72,7 +72,7 @@ namespace ReporterLib
         static private int LastSortColumn;
 
         PrintPageEventArgs PrintArgs = null;
-
+        private bool Close = false;
 
         public void SetMeasId(int id)
         {
@@ -151,10 +151,13 @@ namespace ReporterLib
             allButton.Visible = MultiMode;
             noneButton.Visible = MultiMode;
             delButton.Visible = MultiMode;
-
+            keepButton.Visible = false;
+            discardButton.Visible = false;
+            finishLabel.Visible = false;
+           
             if (MultiMode)
             {
-                Text = ProjectId.ToString() + ": Show All";
+                //Text = ProjectId.ToString() + ": Show All";
                 DBI.GetProjectMeasurements(ProjectId, ref Measurements);
 
                 reportList.Columns.Add("Report");
@@ -167,11 +170,18 @@ namespace ReporterLib
             else // Single report
             {
                 printPreviewControl.Location = new Point(10, 12 + commentButton.Size.Height + 2);
-                printPreviewControl.Size = new Size(Size.Width - 40, Size.Height - 90);
+              
 
                 if (PrintType == ReportType.RT_Measurement)
                 {
-                    Text = ProjectId.ToString() + ": Show " + MeasIds[0].ToString();
+                    // Text = "Measurement Report"; // ProjectId.ToString() + ": Show " + MeasIds[0].ToString();
+                    keepButton.Visible = true;
+                    discardButton.Visible = true;
+                    finishLabel.Visible = true;
+                   // ControlBox = false;
+
+                    printPreviewControl.Size = new Size(Size.Width - 40, Size.Height - 120);
+
                     Measurement = new DBInterface.Measurement();
                     DBI.GetMeasurement(MeasIds[0], ref Measurement);
                     Measurements[MeasIds[0]] = Measurement;
@@ -180,6 +190,8 @@ namespace ReporterLib
                 }
                 else if(PrintType == ReportType.RT_Calibration)
                 {
+                    printPreviewControl.Size = new Size(Size.Width - 40, Size.Height - 90);
+
                     commentButton.Visible = false;
                     PrintCalibrationPreview();
 
@@ -1159,6 +1171,7 @@ namespace ReporterLib
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                     m_yPos += SmalMarg;
                     err.done = true;
+                    i++;
                 }
 
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Left + HeadRect.Width * 0.11f * (ChannelErrList.Count + 1), m_yPos);
@@ -2208,6 +2221,34 @@ namespace ReporterLib
             {
 
             }
+        }
+
+        private void ReportForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!MultiMode && PrintType == ReportType.RT_Measurement)
+            {
+                if (!Close)
+                {
+                    DialogResult res = MessageBox.Show("Keep measurement? (press No to discard)", "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                    if (res == DialogResult.Cancel)
+                        e.Cancel = true;
+                    else
+                        DialogResult = (res == DialogResult.Yes) ? DialogResult.OK : DialogResult.Cancel;
+                }
+            }
+
+        }
+
+        private void keepButton_Click(object sender, EventArgs e)
+        {
+            Close = true;
+            DialogResult = DialogResult.OK;
+        }
+
+        private void discardButton_Click(object sender, EventArgs e)
+        {
+            Close = true;
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

@@ -30,7 +30,7 @@ int ReportManager::OpenReport(int projectId, int measId)
 	reporter->OpenReport(projectId, measId, &l);
 	//c2.Add(100, 100);
 
-	return 0;
+	return l;
 }
 
 int ReportManager::OpenCalibrationData(int projectId)

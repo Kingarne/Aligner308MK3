@@ -103,6 +103,7 @@ public:
     BOOL DeleteRecord(CString table, int id);
     BOOL ClearTable(CString table);    
     
+	BOOL ExecuteSQL(CString& sql);
   //  CADODatabase* GetDB(){return &m_pDb;}    
 	//BOOL GetRecordsFromSql(CString sql, CADORecordset& records);
 

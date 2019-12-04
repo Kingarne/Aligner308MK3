@@ -39,6 +39,9 @@
             this.delButton = new System.Windows.Forms.Button();
             this.zoomComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.discardButton = new System.Windows.Forms.Button();
+            this.keepButton = new System.Windows.Forms.Button();
+            this.finishLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,9 +62,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.printPreviewControl.AutoZoom = false;
             this.printPreviewControl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.printPreviewControl.Location = new System.Drawing.Point(285, 32);
+            this.printPreviewControl.Location = new System.Drawing.Point(285, 45);
             this.printPreviewControl.Name = "printPreviewControl";
-            this.printPreviewControl.Size = new System.Drawing.Size(457, 672);
+            this.printPreviewControl.Size = new System.Drawing.Size(457, 659);
             this.printPreviewControl.TabIndex = 2;
             this.printPreviewControl.UseAntiAlias = true;
             this.printPreviewControl.Click += new System.EventHandler(this.printPreviewControl_Click);
@@ -155,11 +158,46 @@
             this.label1.TabIndex = 10;
             this.label1.Text = "Zoom";
             // 
+            // discardButton
+            // 
+            this.discardButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.discardButton.Location = new System.Drawing.Point(667, 681);
+            this.discardButton.Name = "discardButton";
+            this.discardButton.Size = new System.Drawing.Size(75, 23);
+            this.discardButton.TabIndex = 11;
+            this.discardButton.Text = "Discard";
+            this.discardButton.UseVisualStyleBackColor = true;
+            this.discardButton.Click += new System.EventHandler(this.discardButton_Click);
+            // 
+            // keepButton
+            // 
+            this.keepButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.keepButton.Location = new System.Drawing.Point(586, 681);
+            this.keepButton.Name = "keepButton";
+            this.keepButton.Size = new System.Drawing.Size(75, 23);
+            this.keepButton.TabIndex = 12;
+            this.keepButton.Text = "Keep";
+            this.keepButton.UseVisualStyleBackColor = true;
+            this.keepButton.Click += new System.EventHandler(this.keepButton_Click);
+            // 
+            // finishLabel
+            // 
+            this.finishLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.finishLabel.AutoSize = true;
+            this.finishLabel.Location = new System.Drawing.Point(476, 686);
+            this.finishLabel.Name = "finishLabel";
+            this.finishLabel.Size = new System.Drawing.Size(104, 13);
+            this.finishLabel.TabIndex = 13;
+            this.finishLabel.Text = "Finish Measurement:";
+            // 
             // ReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 716);
+            this.Controls.Add(this.finishLabel);
+            this.Controls.Add(this.keepButton);
+            this.Controls.Add(this.discardButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.zoomComboBox);
             this.Controls.Add(this.delButton);
@@ -172,7 +210,8 @@
             this.Controls.Add(this.printButton);
             this.MinimumSize = new System.Drawing.Size(770, 755);
             this.Name = "ReportForm";
-            this.Text = "ReportForm";
+            this.Text = "Measurement Report";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReportForm_FormClosing);
             this.Load += new System.EventHandler(this.ReportForm_Load);
             this.SizeChanged += new System.EventHandler(this.ReportForm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).EndInit();
@@ -193,5 +232,8 @@
         private System.Windows.Forms.Button delButton;
         private System.Windows.Forms.ComboBox zoomComboBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button discardButton;
+        private System.Windows.Forms.Button keepButton;
+        private System.Windows.Forms.Label finishLabel;
     }
 }

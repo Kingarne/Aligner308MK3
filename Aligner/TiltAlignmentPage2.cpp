@@ -229,7 +229,7 @@ BOOL CTiltAlignmentPage2::OnWizardFinish()
 			ShowPolarGraph();
 		
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-			int keep = m_pParent->m_pResultTable->ShowReport(TRUE);
+			int keep = m_pParent->m_pResultTable->ShowReport();
 
 			if (keep)
 			{
@@ -259,8 +259,7 @@ BOOL CTiltAlignmentPage2::OnWizardFinish()
 }
 
 void CTiltAlignmentPage2::OnReset()
-{
-	m_pParent->ExitResultTable( m_pParent->m_deleteReport );
+{	
     m_pParent->m_Status = STATUS_PAGE_CANCELED;
     g_AlignerData.ErrorDef = ERR_CANCEL;
  

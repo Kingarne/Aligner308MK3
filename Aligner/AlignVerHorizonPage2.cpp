@@ -86,13 +86,9 @@ void CAlignVerHorizonPage2::InitMeasureParam()
     
 }
 
-void CAlignVerHorizonPage2::ShowGraphButtons()
+void CAlignVerHorizonPage2::StoreGraph()
 {
-    GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-	//GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
-	CString graphFileName;
+    CString graphFileName;
 	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
 	{
 		//m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
@@ -101,20 +97,12 @@ void CAlignVerHorizonPage2::ShowGraphButtons()
 
 void CAlignVerHorizonPage2::HideGraphButtons()
 {
-    GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+    
 }
 
 void CAlignVerHorizonPage2::DisableAllButtons()
 {
-    GetDlgItem( IDC_PRINT_GRAPH )->EnableWindow( FALSE );
-    //GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_RESULT_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_POLAR_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_RESULT_TABLE )->EnableWindow( FALSE );
+ 	GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
 	DisableBearingAndRangeBox();
 }
 
@@ -170,13 +158,7 @@ BEGIN_MESSAGE_MAP(CAlignVerHorizonPage2, CPropertyPage)
     ON_BN_CLICKED(IDC_START_MEASURE, OnBnClickedStartMeasure)
     ON_EN_KILLFOCUS(IDC_ALIGN_VER_BEAR, OnEnKillfocusAlignVerBear)
     ON_EN_KILLFOCUS(IDC_ALIGN_VER_RANGE, OnEnKillfocusAlignVerRange)
-    ON_BN_CLICKED(IDC_SHOW_POLAR_GRAPH, OnBnClickedShowPolarGraph)
-    ON_BN_CLICKED(IDC_SHOW_ERROR_GRAPH, OnBnClickedShowErrorGraph)
-    ON_BN_CLICKED(IDC_SHOW_RESULT_GRAPH, OnBnClickedShowResultGraph)
-    ON_BN_CLICKED(IDC_SHOW_RESULT_TABLE, OnBnClickedShowResultTable)
-    ON_BN_CLICKED(IDC_PRINT_GRAPH, OnBnClickedPrintGraph)
-    ON_BN_CLICKED(IDC_SAVE_GRAPH, OnBnClickedSaveGraph)
-	ON_BN_CLICKED(IDC_FINISH_MEASURE, &CAlignVerHorizonPage2::OnBnClickedFinishMeasure)
+    ON_BN_CLICKED(IDC_FINISH_MEASURE, &CAlignVerHorizonPage2::OnBnClickedFinishMeasure)
 END_MESSAGE_MAP()
 
 // CAlignVerHorizonPage2 message handlers
@@ -273,19 +255,13 @@ BOOL CAlignVerHorizonPage2::OnWizardFinish()
 	{				
 		if (m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS)
 		{
-			OnBnClickedShowErrorGraph();
+			ShowErrorGraph();
 		}
-		OnBnClickedShowResultGraph();
-		OnBnClickedShowPolarGraph();
+		ShowResultGraph();
+		ShowPolarGraph();
 		
 		m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-		m_pParent->m_pResultTable->ShowReport(TRUE);
-		m_pParent->m_deleteReport = TRUE;
-
-		m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
-		m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
-		int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
-		m_pParent->ExitResultTable(res != IDYES);
+		m_pParent->m_pResultTable->ShowReport();		
 			   
 		return CPropertyPage::OnWizardFinish();
 	}
@@ -307,12 +283,11 @@ BOOL CAlignVerHorizonPage2::OnWizardFinish()
 }
 
 void CAlignVerHorizonPage2::OnReset()
-{
-	m_pParent->ExitResultTable( m_pParent->m_deleteReport );
-  m_pParent->m_Status = STATUS_PAGE_CANCELED;
-  g_AlignerData.ErrorDef = ERR_CANCEL;
+{	
+	m_pParent->m_Status = STATUS_PAGE_CANCELED;
+	g_AlignerData.ErrorDef = ERR_CANCEL;
   
-  return CPropertyPage::OnReset(); //Calls OnCancel()
+	return CPropertyPage::OnReset(); //Calls OnCancel()
 }
 
 BOOL CAlignVerHorizonPage2::HorizonTestInit()
@@ -653,7 +628,7 @@ void CAlignVerHorizonPage2::OnBnClickedStartMeasure()
         }
     }
 
-    ShowGraphButtons();
+    StoreGraph();
     EnableBearingAndRangeBox();
     m_Text.LoadString( IDS_MEASUREMENT_READY );
     SetDlgItemText( IDC_INFO_TEXT, m_Text );
@@ -828,19 +803,7 @@ void CAlignVerHorizonPage2::HorizonTestContinue()
     }
 	m_UseParallaxValueToBeRestoredOnCancel = g_AlignerData.UseParallax;
 
-    if( m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS )
-    {
-        GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( TRUE );
-    }
-    else
-    {
-        GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( FALSE );
-    }
-    GetDlgItem( IDC_ALIGN_VER_SHOW_GROUP )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_RESULT_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_ERROR_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_SHOW );
+    
     GetDlgItem( IDC_INTRO_TEXT )->ShowWindow( SW_HIDE );
     m_pParent->SetWizardButtons( PSWIZB_FINISH );
 }
@@ -864,18 +827,14 @@ void CAlignVerHorizonPage2::HideAll()
     HideAllText();
     GetDlgItem( IDC_ALIGN_VER_BEAR )->ShowWindow( SW_HIDE );
     GetDlgItem( IDC_ALIGN_VER_RANGE )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_ALIGN_VER_SHOW_GROUP )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_RESULT_GRAPH )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_ERROR_GRAPH )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_HIDE );
+    GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );   
+    
 }
 
 	/***************************************************************************/
-	/*													OnBnClickedShowResultGraph										 */
+	/*													ShowResultGraph										 */
 	/***************************************************************************/
-void CAlignVerHorizonPage2::OnBnClickedShowResultGraph()
+void CAlignVerHorizonPage2::ShowResultGraph()
 {
 	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
     m_YRan = RoundToInt( g_AlignerData.Kh * (m_pParent->m_Ymax - m_pParent->m_Ymin) + 1.5 );
@@ -973,9 +932,9 @@ void CAlignVerHorizonPage2::OnBnClickedShowResultGraph()
 }
 
 	/***************************************************************************/
-	/*													OnBnClickedShowErrorGraph											 */
+	/*													ShowErrorGraph											 */
 	/***************************************************************************/
-void CAlignVerHorizonPage2::OnBnClickedShowErrorGraph()
+void CAlignVerHorizonPage2::ShowErrorGraph()
 {
 	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
     UnitModeT UMode;
@@ -1105,7 +1064,7 @@ void CAlignVerHorizonPage2::OnBnClickedShowErrorGraph()
 	m_pParent->SaveErrorGraphFile();
 }
 
-void CAlignVerHorizonPage2::OnBnClickedShowPolarGraph()
+void CAlignVerHorizonPage2::ShowPolarGraph()
 {
 	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 
@@ -1130,33 +1089,9 @@ void CAlignVerHorizonPage2::OnBnClickedShowPolarGraph()
 	m_pParent->SavePolarGraphFile();
 }
 
-void CAlignVerHorizonPage2::OnBnClickedShowResultTable()
-{
-	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-	if (m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS)
-	{
-		OnBnClickedShowErrorGraph();
-	}
-	OnBnClickedShowResultGraph();
-    OnBnClickedShowPolarGraph(); 
-    m_pParent->m_pResultTable->ShowReport( FALSE );
-	m_pParent->m_deleteReport = TRUE;
-}
 
 void CAlignVerHorizonPage2::OnEnKillfocusAlignVerRange()
 {
     UpdateData( TRUE );
 }
-
-void CAlignVerHorizonPage2::OnBnClickedPrintGraph()
-{
-    m_pParent->m_pGraph->PrintLiveGraph();
-}
-
-void CAlignVerHorizonPage2::OnBnClickedSaveGraph()
-{
-	//GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-	//m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
-}
-
 

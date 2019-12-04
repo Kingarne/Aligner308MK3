@@ -161,7 +161,7 @@
             // discardButton
             // 
             this.discardButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.discardButton.Location = new System.Drawing.Point(667, 681);
+            this.discardButton.Location = new System.Drawing.Point(582, 681);
             this.discardButton.Name = "discardButton";
             this.discardButton.Size = new System.Drawing.Size(75, 23);
             this.discardButton.TabIndex = 11;
@@ -172,7 +172,7 @@
             // keepButton
             // 
             this.keepButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.keepButton.Location = new System.Drawing.Point(586, 681);
+            this.keepButton.Location = new System.Drawing.Point(501, 681);
             this.keepButton.Name = "keepButton";
             this.keepButton.Size = new System.Drawing.Size(75, 23);
             this.keepButton.TabIndex = 12;
@@ -184,7 +184,7 @@
             // 
             this.finishLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.finishLabel.AutoSize = true;
-            this.finishLabel.Location = new System.Drawing.Point(476, 686);
+            this.finishLabel.Location = new System.Drawing.Point(391, 686);
             this.finishLabel.Name = "finishLabel";
             this.finishLabel.Size = new System.Drawing.Size(104, 13);
             this.finishLabel.TabIndex = 13;

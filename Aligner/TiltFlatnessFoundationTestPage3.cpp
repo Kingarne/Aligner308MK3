@@ -38,29 +38,18 @@ void CTiltFlatnessFoundationTestPage3::DoDataExchange(CDataExchange* pDX)
 
 void CTiltFlatnessFoundationTestPage3::ShowGraphButtons()
 {
-    GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
+   
 	
 }
 
 void CTiltFlatnessFoundationTestPage3::HideGraphButtons()
 {
-    GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-    //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+  
 }
 
 void CTiltFlatnessFoundationTestPage3::DisableAllButtons()
-{
-    GetDlgItem( IDC_PRINT_GRAPH )->EnableWindow( FALSE );
-    //GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
+{   
 	GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_RESULT_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_POLAR_GRAPH )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_RESULT_TABLE )->EnableWindow( FALSE );
 	GetDlgItem( IDC_TILT_FLATNESS_TEST_PAGE3_AZIMUTH_ANGLE )->EnableWindow( FALSE );
 }
 
@@ -95,13 +84,7 @@ BOOL CTiltFlatnessFoundationTestPage3::IsAlreadyMeasured( double newAngle )
 BEGIN_MESSAGE_MAP(CTiltFlatnessFoundationTestPage3, CPropertyPage)
     ON_BN_CLICKED(IDC_START_MEASURE, OnBnClickedStartMeasure)
     ON_EN_KILLFOCUS(IDC_TILT_FLATNESS_TEST_PAGE3_AZIMUTH_ANGLE, OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngle)
-    ON_BN_CLICKED(IDC_SHOW_POLAR_GRAPH, OnBnClickedShowPolarGraph)
-    ON_BN_CLICKED(IDC_SHOW_ERROR_GRAPH, OnBnClickedShowErrorGraph)
-    ON_BN_CLICKED(IDC_SHOW_RESULT_GRAPH, OnBnClickedShowResultGraph)
-    ON_BN_CLICKED(IDC_SHOW_RESULT_TABLE, OnBnClickedShowResultTable)
-    ON_BN_CLICKED(IDC_PRINT_GRAPH, OnBnClickedPrintGraph)
-    ON_BN_CLICKED(IDC_SAVE_GRAPH, OnBnClickedSaveGraph)
-	ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT, OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit)
+   ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT, OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit)
     ON_BN_CLICKED(IDC_FINISH_MEASURE, OnBnClickedFinishMeasure)
 	ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT, &CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit)
 	ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_REAL_TEDIT, &CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleRealTedit)
@@ -215,59 +198,17 @@ BOOL CTiltFlatnessFoundationTestPage3::OnWizardFinish()
 		{			
 			if (m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS)
 			{
-				OnBnClickedShowErrorGraph();
+				ShowErrorGraph();
 			}
 
-			OnBnClickedShowResultGraph();
-			OnBnClickedShowPolarGraph();
+			ShowResultGraph();
+			ShowPolarGraph();
 
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-			m_pParent->m_pResultTable->ShowReport(TRUE);
-			m_pParent->m_deleteReport = TRUE;
-
-			m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
-			m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
-			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
-			m_pParent->ExitResultTable(res != IDYES);
-
-//			DisableAllButtons();
+			m_pParent->m_pResultTable->ShowReport();			
+		
 			return CPropertyPage::OnWizardFinish();
 		}
-	/*
-			OnBnClickedShowPolarGraph();				
-
-			if( m_pParent->m_PolarGraphFileName.GetLength() != 0 )
-			{
-				m_Text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD );
-				BOOL keepPolar = (MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1) == IDYES);
-				m_pParent->m_GraphFileManager.IncludeToResultTable( keepPolar, m_pParent->m_PolarGraphFileName );					
-			}
-			OnBnClickedShowResultGraph();
-			//m_pParent->SaveResultGraphFile();
-
-			if( m_pParent->m_ResultGraphFileName.GetLength() != 0 )
-			{
-				m_Text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD );
-
-				BOOL keepResult = (MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1) == IDYES);
-				m_pParent->m_GraphFileManager.IncludeToResultTable( keepResult, m_pParent->m_ResultGraphFileName );					
-			}
-
-			if( m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS )
-			{
-				OnBnClickedShowErrorGraph();
-				//m_pParent->SaveErrorGraphFile();
-
-				if( m_pParent->m_ErrorGraphFileName.GetLength() != 0 )
-				{
-					m_Text.LoadString( IDS_SAVE_THE_GRAPH_TO_THE_LOG_RECORD );
-					BOOL keepError = (MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1) == IDYES);
-					m_pParent->m_GraphFileManager.IncludeToResultTable( keepError, m_pParent->m_ErrorGraphFileName );						
-				}
-			}*/
-			
-            
-		
     
     break;
     case STATUS_PAGE_ERROR:
@@ -287,7 +228,6 @@ BOOL CTiltFlatnessFoundationTestPage3::OnWizardFinish()
 
 void CTiltFlatnessFoundationTestPage3::OnReset()
 {
-	m_pParent->ExitResultTable( m_pParent->m_deleteReport );
     m_pParent->m_Status = STATUS_PAGE_CANCELED;
     g_AlignerData.ErrorDef = ERR_CANCEL;
    
@@ -462,7 +402,7 @@ void CTiltFlatnessFoundationTestPage3::StartMeasureRound2()
         return; 
     }
     m_measurmentNum++;
-    ShowGraphButtons();
+    
 	CString graphFileName;
 	m_pParent->m_pGraph->SaveGraphToUniqueFileName(graphFileName);
 
@@ -568,7 +508,7 @@ void CTiltFlatnessFoundationTestPage3::StartMeasureRound1()
     }
     m_pParent->m_N++;
     m_pParent->m_XAngle[m_pParent->m_N] = m_AzimuthAngleReal;
-    ShowGraphButtons();
+    
 	CString graphFileName;
 	m_pParent->m_pGraph->SaveGraphToUniqueFileName(graphFileName);
 
@@ -837,15 +777,8 @@ void CTiltFlatnessFoundationTestPage3::MeasureRollPathContinue()
         }
     }*/
 
-    GetDlgItem( IDC_SHOW_ERROR_GRAPH )->EnableWindow( m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS);
-    GetDlgItem( IDC_SHOW_RESULT_GRAPH )->EnableWindow( !m_measureWarping );
-
-    GetDlgItem( IDC_TILT_FLATNESS_TEST_SHOW_GROUP )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_RESULT_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_ERROR_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_FINISH_MEASURE )->ShowWindow( SW_HIDE );
+    
+      GetDlgItem( IDC_FINISH_MEASURE )->ShowWindow( SW_HIDE );
     
     m_pParent->SetWizardButtons( PSWIZB_FINISH );
 }
@@ -868,17 +801,13 @@ void CTiltFlatnessFoundationTestPage3::HideAll()
     HideAllText();
     GetDlgItem( IDC_TILT_FLATNESS_TEST_PAGE3_AZIMUTH_ANGLE )->ShowWindow( SW_HIDE );
     GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_TILT_FLATNESS_TEST_SHOW_GROUP )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_RESULT_GRAPH )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_ERROR_GRAPH )->ShowWindow( SW_HIDE );
-    GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_HIDE );
+   
 }
  
 	/***************************************************************************/
-	/*													OnBnClickedShowResultGraph											 */
+	/*													ShowResultGraph											 */
 	/***************************************************************************/
-void CTiltFlatnessFoundationTestPage3::OnBnClickedShowResultGraph()
+void CTiltFlatnessFoundationTestPage3::ShowResultGraph()
 {
 	if(m_measureWarping)
         return;
@@ -978,9 +907,9 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedShowResultGraph()
 }
 
 	/***************************************************************************/
-	/*													OnBnClickedShowErrorGraph											 */
+	/*													ShowErrorGraph											 */
 	/***************************************************************************/
-void CTiltFlatnessFoundationTestPage3::OnBnClickedShowErrorGraph()
+void CTiltFlatnessFoundationTestPage3::ShowErrorGraph()
 {
 	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
     UnitModeT UMode;
@@ -1096,9 +1025,9 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedShowErrorGraph()
 }
 
 	/***************************************************************************/
-	/*													OnBnClickedShowPolarGraph											 */
+	/*													ShowPolarGraph											 */
 	/***************************************************************************/
-void CTiltFlatnessFoundationTestPage3::OnBnClickedShowPolarGraph()
+void CTiltFlatnessFoundationTestPage3::ShowPolarGraph()
 {
 	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 
@@ -1123,33 +1052,7 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedShowPolarGraph()
 	m_pParent->SavePolarGraphFile();
 }
 
-	/***************************************************************************/
-	/*													OnBnClickedShowResultTable										 */
-	/***************************************************************************/
-void CTiltFlatnessFoundationTestPage3::OnBnClickedShowResultTable()
-{
-	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-	if (m_pParent->m_N > MIN_NO_OF_FLATNESS_MEASUREMENTS)
-	{
-		OnBnClickedShowErrorGraph();
-	}
-	OnBnClickedShowResultGraph();
-    OnBnClickedShowPolarGraph(); 
-    m_pParent->m_pResultTable->ShowReport( FALSE );
-	m_pParent->m_deleteReport = TRUE;
-}
-
-void CTiltFlatnessFoundationTestPage3::OnBnClickedPrintGraph()
-{
-    m_pParent->m_pGraph->PrintLiveGraph();
-}
-
-void CTiltFlatnessFoundationTestPage3::OnBnClickedSaveGraph()
-{
-//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-//	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
-}
-
+	
 void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit()
 {
 	// TODO:  If this is a RICHEDIT control, the control will not

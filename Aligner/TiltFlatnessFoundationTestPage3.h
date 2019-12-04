@@ -72,12 +72,11 @@ protected:
 private:
     afx_msg void OnBnClickedStartMeasure();
     afx_msg void OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngle();
-    afx_msg void OnBnClickedShowPolarGraph();
-    afx_msg void OnBnClickedShowErrorGraph();
-    afx_msg void OnBnClickedShowResultGraph();
-    afx_msg void OnBnClickedShowResultTable();
-    afx_msg void OnBnClickedPrintGraph();
-    afx_msg void OnBnClickedSaveGraph();
+    
+	void ShowPolarGraph();
+    void ShowErrorGraph();
+    void ShowResultGraph();
+    
 public:
 	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit();
     afx_msg void OnBnClickedFinishMeasure();

@@ -1186,13 +1186,7 @@ BOOL CResultTable::OpenReport( BOOL SaveToDB )
 	ReportManager rm;
 	result = rm.OpenReport(SysSetup->GetProjectID(), m_reportMeasID);
 
-	/*if( CreateEmptyReport() == FALSE )
-	{
-		return( FALSE );
-	}
 	
-	result =  ShowPresentDialog( m_InParam.ShowPresenetDialog );
-#endif*/
 	return( result );
 }
 BOOL CResultTable::AddGraph(CString fileName, BOOL includeToResultTable)
@@ -1200,7 +1194,7 @@ BOOL CResultTable::AddGraph(CString fileName, BOOL includeToResultTable)
 	return DBInterface::Instance()->InsertGraph(m_reportMeasID, fileName, includeToResultTable);	
 }
 
-BOOL CResultTable::ShowReport(bool b)
+BOOL CResultTable::ShowReport()
 {
 	BOOL result = InitiateReport(NULL);
 	if(result )

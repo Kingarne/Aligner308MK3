@@ -32,7 +32,6 @@ void GainCalibrationPage6::DoDataExchange( CDataExchange *pDX )
 }
 
 BEGIN_MESSAGE_MAP(GainCalibrationPage6, CPropertyPage)
-	ON_BN_CLICKED(IDC_SHOW_RESULT_TABLE, &GainCalibrationPage6::OnBnClickedShowResultTable)
 END_MESSAGE_MAP()
 
 BOOL GainCalibrationPage6::OnSetActive( void )
@@ -132,19 +131,12 @@ void GainCalibrationPage6::SaveDayToDayCalibrationData( Gain6CalibrationResult &
 	{
 		CString msgCaption, text;
 
-		m_pResultTable->ShowReport(TRUE);
-
-		msgCaption.LoadString(IDS_QUESTION_CAPTION);
-
-		text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
-		int res = MessageBox(text, msgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
-		if (res != IDYES)
-		{		
-			m_pResultTable->DeleteLast();
-			delete m_pResultTable;
-			m_pResultTable = NULL;
+		int keep = m_pResultTable->ShowReport();
+		delete m_pResultTable;
+		m_pResultTable = NULL;
+		
+		if (!keep)
 			return;
-		}
 		
 		text.LoadString(IDS_AUTOMATICALLY_ADJUST_CALIBRATION_DATA);
 		if( IDYES == MessageBox( text, msgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
@@ -180,14 +172,8 @@ void GainCalibrationPage6::SaveDayToDayCalibrationData( Gain6CalibrationResult &
 			m_calibUpdated = u1 & u2;	  			  
 			SensorValidation::UpdateCalibrationFlag(TRUE);
 		  }
-
-		  //m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 				
-		}
-		
-
-		delete m_pResultTable;
-		m_pResultTable = NULL;
+		}		
 	  }
 }
 
@@ -279,13 +265,3 @@ void GainCalibrationPage6::OnInitGrid( void )
   }
 }
 
-
-void GainCalibrationPage6::OnBnClickedShowResultTable()
-{
-//	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-
-	//OnBnClickedShowPolarGraph();
-	
-	m_pResultTable->ShowReport(FALSE);
-	//m_pParent->m_deleteReport = TRUE;
-}

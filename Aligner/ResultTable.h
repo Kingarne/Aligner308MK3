@@ -61,7 +61,7 @@ public:
 	virtual ~CResultTable();
 
     BOOL DeleteLast( void );
-	BOOL ShowReport( bool b=true );	
+	BOOL ShowReport();	
 	BOOL AddGraph( CString fileName, BOOL includeToResultTable );
     
     BOOL OpenMainReport();

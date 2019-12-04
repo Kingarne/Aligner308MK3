@@ -2664,18 +2664,8 @@ void CGraphView::OnBnClickedLiveGraphQuit( void )
 		MsgCaption.LoadString( IDS_QUESTION_CAPTION );
 		MsgText.LoadString( IDS_EXIT_WITH_OPPORTUNITY_TO_SAVE );
 			  
-		m_pLiveGraphResultTable->ShowReport( TRUE );
-		MsgText.LoadString( IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD );
-
-		if( IDYES == MessageBox( MsgText, MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON1 ) )
-		{
-			ExitResultTable( FALSE);		
-		}
-		else
-		{
-			ExitResultTable( TRUE);
-		}
-
+		m_pLiveGraphResultTable->ShowReport();
+	
 		
     }
     

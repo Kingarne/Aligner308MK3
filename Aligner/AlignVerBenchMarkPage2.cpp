@@ -61,12 +61,8 @@ void CAlignVerBenchMarkPage2::InitMeasureParam()
 // 	m_pParent -> m_pSource -> Start() ;
 }
 
-void CAlignVerBenchMarkPage2::ShowGraphButtons()
+void CAlignVerBenchMarkPage2::StoreGraph()
 {
-  GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
-  GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-  GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	CString graphFileName;
 	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName ) == TRUE )
 	{
@@ -76,18 +72,13 @@ void CAlignVerBenchMarkPage2::ShowGraphButtons()
 
 void CAlignVerBenchMarkPage2::HideGraphButtons()
 {
-  GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
+  
 }
 
 void CAlignVerBenchMarkPage2::DisableAllButtons()
 {
-  GetDlgItem( IDC_PRINT_GRAPH )->EnableWindow( FALSE );
-  GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
 	GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
 	GetDlgItem( IDC_CONTINUE_MEASURE )->EnableWindow( FALSE );
-	GetDlgItem( IDC_SHOW_RESULT_TABLE )->EnableWindow( FALSE );
 }
 
 void CAlignVerBenchMarkPage2::InitResultTable( void )
@@ -131,10 +122,7 @@ void CAlignVerBenchMarkPage2::ShowLiveData()
 
 BEGIN_MESSAGE_MAP(CAlignVerBenchMarkPage2, CPropertyPage)
   ON_BN_CLICKED(IDC_START_MEASURE, OnBnClickedStartMeasure)
-  ON_BN_CLICKED(IDC_SHOW_RESULT_TABLE, OnBnClickedShowResultTable)
   ON_BN_CLICKED(IDC_CONTINUE_MEASURE, OnBnClickedContinueMeasure)
-  ON_BN_CLICKED(IDC_PRINT_GRAPH, OnBnClickedPrintGraph)
-  ON_BN_CLICKED(IDC_SAVE_GRAPH, OnBnClickedSaveGraph)
   ON_MESSAGE(UM_DAU_ERROR, OnDauError)
 END_MESSAGE_MAP()
 
@@ -469,18 +457,12 @@ BOOL CAlignVerBenchMarkPage2::OnWizardFinish()
   switch( m_pParent->m_Status )
   {
 	case STATUS_PAGE_READY:
-	{
-		m_MsgCaption.LoadString(IDS_QUESTION_CAPTION);
-
+	{	
 		m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-		m_pParent->m_pResultTable->ShowReport(TRUE);
-		m_pParent->m_deleteReport = TRUE;
-		m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
+		m_pParent->m_pResultTable->ShowReport();
+	
 		g_AlignerData.LogData.ResultFromFirstMeasurementExists = FALSE;
-
-		int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
-		m_pParent->ExitResultTable(res != IDYES);
-
+				
 		return CPropertyPage::OnWizardFinish();
 	}
     
@@ -507,7 +489,7 @@ void CAlignVerBenchMarkPage2::OnReset()
 		//theApp.SwitchView( theApp.m_pAlignerView );
 		theApp.SwitchView( theApp.m_pSystemConfigurationView );
 	}
-	m_pParent->ExitResultTable( m_pParent->m_deleteReport );
+	m_pParent->ExitResultTable( );
 	m_pParent->m_Status = STATUS_PAGE_CANCELED;
 	g_AlignerData.ErrorDef = ERR_CANCEL;
   
@@ -613,16 +595,7 @@ void CAlignVerBenchMarkPage2::HideAll()
 {
   HideAllText();
   GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_ALIGN_VER_SHOW_GROUP )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_HIDE );
   GetDlgItem( IDC_CONTINUE_MEASURE )->ShowWindow( SW_HIDE );
-}
-
-void CAlignVerBenchMarkPage2::OnBnClickedShowResultTable()
-{
-	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-	m_pParent->m_pResultTable->ShowReport( FALSE );
-	m_pParent->m_deleteReport = TRUE;
 }
 
 void CAlignVerBenchMarkPage2::MeasFC( int Lineversion )
@@ -665,7 +638,7 @@ void CAlignVerBenchMarkPage2::MeasFC( int Lineversion )
 		//if( g_AlignerData.LogData.ResultFromFirstMeasurementExists == FALSE )
 		if( m_UseResultFromFirstMeasurement == FALSE )
 		{
-			ShowGraphButtons();
+			StoreGraph();
 		}
   }
 
@@ -721,7 +694,7 @@ void CAlignVerBenchMarkPage2::OnBnClickedContinueMeasure()
     case 2:
         if( MeasureAzSecond() == TRUE )
         {
-            ShowGraphButtons();
+            StoreGraph();
             m_MeasNo = 0;
             RestoreGlobals();
             GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
@@ -729,9 +702,7 @@ void CAlignVerBenchMarkPage2::OnBnClickedContinueMeasure()
             m_pParent->m_EnableMoveOfWizard = TRUE;
             m_Text.LoadString( IDS_MEASUREMENT_READY );
             SetDlgItemText( IDC_INFO_TEXT, m_Text );
-            GetDlgItem( IDC_INFO_TEXT )->ShowWindow( SW_SHOW );
-            GetDlgItem( IDC_ALIGN_VER_SHOW_GROUP )->ShowWindow( SW_SHOW );
-            GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_SHOW );
+            GetDlgItem( IDC_INFO_TEXT )->ShowWindow( SW_SHOW );                      
             m_pParent->SetWizardButtons( PSWIZB_FINISH );
         }
         else
@@ -742,17 +713,6 @@ void CAlignVerBenchMarkPage2::OnBnClickedContinueMeasure()
     default:
         break;
     }
-}
-
-void CAlignVerBenchMarkPage2::OnBnClickedPrintGraph()
-{
-  m_pParent->m_pGraph->PrintLiveGraph();
-}
-
-void CAlignVerBenchMarkPage2::OnBnClickedSaveGraph()
-{
-//	GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( FALSE );
-//	m_pParent->m_GraphFileManager.IncludeToResultTable( TRUE, m_pParent->m_pGraph->m_LastSavedGraphFileName );
 }
 
 LRESULT CAlignVerBenchMarkPage2::OnDauError( WPARAM, LPARAM )

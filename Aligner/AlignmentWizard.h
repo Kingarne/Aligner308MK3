@@ -51,7 +51,7 @@ class CAlignmentWizard : public CPropertySheet, public DataRecepient
 public:
     CAlignmentWizard(  UINT nIDCaption, CWnd *pParentWnd = NULL );
 	virtual ~CAlignmentWizard();
-	void ExitResultTable(bool b = true);
+	void ExitResultTable();
 //	BOOL AddGraphFileNameToDataBase( void );
 	void SavePolarGraphFile( void );
 	void SaveErrorGraphFile( void );
@@ -73,7 +73,7 @@ private:
     CMeasure m_Measure;
   
 	GraphFileManager m_GraphFileManager;
-	BOOL m_deleteReport;
+	//BOOL m_deleteReport;
 	BOOL m_SperryActive;
 
 //	double m_StraightEdgeAngle ;

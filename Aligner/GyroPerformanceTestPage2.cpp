@@ -42,10 +42,6 @@ void CGyroPerformanceTestPage2::HideAll()
 
 void CGyroPerformanceTestPage2::ShowGraphButtons()
 {
-	GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_SHOW );
-	GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_SHOW );
-	//GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_SHOW );
-	//GetDlgItem( IDC_SAVE_GRAPH )->EnableWindow( TRUE );
 	
 }
 
@@ -189,13 +185,12 @@ BOOL CGyroPerformanceTestPage2::OnWizardFinish()
 			OnBnClickedShowPolarGraph();
 
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
-			m_pParent->m_pResultTable->ShowReport(TRUE);
-			m_pParent->m_deleteReport = TRUE;
+			m_pParent->m_pResultTable->ShowReport();
+			
 			m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
 
-			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
-			m_pParent->ExitResultTable(res != IDYES);
-			m_pParent->ExitResultTable(FALSE);
+			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);			
+		
 
 			return CPropertyPage::OnWizardFinish();
 		}
@@ -218,10 +213,9 @@ BOOL CGyroPerformanceTestPage2::OnWizardFinish()
 
 void CGyroPerformanceTestPage2::OnReset()
 {
-	m_pParent->ExitResultTable( m_pParent->m_deleteReport );
-  m_pParent->m_Status = STATUS_PAGE_CANCELED;
-  g_AlignerData.ErrorDef = ERR_CANCEL;
-  return CPropertyPage::OnReset(); //Calls OnCancel()
+	m_pParent->m_Status = STATUS_PAGE_CANCELED;
+	g_AlignerData.ErrorDef = ERR_CANCEL;
+	return CPropertyPage::OnReset(); //Calls OnCancel()
 }
 
 void CGyroPerformanceTestPage2::GyroProc()
@@ -265,7 +259,6 @@ void CGyroPerformanceTestPage2::OnBnClickedStartMeasure()
 
   GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
 
-  ShowGraphButtons();
   
   CString graphFileName;
   if (m_pParent->m_pGraph->SaveGraphToUniqueFileName(graphFileName, TRUE) == TRUE)
@@ -410,8 +403,7 @@ void CGyroPerformanceTestPage2::OnBnClickedShowResultTable()
 {
 	m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;    
     OnBnClickedShowPolarGraph(); 
-    m_pParent->m_pResultTable->ShowReport( FALSE );
-	m_pParent->m_deleteReport = TRUE;
+    m_pParent->m_pResultTable->ShowReport(  );
 }
 
 void CGyroPerformanceTestPage2::OnBnClickedPrintGraph()

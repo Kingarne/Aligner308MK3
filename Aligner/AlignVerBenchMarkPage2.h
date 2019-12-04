@@ -69,7 +69,7 @@ protected:
   BOOL MeasureAzFirst();
   BOOL MeasureAzSecond();
   void MeasFC( int Lineversion );
-  void ShowGraphButtons();
+  void StoreGraph();
   void HideGraphButtons();
 	void DisableAllButtons();
 	void InitResultTable( void );
@@ -78,9 +78,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
   afx_msg void OnBnClickedStartMeasure();
-  afx_msg void OnBnClickedShowResultTable();
   afx_msg void OnBnClickedContinueMeasure();
-  afx_msg void OnBnClickedPrintGraph();
-  afx_msg void OnBnClickedSaveGraph();
   afx_msg LRESULT OnDauError( WPARAM, LPARAM );
 };

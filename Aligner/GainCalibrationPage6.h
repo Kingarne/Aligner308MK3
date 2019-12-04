@@ -50,5 +50,5 @@ private:
   void InitResultTable(void);
 
 public:
-	afx_msg void OnBnClickedShowResultTable();
+	
 } ;

@@ -25,8 +25,6 @@ CAlignmentWizard::CAlignmentWizard( UINT nIDCaption,  CWnd* pWndParent )
     m_EnableMoveOfWizard = TRUE;
 	m_MeasurementInterrupted = FALSE;
 	m_psh.dwFlags &= ~PSH_HASHELP;
-  //m_psh.dwFlags |= PSH_MODELESS;
-	m_deleteReport = FALSE;
 	m_SperryActive = FALSE;
 }
 
@@ -36,7 +34,7 @@ CAlignmentWizard::~CAlignmentWizard()
 	
 }
 
-void CAlignmentWizard::ExitResultTable(bool b )
+void CAlignmentWizard::ExitResultTable()
 {
 	if( m_pResultTable != NULL )
 	{
@@ -143,7 +141,7 @@ LRESULT CAlignmentWizard::OnDauError( WPARAM, LPARAM )
 
 void CAlignmentWizard::OnDestroy() 
 {  
-	ExitResultTable( FALSE);
+	ExitResultTable();
 
     if( m_pSource )
     {

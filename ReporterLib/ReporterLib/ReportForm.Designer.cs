@@ -42,6 +42,7 @@
             this.discardButton = new System.Windows.Forms.Button();
             this.keepButton = new System.Windows.Forms.Button();
             this.finishLabel = new System.Windows.Forms.Label();
+            this.numLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pageUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,7 +65,7 @@
             this.printPreviewControl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.printPreviewControl.Location = new System.Drawing.Point(285, 45);
             this.printPreviewControl.Name = "printPreviewControl";
-            this.printPreviewControl.Size = new System.Drawing.Size(457, 659);
+            this.printPreviewControl.Size = new System.Drawing.Size(822, 865);
             this.printPreviewControl.TabIndex = 2;
             this.printPreviewControl.UseAntiAlias = true;
             this.printPreviewControl.Click += new System.EventHandler(this.printPreviewControl_Click);
@@ -73,7 +74,7 @@
             // 
             this.pageUpDown.Location = new System.Drawing.Point(174, 9);
             this.pageUpDown.Name = "pageUpDown";
-            this.pageUpDown.Size = new System.Drawing.Size(50, 20);
+            this.pageUpDown.Size = new System.Drawing.Size(40, 20);
             this.pageUpDown.TabIndex = 3;
             this.pageUpDown.ValueChanged += new System.EventHandler(this.pageUpDown_ValueChanged);
             // 
@@ -88,7 +89,7 @@
             this.reportList.Location = new System.Drawing.Point(12, 32);
             this.reportList.MultiSelect = false;
             this.reportList.Name = "reportList";
-            this.reportList.Size = new System.Drawing.Size(267, 630);
+            this.reportList.Size = new System.Drawing.Size(267, 836);
             this.reportList.TabIndex = 4;
             this.reportList.UseCompatibleStateImageBehavior = false;
             this.reportList.View = System.Windows.Forms.View.Details;
@@ -110,7 +111,7 @@
             // allButton
             // 
             this.allButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.allButton.Location = new System.Drawing.Point(12, 668);
+            this.allButton.Location = new System.Drawing.Point(12, 874);
             this.allButton.Name = "allButton";
             this.allButton.Size = new System.Drawing.Size(42, 19);
             this.allButton.TabIndex = 6;
@@ -121,7 +122,7 @@
             // noneButton
             // 
             this.noneButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.noneButton.Location = new System.Drawing.Point(60, 668);
+            this.noneButton.Location = new System.Drawing.Point(60, 874);
             this.noneButton.Name = "noneButton";
             this.noneButton.Size = new System.Drawing.Size(42, 19);
             this.noneButton.TabIndex = 7;
@@ -132,7 +133,7 @@
             // delButton
             // 
             this.delButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.delButton.Location = new System.Drawing.Point(223, 668);
+            this.delButton.Location = new System.Drawing.Point(223, 874);
             this.delButton.Name = "delButton";
             this.delButton.Size = new System.Drawing.Size(56, 19);
             this.delButton.TabIndex = 8;
@@ -161,7 +162,7 @@
             // discardButton
             // 
             this.discardButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.discardButton.Location = new System.Drawing.Point(582, 681);
+            this.discardButton.Location = new System.Drawing.Point(947, 887);
             this.discardButton.Name = "discardButton";
             this.discardButton.Size = new System.Drawing.Size(75, 23);
             this.discardButton.TabIndex = 11;
@@ -172,7 +173,7 @@
             // keepButton
             // 
             this.keepButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.keepButton.Location = new System.Drawing.Point(501, 681);
+            this.keepButton.Location = new System.Drawing.Point(866, 887);
             this.keepButton.Name = "keepButton";
             this.keepButton.Size = new System.Drawing.Size(75, 23);
             this.keepButton.TabIndex = 12;
@@ -184,17 +185,27 @@
             // 
             this.finishLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.finishLabel.AutoSize = true;
-            this.finishLabel.Location = new System.Drawing.Point(391, 686);
+            this.finishLabel.Location = new System.Drawing.Point(756, 892);
             this.finishLabel.Name = "finishLabel";
             this.finishLabel.Size = new System.Drawing.Size(104, 13);
             this.finishLabel.TabIndex = 13;
             this.finishLabel.Text = "Finish Measurement:";
             // 
+            // numLabel
+            // 
+            this.numLabel.AutoSize = true;
+            this.numLabel.Location = new System.Drawing.Point(220, 11);
+            this.numLabel.Name = "numLabel";
+            this.numLabel.Size = new System.Drawing.Size(21, 13);
+            this.numLabel.TabIndex = 14;
+            this.numLabel.Text = "/ 0";
+            // 
             // ReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(754, 716);
+            this.ClientSize = new System.Drawing.Size(1119, 922);
+            this.Controls.Add(this.numLabel);
             this.Controls.Add(this.finishLabel);
             this.Controls.Add(this.keepButton);
             this.Controls.Add(this.discardButton);
@@ -210,6 +221,7 @@
             this.Controls.Add(this.printButton);
             this.MinimumSize = new System.Drawing.Size(770, 755);
             this.Name = "ReportForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Measurement Report";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReportForm_FormClosing);
             this.Load += new System.EventHandler(this.ReportForm_Load);
@@ -235,5 +247,6 @@
         private System.Windows.Forms.Button discardButton;
         private System.Windows.Forms.Button keepButton;
         private System.Windows.Forms.Label finishLabel;
+        private System.Windows.Forms.Label numLabel;
     }
 }

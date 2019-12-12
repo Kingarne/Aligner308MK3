@@ -178,7 +178,7 @@ void CTiltFlatnessFoundationTestPage2::InitMeasureParam()
   m_pParent->m_Measure.m_InParam.Fs = m_pParent->m_pSource->GetFrequency();
 	m_pParent->m_Measure.m_InParam.SperryActive = m_pParent->GetSperryActive();
   m_pParent->m_Measure.m_InParam.commonFlatTest = FALSE;
-	
+  m_pParent->m_Measure.m_InParam.continousGraph = (g_AlignerData.RX > 0) ? g_AlignerData.ContinousGraph : FALSE;
 	m_pParent->m_pSource -> Start() ;
 }
 

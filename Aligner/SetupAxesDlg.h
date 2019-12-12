@@ -96,4 +96,6 @@ public:
   afx_msg void OnEnKillfocusSetupAxisXManualValue();
   afx_msg void OnEnKillfocusSetupAxisYManualValue();
   afx_msg void OnBnClickedOk();
+  
+  BOOL m_continousGraph;
 };

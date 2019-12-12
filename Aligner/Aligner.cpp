@@ -642,6 +642,7 @@ void CAlignerApp::OnFileOpen( void )
 		d->OpenConfig();
 		d->SetPathName(dlg.m_selectedProj.m_projectName);
 
+		g_AlignerData.Init();
 
 		TRACE("Proj: %s\n",dlg.m_selectedProj.m_projectName);
 		

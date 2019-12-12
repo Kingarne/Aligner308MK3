@@ -605,6 +605,9 @@ BOOL CAlignerDoc::OnSetupSystem( int mode, BOOL showDialog )
 		SysSetup->SetMode( SYSTEM_SETUP_NO_MODE ) ;
 	}
 
+	g_AlignerData.Init();
+	DAU::GetDAU().SetOverrangeDetection(TRUE);
+
 	if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_CALIBRATION )
 	{
 		ResetAllNomAz();	

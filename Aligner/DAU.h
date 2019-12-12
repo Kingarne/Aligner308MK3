@@ -71,6 +71,7 @@ public:
     BOOL Stop( void ) ;
     BOOL ConfigSensors( BOOL sensorsOnly = TRUE) ;  
         
+	void SetOverrangeDetection(BOOL flag);
     void SetOverrangeDetectionActive( BOOL flag ) ;
     int GetProtocolVersion( void ) ;
     void SetIgnoreElevation( BOOL ignoreElevation ) ;
@@ -205,7 +206,8 @@ private:
     BOOL m_running ;
     int m_timeoutCounter ;  
     BOOL m_enableErrorEvent ; // added by R2 040628
-    BOOL m_overangeDetectionActive;	
+	
+	BOOL m_overangeDetectionActive;	
 
     std::deque<DAUFrame> m_DAUFramesQue;    
     CRITICAL_SECTION m_lock;

@@ -74,7 +74,7 @@ void GainCalibrationPage6::InitResultTable(void)
 	m_pResultTable->m_InParam.SamplingRate = 0;
 	m_pResultTable->m_InParam.pFileGraphManager = NULL;// &m_pParent->m_GraphFileManager;
 }
-
+ 
 BOOL GainCalibrationPage6::OnQueryCancel( void )
 {
   CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;

@@ -611,7 +611,7 @@ void CTiltFlatnessTestPage3::ShowResultGraph()
       m_pParent->m_pGraph->SetXYData( k, m_pParent->m_XAngle[j], yPlot );
       k += 2;
     }
-    m_pParent->m_pGraph->UpdateData();
+    m_pParent->m_pGraph->UpdateData(FALSE);
   }
 
   //set the sineFit data for the graph
@@ -625,7 +625,7 @@ void CTiltFlatnessTestPage3::ShowResultGraph()
       m_pParent->m_pGraph->SetXYData( k, deg, yPlot );
       k += 2;
     }
-    m_pParent->m_pGraph->UpdateData();
+    m_pParent->m_pGraph->UpdateData(FALSE);
   }
     
   m_pParent->m_pGraph->ShowTiltFlatnessTestGraphWithText( &graphParams );
@@ -757,7 +757,7 @@ void CTiltFlatnessTestPage3::ShowErrorGraph()
 
       m_pParent->m_pGraph->SetXYData( i, m_pParent->m_XAngle[j], yPlot );
     }
-    m_pParent->m_pGraph->UpdateData();
+    m_pParent->m_pGraph->UpdateData(FALSE);
   }
 
 	m_pParent->m_pGraph->ShowTiltFlatnessTestGraphWithText( &graphParams );
@@ -777,7 +777,7 @@ void CTiltFlatnessTestPage3::ShowPolarGraph()
     m_pParent->m_pGraph->SetXYData( i, g_AlignerData.VecArg[i], g_AlignerData.VecAmp[i] );
 		m_pParent->m_pGraph->SetSerieLabel( i, GetUnitTypeDescription( g_AlignerData.ObjNo[i] ).Left( MAX_NO_OF_CHAR_IN_LEGEND_LABEL ) );
   }
-  m_pParent->m_pGraph->UpdateData();
+  m_pParent->m_pGraph->UpdateData(FALSE);
   PolarGraphInParam graphParams;
   graphParams.mode = m_pParent->m_Measure.m_InParam.Mode1;
   graphParams.tao = m_pParent->m_Measure.m_InParam.Tao;

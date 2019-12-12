@@ -85,6 +85,7 @@ typedef struct
     double Fs;
     BOOL SperryActive;
     BOOL commonFlatTest;
+	BOOL continousGraph;
 }MeasureInParam;
 
 typedef struct

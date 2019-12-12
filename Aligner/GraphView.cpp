@@ -63,6 +63,7 @@ CGraphView::CGraphView( void ) : CFormView( CGraphView::IDD ), DataRecepient( th
   m_AxisY2MinAutoScaleOn = TRUE;
   m_AxisY2MaxAutoScaleOn = TRUE;
   m_AxisY2Unit = _T("");
+  m_continousGraph = FALSE;
 
   m_NoOfSeries = 1;
   m_UseCommonXValues = TRUE;
@@ -911,6 +912,7 @@ BOOL CGraphView::InitDefaultPlotGraph( int noOfSeries )
     m_AxisY2MinAutoScaleOn = TRUE;
     m_AxisY2MaxAutoScaleOn = TRUE;
     m_AxisY2Unit = _T("");
+	m_continousGraph = FALSE;
 
     m_pChart->PutAllowUserChanges( FALSE );
     CleanUp();
@@ -1121,6 +1123,7 @@ BOOL CGraphView::InitDefaultLiveDataGraph( int noOfSeries, int noOfSeriesY2 )
     m_AxisY2MinAutoScaleOn = TRUE;
     m_AxisY2MaxAutoScaleOn = TRUE;
     m_AxisY2Unit = _T("");
+	
 
     m_pChart->PutAllowUserChanges( TRUE );
     CleanUp();
@@ -1432,6 +1435,7 @@ BOOL CGraphView::ShowMeasureGraphWithText( MeasureGraphInParam* pInParam )
     BOOL result = TRUE;
 	m_LastSavedGraphFileName = _T("");
     HideGraph();
+	m_continousGraph = pInParam->ContinousGraph;
 
     //int i, j;
     int noOfEmptyRowsInBlock1Top = 1;
@@ -2254,22 +2258,37 @@ void CGraphView::HideGraph( void )
     theApp.SwitchView( theApp.m_pSystemConfigurationView );
 }
 
+void CGraphView::TraceData(int ser, bool onlyY)
+{
+	TRACE("Serie: %d\n", ser);
+	for (int d = 1; d <= m_pData->GetNumPoints(ser); d++)
+	{
+		double y = m_pData->GetY(ser, d);
+		double x = onlyY ?  -1 : m_pData->GetX(ser, d);
+		TRACE("%d) x:%.9f, y:%.9f\n", d, x, y);
+
+	}
+
+	TRACE("\n\n");
+}
+
 BOOL CGraphView::UpdateLiveData( void )
 {
     int result=TRUE;
     int pointCountY1 = ( m_NoOfSeries > 0 ) ? m_pData->GetNumPoints( 1 ) : 0;
     int pointCountY2 = ( m_NoOfSeriesY2 > 0 ) ? m_pDataY2->GetNumPoints( 1 ) : 0;
     
-    if( ( pointCountY1*m_NoOfSeries + pointCountY2*m_NoOfSeriesY2 ) > MAX_NO_OF_SAMPLES_IN_GRAPH )
+	int totSample = pointCountY1 * m_NoOfSeries + pointCountY2 * m_NoOfSeriesY2;
+    if( totSample > MAX_NO_OF_SAMPLES_IN_GRAPH )
     {
-        m_ShowLiveDataGraph = FALSE;
-        m_ShowBarGraph = FALSE;
-        result = FALSE;
-        m_LiveDataCounter = m_LiveDataCounterStopValue + 1;
+		OnBnClickedLiveGraphStop();
+		return TRUE;
     }
    
-    int newCountY1 = pointCountY1+1;
-    int newCountY2 = pointCountY1+1;
+	TRACE("samples:%d\n",totSample);
+
+    int newCountY1 = (m_LiveDataCounter >= m_LiveDataCounterStopValue) ? pointCountY1 : pointCountY1+1;
+    int newCountY2 = newCountY1;
     BOOL XY1Set=FALSE, XY2Set=FALSE;
 
     m_pData->PutIsBatched( TRUE );
@@ -2280,14 +2299,34 @@ BOOL CGraphView::UpdateLiveData( void )
         if(m_graphData[gr].axis == Axis_Y1)
         {            
            // TRACE("UpdateLiveData Y1, serie:%d\n",graphNum); 
-            m_pData->PutNumPoints( graphNum, newCountY1 );
+            if(pointCountY1 != newCountY1)
+				m_pData->PutNumPoints( graphNum, newCountY1 );
+			else
+			{
+				//TraceData(graphNum, gr > 1);
+				if (gr == 1)
+				{
+					m_pData->ShiftPoints(graphNum, pointCountY1 - 1, 1, 2);
+					if (m_continousGraph)
+					{
+						m_pChart->GetChartArea()->GetAxes()->GetItem("x")->GetMin()->PutIsDefault((VARIANT_BOOL)TRUE);
+						m_pChart->GetChartArea()->GetAxes()->GetItem("x")->GetMax()->PutIsDefault((VARIANT_BOOL)TRUE);
+					}
+				}
+				//TraceData(graphNum, gr > 1);
+			}
+				//m_pData->ShiftPoints(graphNum, newCountY1-1, 0, 1);
+			
             if(!XY1Set)
             {
                 m_pData->PutX( ( long )graphNum, newCountY1, m_graphData[gr].x );
                 XY1Set = TRUE;
+				
             }
+			//TraceData(graphNum, gr > 1);
             m_pData->PutY( ( long )graphNum, newCountY1, m_graphData[gr].y );           
-        }
+			//TraceData(graphNum, gr > 1);
+		}
         else if(m_graphData[gr].axis == Axis_Y2)
         {            
          //   TRACE("UpdateLiveData Y2, serie:%d\n",graphNum); 
@@ -2297,7 +2336,8 @@ BOOL CGraphView::UpdateLiveData( void )
                 m_pDataY2->PutX( ( long )graphNum, newCountY2 ,m_graphData[gr].x );
                 XY2Set = TRUE;
             }
-            m_pDataY2->PutY( ( long )graphNum, newCountY2 ,m_graphData[gr].y );          
+            m_pDataY2->PutY( ( long )graphNum, newCountY2 ,m_graphData[gr].y );  
+			
         }
         
     }
@@ -2309,134 +2349,132 @@ BOOL CGraphView::UpdateLiveData( void )
     return result;
 }
 
-BOOL CGraphView::UpdateData( void )
+BOOL CGraphView::UpdateData( BOOL shiftData )
 {
     BOOL result = TRUE;
-    long pointCount, pointCountY2;
+
+	if (m_GraphType == oc2dTypeBar)
+	{
+		m_pData->PutNumPoints(1, 1);
+		m_pData->PutX(1, 1, m_graphData[1].x);
+		m_pData->PutY(1, 1, m_graphData[1].y);
+
+		for (int serie = 2; serie <= m_NoOfSeries; serie++)
+		{
+			m_pData->PutNumPoints(serie, 1);
+			m_pData->PutY(serie, 1, m_graphData[serie].y);
+		}
+
+		return TRUE;
+	}
+
+    long pointCountY1, pointCountY2;
     int serie;
+
+	pointCountY1 = m_pData->GetNumPoints(1);
+	pointCountY2 = (m_NoOfSeriesY2 > 0) ? m_pDataY2->GetNumPoints(1) : 0;
+
+	int newCountY1 = (shiftData) ? pointCountY1 : pointCountY1 + 1;
+	int newCountY2 = (shiftData) ? pointCountY2 : pointCountY2 + 1;
 
     try
     {
+		int totSample = pointCountY1 * m_NoOfSeries + pointCountY2 * m_NoOfSeriesY2;
+		if (totSample > MAX_NO_OF_SAMPLES_IN_GRAPH)
+		{
+			OnBnClickedLiveGraphStop();
+			return TRUE;
+		}
+
         if( m_UseCommonXValues == TRUE )
-        {
-			if( m_GraphType == oc2dTypeBar )
-			{
-			    pointCount = 0;
-                pointCountY2 = 0;
-			}
-			else
-			{
+        {					
+			m_pData->PutIsBatched(TRUE);
+			m_pDataY2->PutIsBatched(TRUE);
+
+            if( m_NoOfSeries > 0 )
+            {
+				if (shiftData)
+				{
+					m_pData->ShiftPoints(1, pointCountY1 - 1, 1, 2);
+					m_pChart->GetChartArea()->GetAxes()->GetItem("x")->GetMin()->PutIsDefault((VARIANT_BOOL)TRUE);
+					m_pChart->GetChartArea()->GetAxes()->GetItem("x")->GetMax()->PutIsDefault((VARIANT_BOOL)TRUE);				
+				}
+				else
+				{
+					m_pData->PutNumPoints(1, newCountY1);
+				}
+
+                m_pData->PutX( 1, newCountY1,m_graphData[1].x );
+                m_pData->PutY( 1, newCountY1,m_graphData[1].y );
+
+                for( serie=2; serie<=m_NoOfSeries; serie++ )
+                {
+					if(!shiftData)
+						m_pData->PutNumPoints( serie, newCountY1);
+                    m_pData->PutY( ( long )serie, newCountY1, m_graphData[serie].y );
+                }            
+            }
+
+            if( ( IsAxisY2Enabled() == TRUE ) && ( m_NoOfSeriesY2 > 0 ) )
+            {
                 serie = 1;
-                pointCount = ( m_NoOfSeries > 0 ) ? m_pData->GetNumPoints( serie ) : 0;
-                pointCountY2 = ( m_NoOfSeriesY2 > 0 ) ? m_pDataY2->GetNumPoints( serie ) : 0;
-		    }
+            
+                m_pDataY2->PutNumPoints( serie, pointCountY2 + 1 );
+                m_pDataY2->PutX( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].x );
+                m_pDataY2->PutY( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].y );
 
-            if( ( pointCount*m_NoOfSeries + pointCountY2*m_NoOfSeriesY2 ) > MAX_NO_OF_SAMPLES_IN_GRAPH )
-            {
-                //TODO ?, should never happen
-        //        TRACE("\n MAX_NO_OF_SAMPLES_IN_GRAPH");
-				m_ShowLiveDataGraph = FALSE;
-				m_ShowBarGraph = FALSE;
-                result = FALSE;
-                m_LiveDataCounter = m_LiveDataCounterStopValue + 1;
-            }
-            else
-            {
-                if( m_NoOfSeries > 0 )
+                for( serie=2; serie<=m_NoOfSeriesY2; serie++ )
                 {
-                    serie = 1;
-                    m_pData->PutIsBatched( TRUE );
-                    m_pData->PutNumPoints( serie, pointCount + 1 );
-                    m_pData->PutX( ( long )serie, pointCount + 1 ,m_graphData[serie].x );
-                    m_pData->PutY( ( long )serie, pointCount + 1 ,m_graphData[serie].y );
-
-                    for( serie=2; serie<=m_NoOfSeries; serie++ )
-                    {
-                        m_pData->PutNumPoints( serie, pointCount + 1 );
-                        m_pData->PutY( ( long )serie, pointCount + 1 , m_graphData[serie].y );
-                    }
-                    m_pData->PutIsBatched( FALSE );
-                }
-
-                if( ( IsAxisY2Enabled() == TRUE ) && ( m_NoOfSeriesY2 > 0 ) )
-                {
-                    serie = 1;
-                    m_pDataY2->PutIsBatched( TRUE );
                     m_pDataY2->PutNumPoints( serie, pointCountY2 + 1 );
-                    m_pDataY2->PutX( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].x );
                     m_pDataY2->PutY( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].y );
-
-                    for( serie=2; serie<=m_NoOfSeriesY2; serie++ )
-                    {
-                        m_pDataY2->PutNumPoints( serie, pointCountY2 + 1 );
-                        m_pDataY2->PutY( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].y );
-                    }
-                    m_pDataY2->PutIsBatched( FALSE );
-                }
+                }                
             }
+
+			m_pData->PutIsBatched(FALSE);
+			m_pDataY2->PutIsBatched(FALSE);
         }//m_UseCommonXValues == TRUE
         else
         {
-            pointCount = 0;
+            pointCountY1 = 0;
             pointCountY2 = 0;
 
-            for( serie=1; serie<=m_NoOfSeries; serie++ )
+           
+            if( m_NoOfSeries > 0 )
             {
-                pointCount += m_pData->GetNumPoints( serie );
-            }
+                m_pData->PutIsBatched( TRUE );
 
-            for( serie=1; serie<=m_NoOfSeriesY2; serie++ )
-            {
-                pointCountY2 += m_pDataY2->GetNumPoints( serie );
-            }
-
-            if( ( pointCount + pointCountY2 ) > MAX_NO_OF_SAMPLES_IN_GRAPH )
-            {
-                //TODO ?, should never happen
-        //        TRACE("\n MAX_NO_OF_SAMPLES_IN_GRAPH");
-				m_ShowLiveDataGraph = FALSE;
-				m_ShowBarGraph = FALSE;
-                result = FALSE;
-                m_LiveDataCounter = m_LiveDataCounterStopValue + 1;
-            }
-            else
-            {
-                if( m_NoOfSeries > 0 )
+                for( serie=1; serie<=m_NoOfSeries; serie++ )
                 {
-                    m_pData->PutIsBatched( TRUE );
-
-                    for( serie=1; serie<=m_NoOfSeries; serie++ )
+                    if( m_graphData[serie].valid == TRUE )
                     {
-                        if( m_graphData[serie].valid == TRUE )
-                        {
-                            pointCount = m_pData->GetNumPoints( serie );
-                            m_pData->PutNumPoints( serie, pointCount + 1 );
-                            m_pData->PutX( ( long )serie, pointCount + 1 , m_graphData[serie].x );
-                            m_pData->PutY( ( long )serie, pointCount + 1 , m_graphData[serie].y );
-                            m_graphData[serie].valid = FALSE;
-                        }
+                        pointCountY1 = m_pData->GetNumPoints( serie );
+                        m_pData->PutNumPoints( serie, pointCountY1 + 1 );
+                        m_pData->PutX( ( long )serie, pointCountY1 + 1 , m_graphData[serie].x );
+                        m_pData->PutY( ( long )serie, pointCountY1 + 1 , m_graphData[serie].y );
+                        m_graphData[serie].valid = FALSE;
                     }
-                    m_pData->PutIsBatched( FALSE );
                 }
-
-                if( ( IsAxisY2Enabled() == TRUE) && ( m_NoOfSeriesY2 > 0 ) )
-                {
-                    m_pDataY2->PutIsBatched( TRUE );
-
-                    for( serie=1; serie<=m_NoOfSeriesY2; serie++ )
-                    {
-                        if( m_graphData[m_NoOfSeries + serie].valid == TRUE )
-                        {
-                            pointCountY2 = m_pDataY2->GetNumPoints( serie );
-                            m_pDataY2->PutNumPoints( serie, pointCountY2 + 1 );
-                            m_pDataY2->PutX( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].x );
-                            m_pDataY2->PutY( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].y );
-                            m_graphData[m_NoOfSeries + serie].valid = FALSE;
-                        }
-                    }
-                    m_pDataY2->PutIsBatched( FALSE );
-                }
+                m_pData->PutIsBatched( FALSE );
             }
+
+            if( ( IsAxisY2Enabled() == TRUE) && ( m_NoOfSeriesY2 > 0 ) )
+            {
+                m_pDataY2->PutIsBatched( TRUE );
+
+                for( serie=1; serie<=m_NoOfSeriesY2; serie++ )
+                {
+                    if( m_graphData[m_NoOfSeries + serie].valid == TRUE )
+                    {
+                        pointCountY2 = m_pDataY2->GetNumPoints( serie );
+                        m_pDataY2->PutNumPoints( serie, pointCountY2 + 1 );
+                        m_pDataY2->PutX( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].x );
+                        m_pDataY2->PutY( ( long )serie, pointCountY2 + 1 , m_graphData[m_NoOfSeries + serie].y );
+                        m_graphData[m_NoOfSeries + serie].valid = FALSE;
+                    }
+                }
+                m_pDataY2->PutIsBatched( FALSE );
+            }
+            
         }//m_UseCommonXValues == FALSE
     }
     catch ( _com_error e )
@@ -2768,7 +2806,7 @@ BOOL CGraphView::UpdateSourceBarData( void )
 	    SetXYData( gr, xPos, diffVal );
     }
 
-    UpdateData();
+    UpdateData(FALSE);
 
     return( result );
 }
@@ -2871,7 +2909,7 @@ BOOL CGraphView::UpdateLiveDataGraph( void )
 
     m_LiveDataCounter++;
 
-	if( m_LiveDataCounter >= m_LiveDataCounterStopValue )
+	if( m_LiveDataCounter >= m_LiveDataCounterStopValue && !m_continousGraph)
 	{
         done = TRUE;
         updateGraph = TRUE;
@@ -3588,6 +3626,7 @@ BOOL CGraphView::ShowLiveDataGraphWithText( LiveDataGraphInParam* pInParam )
 	m_StoreLiveDataToFile = pInParam->StoreToFile;
 	m_LiveDataCounterStopValue = pInParam->CounterStopValue;
 	m_LiveDataGraphTs = pInParam->Ts;    
+	m_continousGraph = pInParam->ContinousGraph;
 
     //int i, j;
     int noOfEmptyRowsInHeader= 10;
@@ -3611,6 +3650,7 @@ BOOL CGraphView::ShowLiveDataGraphWithText( LiveDataGraphInParam* pInParam )
     long averageNoOfCharactersOnTextTilt = 6;
     long averageNoOfCharactersOnTextLabel = 10;
     long averageNoOfCharactersOnTextData = 15;
+	
 
     int maxLength = max(g_AlignerData.Ship.GetLength(), g_AlignerData.Operator.GetLength());
     maxLength = max(maxLength, g_AlignerData.Place.GetLength());

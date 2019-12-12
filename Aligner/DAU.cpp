@@ -1288,9 +1288,22 @@ void DAU::SetSelected( BOOL selected )
 	}
 }
 
+void DAU::SetOverrangeDetection(BOOL flag)
+{	
+	for (vector<Sensor *>::iterator i = m_sensorPointers.begin(); i != m_sensorPointers.end(); i++)
+	{
+		(*i)->SetOverrangeDetection(flag);
+	}
+	for (vector<Syncro *>::iterator i = m_syncroPointers.begin(); i != m_syncroPointers.end(); i++)
+	{
+		(*i)->SetOverrangeDetection(flag);
+	}
+}
+
+
 void DAU::SetOverrangeDetectionActive( BOOL flag )
 {
-    m_overangeDetectionActive = flag;
+    BOOL overangeDetectionActive = flag;
     for (vector<Sensor *>::iterator i = m_sensorPointers.begin() ; i != m_sensorPointers.end() ; i++)
     {
         (*i)->SetOverrangeDetectionActive( flag ) ;

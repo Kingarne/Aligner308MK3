@@ -609,7 +609,8 @@ void CSetupLiveDataGraphDlg::OnBnClickedShow()
 	m_pGraph->m_LiveDataGraphParam.StoreToFile = m_StoreToFile;
 	m_pGraph->m_LiveDataGraphParam.CounterStopValue = NStop;
 	m_pGraph->m_LiveDataGraphParam.FileName = m_TextFileDir + m_TextFileName;
-	
+	m_pGraph->m_LiveDataGraphParam.ContinousGraph = g_AlignerData.ContinousGraph;
+
 	if( m_FilterOn == TRUE )
 	{
 		m_pGraph->m_LiveDataGraphParam.TimeConstant = m_FilterTimeConstant;

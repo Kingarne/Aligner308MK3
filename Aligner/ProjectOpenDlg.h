@@ -34,4 +34,5 @@ protected:
 	void InitProjList();
 public:
 	CListCtrl m_projList;
+	afx_msg void OnBnClickedDeleteButton();
 };

@@ -113,6 +113,7 @@ typedef struct
     BOOL Reject;
     double RExc;
     long int RX;
+	BOOL ContinousGraph;
     int RY;
     double Sigma[SIZE_OF_ARRAYS];
     int SignDef;
@@ -151,7 +152,8 @@ public:
             ACR[i] = 0.0;
             ACP[i] = 0.0;
         }
-        AlignMode = _T("");
+		ContinousGraph = FALSE;
+		AlignMode = _T("");
         Along = TRUE;
         AzDir = PLUS_0_TO_PLUS_180;
         Bear = 0.0;

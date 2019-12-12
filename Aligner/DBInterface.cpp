@@ -258,6 +258,8 @@ BOOL DBInterface::GetCalibrationProjects(vector<ProjectData>& projects)
 
 BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 {
+	projects.clear();
+
 	if (!m_db.IsOpen())
 		return FALSE;
 

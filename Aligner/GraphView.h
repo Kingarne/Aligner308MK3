@@ -17,7 +17,7 @@ class CResultTable ;
 
 #define MIN_NO_OF_SERIES            1
 #define MAX_NO_OF_SERIES            20
-#define MAX_NO_OF_SAMPLES_IN_GRAPH  10000
+#define MAX_NO_OF_SAMPLES_IN_GRAPH  20000
 
 #define MAX_NO_OF_CHAR_IN_LEGEND_LABEL 22 //user input, g_AlignerData.Device[g_AlignerData.ObjNo[i]],  will be limited to this number
 #define MAX_NO_OF_EXTRA_CHAR_IN_LEGEND_LABEL	2 // this number of extra characters can be added to the limited user input, (length of ": R" ~ length of "WW")
@@ -63,6 +63,7 @@ struct GraphInParam
 {
     CString TimeStamp;
     CString DateStamp;
+	BOOL ContinousGraph;
 };
 
 struct BarGraphInParam : public GraphInParam
@@ -111,7 +112,7 @@ struct PolarGraphInParam : public GraphInParam
 struct LiveDataGraphInParam : public GraphInParam
 {   
 	BOOL StoreToFile;
-	long CounterStopValue;
+	long CounterStopValue;	
 	CString FileName;
 	double TimeConstant;
 	double Ts;
@@ -205,7 +206,7 @@ public:
     void ClearMeasuredLiveGraphValues( BOOL clearTemp );
     void ShowGraph( void );
     void HideGraph( void );
-    BOOL UpdateData( void ) ;
+    BOOL UpdateData( BOOL shiftData) ;
     BOOL UpdateLiveData( void ) ;
     BOOL UpdateGraph( void );
     BOOL SaveGraphToUniqueFileName( CString &fileName, bool resultImage=false);
@@ -305,7 +306,7 @@ private:
     long m_LiveDataCounter ;
 	long m_LiveDataFileWriteCounter ;
 	long m_LiveDataCounterStopValue;
-    
+	BOOL m_continousGraph;
     
     double m_PreviousLiveGraphTemperature[SIZE_OF_ARRAYS] ;
 	
@@ -313,7 +314,7 @@ private:
 	CFile m_LiveDataFile ;
 	double m_LiveDataGraphTs ;
     static CString m_GraphFileName;
-
+	void TraceData(int ser, bool onlyY=false);
   // Y2 Axis for A202
 public:
     static CString m_GraphFileDir;

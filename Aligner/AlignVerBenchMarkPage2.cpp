@@ -31,30 +31,31 @@ void CAlignVerBenchMarkPage2::DoDataExchange(CDataExchange* pDX)
 
 void CAlignVerBenchMarkPage2::InitMeasureParam()
 {
-  //set inparameters for measure
-  //this params already initiated:
-  //m_pParent->m_Measure.m_InParam.pSource = NULL;
-  //m_pParent->m_Measure.m_InParam.SourceStatus = ACQU_IDLE;
-  DAU::GetDAU().m_comThr.SetSamplingMode(FQ_MODE_305);			
+	//set inparameters for measure
+	//this params already initiated:
+	//m_pParent->m_Measure.m_InParam.pSource = NULL;
+	//m_pParent->m_Measure.m_InParam.SourceStatus = ACQU_IDLE;
+	DAU::GetDAU().m_comThr.SetSamplingMode(FQ_MODE_305);			
 
-  m_pParent->m_Measure.m_InParam.Break = FALSE;
-  memcpy( m_pParent->m_Measure.m_InParam.ObjNo, g_AlignerData.ObjNo, SIZE_OF_ARRAYS * sizeof( int ) );
-  m_pParent->m_Measure.m_InParam.RefObjNo = g_AlignerData.RefObjNo;
-  m_pParent->m_Measure.m_InParam.Mode1 = m_ModeA;
-  m_pParent->m_Measure.m_InParam.Tao = g_AlignerData.TaoAz;
-  m_pParent->m_Measure.m_InParam.FiRef = 0;
-  memset( m_pParent->m_Measure.m_InParam.FiObj, 0, SIZE_OF_ARRAYS * sizeof( double ) );
-  memset( m_pParent->m_Measure.m_InParam.ZParCorr, 0, SIZE_OF_ARRAYS * sizeof( double ) );
-  memset( m_pParent->m_Measure.m_InParam.rotateBack, 0, SIZE_OF_ARRAYS * sizeof( BOOL ) );
-  m_pParent->m_Measure.m_InParam.rotateBackRef = 0.0f;
-  m_pParent->m_Measure.m_InParam.CountObj = g_AlignerData.NoOfCorr;
-  m_pParent->m_Measure.m_InParam.RangeX = g_AlignerData.RX;
-  m_pParent->m_Measure.m_InParam.RangeY = g_AlignerData.RY;
-  m_pParent->m_Measure.m_InParam.UseElev = FALSE; 
-  m_pParent->m_Measure.m_InParam.Fs = m_pParent->m_pSource->GetFrequency();
+	m_pParent->m_Measure.m_InParam.Break = FALSE;
+	memcpy( m_pParent->m_Measure.m_InParam.ObjNo, g_AlignerData.ObjNo, SIZE_OF_ARRAYS * sizeof( int ) );
+	m_pParent->m_Measure.m_InParam.RefObjNo = g_AlignerData.RefObjNo;
+	m_pParent->m_Measure.m_InParam.Mode1 = m_ModeA;
+	m_pParent->m_Measure.m_InParam.Tao = g_AlignerData.TaoAz;
+	m_pParent->m_Measure.m_InParam.FiRef = 0;
+	memset( m_pParent->m_Measure.m_InParam.FiObj, 0, SIZE_OF_ARRAYS * sizeof( double ) );
+	memset( m_pParent->m_Measure.m_InParam.ZParCorr, 0, SIZE_OF_ARRAYS * sizeof( double ) );
+	memset( m_pParent->m_Measure.m_InParam.rotateBack, 0, SIZE_OF_ARRAYS * sizeof( BOOL ) );
+	m_pParent->m_Measure.m_InParam.rotateBackRef = 0.0f;
+	m_pParent->m_Measure.m_InParam.CountObj = g_AlignerData.NoOfCorr;
+	m_pParent->m_Measure.m_InParam.RangeX = g_AlignerData.RX;
+	m_pParent->m_Measure.m_InParam.RangeY = g_AlignerData.RY;
+	m_pParent->m_Measure.m_InParam.UseElev = FALSE; 
+	m_pParent->m_Measure.m_InParam.Fs = m_pParent->m_pSource->GetFrequency();
 	m_pParent->m_Measure.m_InParam.SperryActive = m_pParent->GetSperryActive();
-  m_pParent->m_Measure.m_InParam.commonFlatTest = FALSE;
-    
+	m_pParent->m_Measure.m_InParam.commonFlatTest = FALSE;
+	m_pParent->m_Measure.m_InParam.commonFlatTest = FALSE;
+	m_pParent->m_Measure.m_InParam.continousGraph = (g_AlignerData.RX > 0) ? g_AlignerData.ContinousGraph : FALSE;
 
 
 //   m_pParent -> m_pSource -> SetFrequency( m_pParent -> m_Measure.m_InParam.Fs ) ;

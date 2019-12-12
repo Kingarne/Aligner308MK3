@@ -317,7 +317,7 @@ void CalibrationSheet::UpdateGraph( BOOL useCalibrated )
 		    }
         }
         //m_pGraph->UpdateGraphData() ;
-		m_pGraph->UpdateData() ;
+		m_pGraph->UpdateData(FALSE) ;
     }
 }
 

@@ -17,6 +17,7 @@ IMPLEMENT_DYNAMIC(CSetupAxesDlg, CDialog)
 CSetupAxesDlg::CSetupAxesDlg( BOOL disableXAxis /*= FALSE*/, BOOL disableAutoXAxis /*= FALSE*/, CWnd* pParent /*=NULL*/)
 	: CDialog(CSetupAxesDlg::IDD, pParent)
   , m_RangeX(0)
+	, m_continousGraph(FALSE)
 {
   m_DisableXAxis = disableXAxis;
   m_DisableAutoXAxis = disableAutoXAxis;
@@ -30,38 +31,40 @@ CSetupAxesDlg::~CSetupAxesDlg()
 void CSetupAxesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-  DDX_Text(pDX, IDC_SETUP_AXES_X_MANUAL_VALUE, m_RangeX);
+	DDX_Text(pDX, IDC_SETUP_AXES_X_MANUAL_VALUE, m_RangeX);
 
-  switch( m_XUnit )
-  {
-  case X_UNIT_HRS:
-    DDV_MinMaxDouble(pDX, m_RangeX, MIN_RANGE_X_HOURS, MAX_RANGE_X_HOURS);
-    break;
-  case X_UNIT_MIN:
-    DDV_MinMaxDouble(pDX, m_RangeX, MIN_RANGE_X_MIN, MAX_RANGE_X_MIN);
-    break;
-  case X_UNIT_S:
-  default:
-    DDV_MinMaxDouble(pDX, m_RangeX, MIN_RANGE_X_S, MAX_RANGE_X_S);
-    break;
-  }    
+	switch (m_XUnit)
+	{
+	case X_UNIT_HRS:
+		DDV_MinMaxDouble(pDX, m_RangeX, MIN_RANGE_X_HOURS, MAX_RANGE_X_HOURS);
+		break;
+	case X_UNIT_MIN:
+		DDV_MinMaxDouble(pDX, m_RangeX, MIN_RANGE_X_MIN, MAX_RANGE_X_MIN);
+		break;
+	case X_UNIT_S:
+	default:
+		DDV_MinMaxDouble(pDX, m_RangeX, MIN_RANGE_X_S, MAX_RANGE_X_S);
+		break;
+	}
 
-  switch( m_YUnit )
-  {
-  case Y_UNIT_ARCMIN:
-    DDX_Text(pDX, IDC_SETUP_AXES_Y_MIN, m_MinYDlg);
-    DDV_MinMaxInt(pDX, m_MinYDlg, MIN_MIN_Y_ARCMIN, MAX_MIN_Y_ARCMIN);
-    DDX_Text(pDX, IDC_SETUP_AXES_Y_MAX, m_MaxYDlg);
-    DDV_MinMaxInt(pDX, m_MaxYDlg, MIN_MAX_Y_ARCMIN, MAX_MAX_Y_ARCMIN);
-    break;
-  case Y_UNIT_MRAD:
-  default:
-    DDX_Text(pDX, IDC_SETUP_AXES_Y_MIN, m_MinYDlg);
-    DDV_MinMaxInt(pDX, m_MinYDlg, MIN_MIN_Y_MRAD, MAX_MIN_Y_MRAD);
-    DDX_Text(pDX, IDC_SETUP_AXES_Y_MAX, m_MaxYDlg);
-    DDV_MinMaxInt(pDX, m_MaxYDlg, MIN_MAX_Y_MRAD, MAX_MAX_Y_MRAD);
-    break;
-  }
+	switch (m_YUnit)
+	{
+	case Y_UNIT_ARCMIN:
+		DDX_Text(pDX, IDC_SETUP_AXES_Y_MIN, m_MinYDlg);
+		DDV_MinMaxInt(pDX, m_MinYDlg, MIN_MIN_Y_ARCMIN, MAX_MIN_Y_ARCMIN);
+		DDX_Text(pDX, IDC_SETUP_AXES_Y_MAX, m_MaxYDlg);
+		DDV_MinMaxInt(pDX, m_MaxYDlg, MIN_MAX_Y_ARCMIN, MAX_MAX_Y_ARCMIN);
+		break;
+	case Y_UNIT_MRAD:
+	default:
+		DDX_Text(pDX, IDC_SETUP_AXES_Y_MIN, m_MinYDlg);
+		DDV_MinMaxInt(pDX, m_MinYDlg, MIN_MIN_Y_MRAD, MAX_MIN_Y_MRAD);
+		DDX_Text(pDX, IDC_SETUP_AXES_Y_MAX, m_MaxYDlg);
+		DDV_MinMaxInt(pDX, m_MaxYDlg, MIN_MAX_Y_MRAD, MAX_MAX_Y_MRAD);
+		break;
+	}
+
+	DDX_Check(pDX, IDC_CONTINOUS_CHECK, m_continousGraph);
 }
 
 void CSetupAxesDlg::GetSettingsForAxes( CString* pXAxisSettings, CString* pYAxisMinSettings, CString* pYAxisMaxSettings )
@@ -245,33 +248,40 @@ BOOL CSetupAxesDlg::OnInitDialog()
 		GetDlgItem( IDC_SETUP_AXES_X_MIN_UNIT )->EnableWindow( FALSE );
 		GetDlgItem( IDC_SETUP_AXES_X_HRS_UNIT )->EnableWindow( FALSE );
 		GetDlgItem( IDC_X_TEXT )->EnableWindow( FALSE );
+		GetDlgItem(IDC_CONTINOUS_CHECK)->EnableWindow(FALSE);
+		
 	}
   else if( m_DisableAutoXAxis == TRUE )
   {
     GetDlgItem( IDC_SETUP_AXES_X_AUTO )->EnableWindow( FALSE );
   }
+
+	m_continousGraph = g_AlignerData.ContinousGraph;
+
   UpdateData( FALSE );
   return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
 void CSetupAxesDlg::OnBnClickedSetupAxisXAuto()
 {
-  m_RangeXAuto = TRUE;
-  CheckRadioButton( IDC_SETUP_AXES_X_AUTO, IDC_SETUP_AXES_X_MANUAL, IDC_SETUP_AXES_X_AUTO );
-  GetDlgItem( IDC_SETUP_AXES_X_MANUAL_VALUE )->EnableWindow( FALSE );
-  GetDlgItem( IDC_SETUP_AXES_X_S_UNIT )->EnableWindow( FALSE );
-  GetDlgItem( IDC_SETUP_AXES_X_MIN_UNIT )->EnableWindow( FALSE );
-  GetDlgItem( IDC_SETUP_AXES_X_HRS_UNIT )->EnableWindow( FALSE );
+	m_RangeXAuto = TRUE;
+	CheckRadioButton( IDC_SETUP_AXES_X_AUTO, IDC_SETUP_AXES_X_MANUAL, IDC_SETUP_AXES_X_AUTO );
+	GetDlgItem( IDC_SETUP_AXES_X_MANUAL_VALUE )->EnableWindow( FALSE );
+	GetDlgItem( IDC_SETUP_AXES_X_S_UNIT )->EnableWindow( FALSE );
+	GetDlgItem( IDC_SETUP_AXES_X_MIN_UNIT )->EnableWindow( FALSE );
+	GetDlgItem( IDC_SETUP_AXES_X_HRS_UNIT )->EnableWindow( FALSE );
+	GetDlgItem(IDC_CONTINOUS_CHECK)->EnableWindow(FALSE);
 }
 
 void CSetupAxesDlg::OnBnClickedSetupAxisXManual()
 {
-  m_RangeXAuto = FALSE;
-  CheckRadioButton( IDC_SETUP_AXES_X_AUTO, IDC_SETUP_AXES_X_MANUAL, IDC_SETUP_AXES_X_MANUAL );
-  GetDlgItem( IDC_SETUP_AXES_X_MANUAL_VALUE )->EnableWindow( TRUE );
-  GetDlgItem( IDC_SETUP_AXES_X_S_UNIT )->EnableWindow( TRUE );
-  GetDlgItem( IDC_SETUP_AXES_X_MIN_UNIT )->EnableWindow( TRUE );
-  GetDlgItem( IDC_SETUP_AXES_X_HRS_UNIT )->EnableWindow( TRUE );
+	m_RangeXAuto = FALSE;
+	CheckRadioButton( IDC_SETUP_AXES_X_AUTO, IDC_SETUP_AXES_X_MANUAL, IDC_SETUP_AXES_X_MANUAL );
+	GetDlgItem( IDC_SETUP_AXES_X_MANUAL_VALUE )->EnableWindow( TRUE );
+	GetDlgItem( IDC_SETUP_AXES_X_S_UNIT )->EnableWindow( TRUE );
+	GetDlgItem( IDC_SETUP_AXES_X_MIN_UNIT )->EnableWindow( TRUE );
+	GetDlgItem( IDC_SETUP_AXES_X_HRS_UNIT )->EnableWindow( TRUE );
+	GetDlgItem(IDC_CONTINOUS_CHECK)->EnableWindow(TRUE);
 }
 
 void CSetupAxesDlg::OnBnClickedSetupAxisXSUnit()
@@ -343,6 +353,8 @@ void CSetupAxesDlg::OnBnClickedSetupAxisXHrsUnit()
   }
   m_XUnit = X_UNIT_HRS;
   CheckRadioButton( IDC_SETUP_AXES_X_S_UNIT, IDC_SETUP_AXES_X_HRS_UNIT, IDC_SETUP_AXES_X_HRS_UNIT );
+
+
   UpdateData( FALSE );
 }
 
@@ -412,6 +424,7 @@ void CSetupAxesDlg::OnBnClickedOk()
       m_RangeX = MAX_RANGE_X_S;
     }
     g_AlignerData.RX = (long int)m_RangeX;
+	g_AlignerData.ContinousGraph = m_continousGraph;
   }
 
   if( m_RangeYAuto == TRUE )

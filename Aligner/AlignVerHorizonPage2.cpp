@@ -83,7 +83,7 @@ void CAlignVerHorizonPage2::InitMeasureParam()
     m_pParent->m_Measure.m_InParam.Fs = m_pParent->m_pSource->GetFrequency();
 	m_pParent->m_Measure.m_InParam.SperryActive = m_pParent->GetSperryActive();
     m_pParent->m_Measure.m_InParam.commonFlatTest = FALSE;
-    
+	m_pParent->m_Measure.m_InParam.continousGraph = (g_AlignerData.RX > 0) ? g_AlignerData.ContinousGraph : FALSE;
 }
 
 void CAlignVerHorizonPage2::StoreGraph()
@@ -910,7 +910,7 @@ void CAlignVerHorizonPage2::ShowResultGraph()
         m_pParent->m_pGraph->SetXYData( k, m_pParent->m_XAngle[j], yPlot );
         k += 2;
         }
-        m_pParent->m_pGraph->UpdateData();
+        m_pParent->m_pGraph->UpdateData(FALSE);
     }
 
     //set the sineFit data for the graph
@@ -924,7 +924,7 @@ void CAlignVerHorizonPage2::ShowResultGraph()
         m_pParent->m_pGraph->SetXYData( k, deg, yPlot );
         k += 2;
         }
-        m_pParent->m_pGraph->UpdateData();
+        m_pParent->m_pGraph->UpdateData(FALSE);
     }
         
     m_pParent->m_pGraph->ShowTiltFlatnessTestGraphWithText( &graphParams );
@@ -1057,7 +1057,7 @@ void CAlignVerHorizonPage2::ShowErrorGraph()
         //}
         m_pParent->m_pGraph->SetXYData( i, m_pParent->m_XAngle[j], yPlot );
         }
-        m_pParent->m_pGraph->UpdateData();
+        m_pParent->m_pGraph->UpdateData(FALSE);
     }
 
     m_pParent->m_pGraph->ShowTiltFlatnessTestGraphWithText( &graphParams );
@@ -1077,7 +1077,7 @@ void CAlignVerHorizonPage2::ShowPolarGraph()
         m_pParent->m_pGraph->SetXYData( i, g_AlignerData.VecArg[i], g_AlignerData.VecAmp[i] );
 		    m_pParent->m_pGraph->SetSerieLabel( i, GetUnitTypeDescription( g_AlignerData.ObjNo[i] ).Left( MAX_NO_OF_CHAR_IN_LEGEND_LABEL ) );
     }
-    m_pParent->m_pGraph->UpdateData();
+    m_pParent->m_pGraph->UpdateData(FALSE);
     PolarGraphInParam graphParams;  
     graphParams.mode = m_pParent->m_Measure.m_InParam.Mode1;
     graphParams.tao = m_pParent->m_Measure.m_InParam.Tao;

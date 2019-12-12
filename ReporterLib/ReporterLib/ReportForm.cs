@@ -165,7 +165,13 @@ namespace ReporterLib
                 reportList.Columns[0].Width = 150;
                 reportList.Columns[1].Width = 100;
 
-                UpdateReportList();    
+                UpdateReportList();
+                if (reportList.Items.Count > 0)
+                {
+                    reportList.Items[0].Checked = true;
+                    reportList.Items[0].Selected = true;
+                }
+
             }
             else // Single report
             {
@@ -347,6 +353,7 @@ namespace ReporterLib
             pageUpDown.Minimum = 1;
             pageUpDown.Maximum = m_page;
             UpdateColumns();
+            numLabel.Text = "/ " + m_page.ToString();
         }
 
         private void BeginPrintCalib(object sender, System.Drawing.Printing.PrintEventArgs e)
@@ -390,6 +397,7 @@ namespace ReporterLib
             pageUpDown.Minimum = 1;
             pageUpDown.Maximum = m_page;
             UpdateColumns();
+            numLabel.Text = "/ " + m_page.ToString();
         }
 
 

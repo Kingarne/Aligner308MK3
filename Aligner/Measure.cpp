@@ -454,12 +454,12 @@ void CMeasure::Measure()
         {
             if( m_pGraph->TimeToUpdate( NCount ) == TRUE )
             {
-                m_pGraph->UpdateData();
+                m_pGraph->UpdateData(NCount > NStop); // 
             }
         }
         BusyFlag = FALSE;
     
-    } while( ( NCount < NStop ) && ( g_AlignerData.ErrorDef == ERR_NO_ERROR ) && ( m_InParam.Break == FALSE ) );
+    } while( ( (NCount < NStop) || m_InParam.continousGraph) && ( g_AlignerData.ErrorDef == ERR_NO_ERROR ) && ( m_InParam.Break == FALSE ) );
 
     m_mode = MEASURE_MODE_OFF;
 

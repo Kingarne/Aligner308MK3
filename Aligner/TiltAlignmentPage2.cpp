@@ -983,7 +983,7 @@ void CTiltAlignmentPage2::InitMeasureParam()
 	m_pParent->m_Measure.m_InParam.Fs = m_pParent->m_pSource->GetFrequency();
 	m_pParent->m_Measure.m_InParam.SperryActive = m_pParent->GetSperryActive();
     m_pParent->m_Measure.m_InParam.commonFlatTest = m_pParent->m_CommonFlatTest;    
-    
+	m_pParent->m_Measure.m_InParam.continousGraph = (g_AlignerData.RX > 0) ? g_AlignerData.ContinousGraph : FALSE;
 //  m_pParent -> m_pSource -> SetFrequency( m_pParent -> m_Measure.m_InParam.Fs ) ;
 // 	m_pParent -> m_pSource -> Start() ;
 }
@@ -1096,7 +1096,7 @@ void CTiltAlignmentPage2::ShowPolarGraph()
 			    m_pParent->m_pGraph->SetSerieLabel( i, GetUnitTypeDescription( g_AlignerData.ObjNo[i] ).Left( MAX_NO_OF_CHAR_IN_LEGEND_LABEL ) );
 		    }
     }
-    m_pParent->m_pGraph->UpdateData();
+    m_pParent->m_pGraph->UpdateData(FALSE);
     PolarGraphInParam graphParams;
     graphParams.mode = m_pParent->m_Measure.m_InParam.Mode1;
     graphParams.tao = m_pParent->m_Measure.m_InParam.Tao;

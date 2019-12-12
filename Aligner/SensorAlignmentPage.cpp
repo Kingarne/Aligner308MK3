@@ -179,10 +179,10 @@ BOOL SensorAlignmentPage::OnInitDialog( void )
 	SetupSerialNumber( 0 ) ;    
     SetupStations() ;
 
+	OnCbnSelchangeSensorType() ;
 
-	
 
-    OnCbnSelchangeSensorType() ;
+
     return TRUE ;
 }
 

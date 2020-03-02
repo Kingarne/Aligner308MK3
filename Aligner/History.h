@@ -351,8 +351,8 @@ public:
 	class Data : public MeasurementBase
 	{
 	public:
-		CString m_parallaxCompensation ;
-		CString m_elevationCompensation ;
+		bool m_parallaxCompensation ;
+		bool m_elevationCompensation ;
     
 	} ;
 
@@ -383,8 +383,8 @@ public:
 	class Data : public MeasurementBase
 	{
 	public:
-		CString m_parallaxCompensation ;
-		CString m_elevationCompensation ;    
+		bool m_parallaxCompensation ;
+		bool m_elevationCompensation ;    
 	} ;
 
 	class ChannelData : public ChannelBase

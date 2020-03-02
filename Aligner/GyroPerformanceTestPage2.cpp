@@ -34,10 +34,7 @@ void CGyroPerformanceTestPage2::HideAllText()
 void CGyroPerformanceTestPage2::HideAll()
 {
   HideAllText();
-  GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SHOW_GROUP )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_HIDE );
+  GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );  
 }
 
 void CGyroPerformanceTestPage2::ShowGraphButtons()
@@ -47,18 +44,11 @@ void CGyroPerformanceTestPage2::ShowGraphButtons()
 
 void CGyroPerformanceTestPage2::HideGraphButtons()
 {
-  GetDlgItem( IDC_GRAPH_BOUNDARY )->ShowWindow( SW_HIDE );
-  GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-  //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
-}
+ }
 
 void CGyroPerformanceTestPage2::DisableAllButtons()
 {
-  GetDlgItem( IDC_PRINT_GRAPH )->ShowWindow( SW_HIDE );
-  //GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 	GetDlgItem( IDC_START_MEASURE )->ShowWindow( SW_HIDE );
-	GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_HIDE );
-	GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_HIDE );
 }
 
 void CGyroPerformanceTestPage2::InitResultTable( void )
@@ -80,10 +70,6 @@ void CGyroPerformanceTestPage2::InitResultTable( void )
 
 BEGIN_MESSAGE_MAP(CGyroPerformanceTestPage2, CPropertyPage)
   ON_BN_CLICKED(IDC_START_MEASURE, OnBnClickedStartMeasure)
-  ON_BN_CLICKED(IDC_SHOW_POLAR_GRAPH, OnBnClickedShowPolarGraph)
-  ON_BN_CLICKED(IDC_SHOW_RESULT_TABLE, OnBnClickedShowResultTable)
-  ON_BN_CLICKED(IDC_PRINT_GRAPH, OnBnClickedPrintGraph)
-  ON_BN_CLICKED(IDC_SAVE_GRAPH, OnBnClickedSaveGraph)
 END_MESSAGE_MAP()
 
 
@@ -187,9 +173,9 @@ BOOL CGyroPerformanceTestPage2::OnWizardFinish()
 			m_pParent->m_pResultTable->m_InParam.Time = m_pParent->m_MeasurementReadyTimeStamp;
 			m_pParent->m_pResultTable->ShowReport();
 			
-			m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
+			//m_Text.LoadString(IDS_SAVE_THE_RESULT_TABLE_TO_THE_LOG_RECORD);
 
-			int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);			
+			//int res = MessageBox(m_Text, m_MsgCaption, MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);			
 		
 
 			return CPropertyPage::OnWizardFinish();
@@ -276,9 +262,6 @@ void CGyroPerformanceTestPage2::OnBnClickedStartMeasure()
     CartToVec( g_AlignerData.ACR[i], g_AlignerData.ACP[i], &(g_AlignerData.VecAmp[i]), &(g_AlignerData.VecArg[i]) );
   }
 
-  GetDlgItem( IDC_SHOW_GROUP )->ShowWindow( SW_SHOW );
-  GetDlgItem( IDC_SHOW_POLAR_GRAPH )->ShowWindow( SW_SHOW );
-  GetDlgItem( IDC_SHOW_RESULT_TABLE )->ShowWindow( SW_SHOW );
   m_pParent->SetWizardButtons( PSWIZB_FINISH );
 }
 
@@ -374,7 +357,6 @@ BOOL CGyroPerformanceTestPage2::CallMeasure( double *pRoll, double *pPitch )
 
 void CGyroPerformanceTestPage2::OnBnClickedShowPolarGraph()
 {
-	GetDlgItem( IDC_SAVE_GRAPH )->ShowWindow( SW_HIDE );
 
     //init the graph
     m_pParent->m_pGraph->InitDefaultPolarGraph( g_AlignerData.NoOfCorr );

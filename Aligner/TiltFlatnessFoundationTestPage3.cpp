@@ -31,7 +31,7 @@ void CTiltFlatnessFoundationTestPage3::DoDataExchange(CDataExchange* pDX)
 	CPropertyPage::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT, m_AzimuthAngle);
 	DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT, m_ArcAngle);
-	DDV_MinMaxDouble(pDX, m_ArcAngle, 0, 360);
+	//DDV_MinMaxDouble(pDX, m_ArcAngle, 0, 360);
 	DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_REAL_TEDIT, m_ArcAngleReal);
 	DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL_TEDIT, m_AzimuthAngleReal);
 }
@@ -1087,12 +1087,16 @@ void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3
 	// with the ENM_CHANGE flag ORed into the mask.
 
 	// TODO:  Add your control notification handler code here
+	SetStartButtState();
+
 	CString tmpStr;	
 
 	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_REAL_TEDIT)->GetWindowText(tmpStr);
 	if (tmpStr == "")
 		return;
 	UpdateData(TRUE);
+	
+	
 	if ((m_ArcAngleReal < 0) || (m_ArcAngleReal >= 360))
 		return;
 
@@ -1103,8 +1107,25 @@ void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3
 	tmpStr.Format(_T("%.1f"), fi);
 	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL_TEDIT)->SetWindowText(tmpStr);
 	UpdateData(TRUE);
+
+	
 }
 
+void CTiltFlatnessFoundationTestPage3::SetStartButtState()
+{
+	bool enable = true;
+	CString tmpStr;
+
+	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->GetWindowText(tmpStr);
+	if (tmpStr == "")
+		enable = false;
+
+	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_REAL_TEDIT)->GetWindowText(tmpStr);
+	if (tmpStr == "")
+		enable = false;
+
+	GetDlgItem(IDC_START_MEASURE)->EnableWindow(enable);
+}
 
 void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit()
 {
@@ -1114,21 +1135,29 @@ void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3
 	// with the ENM_CHANGE flag ORed into the mask.
 
 	// TODO:  Add your control notification handler code here
-	UpdateData(TRUE);
+	SetStartButtState();
 
+	CString tmpStr;
+
+	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->GetWindowText(tmpStr);
+	if (tmpStr == "")
+		return;
+
+	UpdateData(TRUE);
+	
 	if ((m_AzimuthAngle < 0) || (m_AzimuthAngle >= 360))
 		return;
 	double fi = m_AzimuthAngle- FoundationStraightEdgeAngle;
 	if (fi <= 0)
 		fi = fi + 360.0;
-
-	CString tmpStr;
+	
 	tmpStr.Format(_T("%.1f"), fi);
 	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT)->SetWindowText(tmpStr);
 	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_REAL_TEDIT)->SetWindowText(tmpStr);
 	
 	UpdateData(TRUE);
 	//m_ArcAngle = 
+
 
 }
 

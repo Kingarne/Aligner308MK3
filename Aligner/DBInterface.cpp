@@ -1370,8 +1370,8 @@ BOOL DBInterface::InsertHorizonAbsoluteMode(HorizonAbsoluteMode::Data data, int 
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO VerificationAbsoluteMode (measID, parallaxCompensation, elevationCompensation) VALUES (%d,%f,%f)",
-		 measId, data.m_parallaxCompensation, data.m_elevationCompensation);
+     sql.Format("INSERT INTO VerificationAbsoluteMode (measID, parallaxCompensation, elevationCompensation) VALUES (%d,%s,%s)",
+		 measId, data.m_parallaxCompensation?"True":"False", data.m_elevationCompensation ? "True" : "False");
  
      ExecuteSQL(sql); 
 	return TRUE;
@@ -1396,8 +1396,8 @@ BOOL DBInterface::InsertHorizonRelativeMode(HorizonRelativeMode::Data data, int 
          return FALSE;
  
      CString sql="";
-     sql.Format("INSERT INTO VerificationRelativeMode (measID, referenceChannel, parallaxCompensation, elevationCompensation) VALUES (%d,'%s',%f,%f)",
-		 measId, data.m_refChannel, data.m_parallaxCompensation, data.m_elevationCompensation);
+     sql.Format("INSERT INTO VerificationRelativeMode (measID, referenceChannel, parallaxCompensation, elevationCompensation) VALUES (%d,'%s',%s,%s)",
+		 measId, data.m_refChannel, data.m_parallaxCompensation ? "True" : "False", data.m_elevationCompensation ? "True" : "False");
  
     ExecuteSQL(sql); 
 	return TRUE;

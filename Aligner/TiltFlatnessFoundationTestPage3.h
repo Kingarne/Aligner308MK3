@@ -76,7 +76,7 @@ private:
 	void ShowPolarGraph();
     void ShowErrorGraph();
     void ShowResultGraph();
-    
+	void SetStartButtState();
 public:
 	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit();
     afx_msg void OnBnClickedFinishMeasure();

@@ -46,9 +46,10 @@ void CTiltAlignmentPage2::StoreGraph()
 {
 	CString graphFileName;
 	 
-	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName, FALSE ) == TRUE )
+	if( m_pParent->m_pGraph->SaveGraphToUniqueFileName( graphFileName, !m_pParent->m_CommonFlatTest ) == TRUE )
 	{
-	//	m_pParent->m_GraphFileManager.SaveFileName( graphFileName, FALSE );
+		if(!m_pParent->m_CommonFlatTest)
+			m_pParent->m_GraphFileManager.SaveFileName( graphFileName, GT_Live, FALSE);
 	}
 }
 
@@ -1142,7 +1143,7 @@ BOOL CTiltAlignmentPage2::StartTimer()
 		m_pParent->m_pGraph->HideGraph();
 
 
-		if( (m_CommonFlatTestTimerEvent = SetTimer( COMMON_FLAT_TEST_TIMER, 30000, 0 )) == 0 )
+		if( (m_CommonFlatTestTimerEvent = SetTimer( COMMON_FLAT_TEST_TIMER, 15000, 0 )) == 0 )
 		{
 			return( FALSE );
 		}

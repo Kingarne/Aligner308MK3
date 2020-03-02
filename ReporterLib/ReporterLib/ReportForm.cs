@@ -160,7 +160,7 @@ namespace ReporterLib
                 //Text = ProjectId.ToString() + ": Show All";
                 DBI.GetProjectMeasurements(ProjectId, ref Measurements);
 
-                reportList.Columns.Add("Report");
+                reportList.Columns.Add("Use  Report");
                 reportList.Columns.Add("Time");
                 reportList.Columns[0].Width = 150;
                 reportList.Columns[1].Width = 100;
@@ -214,13 +214,15 @@ namespace ReporterLib
             int currentPage = printPreviewControl.StartPage;
             int inc = e.Delta > 0 ? -1 : 1;
             int newPage = currentPage + inc;
-            if (newPage < 0 || newPage > m_page)
+            if (newPage < 0 || newPage >= m_page)
                 return;
 
 
 
             printPreviewControl.StartPage = newPage;//((int)pageUpDown.Value) - 1;
             printPreviewControl.Update();
+
+            pageUpDown.Value = newPage+1;
         }
 
 
@@ -284,12 +286,21 @@ namespace ReporterLib
 
             printPreviewControl.Document = m_document;
             printPreviewControl.StartPage = 0;
+            pageUpDown.Value = 1;
         }
 
         private void PrintPreview()
         {
             if (!FillMeasIds())
+            {
+                printPreviewControl.Document = null;
+                m_page = 0;
+                pageUpDown.Minimum = 0;
+                pageUpDown.Maximum = 0;
+                pageUpDown.Value = 0;
+                numLabel.Text = "/ 0";
                 return;
+            }
             
             m_document = new PrintDocument();
             m_document.PrinterSettings = m_printerSettings;
@@ -395,6 +406,7 @@ namespace ReporterLib
         private void EndPrint(object sender, System.Drawing.Printing.PrintEventArgs e)
         {
             pageUpDown.Minimum = 1;
+            pageUpDown.Value = 1;
             pageUpDown.Maximum = m_page;
             UpdateColumns();
             numLabel.Text = "/ " + m_page.ToString();
@@ -765,6 +777,9 @@ namespace ReporterLib
 
         private void UpdateColumns()
         {
+            if (printPreviewControl.Document == null)
+                return;
+
             int oldColumns = printPreviewControl.Columns;
             int newColumns = 1;
 
@@ -848,6 +863,7 @@ namespace ReporterLib
                     UpdateReportList();
 
                 }
+                PrintPreview();
             } 
         }
 

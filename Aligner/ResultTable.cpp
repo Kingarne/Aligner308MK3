@@ -221,9 +221,9 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
   case MeasType::MT_VerifAbsolute:
 
 	  m_HorizonAbsoluteMode.m_timeConstant = g_AlignerData.TaoTilt;
-	  m_HorizonAbsoluteMode.m_parallaxCompensation.LoadString( g_AlignerData.UseParallax == TRUE ? IDS_ON : IDS_OFF);
+	  m_HorizonAbsoluteMode.m_parallaxCompensation = g_AlignerData.UseParallax;
 	
-	  m_HorizonAbsoluteMode.m_elevationCompensation.LoadString( g_AlignerData.UseElevError == TRUE ? IDS_ON : IDS_OFF);
+	  m_HorizonAbsoluteMode.m_elevationCompensation = g_AlignerData.UseElevError;
 	  m_HorizonAbsoluteMode.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
 	  m_HorizonAbsoluteMode.m_refChannel = "";// GetChannelName(g_AlignerData.RefObjNo);
 	  m_HorizonAbsoluteMode.m_time = m_InParam.Time;
@@ -276,9 +276,9 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
     case MeasType::MT_VerifRelative:
 
 		m_HorizonRelativeMode.m_timeConstant = g_AlignerData.TaoTilt;
-		m_HorizonRelativeMode.m_parallaxCompensation.LoadString( g_AlignerData.UseParallax == TRUE ? IDS_ON : IDS_OFF);
+		m_HorizonRelativeMode.m_parallaxCompensation = g_AlignerData.UseParallax;
 		m_HorizonRelativeMode.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);
-		m_HorizonRelativeMode.m_elevationCompensation.LoadString( g_AlignerData.UseElevError == TRUE ? IDS_ON :IDS_OFF);
+		m_HorizonRelativeMode.m_elevationCompensation = g_AlignerData.UseElevError;
 		m_HorizonRelativeMode.m_comment = m_InParam.Comment.GetLength() == 0 ? DB_EMPTY_STRING : m_InParam.Comment;
 		
 		m_HorizonRelativeMode.m_time = m_InParam.Time;

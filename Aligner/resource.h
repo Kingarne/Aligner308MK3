@@ -1014,6 +1014,9 @@
 #define IDC_TABLE_STATIC                1662
 #define IDC_DELETE_BUTTON               1663
 #define IDC_CONTINOUS_CHECK             1664
+#define IDC_BREAK_BUTTON                1665
+#define IDC_STATIC_SENS                 1666
+#define IDC_WAIT_TEXT                   1667
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1433,9 +1436,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        573
+#define _APS_NEXT_RESOURCE_VALUE        574
 #define _APS_NEXT_COMMAND_VALUE         32823
-#define _APS_NEXT_CONTROL_VALUE         1665
+#define _APS_NEXT_CONTROL_VALUE         1668
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

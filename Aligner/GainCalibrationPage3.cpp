@@ -25,10 +25,16 @@ void GainCalibrationPage3::DoDataExchange( CDataExchange *pDX )
 }
 
 BEGIN_MESSAGE_MAP(GainCalibrationPage3, CPropertyPage)
+	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_BREAK_BUTTON, &GainCalibrationPage3::OnBnClickedBreakButton)
 END_MESSAGE_MAP()
 
 BOOL GainCalibrationPage3::OnSetActive( void )
 {
+	StopTimer();
+	ShowWindow(IDC_WAIT_TEXT, SW_HIDE);
+	ShowWindow(IDC_BREAK_BUTTON, SW_HIDE);
+
     GainAzimuthCalibration *pSheet = static_cast<GainAzimuthCalibration *>(GetParent()) ;
     ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(GainAzimuthCalibration) )) ;
     MoveDlgToRightSideOfApp(pSheet);
@@ -54,25 +60,31 @@ LRESULT GainCalibrationPage3::OnWizardNext( void )
 		inProgress = false;
 		return CPropertyPage::OnWizardNext();
 	}
-	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
-	ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
-	inProgress = true;
-	pSheet -> SetWizardButtons( 0 ) ;
-	pSheet -> StartMeasurement( FALSE, - pSheet -> m_alpha / 2.0, 0.0, TRUE ) ;
+	
+	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent());
+	ASSERT(pSheet->IsKindOf(RUNTIME_CLASS(CalibrationSheet)));
+	pSheet->SetWizardButtons(PSWIZB_BACK);
+
+	ShowWindow(IDC_WAIT_TEXT, SW_SHOW);
+	ShowWindow(IDC_BREAK_BUTTON, SW_SHOW);
+	StartTimer();
+
 	return -1 ;
 }
 
 BOOL GainCalibrationPage3::OnQueryCancel( void )
 {
-  CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
-  ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
-  pSheet -> StopMeasurement() ;
-  pSheet -> SetWizardButtons( PSWIZB_NEXT | PSWIZB_BACK ) ;
-  return IDYES == ::AfxMessageBox( IDS_REALY_ABORT, MB_YESNO | MB_DEFBUTTON2 ) ;
+	StopTimer();
+	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
+	ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
+	pSheet -> StopMeasurement() ;
+	pSheet -> SetWizardButtons( PSWIZB_NEXT | PSWIZB_BACK ) ;
+	return IDYES == ::AfxMessageBox( IDS_REALY_ABORT, MB_YESNO | MB_DEFBUTTON2 ) ;
 }
 
 LRESULT GainCalibrationPage3::OnWizardBack( void )
 {
+	StopTimer();
   CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
   ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
   if (pSheet -> IsMeasuring())
@@ -82,4 +94,57 @@ LRESULT GainCalibrationPage3::OnWizardBack( void )
     return -1 ;
   }
   return IDYES != ::AfxMessageBox( IDS_REALY_BACK, MB_YESNO | MB_DEFBUTTON2 ) ;
+}
+
+
+void GainCalibrationPage3::OnBnClickedBreakButton()
+{
+	StartMeasure();
+}
+
+void GainCalibrationPage3::ShowWindow(int id, int status)
+{
+	CWnd *pWnd = GetDlgItem(id);
+	pWnd->ShowWindow(status);
+}
+
+void GainCalibrationPage3::StopTimer()
+{
+	if (m_timer)
+	{
+		KillTimer(m_timer);
+		m_timer = 0;
+	}
+}
+
+
+void GainCalibrationPage3::StartTimer()
+{
+	if (!m_timer)
+	{
+		m_timer = SetTimer(1, 15000, 0);
+	}
+}
+
+void GainCalibrationPage3::OnTimer(UINT_PTR nIDEvent)
+{
+	if (nIDEvent == m_timer)
+	{
+		StartMeasure();
+	}
+
+	CPropertyPage::OnTimer(nIDEvent);
+}
+
+
+LRESULT GainCalibrationPage3::StartMeasure(void)
+{
+	StopTimer();
+	ShowWindow(IDC_BREAK_BUTTON, SW_HIDE);
+	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent());
+	ASSERT(pSheet->IsKindOf(RUNTIME_CLASS(CalibrationSheet)));
+	inProgress = true;
+	pSheet->SetWizardButtons(PSWIZB_BACK);
+	pSheet->StartMeasurement(FALSE, -pSheet->m_alpha / 2.0, 0.0, TRUE);
+	return S_OK;
 }

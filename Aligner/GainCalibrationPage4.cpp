@@ -10,7 +10,7 @@ IMPLEMENT_DYNAMIC(GainCalibrationPage4, CPropertyPage)
 
 GainCalibrationPage4::GainCalibrationPage4( void ): CPropertyPage(GainCalibrationPage4::IDD)
 {
-  // Empty
+	m_timer=0;
 }
 
 GainCalibrationPage4::~GainCalibrationPage4( void )
@@ -24,10 +24,16 @@ void GainCalibrationPage4::DoDataExchange( CDataExchange* pDX )
 }
 
 BEGIN_MESSAGE_MAP(GainCalibrationPage4, CPropertyPage)
+	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_BREAK_BUTTON, &GainCalibrationPage4::OnBnClickedBreakButton)
 END_MESSAGE_MAP()
 
 BOOL GainCalibrationPage4::OnSetActive( void )
 {
+	StopTimer();
+	ShowWindow(IDC_WAIT_TEXT, SW_HIDE);
+	ShowWindow(IDC_BREAK_BUTTON, SW_HIDE);
+
     GainAzimuthCalibration *pSheet = static_cast<GainAzimuthCalibration *>(GetParent()) ;
     ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(GainAzimuthCalibration) )) ;
     MoveDlgToRightSideOfApp(pSheet);
@@ -45,32 +51,91 @@ LRESULT GainCalibrationPage4::OnWizardNext( void )
 		inProgress = false;
 		return CPropertyPage::OnWizardNext();
 	}
-	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
-	ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
-	inProgress = true;
-	pSheet -> SetWizardButtons( 0 ) ;
-	pSheet -> StartMeasurement( FALSE, pSheet -> m_alpha / 2.0, 0.0, TRUE ) ;
+	
+	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent());
+	ASSERT(pSheet->IsKindOf(RUNTIME_CLASS(CalibrationSheet)));
+	pSheet->SetWizardButtons(PSWIZB_BACK);
+
+	ShowWindow(IDC_WAIT_TEXT, SW_SHOW);
+	ShowWindow(IDC_BREAK_BUTTON, SW_SHOW);
+	StartTimer();
+
 	return -1 ;
 }
 
 BOOL GainCalibrationPage4::OnQueryCancel( void )
 {
-  CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
-  ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
-  pSheet -> StopMeasurement() ;
-  pSheet -> SetWizardButtons( PSWIZB_NEXT | PSWIZB_BACK ) ;
-  return IDYES == ::AfxMessageBox( IDS_REALY_ABORT, MB_YESNO | MB_DEFBUTTON2 ) ;
+	StopTimer();
+	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
+	ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
+	pSheet -> StopMeasurement() ;
+	pSheet -> SetWizardButtons( PSWIZB_NEXT | PSWIZB_BACK ) ;
+	return IDYES == ::AfxMessageBox( IDS_REALY_ABORT, MB_YESNO | MB_DEFBUTTON2 ) ;
 }
 
 LRESULT GainCalibrationPage4::OnWizardBack( void )
 {
-  GainAzimuthCalibration *pSheet = static_cast<GainAzimuthCalibration *>(GetParent()) ;
-  ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(GainAzimuthCalibration) )) ;
-  if (pSheet -> IsMeasuring())
-  {
-    pSheet -> StopMeasurement() ;
-    pSheet -> SetWizardButtons( PSWIZB_NEXT | PSWIZB_BACK ) ;
-    return -1 ;
-  }
-  return IDYES != ::AfxMessageBox( IDS_REALY_BACK, MB_YESNO | MB_DEFBUTTON2 ) ;
+	StopTimer();
+	GainAzimuthCalibration *pSheet = static_cast<GainAzimuthCalibration *>(GetParent()) ;
+	ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(GainAzimuthCalibration) )) ;
+	if (pSheet -> IsMeasuring())
+	{
+		pSheet -> StopMeasurement() ;
+		pSheet -> SetWizardButtons( PSWIZB_NEXT | PSWIZB_BACK ) ;
+		return -1 ;
+	}
+	return IDYES != ::AfxMessageBox( IDS_REALY_BACK, MB_YESNO | MB_DEFBUTTON2 ) ;
+}
+
+
+void GainCalibrationPage4::OnBnClickedBreakButton()
+{
+	StartMeasure();
+}
+
+void GainCalibrationPage4::ShowWindow(int id, int status)
+{
+	CWnd *pWnd = GetDlgItem(id);
+	pWnd->ShowWindow(status);
+}
+
+void GainCalibrationPage4::StopTimer()
+{
+	if (m_timer)
+	{
+		KillTimer(m_timer);
+		m_timer = 0;
+	}
+}
+
+
+void GainCalibrationPage4::StartTimer()
+{
+	if (!m_timer)
+	{
+		m_timer = SetTimer(1, 15000, 0);
+	}
+}
+
+void GainCalibrationPage4::OnTimer(UINT_PTR nIDEvent)
+{
+	if (nIDEvent == m_timer)
+	{
+		StartMeasure();
+	}
+
+	CPropertyPage::OnTimer(nIDEvent);
+}
+
+LRESULT GainCalibrationPage4::StartMeasure(void)
+{
+	StopTimer();
+	ShowWindow(IDC_BREAK_BUTTON, SW_HIDE);
+	CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent());
+	ASSERT(pSheet->IsKindOf(RUNTIME_CLASS(CalibrationSheet)));
+	inProgress = true;
+	pSheet->SetWizardButtons(PSWIZB_BACK);
+	pSheet->StartMeasurement(FALSE, pSheet->m_alpha / 2.0, 0.0, TRUE);
+
+	return S_OK;
 }

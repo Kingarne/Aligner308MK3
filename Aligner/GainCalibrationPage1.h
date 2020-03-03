@@ -27,4 +27,13 @@ private:
 	CComboBox m_sensor ;
 
 	BOOL inProgress;
+	
+	void ShowWindow(int id, int status);
+	LRESULT StartMeasure(void);
+	void StopTimer();
+	void StartTimer();
+	int m_timer;
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnBnClickedBreakButton();
 } ;

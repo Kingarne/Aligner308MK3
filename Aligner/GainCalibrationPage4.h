@@ -22,4 +22,16 @@ protected:
 	virtual LRESULT OnWizardNext( void ) ;
 	virtual LRESULT OnWizardBack( void ) ;
 	BOOL inProgress;
+
+	void ShowWindow(int id, int status);
+	LRESULT StartMeasure(void);
+	void StopTimer();
+	void StartTimer();
+	int m_timer;
+
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+
+
+public:
+	afx_msg void OnBnClickedBreakButton();
 } ;

@@ -191,6 +191,7 @@ namespace ReporterLib
 
         public class AbsoulteModeVerif : AlignmentBase
         {
+            public int range { get; set; }
             public bool parallaxComp { get; set; }
             public bool elevationComp { get; set; }
         }
@@ -204,6 +205,7 @@ namespace ReporterLib
 
         public class RelativeModeVerif : AlignmentBase
         {
+            public int range { get; set; }
             public bool parallaxComp { get; set; }
             public bool elevationComp { get; set; }
         }
@@ -1025,7 +1027,8 @@ namespace ReporterLib
                     {
                         amv.ID = (int)dr["ID"];
                         amv.parallaxComp = (bool)dr["parallaxCompensation"];
-                        amv.elevationComp = (bool)dr["elevationCompensation"];                                               
+                        amv.elevationComp = (bool)dr["elevationCompensation"];
+                        amv.range = (int)dr["targetDistance"];
                     }
                 }
             }
@@ -1076,7 +1079,7 @@ namespace ReporterLib
             return true;
         }
 
-        public bool GetRelativeModeMeas(ref DBInterface.Measurement meas, ref RelativeModeVerif amv)
+        public bool GetRelativeModeMeas(ref DBInterface.Measurement meas, ref RelativeModeVerif rmv)
         {
 
             if (Connection.State != System.Data.ConnectionState.Open)
@@ -1088,9 +1091,10 @@ namespace ReporterLib
                 {
                     if (dr.Read())
                     {
-                        amv.ID = (int)dr["ID"];
-                        amv.parallaxComp = (bool)dr["parallaxCompensation"];
-                        amv.elevationComp = (bool)dr["elevationCompensation"];
+                        rmv.ID = (int)dr["ID"];
+                        rmv.parallaxComp = (bool)dr["parallaxCompensation"];
+                        rmv.elevationComp = (bool)dr["elevationCompensation"];
+                        rmv.range = (int)dr["targetDistance"];
                         string refCh = (string)dr["referenceChannel"];
                         meas.RefChannel = refCh;
                     }

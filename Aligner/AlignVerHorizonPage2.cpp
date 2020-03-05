@@ -193,7 +193,8 @@ BOOL CAlignVerHorizonPage2::OnSetActive()
     m_pParent->SetWizardButtons( PSWIZB_DISABLEDFINISH );
     HideAll();
     m_Bear = 0;
-    m_Range = 0;
+	m_Range = 0;
+	
 
     if( HorizonTestInit() == FALSE )
     {
@@ -658,7 +659,7 @@ void CAlignVerHorizonPage2::OnBnClickedStartMeasure()
         m_pParent->m_Leave = TRUE;
     }
 
-    if( m_pParent->m_Leave == FALSE )
+    if( m_pParent->m_Leave == FALSE )  
     {
         HorizonTestLoopInit();
     }
@@ -673,6 +674,7 @@ void CAlignVerHorizonPage2::OnBnClickedStartMeasure()
 
 void CAlignVerHorizonPage2::OnBnClickedFinishMeasure()
 {
+	GetDlgItem(IDC_FINISH_MEASURE)->ShowWindow(SW_HIDE);
 	m_pParent->m_N--;
 	RestoreGlobals();
 	DisableBearingAndRangeBox();
@@ -686,6 +688,8 @@ void CAlignVerHorizonPage2::RestoreGlobals()
   g_AlignerData.UseElevError = m_pParent->m_Measure.m_InParam.UseElev;
   g_AlignerData.Bear = m_Bear;
   g_AlignerData.Range = m_Range;
+  
+	
 }
 
 BOOL CAlignVerHorizonPage2::CallMeasure( double *pRoll, double *pPitch )

@@ -220,6 +220,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	
   case MeasType::MT_VerifAbsolute:
 
+	  m_HorizonAbsoluteMode.m_range = g_AlignerData.Range;
 	  m_HorizonAbsoluteMode.m_timeConstant = g_AlignerData.TaoTilt;
 	  m_HorizonAbsoluteMode.m_parallaxCompensation = g_AlignerData.UseParallax;
 	
@@ -275,6 +276,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 	/***************************************************************************/
     case MeasType::MT_VerifRelative:
 
+		m_HorizonRelativeMode.m_range = g_AlignerData.Range;
 		m_HorizonRelativeMode.m_timeConstant = g_AlignerData.TaoTilt;
 		m_HorizonRelativeMode.m_parallaxCompensation = g_AlignerData.UseParallax;
 		m_HorizonRelativeMode.m_refChannel = GetChannelName(g_AlignerData.RefObjNo);

@@ -351,6 +351,7 @@ public:
 	class Data : public MeasurementBase
 	{
 	public:
+		int m_range;
 		bool m_parallaxCompensation ;
 		bool m_elevationCompensation ;
     
@@ -383,6 +384,7 @@ public:
 	class Data : public MeasurementBase
 	{
 	public:
+		int m_range;
 		bool m_parallaxCompensation ;
 		bool m_elevationCompensation ;    
 	} ;

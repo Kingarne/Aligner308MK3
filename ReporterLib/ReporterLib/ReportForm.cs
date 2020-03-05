@@ -1610,9 +1610,13 @@ namespace ReporterLib
                 int xPerc = 60;
                 DrawText("Parallax Comp:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
                 DrawText("Elevation Comp:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+                string td = amm.parallaxComp ? "" : "Target Distance:";
+                DrawText(td, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + 2*yHeadSpace);
                 xPerc = xPerc + 15;
                 DrawText(amm.parallaxComp ? "On" : "Off", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
                 DrawText(amm.elevationComp? "On" : "Off", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+                td = amm.parallaxComp ? "": amm.range.ToString() + " [m]";
+                DrawText(td, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + 2*yHeadSpace);
 
                 int wPerc = 8;
                 List<TableItem> table = new List<TableItem>();
@@ -1685,12 +1689,17 @@ namespace ReporterLib
                 Images = new List<DBInterface.ImageInfo>();
                 DBI.GetImages(Measurement.ID, ref Images);
 
+                
                 int xPerc = 60;
                 DrawText("Parallax Comp:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
                 DrawText("Elevation Comp:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+                string td = rmm.parallaxComp ? "" : "Target Distance:";
+                DrawText(td, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + 2*yHeadSpace);
                 xPerc = xPerc + 15;
                 DrawText(rmm.parallaxComp ? "On" : "Off", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
                 DrawText(rmm.elevationComp ? "On" : "Off", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
+                td = rmm.parallaxComp ? "":rmm.range.ToString() + " [m]";
+                DrawText(td, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + 2*yHeadSpace);
 
                 int wPerc = 8;
                 List<TableItem> table = new List<TableItem>();

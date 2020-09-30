@@ -562,6 +562,9 @@
     <ClCompile Include="GridCtrl\TitleTip.cpp">
       <Filter>Source Files\GridCtrl</Filter>
     </ClCompile>
+    <ClCompile Include="MQTT\MQTTLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorStatic.h">
@@ -1028,6 +1031,9 @@
     </ClInclude>
     <ClInclude Include="DBInterface.h">
       <Filter>Header Files\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="MQTT\MQTTLib.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

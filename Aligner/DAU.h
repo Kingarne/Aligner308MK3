@@ -14,6 +14,7 @@ class DAUValues ;
 #include "Digital.h"
 #include "DAOComThr.h"
 #include "DataCompensator.h"
+#include "MQTT\MQTTLib.h"
 
 #define DIG_D1 0x01
 #define DIG_D2 0x02
@@ -230,9 +231,15 @@ private:
     void InvertSensorData(DAUFrame& frame);
     CString HandleSyncroData308(DAUFrame& frame);
     CString HandleSyncroData202(DAUFrame& frame);
-    
+	
+	void ExportMQTT();
+	bool m_exportMQTT;
+	MQTTLib m_mqttLib;	
+
 public:
-    DAUData m_simulatedData;
+	int m_mqttMsg;
+    
+	DAUData m_simulatedData;
     BOOL m_simulationActive ;
 
     CString m_activeHighSeaGyro;        

@@ -464,6 +464,7 @@
     <ClCompile Include="GridCtrl\InPlaceEdit.cpp" />
     <ClCompile Include="GridCtrl\TitleTip.cpp" />
     <ClCompile Include="InfoDlg.cpp" />
+    <ClCompile Include="MQTT\MQTTLib.cpp" />
     <ClCompile Include="ProjectOpenCalibDlg.cpp" />
     <ClCompile Include="ProjectOpenDlg.cpp" />
     <ClCompile Include="Registry.cpp" />
@@ -673,6 +674,7 @@
     <ClInclude Include="InfoDlg.h" />
     <ClInclude Include="InPlaceEdit.h" />
     <ClInclude Include="MemDC.h" />
+    <ClInclude Include="MQTT\MQTTLib.h" />
     <ClInclude Include="ProjectOpenDlg.h" />
     <ClInclude Include="ReportManager.h" />
     <ClInclude Include="SecrRegistry.h" />

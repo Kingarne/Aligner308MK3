@@ -6,9 +6,11 @@
 #import "..\ReporterLib\ReporterLib\bin\Release\ReporterLib.tlb" raw_interfaces_only
 using namespace ReporterLib;
 
+CString ReportManager::dbPath="";
+
 ReportManager::ReportManager()
 {
-	CoInitialize(NULL);
+	CoInitialize(NULL);	
 }
 
 
@@ -26,7 +28,10 @@ int ReportManager::OpenReport(int projectId, int measId)
 	long l;
 	//ic->Add(0,0,&l);
 	//Class2 c2;
-	BSTR str = L"I am a happy BSTR";
+	//char* str = "I am a happy BSTR";
+	TRACE("%s\n",ReportManager::dbPath);
+	//int len = strlen(str);
+	reporter->SetDBPath((unsigned char*)(LPCTSTR)dbPath, dbPath.GetLength());
 	reporter->OpenReport(projectId, measId, &l);
 	//c2.Add(100, 100);
 
@@ -38,6 +43,7 @@ int ReportManager::OpenCalibrationData(int projectId)
 	ReporterIPtr reporter(__uuidof(Reporter));
 
 	long l;
+	reporter->SetDBPath((unsigned char*)(LPCTSTR)dbPath, dbPath.GetLength());
 	reporter->OpenCalibrationData(projectId, &l);	
 
 	return 0;

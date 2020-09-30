@@ -63,6 +63,7 @@ m_overangeDetectionActive(FALSE)
 	m_comThr.SetStatusCallback(StaticStatusCallback, this);	
     
     m_activeHighSeaGyro = "";
+	m_mqttMsg = 1;
 }
 
 DAU::~DAU( void )
@@ -411,6 +412,38 @@ void DAU::AddToReceivedDACVal(short val)
     }
 }
 
+void DAU::ExportMQTT()
+{
+	if (!m_exportMQTT || !m_mqttLib.IsOpen())
+		return;
+
+	m_mqttLib.MQTTLoop(1000);
+	
+	if (m_mqttMsg == 0)
+		return;
+
+	BOOL calibrated = (m_mqttMsg != 2);
+	BOOL unfilter = (m_mqttMsg == 3);
+
+	CString msg;
+	for (auto i = m_sensorPointers.begin(); i != m_sensorPointers.end(); i++)
+	{
+		CString tmp;		
+		if (unfilter)
+		{
+			tmp.Format("%f,%f,", (*i)->GetUnfilteredRoll(), (*i)->GetUnfilteredPitch());
+		}
+		else
+		{
+			tmp.Format("%f,%f,", (*i)->GetRoll(calibrated), (*i)->GetPitch(calibrated));
+		}
+		msg += tmp;
+	}
+	msg.TrimRight(',');
+
+	m_mqttLib.SendMsg((char*)(LPCTSTR)msg, MQTT_A308MODULE_LIVE_DATA);
+}
+
 
 int DAU::HandleSensorData(DAUFrame& frame)
 {
@@ -438,6 +471,8 @@ int DAU::HandleSensorData(DAUFrame& frame)
             outOfRange = TRUE ;
         }
     }
+
+	ExportMQTT();
 
     if(!outOfRange)
     {
@@ -712,6 +747,13 @@ BOOL DAU::LoadSyncroConfig( LONG id )
     return TRUE ;
 }
 
+void MsgCB(void* pC, char* msg, char* top)
+{
+	TRACE("topic:%s, msg:%s\n", top, msg);
+	DAU* pObj = (DAU*)pC;
+	pObj->m_mqttMsg = atoi(msg);
+}
+
 BOOL DAU::LoadConfig()
 {
   m_mask = 255 ;
@@ -724,6 +766,22 @@ BOOL DAU::LoadConfig()
   
   DBInterface::Instance()->GetDAUData(m_serial, m_dauDBData);
   SysSetup->SetDAUSerial(m_serial);
+
+
+  Registry reg;
+  m_exportMQTT = (reg.GetIntegerValue("DAU\\MQTTExport", 0) == 1);
+  if (m_exportMQTT)
+  {
+	  if (m_mqttLib.LoadDll())
+	  {		  
+		  m_mqttLib.Init(A308MODULE_CLIENT_ID, BROKER_ADDRESS, MQTT_PORT);
+		  m_mqttLib.Subscribe(MQTT_A308_SET_MODULE_ACTION, 2);
+		  m_mqttLib.SetCB(MsgCB, this);
+	  }
+	  else
+		  m_exportMQTT = false; 
+  }
+  
 
   //test
     /*CalibrationInfo info;
@@ -756,7 +814,6 @@ BOOL DAU::LoadConfig()
       return FALSE ;
   }
 
-  Registry reg;  
   int digitalSetup = reg.GetIntegerValue("DAU\\DigitalSetup", DIG_D1 | DIG_D2); 
 
     if((digitalSetup & DIG_D1) != 0)

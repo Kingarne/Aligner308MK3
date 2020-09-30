@@ -90,7 +90,7 @@ namespace ReporterLib
             public Color Color;
         }
 
-        public ReportForm()
+        public ReportForm(string path)
         {
             InitializeComponent();
 
@@ -99,7 +99,7 @@ namespace ReporterLib
             Sorter = new ReportSorter();
 
             DBI = new DBInterface();
-            DBI.Open();
+            DBI.Open(path);
 
             Measurements = new Dictionary<int, DBInterface.Measurement>();
 
@@ -163,7 +163,7 @@ namespace ReporterLib
                 reportList.Columns.Add("Use  Report");
                 reportList.Columns.Add("Time");
                 reportList.Columns[0].Width = 150;
-                reportList.Columns[1].Width = 100;
+                reportList.Columns[1].Width = 120;
 
                 UpdateReportList();
                 if (reportList.Items.Count > 0)

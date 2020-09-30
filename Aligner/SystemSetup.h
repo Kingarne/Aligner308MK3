@@ -97,6 +97,8 @@ public:
 	int m_numMeasurements;
 
 	Platform m_platform;
+
+
 };
 
 class SystemSetup

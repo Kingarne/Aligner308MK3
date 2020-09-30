@@ -30,6 +30,7 @@
 #include <gdiplus.h>
 #include "InfoDlg.h"
 #include "ProjectOpenDlg.h"
+#include "ReportManager.h"
 //using namespace Gdiplus;
 
 #include <shellapi.h>
@@ -329,7 +330,8 @@ BOOL CAlignerApp::InitInstance( void )
 //     }
 
     CString connectionString = reg.GetStringValue( "ConnectionString", "" ) ;
-    if(DBInterface::Instance()->Open(connectionString) != 0)
+	ReportManager::dbPath = connectionString;
+	if(DBInterface::Instance()->Open(connectionString) != 0)
     {
 
     }

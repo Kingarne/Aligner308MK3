@@ -112,7 +112,7 @@ void Sensor::ElevCompensate(double& roll, double& pitch)
 //              //dauData.AbsPitch[m_InParam.ObjNo[i]] -=  g_AlignerData.EalS[i];
 //             break;
         default:break;
-    }
+    } 
 
 }
 

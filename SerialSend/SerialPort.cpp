@@ -255,18 +255,19 @@ void SerialPort::DoConfig( void )
 		return ;
 	}
 
-	configuration.dcb.BaudRate = 9600;
-// 	if (0 == CommConfigDialog( m_deviceName.c_str(), NULL, &configuration ))
-// 	{
-//     DWORD errorCode = GetLastError() ;
-//     if( errorCode != ERROR_CANCELLED )
-//     {
-//       CString message ;
-//       FormatMessageFromLastError( message, errorCode ) ;
-//       ::AfxMessageBox( message ) ;
-//     }
-//     return ;
-// 	}
+	//configuration.dcb.BaudRate = 9600;
+ 	if (0 == CommConfigDialogA( "COM3", NULL, &configuration ))
+	//if (0 == CommConfigDialogA( m_deviceName.c_str(), NULL, &configuration ))
+ 	{
+     DWORD errorCode = GetLastError() ;
+     if( errorCode != ERROR_CANCELLED )
+     {
+       CString message ;
+       FormatMessageFromLastError( message, errorCode ) ;
+       ::AfxMessageBox( message ) ;
+     }
+     return ;
+ 	}
 
 	if (0 == SetCommConfig( m_hDevice, &configuration, configurationSize ))
 	{

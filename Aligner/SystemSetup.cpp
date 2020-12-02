@@ -298,6 +298,17 @@ void SystemSetup::LoadDigitalSyncroTypesFromRegistry( void )
 	   info.rate = 38400;
 	   m_validSyncroTypes[info.type] = info;
    }
+   if (SystemSetup::IsDigitalSyncroTypeEnabled(FEATURE_MASK_SPERRY_MK39M3) == TRUE)
+   {
+	   str.LoadString(IDS_SPERRY_MK39M3);
+	   info.name = str;
+	   info.type = DigChTypeProSperryMk39M3;
+	   info.serialType = DigChSerialTypeProUart;
+	   info.bits = 8;
+	   info.parity = 1;
+	   info.rate = 38400;
+	   m_validSyncroTypes[info.type] = info;
+   }
 
     ReadDigitalSettings();
 

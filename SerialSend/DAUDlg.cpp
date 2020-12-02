@@ -26,6 +26,7 @@ DAUDlg::DAUDlg(CWnd* pParent /*=NULL*/)
     ,m_pitchAng(0.0f)
     , m_protRoll(0)
     , m_protPitch(0)
+	, m_heading(0)
     , m_autoRoll(FALSE)
     , m_autoPitch(FALSE)
     , m_timer(0)    
@@ -47,6 +48,7 @@ DAUDlg::DAUDlg(CWnd* pParent /*=NULL*/)
     , m_pitchNoice(0.0f)    
     , m_rollNoice(0.0f)    
 	, m_bInduceCRCErr(FALSE)
+	, m_headingStr(_T(""))
 {
     m_frequence.QuadPart = 0;
     ::QueryPerformanceFrequency(&m_frequence);
@@ -59,21 +61,22 @@ DAUDlg::~DAUDlg()
 
 void DAUDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);    
-    DDX_Text(pDX, IDC_PROT_ROLL, m_protRoll);
-    DDX_Text(pDX, IDC_PROT_PITCH, m_protPitch);
-    DDX_Check(pDX, IDC_ROLL_AUTO, m_autoRoll);
-    DDX_Check(pDX, IDC_PITCH_AUTO, m_autoPitch);
-    DDX_Text(pDX, IDC_MAX_ROLL_ANG, m_maxRollAngStr);
-    DDX_Text(pDX, IDC_ROLL_STEP, m_rollAngStepStr);
-    DDX_Text(pDX, IDC_MAX_PITCH_ANG, m_maxPitchAngStr);
-    DDX_Text(pDX, IDC_PITCH_STEP, m_pitchAngStepStr);
-    DDX_Control(pDX, IDC_COMBO1, m_typeCombo);
-    DDX_Text(pDX, IDC_ROLL_CENTER, m_rollCenterStr);
-    DDX_Text(pDX, IDC_PITCH_CENTER, m_pitchCenterStr);
-    DDX_Check(pDX, IDC_ANIM, m_animate);
-    DDX_Text(pDX, IDC_NOICE_ROLL, m_rollNoiceStr);
-    DDX_Text(pDX, IDC_NOICE_PITCH, m_pitchNoiceStr);
+	CDialog::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_PROT_ROLL, m_protRoll);
+	DDX_Text(pDX, IDC_PROT_PITCH, m_protPitch);
+	DDX_Check(pDX, IDC_ROLL_AUTO, m_autoRoll);
+	DDX_Check(pDX, IDC_PITCH_AUTO, m_autoPitch);
+	DDX_Text(pDX, IDC_MAX_ROLL_ANG, m_maxRollAngStr);
+	DDX_Text(pDX, IDC_ROLL_STEP, m_rollAngStepStr);
+	DDX_Text(pDX, IDC_MAX_PITCH_ANG, m_maxPitchAngStr);
+	DDX_Text(pDX, IDC_PITCH_STEP, m_pitchAngStepStr);
+	DDX_Control(pDX, IDC_COMBO1, m_typeCombo);
+	DDX_Text(pDX, IDC_ROLL_CENTER, m_rollCenterStr);
+	DDX_Text(pDX, IDC_PITCH_CENTER, m_pitchCenterStr);
+	DDX_Check(pDX, IDC_ANIM, m_animate);
+	DDX_Text(pDX, IDC_NOICE_ROLL, m_rollNoiceStr);
+	DDX_Text(pDX, IDC_NOICE_PITCH, m_pitchNoiceStr);
+	DDX_Text(pDX, IDC_HEADING, m_headingStr);
 }
 
 
@@ -104,6 +107,7 @@ BEGIN_MESSAGE_MAP(DAUDlg, CDialog)
     ON_EN_CHANGE(IDC_NOICE_ROLL, OnEnChangeNoiceRoll)
     ON_EN_KILLFOCUS(IDC_NOICE_ROLL, OnEnKillfocusNoiceRoll)
     ON_BN_CLICKED(IDC_ANIM, OnBnClickedAnim)
+	ON_EN_KILLFOCUS(IDC_HEADING, &DAUDlg::OnEnKillfocusHeading)
 END_MESSAGE_MAP()
 
 
@@ -137,6 +141,7 @@ BOOL DAUDlg::OnInitDialog()
     m_typeCombo.AddString("Sigma40Id01");
     m_typeCombo.AddString("Sigma40Id03");
     m_typeCombo.AddString("Sigma40-NMEA");
+	m_typeCombo.AddString("Sperry-MK39M3");
 
     m_type = TYPE_SIGMA40_ID01;
     m_typeCombo.SelectString(0, "Sigma40Id01");
@@ -160,10 +165,23 @@ BOOL DAUDlg::OnInitDialog()
     m_sigma40id03Data.heading = 0;
     m_sigma40id03Data.roll = 1;
     m_sigma40id03Data.pitch = 2;
-	memset(m_sigma40id03Data.pad, 0x55, sizeof(m_sigma40id01Data.pad));	
+	memset(m_sigma40id03Data.pad, 0x55, sizeof(m_sigma40id03Data.pad));	
 	m_sigma40id03Data.term = 0xaa;
 
-    m_maxRollAngStr.Format("%.2f",m_maxRollAng);
+	m_sperryData.header = 0xa55a;
+	m_sperryData.numData = 0x1a;
+	m_sperryData.Id = 01;
+	m_sperryData.status1 = 0;
+	m_sperryData.status2 = 0;
+	m_sperryData.heading = 0;
+	m_sperryData.roll = 1;
+	m_sperryData.pitch = 2;
+	memset(m_sperryData.pad, 0x55, sizeof(m_sperryData.pad));
+	m_sperryData.term = 0xaa;
+
+	
+	
+	m_maxRollAngStr.Format("%.2f",m_maxRollAng);
     m_rollAngStepStr.Format("%.2f",m_rollAngStep);
     m_maxPitchAngStr.Format("%.2f",m_maxPitchAng);
     m_pitchAngStepStr.Format("%.2f",m_pitchAngStep);
@@ -200,6 +218,8 @@ void DAUDlg::SendDauData()
     swap(roll);
     unsigned short pitch = m_protPitch;
     swap(pitch);
+	unsigned short head = m_heading;
+	swap(head);
 
     if(m_type == TYPE_SIGMA40_ID01)
     {        
@@ -207,6 +227,7 @@ void DAUDlg::SendDauData()
 		TRACE("send(01):%d, %x\n",m_protRoll, roll);
         m_sigma40id01Data.roll = roll;
         m_sigma40id01Data.pitch = pitch;
+		m_sigma40id01Data.heading = head;
         int length = sizeof(Sigma40Id01Data);
         CalcCRC(&m_sigma40id01Data.numData, &m_sigma40id01Data.crc, 28);
 		
@@ -234,6 +255,7 @@ void DAUDlg::SendDauData()
         }
         m_sigma40id03Data.roll = roll;
         m_sigma40id03Data.pitch = pitch;
+		m_sigma40id03Data.heading = head;
         int length = sizeof(Sigma40Id03Data);
 		CalcCRC(&m_sigma40id03Data.numData, &m_sigma40id03Data.crc, 29);
 		
@@ -263,6 +285,27 @@ void DAUDlg::SendDauData()
 
         m_pSerialPort->Write( nmea, nmea.GetLength()+2 ) ;
     }
+	else if (m_type == TYPE_SPERRY_MK39M3)
+	{
+		TRACE("send(Sperry):%d, %x\n", m_protRoll, roll);
+		m_sperryData.roll = roll;
+		m_sperryData.pitch = pitch;
+		m_sperryData.heading = head;
+		int length = sizeof(SperryMK39M3Data);
+		CalcCRC(&m_sperryData.numData, &m_sperryData.crc, 28);
+
+		if (m_bInduceCRCErr)
+		{
+			m_sperryData.crc += 12;
+			m_bInduceCRCErr = FALSE;
+		}
+
+
+		m_pSerialPort->Write(reinterpret_cast<const char *>(&m_sperryData), length);
+
+		//trace.Format("t:%.5f",elapsedTime*1000.0f);
+	   // sw.TraceTime(TRUE, TRUE, "write time");
+	}
 }
 
 
@@ -515,7 +558,7 @@ void DAUDlg::UpdateValues()
 void DAUDlg::OnTimer(UINT nIDEvent)
 {
     
-    TRACE("Timer\n");
+    //TRACE("Timer\n");
     if(m_autoRoll)  
     {        
 //         static double moveRAng = 90.0f;
@@ -571,6 +614,16 @@ void DAUDlg::OnEnKillfocusPitchStep()
     double periodTime = atof(m_pitchAngStepStr);
     m_pitchAngStep = 360.0/(10*periodTime);   
 }
+
+void DAUDlg::OnEnKillfocusHeading()
+{
+	UpdateData(TRUE);
+	int head=0;
+	sscanf(m_headingStr, "%x", &head);
+	TRACE("%d\n",head);
+	m_heading = head;
+}
+
 
 void DAUDlg::OnEnChangeMaxRollAng()
 {
@@ -649,3 +702,6 @@ void DAUDlg::OnBnClickedAnim()
 {
     UpdateData(TRUE);
 }
+
+
+

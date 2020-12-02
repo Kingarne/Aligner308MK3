@@ -64,6 +64,7 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\SerialSend.ico"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -107,8 +108,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,2
- PRODUCTVERSION 1,0,0,2
+ FILEVERSION 1,0,0,3
+ PRODUCTVERSION 1,0,0,3
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -125,12 +126,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "TODO: <Company name>"
             VALUE "FileDescription", "TODO: <File description>"
-            VALUE "FileVersion", "1.0.0.2"
+            VALUE "FileVersion", "1.0.0.3"
             VALUE "InternalName", "SerialSend.exe"
             VALUE "LegalCopyright", "TODO: (c) <Company name>.  All rights reserved."
             VALUE "OriginalFilename", "SerialSend.exe"
             VALUE "ProductName", "TODO: <Product name>"
-            VALUE "ProductVersion", "1.0.0.2"
+            VALUE "ProductVersion", "1.0.0.3"
         END
     END
     BLOCK "VarFileInfo"
@@ -251,6 +252,8 @@ BEGIN
     LTEXT           "Noice",IDC_STATIC,84,233,18,8
     CONTROL         "Animate",IDC_ANIM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,9,167,42,10
     PUSHBUTTON      "Induce CRC Error",IDC_CRC_ERR_BUTTON,336,190,61,12
+    EDITTEXT        IDC_HEADING,234,243,44,12,ES_AUTOHSCROLL
+    LTEXT           "Heading:",IDC_STATIC,235,233,30,8
 END
 
 IDD_CAM_CTRL_DIALOG DIALOGEX 0, 0, 340, 164
@@ -288,6 +291,17 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DAU_DIALOG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
 
 #endif    // Swedish (Sweden) resources
 /////////////////////////////////////////////////////////////////////////////

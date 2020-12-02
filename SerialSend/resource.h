@@ -42,6 +42,8 @@
 #define IDC_ADD_STOP_CHAR               1019
 #define IDC_CRC_ERR_BUTTON              1020
 #define IDC_CAM_CTRL_BUTTON             1021
+#define IDC_PROT_ROLL3                  1021
+#define IDC_HEADING                     1021
 #define IDC_LIST1                       1022
 #define IDC_COM_INFO                    1022
 
@@ -49,7 +51,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        133
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           101

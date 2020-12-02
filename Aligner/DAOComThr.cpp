@@ -714,6 +714,7 @@ int DAOComThread::HandleUARTData(DAUFrame& msg, int type)
     {
         case DigChTypeProSigma40_03:
         case DigChTypeProSigma40_01:
+		case DigChTypeProSperryMk39M3:
             return HandleSigmaUARTData(msg, type);
             break;
 

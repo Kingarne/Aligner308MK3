@@ -14726,6 +14726,7 @@ BEGIN
     IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_SET_INDEX_ARM_R2 
                             "Position the index arm according to the Graduated Arc value below."
     IDS_MINS_NMEA           "MINS NMEA"
+    IDS_SPERRY_MK39M3       "SperryMK39M3"
 END
 
 #endif    // English (United States) resources

@@ -2,8 +2,7 @@
 #include ".\HFSender.h"
 
 HFSender::HFSender(void)
-{
-	
+{	
 	m_hThread = NULL;
 	m_callback = NULL;
 	m_pCallbackData = NULL;

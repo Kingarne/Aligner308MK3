@@ -96,6 +96,7 @@ CString Digital::GetDigTypeText( )
         case DigChTypeProMSI:           typeText = _T("MSI");          break ;      
 		case DigChTypeProPL40:          typeText = _T("PL-41");          break ; 
 		case DigChTypeProMinsNMEA:      typeText = _T("MINS-NMEA");    break;
+		case DigChTypeProSperryMk39M3:  typeText = _T("Sperry-MK39M3");    break;
 		default:ASSERT(0); break ;
     }
     return typeText ;
@@ -140,6 +141,17 @@ void Shift( BYTE *pBuffer, UINT &length, UINT shift )
   length -= shift ;
 }
 
+
+static double ToHeading(BYTE firstByte, BYTE secondByte, double scale)
+{
+	union {
+		unsigned __int8  byte[2];
+		unsigned __int16 angle;
+	} angleUnion;
+	angleUnion.byte[0] = (unsigned __int8)secondByte;
+	angleUnion.byte[1] = (unsigned __int8)firstByte;
+	return scale * 360.0 * ((double)angleUnion.angle) / 65536.0;
+}
 
 static double ToSigma40( BYTE firstByte, BYTE secondByte, double scale )
 {
@@ -596,6 +608,34 @@ void Digital::HandleSigma40_01(DAUFrame &frame )
 }
 
 
+void Digital::HandleSperryMk39M3(DAUFrame &frame)
+{
+	if (frame.HdlcMsg[0] == 0x5A && frame.HdlcMsg[1] == 0xA5 && frame.HdlcMsg[3] == 0x1)// same as Sigma40_01Ident
+	{
+		BYTE checksumCalc = 0;
+		for (int i = 2; i <= 29; i++)
+		{
+			checksumCalc += frame.HdlcMsg[i];
+		}
+	
+
+		if (checksumCalc == frame.HdlcMsg[31])
+		{
+			SetData(ToSigma40(frame.HdlcMsg[8], frame.HdlcMsg[9], 1.0), ToSigma40(frame.HdlcMsg[10], frame.HdlcMsg[11], 1.0), ToHeading(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0));
+		}
+		else
+		{
+			//Checksum incorrect.
+			SetData(0, 0, 0, DS_CRC_ERR);
+			m_CRCError = TRUE;
+		}
+	}
+	else
+	{
+		TRACE("Wrong interface\n");
+	}
+}
+
 void Digital::HandleSigma40_03(DAUFrame &frame )
 {
     if(frame.HdlcMsg[3] == Sigma40_03Ident)
@@ -926,6 +966,11 @@ UINT Digital::HandleDataFrame(DAUFrame &frame)
 		case DigChTypeProPL40:
 			HandlePL40(frame) ;
 			break ;
+
+		case DigChTypeProSperryMk39M3:
+			HandleSperryMk39M3(frame);
+			break;
+
 
         case 0:
         default:

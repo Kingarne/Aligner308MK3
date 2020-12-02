@@ -109,6 +109,9 @@ BOOL Dialog::OnInitDialog( void )
 
     CButton* pButt = (CButton*)GetDlgItem(IDC_ADD_STOP_CHAR);
     pButt->SetCheck(m_addEndChar);
+	
+	m_HFSender.SetCallback(&staticCallback, this);
+	m_HFSender.Create();
 
   
 
@@ -116,10 +119,29 @@ BOOL Dialog::OnInitDialog( void )
 }
 
 void Dialog::Callback(LPARAM lp)
-{
-    TRACE("Callback\n");
-    m_dauDlg.UpdateValues();
-    m_dauDlg.Send();
+{	
+	if (m_text != "")
+	{
+	
+		if (m_hex)
+		{
+			m_serialPort.Write(reinterpret_cast<const char *>(m_pData), m_dataLength);
+			TRACE("Send hex(%d)\n", m_dataLength);
+		}
+		else
+		{
+			CString sendText = m_text;
+			if (m_addEndChar)
+				sendText += "\r\n";
+			m_serialPort.Write(sendText, sendText.GetLength());
+			TRACE("Send %s\n",sendText);
+		}
+	}
+	else
+	{
+		m_dauDlg.UpdateValues();
+		m_dauDlg.Send();
+	}
 }
 
 void Dialog::OnSysCommand( UINT nID, LPARAM lParam )
@@ -233,8 +255,8 @@ void Dialog::OnBnClickedApplyButton()
 
     m_HFSender.SetFrequence(frequence);
 
-//     if(interval > 0)
-//         SetTimer( 1, interval, NULL ) ;
+   //  if(frequence > 0)
+   //      SetTimer( 1, interval, NULL ) ;
 }
 
 BOOL CAboutDlg::OnInitDialog( void )

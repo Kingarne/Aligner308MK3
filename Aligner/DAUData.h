@@ -338,7 +338,8 @@ public:
 //typedef enum MsgTypePro {MsgTypeProSdcAdc = 1, MsgTypeProHdlcA = 2, MsgTypeProHdlcB = 3, MsgTypeProUartA = 4, MsgTypeProUartB = 5, MsgProTypeRegs = 7} ;
 
 typedef enum DigDauChPro {DigDauChProA, DigDauChProB, DigDauChProCount} ;
-typedef enum DigChTypePro {DigChTypeProUnused, DigChTypeProSeapath, DigChTypeProSigma40_03, DigChTypeProSigma40_NMEA, DigChTypeProSigma40_01, DigChTypeProMins, DigChTypeProIXSEA, DigChTypeProMSI, DigChTypeProPL40, DigChTypeProSigma40_50, DigChTypeProMinsNMEA, DigChTypeProCount} ;
+typedef enum DigChTypePro {DigChTypeProUnused, DigChTypeProSeapath, DigChTypeProSigma40_03, DigChTypeProSigma40_NMEA, DigChTypeProSigma40_01, DigChTypeProMins,
+	DigChTypeProIXSEA, DigChTypeProMSI, DigChTypeProPL40, DigChTypeProSigma40_50, DigChTypeProMinsNMEA, DigChTypeProSperryMk39M3, DigChTypeProCount} ;
 typedef enum DigChSerialTypePro {DigChSerialTypeProHdlc, DigChSerialTypeProUart, DigChSerialTypeCount} ;
 typedef enum ParityPro {ParityNone, ParityEven, ParityOdd, ParityCount} ;
 

@@ -7,10 +7,12 @@ using namespace Gdiplus;
 class SerialPort;
 // DAUDlg dialog
 
-#define TYPE_SIGMA40_ID01 0
-#define TYPE_SIGMA40_ID03 1
-#define TYPE_SIGMA40_NMEA 2
+#define TYPE_SIGMA40_ID01  0 
+#define TYPE_SIGMA40_ID03  1
+#define TYPE_SIGMA40_NMEA  2
+#define TYPE_SPERRY_MK39M3 3
 
+#pragma pack(push , 1)
 struct Sigma40Id01Data
 {
     unsigned short header;
@@ -42,6 +44,23 @@ struct Sigma40Id03Data
 	unsigned char term;
 };
 
+struct SperryMK39M3Data
+{
+	unsigned short header;
+	unsigned char numData;
+	unsigned char Id;
+	unsigned char status1;
+	unsigned char status2;
+	unsigned short heading;
+	unsigned short roll;
+	unsigned short pitch;
+	unsigned char pad[18];
+	unsigned char crc;
+	unsigned char term;
+};
+
+#pragma pack(pop)
+
 class DAUDlg : public CDialog
 {
 	DECLARE_DYNAMIC(DAUDlg)
@@ -63,6 +82,7 @@ protected:
 
     Sigma40Id01Data m_sigma40id01Data;
     Sigma40Id03Data m_sigma40id03Data;
+	SperryMK39M3Data m_sperryData;
 
     double CalcAngle(CRect& m_rollRect, CPoint& point);
     void CheckPoint(CPoint& point);
@@ -94,7 +114,8 @@ public:
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
     short m_protRoll;
     short m_protPitch;
-    afx_msg void OnBnClickedPitchAuto();
+	short m_heading;
+	afx_msg void OnBnClickedPitchAuto();
     afx_msg void OnBnClickedRollAuto();
     BOOL m_autoRoll;
     BOOL m_autoPitch;
@@ -147,4 +168,6 @@ public:
     afx_msg void OnEnChangeNoiceRoll();
     afx_msg void OnEnKillfocusNoiceRoll();
     afx_msg void OnBnClickedAnim();
+	CString m_headingStr;
+	afx_msg void OnEnKillfocusHeading();
 };

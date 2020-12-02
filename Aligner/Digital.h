@@ -66,6 +66,7 @@ private:
 	void HandleIXSEA(DAUFrame &frame);
 	void HandleMSI(DAUFrame &frame );
 	void HandlePL40(DAUFrame &frame );
+	void HandleSperryMk39M3(DAUFrame &frame);
 
     BOOL ParseNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK);
 	BOOL ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK);

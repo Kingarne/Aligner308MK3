@@ -25,6 +25,10 @@ int ReportManager::OpenReport(int projectId, int measId)
 	//Class1Ptr ic(__uuidof(Class2));
 	ReporterIPtr reporter(__uuidof(Reporter));
 
+	Registry reg;
+	CString path;
+	CString regPath = reg.GetKeyPath(path);	
+
 	long l;
 	//ic->Add(0,0,&l);
 	//Class2 c2;

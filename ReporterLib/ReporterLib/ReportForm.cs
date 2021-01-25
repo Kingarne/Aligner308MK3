@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Printing;
 
+
 namespace ReporterLib
 {
     public partial class ReportForm : Form
@@ -124,10 +125,28 @@ namespace ReporterLib
             CalTypeMap[DBInterface.CalType.CT_RollGain] = "Roll Scale Factor";
             CalTypeMap[DBInterface.CalType.CT_RollOffs] = "Roll Offset";
 
+            int h = Screen.FromControl(this).Bounds.Height;
+            this.Height = h - 40;
+            this.Location= new Point(this.Location.X, 20);
 
+            RegAccess.Inst.SetValue("Project\\Place", "Snavlunda");
+
+            string place = (string)RegAccess.Inst.GetValue("DAU\\HSC\\MaxDataDiff", "def"); 
+            string place2 = (string)RegAccess.Inst.GetValue("Project\\Place", "def");
+            string place3 = (string)RegAccess.Inst.GetValue("ApplicationKey", "def");
+            
+
+            // An int value can be stored without specifying the
+            // registry data type, but long values will be stored
+            // as strings unless you specify the type. Note that
+            // the int is stored in the default name/value
+            // pair.
+            //  Registry.SetValue(keyName, "", 5280);
+            // Registry.SetValue(keyName, "TestLong", 12345678901234,
+            //    RegistryValueKind.QWord);
         }
 
-        
+
         private void ReportForm_Load(object sender, EventArgs e)
         {
             m_printerSettings = new PrinterSettings();

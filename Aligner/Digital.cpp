@@ -621,7 +621,7 @@ void Digital::HandleSperryMk39M3(DAUFrame &frame)
 
 		if (checksumCalc == frame.HdlcMsg[31])
 		{
-			SetData(ToSigma40(frame.HdlcMsg[8], frame.HdlcMsg[9], 1.0), ToSigma40(frame.HdlcMsg[10], frame.HdlcMsg[11], 1.0), ToHeading(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0));
+			SetData(ToSigma40(frame.HdlcMsg[8], frame.HdlcMsg[9], -1.0), ToSigma40(frame.HdlcMsg[10], frame.HdlcMsg[11], -1.0), ToHeading(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0));
 		}
 		else
 		{

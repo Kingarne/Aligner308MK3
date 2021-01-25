@@ -45,10 +45,11 @@ public:
   std::vector<BYTE> GetBinaryValue(const CString& strKeyName, std::vector<BYTE>& defaultValue);
   	
   int SetBinaryValue(const CString& strKeyName, std::vector<BYTE>& value);
-    
-private:
   //Get the complete key name.  
-   CString GetKeyPath( CString & strKeyName);
+  CString GetKeyPath(CString & strKeyName);
+
+private:
+ 
 public:  
   int SetMultiStringValue(const CString& strKeyName, std::vector<CString>& value);
 

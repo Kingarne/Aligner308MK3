@@ -11,6 +11,7 @@ namespace ReporterLib
     public interface ReporterI
     {
         unsafe void SetDBPath(byte* s, int len);
+        unsafe void SetRegPath(byte* s, int len);
         int OpenReport(int projectId, int measId);
         int OpenCalibrationData(int projectId);
     }
@@ -22,6 +23,7 @@ namespace ReporterLib
         //private int m_historyId;
         private ReportForm reportForm;
         private string Path = "";
+        private string RegPath = "";
 
         unsafe public void SetDBPath(byte* s, int len)
         {
@@ -29,6 +31,13 @@ namespace ReporterLib
             System.Runtime.InteropServices.Marshal.Copy((IntPtr)s, arr, 0, len);            
 
             Path = System.Text.Encoding.UTF8.GetString(arr);
+        }
+        unsafe public void SetRegPath(byte* s, int len)
+        {
+            byte[] arr = new byte[len];
+            System.Runtime.InteropServices.Marshal.Copy((IntPtr)s, arr, 0, len);
+
+            RegPath = System.Text.Encoding.UTF8.GetString(arr);
         }
 
         public int OpenReport(int projectId, int measId=-1)
@@ -40,9 +49,8 @@ namespace ReporterLib
 
             if(reportForm == null)
             {
-                reportForm = new ReportForm(Path);
-            }
-
+                reportForm = new ReportForm(Path, RegPath);
+            }            
             reportForm.PrintType = ReportForm.ReportType.RT_Measurement;
             reportForm.ProjectId = projectId;
             reportForm.SetMeasId(measId);
@@ -58,9 +66,10 @@ namespace ReporterLib
 
             if (reportForm == null)
             {
-                reportForm = new ReportForm(Path);
+                reportForm = new ReportForm(Path, RegPath);
             }
 
+            
             reportForm.PrintType = ReportForm.ReportType.RT_Calibration;
             reportForm.ProjectId = projectId;
             reportForm.SetMeasId(-1);

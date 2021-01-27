@@ -17,20 +17,26 @@ namespace ReporterLib
         public string KeyBase { get { return UserRoot + "\\" + Subkey; } }
 
 
-        public object GetValue(string key, string def)
+        public object GetValue(string key, object def)
         {
             int index = key.LastIndexOf("\\");
             string subKey = KeyBase;
+            string tempKey = key;
             if (index > 0)
             {
-                string add = key.Substring(0, index);
+                string add = tempKey.Substring(0, index);
                 index += 1;
-                key = key.Substring(index, key.Length - index);
+                tempKey = key.Substring(index, tempKey.Length - index);
                 subKey += add;
             }
             //string keyName = UserRoot + "\\" + Subkey;        
-            object noSuch = Registry.GetValue(subKey, key, "default if NoSuchName does not exist.");
-            return noSuch;
+            object val = Registry.GetValue(subKey, tempKey, def);
+            if(val == null)
+            {
+                SetValue(key, def);
+                return def;
+            }
+            return val;
         }
 
         public void SetValue(string key, object val)

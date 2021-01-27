@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Printing;
-
+using System.Globalization;
 
 namespace ReporterLib
 {
@@ -26,7 +26,8 @@ namespace ReporterLib
         }
 
         public ReportType PrintType{get;set;}
-        public int ProjectId { get; set; }        
+        public int ProjectId { get; set; }      
+        public string RegPath { get; set; }
         List<int> MeasIds = new List<int>();
         private int MeasNum { get; set; }
         private bool HeadPage { get; set; }
@@ -66,7 +67,7 @@ namespace ReporterLib
         private Color RefColor = Color.DarkOrange;
 
         private Color HeadBGColor = Color.FromArgb(255, 240, 240, 255);
-
+        private double Zoom = 1.0f;
 
         ReportSorter Sorter;
         static private SortOrder LastSortOrder;
@@ -91,10 +92,11 @@ namespace ReporterLib
             public Color Color;
         }
 
-        public ReportForm(string path)
+        public ReportForm(string path, string regPath)
         {
             InitializeComponent();
 
+            RegAccess.Inst.Subkey = regPath;
             LastSortOrder = SortOrder.Ascending;
             LastSortColumn = 1; //time
             Sorter = new ReportSorter();
@@ -129,7 +131,14 @@ namespace ReporterLib
             this.Height = h - 40;
             this.Location= new Point(this.Location.X, 20);
 
-            RegAccess.Inst.SetValue("Project\\Place", "Snavlunda");
+            //RegAccess.Inst.SetValue("Project\\Place", "Snavlunda");
+            string z = (string)RegAccess.Inst.GetValue("Report\\Zoom", "1.1");
+            double zoom = 0;
+            Zoom = 1.0f;
+            if(double.TryParse(z, NumberStyles.Any, CultureInfo.InvariantCulture, out zoom ))
+            {
+                Zoom = zoom;
+            }
 
             string place = (string)RegAccess.Inst.GetValue("DAU\\HSC\\MaxDataDiff", "def"); 
             string place2 = (string)RegAccess.Inst.GetValue("Project\\Place", "def");
@@ -151,15 +160,15 @@ namespace ReporterLib
         {
             m_printerSettings = new PrinterSettings();
 
-            double[] zoom = new double[] { 0.6f, 0.8f, 1.0f, 1.2f, 1.4f, 1.6f };
+            double[] zoom = new double[] { 0.6, 0.8, 1.0, 1.2, 1.4, 1.6 };
              
             foreach (double d in zoom)
             {
-                int i = zoomComboBox.Items.Add((d*100.0).ToString("0") + "%");
+                zoomComboBox.Items.Add((d*100.0).ToString("0") + "%");
                 //zoomComboBox.Items[i]
             }
-            zoomComboBox.SelectedIndex = 2;
-
+            int i = Array.FindIndex(zoom, el => el == Zoom);
+            zoomComboBox.SelectedIndex = i>=0?i:2;            
 
 
             Project = new DBInterface.Project();
@@ -179,7 +188,7 @@ namespace ReporterLib
                 //Text = ProjectId.ToString() + ": Show All";
                 DBI.GetProjectMeasurements(ProjectId, ref Measurements);
 
-                reportList.Columns.Add("Use  Report");
+                reportList.Columns.Add("Include Report");
                 reportList.Columns.Add("Time");
                 reportList.Columns[0].Width = 150;
                 reportList.Columns[1].Width = 120;
@@ -675,6 +684,24 @@ namespace ReporterLib
             }
 
             return maxY;
+        }
+
+        private int DrawPlainText(Graphics gr, string text, int pos)
+        {
+            int h = 0;
+            int startPos = pos;
+            if (text != "")
+            {
+                //pos += MargY;
+                SolidBrush br = new SolidBrush(Color.Black);
+                SizeF size = gr.MeasureString(text, Font, HeadRect.Width);
+                Rectangle rect = new Rectangle(HeadRect.Left, pos, HeadRect.Width, (int)size.Height);
+                DrawText(text, gr, Font, br, rect, 2, 0);
+                pos += (int)size.Height + MargY;
+                h += pos - startPos;
+            }
+
+            return h;
         }
 
         private int DrawCalibInfo(Graphics gr, DBInterface.Measurement meas, int pos)
@@ -1543,9 +1570,10 @@ namespace ReporterLib
                 Images = new List<DBInterface.ImageInfo>();
                 DBI.GetImages(Measurement.ID, ref Images);
 
-                string s = cfm.DBUpdated ? "Yes" : "No";
-                int xPerc = 60;
-                DrawText("Calibration Updated: " + s, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+                m_yPos -= MargY/2;
+                string s = "Sensor offset updated: " + (cfm.DBUpdated ? "Yes" : "No");
+                m_yPos += DrawPlainText(gr, s, m_yPos);
+                m_yPos += SmalMarg;
 
                 int wPerc = 8;
                 List<TableItem> table = new List<TableItem>();
@@ -1563,6 +1591,7 @@ namespace ReporterLib
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
                 m_yPos += SmalMarg;
 
+               
                 foreach (DBInterface.CommonFlatCh ch in channels)
                 {
                     table = new List<TableItem>();
@@ -2264,9 +2293,13 @@ namespace ReporterLib
         {
             try
             {
-                double zoom = double.Parse(zoomComboBox.Items[zoomComboBox.SelectedIndex].ToString().TrimEnd('%'));
+                string zoomStr = zoomComboBox.Items[zoomComboBox.SelectedIndex].ToString().TrimEnd('%');
+                double zoom = double.Parse(zoomStr);
+                zoom /= 100.0f;
+                
+                RegAccess.Inst.SetValue("Report\\Zoom", zoom.ToString("0.0", CultureInfo.InvariantCulture));
 
-                printPreviewControl.Zoom = zoom/100.0f;
+                printPreviewControl.Zoom = zoom;
                 printPreviewControl.Update();
             }
             catch (Exception ex)

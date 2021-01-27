@@ -21,8 +21,6 @@ ReportManager::~ReportManager()
 
 int ReportManager::OpenReport(int projectId, int measId)
 {
-	
-	//Class1Ptr ic(__uuidof(Class2));
 	ReporterIPtr reporter(__uuidof(Reporter));
 
 	Registry reg;
@@ -30,23 +28,25 @@ int ReportManager::OpenReport(int projectId, int measId)
 	CString regPath = reg.GetKeyPath(path);	
 
 	long l;
-	//ic->Add(0,0,&l);
-	//Class2 c2;
-	//char* str = "I am a happy BSTR";
-	TRACE("%s\n",ReportManager::dbPath);
-	//int len = strlen(str);
+	//TRACE("%s\n",ReportManager::dbPath);
+	
+	reporter->SetRegPath((unsigned char*)(LPCTSTR)regPath, regPath.GetLength());
 	reporter->SetDBPath((unsigned char*)(LPCTSTR)dbPath, dbPath.GetLength());
 	reporter->OpenReport(projectId, measId, &l);
-	//c2.Add(100, 100);
-
+	
 	return l;
 }
 
 int ReportManager::OpenCalibrationData(int projectId)
 {	
 	ReporterIPtr reporter(__uuidof(Reporter));
+	
+	Registry reg;
+	CString path;
+	CString regPath = reg.GetKeyPath(path);
 
 	long l;
+	reporter->SetRegPath((unsigned char*)(LPCTSTR)regPath, regPath.GetLength());
 	reporter->SetDBPath((unsigned char*)(LPCTSTR)dbPath, dbPath.GetLength());
 	reporter->OpenCalibrationData(projectId, &l);	
 

@@ -354,23 +354,22 @@ void CTiltFlatnessTestPage3::OnBnClickedStartMeasure()
     tmpStr.Format( _T("%d"), m_pParent->m_N );
     AfxFormatString1( m_Text, IDS_TILT_FLATNESS_TEST_N_MEAS_COMPLETED, tmpStr );
 
-    if( (m_pParent->m_N >= MIN_NO_OF_FLATNESS_MEASUREMENTS) && (m_pParent->m_N < MAX_NO_OF_FLATNESS_MEASUREMENTS) )
-    {
-		GetDlgItem(IDC_FINISH_MEASURE)->ShowWindow(SW_SHOW);		
-    }
-    else if( m_pParent->m_N >= MAX_NO_OF_FLATNESS_MEASUREMENTS  )
+	bool show = (m_pParent->m_N >= MIN_NO_OF_FLATNESS_MEASUREMENTS) && (m_pParent->m_N < MAX_NO_OF_FLATNESS_MEASUREMENTS);
+	GetDlgItem(IDC_FINISH_MEASURE)->ShowWindow(show ? SW_SHOW : SW_HIDE);
+   
+	if( m_pParent->m_N >= MAX_NO_OF_FLATNESS_MEASUREMENTS  )
     {
         m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
         tmpStr.LoadString( IDS_TILT_FLATNESS_TEST_NO_MORE_MEASUREMENTS );
         m_Text += tmpStr;
         MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
-        m_pParent->m_Leave = TRUE;
-    }
+		m_pParent->m_Leave = TRUE;
+	}
 
     if( m_pParent->m_Leave == FALSE )
     {
         MeasureRollPathInit();
-    }
+	}
     else
     {
         RestoreGlobals();
@@ -382,11 +381,15 @@ void CTiltFlatnessTestPage3::OnBnClickedStartMeasure()
 
 void CTiltFlatnessTestPage3::OnBnClickedFinishMeasure()
 {
-	m_pParent->m_N--;
-	m_pParent->m_Leave = TRUE;
-	RestoreGlobals();
-	GetDlgItem(IDC_START_MEASURE)->EnableWindow(FALSE);
-	MeasureRollPathContinue();
+	if (m_pParent->m_Leave == FALSE)
+	{
+		GetDlgItem(IDC_FINISH_MEASURE)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_START_MEASURE)->EnableWindow(FALSE);
+		m_pParent->m_N--;
+		m_pParent->m_Leave = TRUE;
+		RestoreGlobals();		
+		MeasureRollPathContinue();
+	}
 }
 
 

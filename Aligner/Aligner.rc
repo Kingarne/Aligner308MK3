@@ -194,8 +194,8 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "DA-AD Loop Test",             ID_UTILITIES_DA
         MENUITEM SEPARATOR
-        MENUITEM "&View Report",                ID_UTILITIES_VIEWREPORT
-        MENUITEM "View Calibration &Data",      ID_UTILITIES_VIEWCALIBRATIONDATA
+        MENUITEM "&View Report\tCtrl+R",        ID_UTILITIES_VIEWREPORT
+        MENUITEM "View Calibration &Data\tCtrl+C", ID_UTILITIES_VIEWCALIBRATIONDATA
         MENUITEM SEPARATOR
         MENUITEM "COM &Setup...",               ID_UTILITIES_COMSETUP
     END
@@ -249,7 +249,7 @@ IDR_MAINFRAME ACCELERATORS
 BEGIN
     VK_F1,          ID_CONTEXT_HELP,        VIRTKEY, SHIFT, NOINVERT
     "0",            ID_DEBUG_PANEL,         VIRTKEY, CONTROL, NOINVERT
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "C",            ID_UTILITIES_VIEWCALIBRATIONDATA, VIRTKEY, CONTROL, NOINVERT
     VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
     "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
@@ -265,6 +265,7 @@ BEGIN
     VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
     "P",            ID_SETUP_COMPORTS,      VIRTKEY, SHIFT, NOINVERT
     "S",            ID_SETUP_SYSTEM,        VIRTKEY, SHIFT, NOINVERT
+    "R",            ID_UTILITIES_VIEWREPORT, VIRTKEY, CONTROL, NOINVERT
 END
 
 IDR_MAINFRAME_A202 ACCELERATORS
@@ -15075,8 +15076,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,3,0
- PRODUCTVERSION 3,0,3,0
+ FILEVERSION 3,0,4,0
+ PRODUCTVERSION 3,0,4,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -15093,11 +15094,11 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Schill Reglerteknik AB"
             VALUE "FileDescription", "Aligner 202/308 Application"
-            VALUE "FileVersion", "3.0.3.0"
+            VALUE "FileVersion", "3.0.4.0"
             VALUE "InternalName", "Aligner 202/308"
             VALUE "LegalCopyright", "Copyright (C) 2017"
             VALUE "ProductName", "Aligner 202/308 Application"
-            VALUE "ProductVersion", "3.0.3.0"
+            VALUE "ProductVersion", "3.0.4.0"
         END
     END
     BLOCK "VarFileInfo"

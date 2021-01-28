@@ -512,13 +512,15 @@ namespace ReporterLib
         }
 
 
-        private void DrawText(string text, Graphics gr, Font font, Brush br, Rectangle rect, double percX, double percY)
+        private void DrawText(string text, Graphics gr, Font font, Brush br, Rectangle rect, double percX, double percY, StringFormat sf=null)
         {
             int x = rect.Left + (int)((double)rect.Width * (percX / 100.0f));
             int y = rect.Top + (int)((double)rect.Height * (percY / 100.0f));
 
-            gr.DrawString(text, font, br, x, y);
-
+            if(sf == null)
+                gr.DrawString(text, font, br, x, y);
+            else
+                gr.DrawString(text, font, br, x, y, sf);
         }
 
         private void pageUpDown_ValueChanged(object sender, EventArgs e)
@@ -607,6 +609,7 @@ namespace ReporterLib
             //DBI.GetMeasurement(MeasId, ref measurement);                       
             Graphics gr = PrintArgs.Graphics;
 
+            startYHeadPerc = 40;
             int headX = PrintArgs.MarginBounds.Left;
             int headY = PrintArgs.MarginBounds.Top;
 
@@ -616,15 +619,30 @@ namespace ReporterLib
 
             headY = headY + (int)size.Height + MargY;
 
-            HeadRect = new Rectangle(new Point(headX, headY), new Size(PrintArgs.MarginBounds.Width, 120));
+            HeadRect = new Rectangle(new Point(headX, headY), new Size(PrintArgs.MarginBounds.Width, 140));
 
+            Color lineCol = Color.FromArgb(255, 180, 180, 180);
             gr.FillRectangle(new SolidBrush(HeadBGColor), HeadRect);
-            gr.DrawRectangle(new Pen(Color.FromArgb(255,180,180,180)), HeadRect);
+            gr.DrawRectangle(new Pen(lineCol), HeadRect);
             int xPerc = 2;
             //string text = "AZIMUTH ALIGNMENT ERRORS ";
-                                  
+
             //gr.DrawString(text, new Font("Ariel", 8, FontStyle.Bold), Brushes.Black, headX +10, headY+10);
-            DrawText(Measurement.TypeText.ToUpper(), gr, new Font("Ariel", 10, FontStyle.Bold), Brushes.Black, HeadRect, 2, 6);
+            StringFormat sfc = new StringFormat();
+            sfc.Alignment = StringAlignment.Center;
+
+            DrawText(Measurement.TypeText.ToUpper(), gr, new Font("Ariel", 10, FontStyle.Bold), Brushes.Black, HeadRect, 50, 8, sfc);
+            DrawText("PROJECT", gr, HeadFont, Brushes.Black, HeadRect, 25, 22, sfc);
+            DrawText("MEASUREMENT", gr, HeadFont, Brushes.Black, HeadRect, 75, 22, sfc);
+
+            int y = HeadRect.Top + (int)((double)HeadRect.Height * (35 / 100.0f));
+            int x1 = HeadRect.Left + (int)((double)HeadRect.Width * (2 / 100.0f));
+            int x2 = HeadRect.Left + (int)((double)HeadRect.Width * (55 / 100.0f));
+            gr.DrawLine(new Pen(lineCol, 1), x1, y, x2, y);
+            x1 = HeadRect.Left + (int)((double)HeadRect.Width * (60 / 100.0f));
+            x2 = HeadRect.Left + (int)((double)HeadRect.Width * (98 / 100.0f));
+            gr.DrawLine(new Pen(lineCol, 1), x1, y, x2, y);
+
             DrawText("Project:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
             DrawText("Ship:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
             DrawText("Operator:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace*2);
@@ -640,14 +658,21 @@ namespace ReporterLib
             DrawText("Date:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
             DrawText("Place:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
             DrawText("Latitude:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
-            DrawText("Time const:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
+            DrawText("Units:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
+            
 
             xPerc = xPerc + 10;
             DrawText(Measurement.Time.ToString("yyyy/MM/dd HH:mm:ss"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
             DrawText(Project.Location, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace);
             DrawText(Project.Latitude.ToString("0.00") + " [deg]", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 2);
-            DrawText(Measurement.TimeConstant.ToString("0.0") + " [s]", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
+            DrawText(Project.UnitText, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc + yHeadSpace * 3);
 
+            xPerc = 60;
+            DrawText("Time const:", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+            xPerc = xPerc + 10;
+            DrawText(Measurement.TimeConstant.ToString("0.0") + " [s]", gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
+
+            startYHeadPerc += yHeadSpace;
             m_yPos = HeadRect.Bottom + MargY;
         }
 
@@ -1831,11 +1856,13 @@ namespace ReporterLib
                 Images = new List<DBInterface.ImageInfo>();
                 DBI.GetImages(Measurement.ID, ref Images);
                 
-                string s = svm.DBUpdated ? "Yes" : "No";                
                 int xPerc = 60;
                 DrawText("Platform S/N: " + svm.PlatformSN.ToString("000"), gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc);
-                DrawText("Calibration Updated: " + s, gr, HeadFont, MainBr, HeadRect, xPerc, startYHeadPerc+yHeadSpace);
-
+                
+                m_yPos -= MargY / 2;
+                string s = "Sensor azimuth updated: " + (svm.DBUpdated ? "Yes" : "No");
+                m_yPos += DrawPlainText(gr, s, m_yPos);
+                m_yPos += SmalMarg;               
 
                 int wPerc = 12;
                 List<TableItem> table = new List<TableItem>();

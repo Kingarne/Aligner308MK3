@@ -88,6 +88,7 @@ public:
 class ChannelBase
 {
 public:
+	ChannelBase() { m_station = ""; m_channel = ""; m_sensorSerialNumber = ""; m_adapterSerialNumber = "";	}
 	CString m_station;
 	CString m_channel;
 	CString m_sensorSerialNumber;

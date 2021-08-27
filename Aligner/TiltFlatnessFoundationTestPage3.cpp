@@ -304,10 +304,10 @@ CString CTiltFlatnessFoundationTestPage3::GetFinishButtonText()
 {
     if(m_measureWarping && m_measureRound == 1)
     {
-        return "Finish Round";
+        return "Done Round";
     }
 
-    return "Finish";
+    return "Done";
 }
 
 void CTiltFlatnessFoundationTestPage3::OnBnClickedStartMeasure()

@@ -920,9 +920,9 @@ void CLiveDataView::OnShowWindow(BOOL bShow, UINT nStatus)
     {
         SetHandleError() ;
         GetDlgItem( IDC_LIVE_RESTART ) -> ShowWindow( SW_HIDE );
-        m_testVoltageControl.EnableWindow( 0 < DAU::GetDAU().GetProtocolVersion()) ;
-	    m_measuredTestVoltageControl.EnableWindow( 0 < DAU::GetDAU().GetProtocolVersion()) ;
-        m_testVoltageAcceptControl.EnableWindow( 0 < DAU::GetDAU().GetProtocolVersion()) ;
+        m_testVoltageControl.EnableWindow( DAU::GetDAU().GetProtocolVersion() >= 0 ) ;
+	    m_measuredTestVoltageControl.EnableWindow( 0 < DAU::GetDAU().GetProtocolVersion() >= 0) ;
+        m_testVoltageAcceptControl.EnableWindow( 0 < DAU::GetDAU().GetProtocolVersion() >= 0) ;
         m_testVoltageControl.SetWindowText( _T("0") ) ;
 	    m_measuredTestVoltageControl.SetWindowText( _T("0") ) ;
         theApp.SetLiveDataViewActivated( TRUE ) ;

@@ -232,6 +232,7 @@ void SerialPort::SaveConfig( void )
 		return ;
 	}
 	
+	configuration.dcb.BaudRate = 153600;
 	LONG status = RegSetValueEx( hSubKey, m_deviceName.c_str(), 0, NULL, reinterpret_cast<unsigned char *>(&configuration), configurationSize ) ;
 	if (ERROR_SUCCESS != status)
 	{
@@ -239,6 +240,11 @@ void SerialPort::SaveConfig( void )
 	}
 
 	RegCloseKey( hSubKey ) ;
+
+	if (0 == GetCommConfig(m_hDevice, &configuration, &configurationSize))
+	{
+
+	}
 }
 
 void SerialPort::DoConfig( void )

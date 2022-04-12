@@ -13594,6 +13594,10 @@ BEGIN
     BEGIN
     END
 
+    IDD_PORT_SETUP, DIALOG
+    BEGIN
+    END
+
     IDD_SENSORCALIBRATION_PROPERTYPAGE, DIALOG
     BEGIN
     END
@@ -15076,8 +15080,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,5,0
- PRODUCTVERSION 3,0,5,0
+ FILEVERSION 3,0,6,0
+ PRODUCTVERSION 3,0,6,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -15094,11 +15098,11 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Schill Reglerteknik AB"
             VALUE "FileDescription", "Aligner 202/308 Application"
-            VALUE "FileVersion", "3.0.5.0"
+            VALUE "FileVersion", "3.0.6.0"
             VALUE "InternalName", "Aligner 202/308"
             VALUE "LegalCopyright", "Copyright (C) 2017"
             VALUE "ProductName", "Aligner 202/308 Application"
-            VALUE "ProductVersion", "3.0.5.0"
+            VALUE "ProductVersion", "3.0.6.0"
         END
     END
     BLOCK "VarFileInfo"

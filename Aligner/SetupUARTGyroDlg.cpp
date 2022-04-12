@@ -45,8 +45,9 @@ BOOL SetupUARTGyroDlg::OnInitDialog()
     CDialog::OnInitDialog();
 
     vector<int> rates;
-    
-    rates.push_back(115200);
+	
+	rates.push_back(153600);
+	rates.push_back(115200);
     rates.push_back(114400);
     rates.push_back(57600);
     rates.push_back(38400);

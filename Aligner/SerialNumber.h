@@ -9,10 +9,10 @@ class SerialNumber
 public:
   SerialNumber( void ) ;
   virtual ~SerialNumber( void ) ;
-public:
+
   BOOL SetSerialNumber( const CString &serialNumber ) ;
-public:
   CString GetSerialNumber( void ) const ;
+
 private:
   CString m_serialNumber ;
 } ;

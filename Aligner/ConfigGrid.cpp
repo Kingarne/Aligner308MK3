@@ -34,12 +34,13 @@ void SensorGrid::Init()
 	columns.push_back(Column("Adapter",60));
 	columns.push_back(Column("Elev. Error\n[mrad]",60));
 	columns.push_back(Column("Azim. Error\n[mrad]",60));
-    columns.push_back(Column("X",45));
-    columns.push_back(Column("Y",45));
-    columns.push_back(Column("Z",45));
-    columns.push_back(Column("dX",45));
-    columns.push_back(Column("dY",45));
-    columns.push_back(Column("dZ",45));
+  columns.push_back(Column("X",45));
+  columns.push_back(Column("Y",45));
+  columns.push_back(Column("Z",45));
+  columns.push_back(Column("dX",45));
+  columns.push_back(Column("dY",45));
+  columns.push_back(Column("dZ",45));
+  columns.push_back(Column("Calibrated", 60));
 
 	m_cols = columns.size();
 
@@ -186,6 +187,7 @@ void SensorGrid::UpdateGrid()
 			
 			if (pSensor->GetTemperature() < 68.4f)
 			{
+
 				text.Format(_T("%.1f°"), pSensor->GetTemperature());
 				SetItemText(row, SColTmpr, text);
 			}
@@ -202,38 +204,40 @@ void SensorGrid::UpdateGrid()
 			
 
 
-            if( UnitType::TypeHasAdapter(pSensor->GetType()))
-            {
-                SetItemText(row, SColAdapter, pSensor->GetAdapterSerialNumber() );                              
-                double value = 1000 * pSensor->GetAdapterCalibrationData().m_elevation ;
-                text.Format( _T("%+6.2f"), (SysSetup->GetUnits() == UNIT_ARCMIN) ? MRADIANS_TO_ARCMIN(value) : value );
-                SetItemText(row, SColElevErr, text );                              
+        if( UnitType::TypeHasAdapter(pSensor->GetType()))
+        {
+            SetItemText(row, SColAdapter, pSensor->GetAdapterSerialNumber() );                              
+            double value = 1000 * pSensor->GetAdapterCalibrationData().m_elevation ;
+            text.Format( _T("%+6.2f"), (SysSetup->GetUnits() == UNIT_ARCMIN) ? MRADIANS_TO_ARCMIN(value) : value );
+            SetItemText(row, SColElevErr, text );                              
 
-                value = 1000 * pSensor->GetAdapterCalibrationData().m_azimuth ;
-                text.Format( _T("%+6.2f"), (SysSetup->GetUnits() == UNIT_ARCMIN) ? MRADIANS_TO_ARCMIN(value) : value );
-                SetItemText(row, SColAzErr, text );                              
-            }
-            else
-            {
-                text.LoadString(IDS_NA); //Gun parameters Not Applicable
-                SetItemText(row, SColAdapter, text );             
-                SetItemText(row, SColElevErr, text );
-                SetItemText(row, SColAzErr, text );
-            }
+            value = 1000 * pSensor->GetAdapterCalibrationData().m_azimuth ;
+            text.Format( _T("%+6.2f"), (SysSetup->GetUnits() == UNIT_ARCMIN) ? MRADIANS_TO_ARCMIN(value) : value );
+            SetItemText(row, SColAzErr, text );                              
+        }
+        else
+        {
+            text.LoadString(IDS_NA); //Gun parameters Not Applicable
+            SetItemText(row, SColAdapter, text );             
+            SetItemText(row, SColElevErr, text );
+            SetItemText(row, SColAzErr, text );
+        }
              
-            ParallaxData parallaxdata = pSensor->GetParallaxData();
-            text.Format("%+.1f",parallaxdata.x);
-            SetItemText(row, SColPlxX, text );             
-            text.Format("%+.1f",parallaxdata.y);
-            SetItemText(row, SColPlxY, text );             
-            text.Format("%+.1f",parallaxdata.z);
-            SetItemText(row, SColPlxZ, text );             
-            text.Format("%+.1f",parallaxdata.dx);
-            SetItemText(row, SColPlxdX, text );             
-            text.Format("%+.1f",parallaxdata.dy);
-            SetItemText(row, SColPlxdY, text );             
-            text.Format("%+.1f",parallaxdata.dz);
-            SetItemText(row, SColPlxdZ, text );             
+        ParallaxData parallaxdata = pSensor->GetParallaxData();
+        text.Format("%+.1f",parallaxdata.x);
+        SetItemText(row, SColPlxX, text );             
+        text.Format("%+.1f",parallaxdata.y);
+        SetItemText(row, SColPlxY, text );             
+        text.Format("%+.1f",parallaxdata.z);
+        SetItemText(row, SColPlxZ, text );             
+        text.Format("%+.1f",parallaxdata.dx);
+        SetItemText(row, SColPlxdX, text );             
+        text.Format("%+.1f",parallaxdata.dy);
+        SetItemText(row, SColPlxdY, text );             
+        text.Format("%+.1f",parallaxdata.dz);
+        SetItemText(row, SColPlxdZ, text );  
+        text.Format("%s", pSensor->HasValidCalibration()?"Exp. 23d":"No");
+        SetItemText(row, SCCalib, text);
         }
 
     }

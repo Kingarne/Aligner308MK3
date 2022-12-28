@@ -153,6 +153,14 @@ BOOL Sensor::SetData( const SensorData &data )
     return !(ShallDoOverrangeDetection() && ((abs(data.m_pitch) > OVERRANGE_LEVEL) || (abs(data.m_roll) > OVERRANGE_LEVEL))) ; // TODO: Add overrange constant.
 }
 
+bool Sensor::HasValidCalibration()
+{
+  bool valid = true;
+  TRACE("HasValidCalibration %s\n", GetSerialNumber());
+
+  return valid;
+}
+
 void Sensor::SetCentrifugPitchComp(double compVal)
 {
     double fac = (m_parallaxData.x+ cos(m_currentAz)*m_parallaxData.dx - sin(m_currentAz)*m_parallaxData.dy);

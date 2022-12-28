@@ -151,7 +151,8 @@ public:
     ParallaxData GetParallaxData(){return m_parallaxData;}
     void SetCentrifugPitchComp(double compVal);
     void SetCentrifugRollComp(double compVal);
-	void Dump(ofstream& dump);
+	  void Dump(ofstream& dump);
+    bool HasValidCalibration();
 
     SensorTemperatureCalibrationData m_rollOffsetTemperatureCalibration ;
     SensorTemperatureCalibrationData m_rollGainTemperatureCalibration ;

@@ -66,7 +66,9 @@ LRESULT TheoAdapterCalibrationPage1::OnWizardNext( void )
 	//pSheet -> m_sensorData.push_back( CalibrationData( static_cast<Sensor *>(m_sensorAdapterControl.GetItemDataPtr( index )) ) ) ;
 	//reset the AdapterCalibrationData for the selected gun adapter
 	CalibrationData currCalibrationData( pSensor, sensorIndex );
-	currCalibrationData.m_pSource->SetAdapterCalibrationData( AdapterCalibrationData( 0, 0 ) );
+	DBTIMESTAMP now;
+	COleDateTime::GetCurrentTime().GetAsDBTIMESTAMP(now);
+	currCalibrationData.m_pSource->SetAdapterCalibrationData( AdapterCalibrationData( 0, 0, now) );
 	pSheet->m_sensorData.push_back( currCalibrationData ) ;
    
 	  return __super::OnWizardNext() ;

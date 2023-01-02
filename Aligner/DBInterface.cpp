@@ -470,28 +470,32 @@ BOOL DBInterface::GetSensors(vector<Sensor*>& sensors, int id)
      {
          while(!rs.IsEOF())
          {
-			 CDBVariant val;
-             rs.GetFieldValue("name", name);                    
-             rs.GetFieldValue("type", val); 
-			 type = val.m_iVal;
-             rs.GetFieldValue("offset", val);
-			 offset = val.m_iVal;
-             rs.GetFieldValue("pitchOffset", val);
-			 pitchOffset = val.m_iVal;
-             rs.GetFieldValue("rollOffset", val);
-			 rollOffset = val.m_iVal;
-             rs.GetFieldValue("pitchGain", val);
-			 pitchGain = val.m_dblVal;
-             rs.GetFieldValue("rollGain", val);
-			 rollGain = val.m_dblVal;
+            CDBVariant val;
+            rs.GetFieldValue("name", name);                    
+            rs.GetFieldValue("type", val); 
+            type = val.m_iVal;
+            rs.GetFieldValue("offset", val);
+            offset = val.m_iVal;
+            rs.GetFieldValue("pitchOffset", val);
+            pitchOffset = val.m_iVal;
+            rs.GetFieldValue("rollOffset", val);
+            rollOffset = val.m_iVal;
+            rs.GetFieldValue("pitchGain", val);
+            pitchGain = val.m_dblVal;
+            rs.GetFieldValue("rollGain", val);
+            rollGain = val.m_dblVal;
  
-             TRACE("Name:%s",name);
+            CDBVariant t;
+            rs.GetFieldValue("calibTime", t);
+            DBTIMESTAMP time = ToDBTimestamp(t.m_pdate);
+
+            TRACE("Name:%s",name);
              
              Sensor *pSensor = new Sensor( name, type ) ;
              sensors.push_back( pSensor ) ;
              pSensor->SetOffset( offset ) ;
-             ChannelCalibrationData roll(rollOffset, rollGain) ;
-             ChannelCalibrationData pitch(pitchOffset, pitchGain) ;
+             ChannelCalibrationData roll(rollOffset, rollGain, time) ;
+             ChannelCalibrationData pitch(pitchOffset, pitchGain, time) ;
              pSensor->SetChannelCalibrationData( roll, pitch ) ;
          
              rs.MoveNext();
@@ -764,14 +768,14 @@ BOOL DBInterface::GetAdapterCalibration(CString adaperSN, AdapterCalibrationData
 	 {
          if(!rs.IsEOF())
          {
-			 CDBVariant val;
-			 rs.GetFieldValue("serialNumber", serial); 
-			 rs.GetFieldValue("elevation", val);
-			 data.m_elevation = val.m_dblVal;
-             rs.GetFieldValue("azimuth", val);
-			 data.m_azimuth = val.m_dblVal;
-			 rs.GetFieldValue("time", val);
-			 DBTIMESTAMP time = ToDBTimestamp(val.m_pdate);
+            CDBVariant val;
+            rs.GetFieldValue("serialNumber", serial); 
+            rs.GetFieldValue("elevation", val);
+            data.m_elevation = val.m_dblVal;
+            rs.GetFieldValue("azimuth", val);
+            data.m_azimuth = val.m_dblVal;
+            rs.GetFieldValue("time", val);
+            data.m_time = ToDBTimestamp(val.m_pdate);
 
          }
      }
@@ -796,17 +800,17 @@ BOOL DBInterface::GetSensorCalibrationData(CString calibName, CString SN, Sensor
      {
          if(!rs.IsEOF())
          {
-			 CDBVariant val;
-             rs.GetFieldValue("a_0", val);
-			 data.m_offset = val.m_dblVal;
-             rs.GetFieldValue("a_1", val);
-			 data.m_linear = val.m_dblVal;
-             rs.GetFieldValue("a_2", val);
-			 data.m_quadratic = val.m_dblVal;
-             rs.GetFieldValue("a_3", val);
-			 data.m_cubic = val.m_dblVal;
-			 rs.GetFieldValue("time", val);
-			 data.time = ToDBTimestamp(val.m_pdate);
+            CDBVariant val;
+            rs.GetFieldValue("a_0", val);
+            data.m_offset = val.m_dblVal;
+            rs.GetFieldValue("a_1", val);
+            data.m_linear = val.m_dblVal;
+            rs.GetFieldValue("a_2", val);
+            data.m_quadratic = val.m_dblVal;
+            rs.GetFieldValue("a_3", val);
+            data.m_cubic = val.m_dblVal;
+            rs.GetFieldValue("time", val);
+            data.m_time = ToDBTimestamp(val.m_pdate);
          }
      }
     return TRUE;

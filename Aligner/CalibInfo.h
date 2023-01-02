@@ -4,7 +4,7 @@
 
 #pragma once
 
-
+#define CAL_TIME_LIMIT 365
 
 class CalibrationInfo
 {
@@ -16,6 +16,7 @@ public:
     void AddAdapter(CString ad);
 
     CString GetInfo();
+    
 
 protected:
     
@@ -24,8 +25,7 @@ protected:
     vector<CString> m_sensors;
     vector<CString> m_adapters;
 
-    int m_timeLimitDays;
-
+    
     BOOL CalibrationTimeValid(DBTIMESTAMP time);
 
 };

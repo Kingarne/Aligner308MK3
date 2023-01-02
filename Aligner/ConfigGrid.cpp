@@ -40,7 +40,7 @@ void SensorGrid::Init()
   columns.push_back(Column("dX",45));
   columns.push_back(Column("dY",45));
   columns.push_back(Column("dZ",45));
-  columns.push_back(Column("Calibrated", 60));
+  columns.push_back(Column("Calibration", 60));
 
 	m_cols = columns.size();
 
@@ -158,44 +158,47 @@ void SensorGrid::UpdateGrid()
 
     for( int i = 0; i < min( 7, DAU::GetDAU().GetSensorCount() ); i++ )
     {
-        int pos;
-        CString name;
-        Sensor *pSensor = DAU::GetDAU().GetSensor( i );
-        name = pSensor->GetName();
-        pos = chIndexMap[name];
-        int row = i+1;
+      int pos;
+      CString name;
+      Sensor *pSensor = DAU::GetDAU().GetSensor( i );
+      name = pSensor->GetName();
+      pos = chIndexMap[name];
+      int row = i+1;
 
-        SetRowBGColor(row, (pSensor->GetType() != UnitType::Unused) ? USED_COLOR : UNUSED_COLOR);
-        
-        SetItemText(row, SColCh, name);
-        CString text;
+      SetRowBGColor(row, (pSensor->GetType() != UnitType::Unused) ? USED_COLOR : UNUSED_COLOR);
 
-        if( UnitType::Unused != pSensor->GetType() )
-        {
-            SetItemText(row, SColSensor, pSensor->GetSerialNumber());             
-            SetItemText(row, SColStation, pSensor->m_description );             
-            SetItemText(row, SColType, UnitType::GetUnitText(pSensor->GetType()) );             
+      SetItemText(row, SColCh, name);
+      CString text;
+
+      if( UnitType::Unused != pSensor->GetType() )
+      {
+        SetItemText(row, SColSensor, pSensor->GetSerialNumber());             
+        SetItemText(row, SColStation, pSensor->m_description );             
+        SetItemText(row, SColType, UnitType::GetUnitText(pSensor->GetType()) );             
            
-			double roll = -SysSetup->GetSignDef() * pSensor->GetRoll() * 1000.0f;
-			text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? roll : MRADIANS_TO_ARCMIN(roll));
-			SetItemText(row, SColRoll, text);
+			  double roll = -SysSetup->GetSignDef() * pSensor->GetRoll() * 1000.0f;
+			  text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? roll : MRADIANS_TO_ARCMIN(roll));
+			  SetItemText(row, SColRoll, text);
 			
-			double pitch = -SysSetup->GetSignDef() * pSensor->GetPitch() * 1000.0f;
-			text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? roll : MRADIANS_TO_ARCMIN(roll));
-			SetItemText(row, SColPitch, text);
+			  double pitch = -SysSetup->GetSignDef() * pSensor->GetPitch() * 1000.0f;
+			  text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? roll : MRADIANS_TO_ARCMIN(roll));
+			  SetItemText(row, SColPitch, text);
 						
-			
+        int daysLeft = pSensor->DaysToCalibrationExp();
+
 			if (pSensor->GetTemperature() < 68.4f)
 			{
-
-				text.Format(_T("%.1f°"), pSensor->GetTemperature());
+        if(daysLeft < 0)
+          SetRowBGColor(row, UNCALIBRATED_COLOR);
+        
+        text.Format(_T("%.1f°"), pSensor->GetTemperature());
 				SetItemText(row, SColTmpr, text);
 			}
 			else
 			{
 				SetRowBGColor(row, UNCONNECTED_COLOR);
-				SetItemText(row, SColTmpr, "-");
-			}
+				SetItemText(row, SColTmpr, "-");			      
+      }
 
 
 			text.Format( _T("%+6.1f°"), pSensor->GetNominalAzimuth() );
@@ -236,7 +239,14 @@ void SensorGrid::UpdateGrid()
         SetItemText(row, SColPlxdY, text );             
         text.Format("%+.1f",parallaxdata.dz);
         SetItemText(row, SColPlxdZ, text );  
-        text.Format("%s", pSensor->HasValidCalibration()?"Exp. 23d":"No");
+       
+        if (daysLeft > 30)
+          text = "OK";
+        else if (daysLeft < 0)
+          text = "Expired!";
+        else
+          text.Format("Exp. %dd", daysLeft);
+        
         SetItemText(row, SCCalib, text);
         }
 
@@ -1168,32 +1178,32 @@ CString SensorGrid::GetCalibrationInfo(Sensor& sensor)
 
 	SensorTemperatureCalibrationData cal = sensor.m_rollOffsetTemperatureCalibration;
 	str.Format(" Roll Offset: %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
-		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 	cal = sensor.m_rollGainTemperatureCalibration;
 	str.Format(" Roll Scale:   %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
-		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 	cal = sensor.m_rollAzimuthTemperatureCalibration;
 	str.Format(" Roll Azim:    %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
-		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str + "\n";
 
 	cal = sensor.m_pitchOffsetTemperatureCalibration;
 	str.Format(" Pitch Offset:  %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
-		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 	cal = sensor.m_pitchGainTemperatureCalibration;
 	str.Format(" Pitch Scale:    %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
-		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 	cal = sensor.m_pitchAzimuthTemperatureCalibration;
 	str.Format(" Pitch Azim:     %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
-		cal.time.year - 2000, cal.time.month, cal.time.day, cal.time.hour, cal.time.minute, cal.time.second);
+		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 

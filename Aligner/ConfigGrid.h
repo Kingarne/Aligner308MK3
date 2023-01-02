@@ -1,9 +1,10 @@
 #pragma once
 #include ".\gridctrl\gridctrl.h"
 
-#define USED_COLOR			RGB(200,255,200)
-#define UNUSED_COLOR		::GetSysColor(COLOR_BTNFACE)
-#define UNCONNECTED_COLOR	RGB(255,255,200)
+#define USED_COLOR			    RGB(200,240,200)
+#define UNUSED_COLOR		    ::GetSysColor(COLOR_BTNFACE)
+#define UNCONNECTED_COLOR	  RGB(240,240,80)
+#define UNCALIBRATED_COLOR	RGB(240,180,80)
 
 struct Column{
 	Column(CString head, int w):header(head),width(w){}

@@ -200,10 +200,12 @@ BOOL TheoAdapterCalibrationPageFinish::OnWizardFinish( void )
 {
     CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent()) ;
     ASSERT(pSheet -> IsKindOf( RUNTIME_CLASS(CalibrationSheet) )) ;
+    DBTIMESTAMP now;
+    COleDateTime::GetCurrentTime().GetAsDBTIMESTAMP(now);
 
     for (int i = 0 ; i < (int)(m_adapter.size()) ; i++)
     {
-		pSheet->m_sensorData[i].m_pSource->SetAdapterCalibrationData(AdapterCalibrationData(m_adapter[i].m_elevation, m_adapter[i].m_azimuth));
+		pSheet->m_sensorData[i].m_pSource->SetAdapterCalibrationData(AdapterCalibrationData(m_adapter[i].m_elevation, m_adapter[i].m_azimuth, now));
 		DBInterface::Instance()->UpdateAdapterCalibration(pSheet->m_sensorData[i].m_pSource->GetAdapterSerialNumber(), m_adapter[i].m_elevation, m_adapter[i].m_azimuth);      
 
 	}

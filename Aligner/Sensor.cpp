@@ -7,6 +7,8 @@
 #include "SerialNumber.h"
 #include "Type.h"
 #include "Sensor.h"
+#include "CalibInfo.h"
+#include <algorithm>
 
 double Sensor::sm_latitudeCompensation = 1.0 ;
 
@@ -153,12 +155,41 @@ BOOL Sensor::SetData( const SensorData &data )
     return !(ShallDoOverrangeDetection() && ((abs(data.m_pitch) > OVERRANGE_LEVEL) || (abs(data.m_roll) > OVERRANGE_LEVEL))) ; // TODO: Add overrange constant.
 }
 
-bool Sensor::HasValidCalibration()
+COleDateTime Sensor::GetTempCalTime()
+{
+  vector<DATE> vec;
+
+  //Temperature calibration time.
+  vec.push_back(COleDateTime(m_rollOffsetTemperatureCalibration.m_time).m_dt);
+  vec.push_back(COleDateTime(m_rollGainTemperatureCalibration.m_time).m_dt);
+  vec.push_back(COleDateTime(m_rollAzimuthTemperatureCalibration.m_time).m_dt);
+  vec.push_back(COleDateTime(m_pitchOffsetTemperatureCalibration.m_time).m_dt);
+  vec.push_back(COleDateTime(m_pitchGainTemperatureCalibration.m_time).m_dt);
+  vec.push_back(COleDateTime(m_pitchAzimuthTemperatureCalibration.m_time).m_dt);
+  
+  //Sensor calibration time
+  vec.push_back(COleDateTime(m_rollChannelCalibration.m_time).m_dt);
+
+  if (UnitType::TypeHasAdapter(m_type))
+  {
+    vec.push_back(COleDateTime(m_adapterCalibration.m_time).m_dt);    
+  }
+
+  COleDateTime ts(*std::min_element(vec.begin(), vec.end()));
+ 
+  return ts;
+}
+
+
+int Sensor::DaysToCalibrationExp()
 {
   bool valid = true;
   TRACE("HasValidCalibration %s\n", GetSerialNumber());
+  COleDateTime calTime = GetTempCalTime();
+  COleDateTime now = COleDateTime::GetCurrentTime();
 
-  return valid;
+  COleDateTimeSpan ts = now - calTime;
+  return CAL_TIME_LIMIT - ts.GetDays();
 }
 
 void Sensor::SetCentrifugPitchComp(double compVal)
@@ -222,15 +253,15 @@ BOOL Sensor::LoadCalibration( void )
     DBInterface::Instance()->GetSensorCalibrationData("SensorPitchOffsetCalibration", GetSerialNumber(), m_pitchOffsetTemperatureCalibration ) ;
     DBInterface::Instance()->GetSensorCalibrationData("SensorPitchGainCalibration", GetSerialNumber(), m_pitchGainTemperatureCalibration ) ;
     DBInterface::Instance()->GetSensorCalibrationData("SensorPitchAzimuthCalibration", GetSerialNumber(), m_pitchAzimuthTemperatureCalibration ) ;
-
+     
     m_adapterCalibration = AdapterCalibrationData() ;
 
-    if (GetType() == UnitType::Gun || GetType() == UnitType::Theo)
-	{
+    if (UnitType::TypeHasAdapter(m_type))
+	  {
         AdapterCalibrationData data;
         DBInterface::Instance()->GetAdapterCalibration(GetAdapterSerialNumber(), data);        
-        m_adapterCalibration = AdapterCalibrationData( MilliUnitsToUnits( data.m_elevation ), MilliUnitsToUnits( data.m_azimuth ) ) ;
-	}
+        m_adapterCalibration = AdapterCalibrationData( MilliUnitsToUnits( data.m_elevation ), MilliUnitsToUnits( data.m_azimuth ), data.m_time ) ;
+	  }
 	
     ParallaxData defaultParallax = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
     m_parallaxData = defaultParallax;

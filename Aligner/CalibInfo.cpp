@@ -18,7 +18,7 @@ static char THIS_FILE[]=__FILE__;
 
 CalibrationInfo::CalibrationInfo()
 {
-    m_timeLimitDays = 365;
+    
 }
 
 
@@ -49,7 +49,7 @@ BOOL CalibrationInfo::CalibrationTimeValid(DBTIMESTAMP time)
     COleDateTimeSpan ts = calibTime-t; 
 
     TRACE("time:%d\n",ts.GetDays());   
-    if(ts.GetDays() > m_timeLimitDays)
+    if(ts.GetDays() > CAL_TIME_LIMIT)
         return FALSE;
 
    

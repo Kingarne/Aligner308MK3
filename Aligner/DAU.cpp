@@ -1117,9 +1117,8 @@ BOOL DAU::ConfigSensors( BOOL sensorsOnly )
         pProperties->GetPSP().dwFlags |= PSP_USETITLE ;
         CString serialNumber = m_sensorPointers [i]->GetSerialNumber() ;
         pProperties->m_serialNumber = 0 == m_sensorPointers [i]->GetType() ? CString(_T("")) : serialNumber ; //Allow serialnumber 000, R2 050413
-        //pProperties->m_serialNumber = "000" == serialNumber ? CString(_T("")) : serialNumber ;
-        serialNumber = m_sensorPointers [i]->GetAdapterSerialNumber() ;
-        pProperties->m_adapterNumberString = "000" == serialNumber ? CString(_T("")) : serialNumber ;
+        //pProperties->m_serialNumber = "000" == serialNumber ? CString(_T("")) : serialNumber ;        
+        pProperties->m_adapterNumberString = m_sensorPointers[i]->GetAdapterSerialNumber();
         pProperties->m_description = m_sensorPointers [i]->m_description ;
         pProperties->m_overrangeDetection = m_sensorPointers [i]->GetOverrangeDetection() ;
         pProperties->m_type = m_sensorPointers [i]->GetType() ;

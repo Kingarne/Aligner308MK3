@@ -37,7 +37,7 @@ public:
   void SetIsSelected( BOOL selectionStatus = TRUE ) ;
   BOOL IsSelected( void ) const ;
   BOOL ShallDoOverrangeDetection();
-private:
+protected:
   Types m_type ;
   BOOL m_overrangeDetection ;
   BOOL m_activeOverrangeDetection ;

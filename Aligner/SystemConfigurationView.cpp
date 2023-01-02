@@ -109,6 +109,7 @@ void SystemConfigurationView::ShowGeneralConfiguration( int nCmdShow )
     	
 	ShowSensorConfiguration( SW_HIDE );
 	ShowSyncroConfiguration( SW_HIDE );
+ // GetDlgItem(IDC_SYSTEM_CONFIG_INFO_BOUNDARY)->ShowWindow(nCmdShow);
 }
 
 void SystemConfigurationView::ShowSensorConfiguration( int nCmdShow )

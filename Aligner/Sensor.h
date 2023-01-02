@@ -20,6 +20,7 @@
 
 struct ChannelCalibrationData
 {
+  DBTIMESTAMP m_time;
   int m_offset ;
   double m_scale ;
 public:
@@ -27,9 +28,10 @@ public:
     m_offset = DEFAULT_CHANNEL_OFFSET ;
     m_scale = DEFAULT_CHANNEL_SCALE ;
   }
-  ChannelCalibrationData( int offset, double scale ) {
+  ChannelCalibrationData( int offset, double scale, DBTIMESTAMP ts) {
     m_offset = offset ;
     m_scale = scale ;
+    m_time = ts;
   }
 } ;
 
@@ -58,7 +60,7 @@ public:
 
 struct SensorTemperatureCalibrationData
 {
-	DBTIMESTAMP time;
+	DBTIMESTAMP m_time;
 	double m_offset ;
 	double m_linear ;
 	double m_quadratic ;
@@ -79,6 +81,7 @@ public:
 
 struct AdapterCalibrationData
 {
+  DBTIMESTAMP m_time;
   double m_elevation ;
   double m_azimuth ;
 public:
@@ -86,9 +89,10 @@ public:
     m_elevation = 0.0 ;
     m_azimuth = 0.0 ;
   }
-  AdapterCalibrationData( double elevation, double azimuth ) {
+  AdapterCalibrationData( double elevation, double azimuth, DBTIMESTAMP ts) {
     m_elevation = elevation ;
     m_azimuth = azimuth ;
+    m_time = ts;
   }
 } ;
 
@@ -152,7 +156,7 @@ public:
     void SetCentrifugPitchComp(double compVal);
     void SetCentrifugRollComp(double compVal);
 	  void Dump(ofstream& dump);
-    bool HasValidCalibration();
+    int DaysToCalibrationExp();    
 
     SensorTemperatureCalibrationData m_rollOffsetTemperatureCalibration ;
     SensorTemperatureCalibrationData m_rollGainTemperatureCalibration ;
@@ -162,7 +166,7 @@ public:
     SensorTemperatureCalibrationData m_pitchAzimuthTemperatureCalibration ;
 private:
 
-	ChannelCalibrationData m_rollChannelCalibration ;
+	  ChannelCalibrationData m_rollChannelCalibration ;
     ChannelCalibrationData m_pitchChannelCalibration ;
     SensorCalibrationData m_rollCalibration ;
     SensorCalibrationData m_pitchCalibration ;
@@ -195,7 +199,8 @@ public:
 private:
 	static double GetLatitudeCompensation( void ) ;
     void ElevCompensate(double& roll, double& pitch);
-	static double sm_latitudeCompensation ;
+    COleDateTime GetTempCalTime();
+    static double sm_latitudeCompensation ;
 } ;
 
 /**

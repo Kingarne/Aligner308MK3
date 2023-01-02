@@ -72,7 +72,7 @@ void SensorAlignmentPage::DoDataExchange( CDataExchange *pDX )
         AfxMessageBox( IDS_MUSTSETSTATION ) ;
         pDX -> Fail() ;
     }
-	if (pDX->m_bSaveAndValidate && (m_type == UnitType::Gun || m_type == UnitType::Theo) && m_adapterNumberString.GetLength() == 0)
+	if (pDX->m_bSaveAndValidate && UnitType::TypeHasAdapter(m_type) && m_adapterNumberString.GetLength() == 0)
 	{
 		AfxMessageBox( IDS_MUSTSETADAPTER ) ;
 		pDX->Fail() ;

@@ -1218,4 +1218,13 @@
       <Filter>HTML Help Files</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\rarne\Downloads\Schill.png" />
+    <Image Include="C:\Users\rarne\Downloads\Schill.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\qr.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

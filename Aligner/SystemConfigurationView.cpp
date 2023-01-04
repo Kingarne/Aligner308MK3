@@ -126,8 +126,8 @@ void SystemConfigurationView::ShowInfo(int show)
   m_desc2.ShowWindow(show);
   m_descBox3.ShowWindow(show);
   m_desc3.ShowWindow(show);
-  
-
+  m_link.ShowWindow(show);
+  m_img.ShowWindow(show);
 }
 
 void SystemConfigurationView::ShowSensorConfiguration( int nCmdShow )
@@ -313,6 +313,15 @@ void SystemConfigurationView::OnInitialUpdate()
         m_desc3.Create("Calibration Exired", WS_CHILD, r3, this);
         m_desc3.SetFont(&m_font);
 
+        CRect r4(CPoint(rect.right - 90, rect.bottom - 110), CSize(80, 50));
+        m_link.Create("Contact:\r\https:\\\\schill.se", WS_CHILD, r4, this, 1000);
+        m_link.SetFont(&m_font);
+
+        CRect r5(CPoint(rect.right - 90, rect.bottom - 80), CSize(60, 60));
+        m_img.Create("", WS_CHILD, r5, this, 1000);
+        m_img.ModifyStyle(0, SS_BITMAP| SS_REALSIZECONTROL);
+        m_bm.LoadBitmap(IDB_QR);
+        m_img.SetBitmap(m_bm);
     }
 
 }

@@ -1081,6 +1081,11 @@ echo.
   <ItemGroup>
     <ResourceCompile Include="Aligner.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\rarne\Downloads\Schill.bmp" />
+    <Image Include="C:\Users\rarne\Downloads\Schill.png" />
+    <Image Include="res\qr.bmp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

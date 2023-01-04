@@ -14666,6 +14666,8 @@ IDB_202_SPLASH          BITMAP                  "res\\A202Splash.bmp"
 
 IDB_SPLASH_MK3          BITMAP                  "res\\splash.bmp"
 
+IDB_QR                  BITMAP                  "res\\qr.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

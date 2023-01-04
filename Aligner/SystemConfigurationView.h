@@ -66,6 +66,12 @@ private:
 		CStatic m_desc2;
 		WhiteBackgroundEdit m_descBox3;
 		CStatic m_desc3;
+
+		CStatic m_link;
+		CStatic m_img; 
+		CBitmap m_bm;
+
+
 		
 
 public:

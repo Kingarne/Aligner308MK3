@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(SystemSetupDialog, CDialog)
 	ON_EN_CHANGE(IDC_SYSTEM_SETUP_PLACE, OnTextChanged)
 	ON_EN_CHANGE(IDC_SYSTEM_SETUP_SHIP, OnTextChanged)
 	ON_EN_CHANGE(IDC_SYSTEM_SETUP_PROJECT, OnTextChanged)
+	ON_EN_CHANGE(IDC_EDIT_LATITUDE, OnTextChanged)
 	ON_BN_CLICKED(IDC_SYSTEM_SETUP_BROWSE, OnBnClickedBrowseButton)
 	ON_CBN_SELCHANGE(IDC_SHIP_COMBO, OnCbnSelchangeShipName)
 	ON_BN_CLICKED(IDOK, &SystemSetupDialog::OnBnClickedOk)
@@ -86,24 +87,45 @@ void SystemSetupDialog::HandleTextChanged(void)
 	CEdit *pProject = static_cast<CEdit *>(GetDlgItem(IDC_SYSTEM_SETUP_PROJECT));
 	CEdit *pName = static_cast<CEdit *>(GetDlgItem(IDC_SYSTEM_SETUP_NAME));
 	CEdit *pPlace = static_cast<CEdit *>(GetDlgItem(IDC_SYSTEM_SETUP_PLACE));
+	CEdit* pLat = static_cast<CEdit*>(GetDlgItem(IDC_EDIT_LATITUDE));
 	CButton *pOK = static_cast<CButton *>(GetDlgItem(IDOK));
 	CString text;
 	
-	bool enable = true;
+	pOK->EnableWindow(false);
+
 	pProject->GetWindowText(text);
 	if (0 == text.GetLength())
 	{
-		enable = false;		
+		return;
+	}
+
+	pName->GetWindowText(text);
+	if (0 == text.GetLength())
+	{
+		return;
+	}
+	
+	pPlace->GetWindowText(text);
+	if (0 == text.GetLength())
+	{
+		return;
+	}
+
+	pLat->GetWindowText(text);
+	if (0 == text.GetLength())
+	{
+		return;
 	}
 
 	if (theApp.IsAligner308Enabled())
 	{
 		if (m_shipCombo.GetCurSel() == CB_ERR)
 		{
-			enable = false;				
+			return;
 		}
 	}
-	pOK->EnableWindow(enable);
+
+	pOK->EnableWindow(true);
 }
 
 void SystemSetupDialog::HandleNewMode(void)
@@ -139,7 +161,7 @@ void SystemSetupDialog::OnCbnSelchangeShipName(void)
 	m_proj.m_shipID = LOWORD(data);
 	m_proj.m_shipClass = HIWORD(data);
 
-	//HandleTextChanged();
+	HandleTextChanged();
 }
 
 void SystemSetupDialog::OnCbnSelchangeSystemSetupDialogMode(void)

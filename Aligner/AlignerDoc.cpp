@@ -676,6 +676,7 @@ void CAlignerDoc::OnAlignmentSetup( void )
 	static_cast<CLiveDataView *>(theApp.m_pLiveDataView) -> SetShowOnlySelected( FALSE ) ;
 	static_cast<SystemConfigurationView *>( theApp.m_pSystemConfigurationView )->ShowSensorConfiguration( SW_SHOW );
 	static_cast<SystemConfigurationView *>( theApp.m_pSystemConfigurationView )->ShowSyncroConfiguration( SW_SHOW );
+  static_cast<SystemConfigurationView*>(theApp.m_pSystemConfigurationView)->ShowInfo(SW_SHOW);
     UpdateAllViews( NULL ) ;
 }
 

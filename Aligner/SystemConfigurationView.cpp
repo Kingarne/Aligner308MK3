@@ -266,12 +266,15 @@ void SystemConfigurationView::OnInitialUpdate()
         m_sensorGrid.Init();    
         m_gyroGrid.Init();
 
+
         CRect ref1Rect, ref2Rect, rect;
         GetDlgItem(IDC_SYSTEM_CONFIG_SENSOR_BOUNDARY)->GetWindowRect(&ref1Rect);
         GetDlgItem(IDC_SYSTEM_CONFIG_SYNCRO_BOUNDARY)->GetWindowRect(&ref2Rect);
         ScreenToClient(ref1Rect);
         ScreenToClient(ref2Rect);
 
+        if (m_descBox1.m_hWnd)
+          return;
 
         CWnd* pInfo = GetDlgItem(IDC_SYSTEM_INFO_BOUNDARY);
        // pInfo->ShowWindow(SW_SHOW);
@@ -310,7 +313,7 @@ void SystemConfigurationView::OnInitialUpdate()
         m_descBox3.Create(WS_CHILD | WS_BORDER, r3, this, 1000);
         m_descBox3.SetBkColor(UNCALIBRATED_COLOR);
         r3 = CRect(r3.TopLeft() + CSize(25, 5), CSize(100, 20));
-        m_desc3.Create("Calibration Exired", WS_CHILD, r3, this);
+        m_desc3.Create("Calibration Expired", WS_CHILD, r3, this);
         m_desc3.SetFont(&m_font);
 
         CRect r4(CPoint(rect.right - 90, rect.bottom - 110), CSize(80, 50));

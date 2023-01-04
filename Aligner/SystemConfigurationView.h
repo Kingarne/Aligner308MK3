@@ -7,6 +7,7 @@
 #include "resource.h"
 #include "AlignerControls.h"
 #include "ConfigGrid.h"
+#include "ColorStatic.h"
 // SystemConfigurationView form view
 
 class SystemConfigurationView : public CFormView
@@ -31,6 +32,7 @@ public:
 	void ShowGeneralConfiguration( int nCmdShow );
 	void ShowSensorConfiguration( int nCmdShow );
 	void ShowSyncroConfiguration( int nCmdShow );
+	void ShowInfo(int show);
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -51,11 +53,20 @@ private:
     WhiteBackgroundEdit m_GeneralUnit;
     UINT_PTR m_timerId ;
 
-    WhiteBackgroundEdit m_SyncroNominalAzimuth[4];
+//    WhiteBackgroundEdit m_SyncroNominalAzimuth[4];
 	
     SensorGrid m_sensorGrid;
     GyroGrid m_gyroGrid;
     ChannelGrid m_channelGrid;
+		
+		CFont m_font;
+		WhiteBackgroundEdit m_descBox1;
+		CStatic m_desc1;
+		WhiteBackgroundEdit m_descBox2;
+		CStatic m_desc2;
+		WhiteBackgroundEdit m_descBox3;
+		CStatic m_desc3;
+		
 
 public:
 	virtual void OnInitialUpdate();

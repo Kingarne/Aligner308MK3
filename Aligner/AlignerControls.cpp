@@ -11,7 +11,8 @@ IMPLEMENT_DYNAMIC(WhiteBackgroundEdit, CEdit)
 WhiteBackgroundEdit::WhiteBackgroundEdit( void )
 {
     m_color = RGB(255, 255, 255);
-    m_backgroundBrush.CreateSolidBrush(m_color) ;    
+    m_backgroundBrush.CreateSolidBrush(m_color) ;   
+   
 }
 
 WhiteBackgroundEdit::~WhiteBackgroundEdit( void )
@@ -35,6 +36,7 @@ HBRUSH WhiteBackgroundEdit::CtlColor( CDC *pDC, UINT controlColor )
    pDC->SetDCPenColor( RGB(0,0,0) ) ;
    pDC->SetDCBrushColor( RGB(0,0,0) ) ;
 
+   
   return m_backgroundBrush ;
 }
 

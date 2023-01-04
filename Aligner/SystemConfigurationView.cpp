@@ -44,10 +44,11 @@ void SystemConfigurationView::DoDataExchange(CDataExchange* pDX)
 
     if( theApp.IsAligner202Enabled() == FALSE )
     {
-	    DDX_Control(pDX, IDC_SYSTEM_CONFIG_SYNCRO_NOMINAL_AZIMUTH_1, m_SyncroNominalAzimuth[0]);
+	   /* DDX_Control(pDX, IDC_SYSTEM_CONFIG_SYNCRO_NOMINAL_AZIMUTH_1, m_SyncroNominalAzimuth[0]);
 	    DDX_Control(pDX, IDC_SYSTEM_CONFIG_SYNCRO_NOMINAL_AZIMUTH_2, m_SyncroNominalAzimuth[1]);
 	    DDX_Control(pDX, IDC_SYSTEM_CONFIG_SYNCRO_NOMINAL_AZIMUTH_3, m_SyncroNominalAzimuth[2]);
 	    DDX_Control(pDX, IDC_SYSTEM_CONFIG_SYNCRO_NOMINAL_AZIMUTH_4, m_SyncroNominalAzimuth[3]);
+      */
     }
     else
     {
@@ -66,6 +67,7 @@ void SystemConfigurationView::ShowAll( int nCmdShow )
 	ShowGeneralConfiguration( nCmdShow );
 	ShowSensorConfiguration( nCmdShow );
 	ShowSyncroConfiguration( nCmdShow );
+  ShowInfo(nCmdShow);
 }
 
 void SystemConfigurationView::ShowGeneralConfiguration( int nCmdShow )
@@ -109,7 +111,23 @@ void SystemConfigurationView::ShowGeneralConfiguration( int nCmdShow )
     	
 	ShowSensorConfiguration( SW_HIDE );
 	ShowSyncroConfiguration( SW_HIDE );
+  ShowInfo(SW_HIDE);
  // GetDlgItem(IDC_SYSTEM_CONFIG_INFO_BOUNDARY)->ShowWindow(nCmdShow);
+}
+
+void SystemConfigurationView::ShowInfo(int show)
+{
+ 
+  CWnd* pInfo = GetDlgItem(IDC_SYSTEM_INFO_BOUNDARY);
+  pInfo->ShowWindow(show);
+  m_descBox1.ShowWindow(show);
+  m_desc1.ShowWindow(show);
+  m_descBox2.ShowWindow(show);
+  m_desc2.ShowWindow(show);
+  m_descBox3.ShowWindow(show);
+  m_desc3.ShowWindow(show);
+  
+
 }
 
 void SystemConfigurationView::ShowSensorConfiguration( int nCmdShow )
@@ -150,6 +168,7 @@ void SystemConfigurationView::ShowSyncroConfiguration( int nCmdShow )
         m_gyroGrid.ShowWindow(nCmdShow);
     }
         
+   
     GetDlgItem( IDC_SYSTEM_CONFIG_SYNCRO_BOUNDARY )->ShowWindow( nCmdShow );    
 }
 
@@ -246,6 +265,54 @@ void SystemConfigurationView::OnInitialUpdate()
     {
         m_sensorGrid.Init();    
         m_gyroGrid.Init();
+
+        CRect ref1Rect, ref2Rect, rect;
+        GetDlgItem(IDC_SYSTEM_CONFIG_SENSOR_BOUNDARY)->GetWindowRect(&ref1Rect);
+        GetDlgItem(IDC_SYSTEM_CONFIG_SYNCRO_BOUNDARY)->GetWindowRect(&ref2Rect);
+        ScreenToClient(ref1Rect);
+        ScreenToClient(ref2Rect);
+
+
+        CWnd* pInfo = GetDlgItem(IDC_SYSTEM_INFO_BOUNDARY);
+       // pInfo->ShowWindow(SW_SHOW);
+       // pInfo->GetWindowRect(&rect);
+        rect.top = ref2Rect.top;
+        rect.bottom = ref2Rect.bottom;
+
+        rect.left = ref2Rect.right + 10;
+        rect.right = ref1Rect.right;
+        pInfo->MoveWindow(rect);
+    
+        //CRect r(CPoint(rect.left+20, rect.top+20), CSize(20,20));
+        CRect r1(CPoint(rect.left + 20, rect.top + 30), CSize(20, 20));
+        CRect r2(CPoint(rect.left + 20, rect.top + 60), CSize(20, 20));
+        CRect r3(CPoint(rect.left + 20, rect.top + 90), CSize(20, 20));
+
+        LOGFONT logFont;
+        ZeroMemory(&logFont, sizeof(LOGFONT));
+        logFont.lfHeight = 14;
+        logFont.lfWeight = FW_NORMAL;
+        strcpy(logFont.lfFaceName, "Ariel");
+        m_font.CreateFontIndirect(&logFont);
+
+        m_descBox1.Create(WS_CHILD| WS_BORDER, r1, this, 1000);
+        m_descBox1.SetBkColor(USED_COLOR);
+        r1 = CRect(r1.TopLeft()+CSize(25,5), CSize(100, 20));
+        m_desc1.Create("OK", WS_CHILD, r1, this);
+        m_desc1.SetFont(&m_font);
+
+        m_descBox2.Create(WS_CHILD | WS_BORDER, r2, this, 1000);
+        m_descBox2.SetBkColor(UNCONNECTED_COLOR);
+        r2 = CRect(r2.TopLeft() + CSize(25, 5), CSize(100, 20));
+        m_desc2.Create("Unconnected", WS_CHILD, r2, this);
+        m_desc2.SetFont(&m_font);
+
+        m_descBox3.Create(WS_CHILD | WS_BORDER, r3, this, 1000);
+        m_descBox3.SetBkColor(UNCALIBRATED_COLOR);
+        r3 = CRect(r3.TopLeft() + CSize(25, 5), CSize(100, 20));
+        m_desc3.Create("Calibration Exired", WS_CHILD, r3, this);
+        m_desc3.SetFont(&m_font);
+
     }
 
 }

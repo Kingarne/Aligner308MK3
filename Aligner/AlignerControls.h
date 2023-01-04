@@ -23,6 +23,7 @@ private:
 private:
   CBrush m_backgroundBrush ;
     COLORREF m_color;
+   
 } ;
 
 

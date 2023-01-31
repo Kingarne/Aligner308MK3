@@ -756,7 +756,7 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 			m_LiveGraphChannel[i].m_tilt = g_AlignerData.Kh * g_AlignerData.VecAmp[i];
 			m_LiveGraphChannel[i].m_angle = AdjustDegAngle( g_AlignerData.VecArg[i], pInParam->AngleRange0ToPlusMinus180, 1 );
 
-			m_LiveGraphChannel[i].m_temperature = IsSensor(id) ? pInParam->pTemperature[i] : DB_EMPTY_DOUBLE;
+			m_LiveGraphChannel[i].m_temperature = IsSensor(id) ? pInParam->pTemperature[i] : 0.0f;
         }
 
         //Get calibration status

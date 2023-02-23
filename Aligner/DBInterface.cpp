@@ -361,7 +361,7 @@ BOOL DBInterface::GetDAUData(int DAUSerial, DAUSetupData& dauData)
 			    dauData.serial = val.m_iVal;
 			    dauData.serialStr.Format("%03d", dauData.serial);
           rs.GetFieldValue("meta", val);
-          CString meta = *val.m_pstring;
+          dauData.meta = *val.m_pstring;
 
            /* rs.GetFieldValue("protocolVersion", val);
 			dauData.protocolVersion  = val.m_iVal;

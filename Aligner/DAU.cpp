@@ -754,6 +754,13 @@ void MsgCB(void* pC, char* msg, char* top)
 	pObj->m_mqttMsg = atoi(msg);
 }
 
+BOOL DAU::CheckDAUKey(int DAUSerial, DAUSetupData& dauData)
+{
+
+
+  return TRUE;
+}
+
 BOOL DAU::LoadConfig()
 {
   m_mask = 255 ;
@@ -765,6 +772,9 @@ BOOL DAU::LoadConfig()
   m_serial = m_comThr.m_dauSN ;
   
   DBInterface::Instance()->GetDAUData(m_serial, m_dauDBData);
+  if (!CheckDAUKey(m_serial, m_dauDBData))
+    return FALSE;
+
   SysSetup->SetDAUSerial(m_serial);
   //Check
 
@@ -801,8 +811,8 @@ BOOL DAU::LoadConfig()
   CString str;
   str.Format("%03d",m_serial);
   SetSerialNumber(str) ;
-  m_protocolVersion = m_dauDBData.protocolVersion ;
-  m_sampleAndHold = m_dauDBData.sampleAndHold ;
+  m_protocolVersion = 0;// m_dauDBData.protocolVersion;
+  m_sampleAndHold = 0;// m_dauDBData.sampleAndHold;
  
   SysSetup->ClearUnits() ;
   if (!LoadSyncroConfig(m_dauDBData.DBId))

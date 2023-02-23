@@ -27,8 +27,10 @@ struct DAUSetupData
     int DBId;
     CString serialStr;
     int serial;
-    int protocolVersion;
-    int sampleAndHold;
+    CString meta;
+    
+    //int protocolVersion;
+    //int sampleAndHold;
 };
 
 
@@ -177,7 +179,7 @@ private:
         void SortSensors();
         void Log2File(short val, CString file);
         void AddToReceivedDACVal(short val);
-
+        BOOL CheckDAUKey(int DAUSerial, DAUSetupData& dauData);
     CString m_port ;
     int m_mask ;
     int m_stop ;

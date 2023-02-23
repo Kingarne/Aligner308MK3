@@ -766,7 +766,7 @@ BOOL DAU::LoadConfig()
   
   DBInterface::Instance()->GetDAUData(m_serial, m_dauDBData);
   SysSetup->SetDAUSerial(m_serial);
-
+  //Check
 
   Registry reg;
   m_exportMQTT = (reg.GetIntegerValue("DAU\\MQTTExport", 0) == 1);

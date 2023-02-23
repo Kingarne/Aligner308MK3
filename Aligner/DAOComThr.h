@@ -143,10 +143,11 @@ public:
     void SetDigInterfaceSettings(DigDauChPro interfaceCh, DigChSerialTypePro interfaceType, DigChTypePro type);
     void SetResolutions(int a1, int a2, int b1, int b2);
     void GetResolutions(int& a1, int& a2, int& b1, int& b2);
+    CString GetFTDISerial() { return m_ftdSerial; }
 
     int m_dauSN;    
     map<int, double> m_sampleRateMap;	
-	ErrorHandler m_errorHandler;
+	  ErrorHandler m_errorHandler;
 
 protected:
         
@@ -179,7 +180,7 @@ protected:
     
 
     FTD2Api m_ftd2Api;
-	CString m_ftdSerial;
+	  CString m_ftdSerial;
     int m_status;
     BOOL m_pauseRead;
     CString m_comPort;

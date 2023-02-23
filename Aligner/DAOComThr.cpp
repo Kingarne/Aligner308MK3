@@ -1818,7 +1818,7 @@ int DAOComThread::LoopTest()
     do
     {
         m_ftd2Api.Read(&m_regs[0], 1, &numRead);
-        TRACE("%02x ", m_regs[0]);
+        //TRACE("%02x ", m_regs[0]);
     }while(numRead > 0);    
 
     
@@ -1941,7 +1941,7 @@ int DAOComThread::InitHW()
 
     while(fread(&old, 1, 1, fp) > 0)
     {
-        TRACE("%c\n",old);
+       // TRACE("%c\n",old);
         len++;
     }
     TRACE("%d bytes read\n", len);    

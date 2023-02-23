@@ -1000,7 +1000,7 @@ BOOL DBInterface::UpdateDAUChannelGain(CString serialNumber, CString channel, DA
         return FALSE;
  
      CString sql="";
-     sql.Format("UPDATE DAUSetupSensorChannel, DAUSetup SET rollGain = %f, pitchGain = %f, calibTime = '%s' WHERE [DAUSetup].[id] = foreignId And [DAUSetup].[serialNumber]='%s' And [DAUSetupSensorChannel].[name]='%s'", Chk(result.m_rollGain), Chk(result.m_pitchGain), COleDateTime::GetCurrentTime().Format( _T("%Y-%m-%d %H:%M:%S")), serialNumber, channel);
+     sql.Format("UPDATE DAUSetupSensorChannel, DAUSetup SET rollGain = %f, pitchGain = %f, calibTime = '%s' WHERE [DAUSetup].[id] = foreignId And [DAUSetup].[serialNumber]=%s And [DAUSetupSensorChannel].[name]='%s'", Chk(result.m_rollGain), Chk(result.m_pitchGain), COleDateTime::GetCurrentTime().Format( _T("%Y-%m-%d %H:%M:%S")), serialNumber, channel);
  
 	 ExecuteSQL(sql);
 	 return TRUE;
@@ -1012,7 +1012,7 @@ BOOL DBInterface::UpdateDAUChannelOffset(CString serialNumber, CString channel, 
          return FALSE;
  
      CString sql="";
-     sql.Format("UPDATE DAUSetupSensorChannel, DAUSetup SET rollOffset = %d, pitchOffset = %d WHERE [DAUSetup].[id] = foreignId And [DAUSetup].[serialNumber]='%s' And [DAUSetupSensorChannel].[name]='%s'", Chk(result.m_rollOffset), Chk(result.m_pitchOffset), serialNumber, channel);
+     sql.Format("UPDATE DAUSetupSensorChannel, DAUSetup SET rollOffset = %f, pitchOffset = %f WHERE [DAUSetup].[id] = foreignId And [DAUSetup].[serialNumber]=%s And [DAUSetupSensorChannel].[name]='%s'", Chk(result.m_rollOffset), Chk(result.m_pitchOffset), serialNumber, channel);
      
 	 ExecuteSQL(sql);
 	 return TRUE;

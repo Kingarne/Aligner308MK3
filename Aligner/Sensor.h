@@ -82,16 +82,19 @@ public:
 struct AdapterCalibrationData
 {
   DBTIMESTAMP m_time;
-  double m_elevation ;
-  double m_azimuth ;
+  double m_elevation;
+  double m_azimuth;
+  double m_elevCorrOffset;
 public:
   AdapterCalibrationData( void ) {
     m_elevation = 0.0 ;
     m_azimuth = 0.0 ;
+    m_elevCorrOffset = 0.0;
   }
-  AdapterCalibrationData( double elevation, double azimuth, DBTIMESTAMP ts) {
+  AdapterCalibrationData( double elevation, double azimuth, DBTIMESTAMP ts, double elevCorr=0.0f) {
     m_elevation = elevation ;
     m_azimuth = azimuth ;
+    m_elevCorrOffset = elevCorr;
     m_time = ts;
   }
 } ;

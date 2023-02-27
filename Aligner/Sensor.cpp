@@ -130,7 +130,7 @@ BOOL Sensor::SetData( const SensorData &data )
 	double roll  = asin( GetLatitudeCompensation() * (m_rollCalibration.m_scale * channelRoll - m_rollCalibration.m_azimut * channelPitch + m_rollCalibration.m_offset) ) ;
 	double pitch = asin( GetLatitudeCompensation() * (m_pitchCalibration.m_scale * channelPitch + m_pitchCalibration.m_azimut * channelRoll  + m_pitchCalibration.m_offset) ) ;
     Rotate( roll, pitch, -GetNominalAzimuthRad() , roll, pitch ) ;
-    pitch += (!m_ignoreElevation) ? m_adapterCalibration.m_elevation : 0;
+    pitch += ((!m_ignoreElevation) ? m_adapterCalibration.m_elevation : 0) + m_adapterCalibration.m_elevCorrOffset;
     Rotate( roll, pitch, -m_adapterCalibration.m_azimuth, roll, pitch ) ;
    
     ElevCompensate(roll, pitch);
@@ -260,7 +260,7 @@ BOOL Sensor::LoadCalibration( void )
 	  {
         AdapterCalibrationData data;
         DBInterface::Instance()->GetAdapterCalibration(GetAdapterSerialNumber(), data);        
-        m_adapterCalibration = AdapterCalibrationData( MilliUnitsToUnits( data.m_elevation ), MilliUnitsToUnits( data.m_azimuth ), data.m_time ) ;
+        m_adapterCalibration = AdapterCalibrationData( MilliUnitsToUnits( data.m_elevation ), MilliUnitsToUnits( data.m_azimuth ), data.m_time, data.m_elevCorrOffset ) ;
 	  }
 	
     ParallaxData defaultParallax = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};

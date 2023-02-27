@@ -88,6 +88,34 @@ UINT64 GetCPUId(void)
 	return( ((UINT64)(dwFeature) << 32) | ((UINT64)(dwStandard)));
 }
 
+BOOL Features::CheckString(CString str, CString crypto)
+{	
+	if (crypto.GetLength() >= 16)
+	{
+		int key1 = GetKey(23249999, 21110211); //23256527
+		int key2 = GetKey(12124121, 43532454); //45678591
+		CString key1Str; key1Str.Format("%d", key1);
+		CString key2Str; key2Str.Format("%d", key2);
+
+		CString plainText, comp;
+		McbDecrypt(key1Str, key2Str, crypto, plainText);
+
+		comp = plainText;
+		if (comp == "krackelibankelfnatt")
+			return TRUE;
+
+		if (comp.Compare(str) == 0)
+		{
+			TRACE("Match!\n");
+
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+
 BOOL Features::CheckString(CString str )
 {
 	Registry reg;

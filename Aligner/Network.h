@@ -13,6 +13,7 @@ public:
 	static BOOL CheckNetwork( void ) ;
 	static BOOL CheckCPU( );
 	static BOOL CheckString(CString str );
+	static BOOL CheckString(CString str, CString crypto);
 	static BOOL CheckFeatures() ;
 	static UINT m_featureKey;
 private:

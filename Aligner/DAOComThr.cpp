@@ -1643,11 +1643,11 @@ int DAOComThread::InitUSBHW()
 		delete BufPtrs[d];  
 	}
 
-	if (!Features::CheckString(m_ftdSerial))
+	/*if (!Features::CheckString(m_ftdSerial))
 	{
 		::AfxMessageBox( _T("Invalid application Key!") ) ;
 		return FALSE ;
-	}
+	}*/
 
 
     status = m_ftd2Api.Open((PVOID)devIndex);//load default device 0

@@ -28,7 +28,13 @@ struct DAUSetupData
     CString serialStr;
     int serial;
     CString meta;
-    
+    void Clear()
+    {   
+      DBId=-1;
+      serialStr = "";
+      serial = -1;
+      meta = "";
+    }
     //int protocolVersion;
     //int sampleAndHold;
 };
@@ -149,6 +155,7 @@ public:
     set<CString> m_usedBuddyChannelSet;	    
     Syncro* GetHighSeaCompGyro();
 	Sensor *GetSensorFromSN(const CString &sn);
+  int GetSerial() { return m_serial; }
 
 	int m_timerIntervall;
 	BOOL CheckDataRate(int numframesHandled);
@@ -163,7 +170,7 @@ public:
     unsigned short m_recSetDACVal;    
     BOOL m_logDACData;
 
-    static DAU &DAU::GetDAU( void ) ;
+    static DAU &GetDAU( void ) ;
     int HandleDAUFrames();    
     DAOComThread m_comThr;
     vector<int> m_dauFramesCounter;
@@ -179,7 +186,7 @@ private:
         void SortSensors();
         void Log2File(short val, CString file);
         void AddToReceivedDACVal(short val);
-        BOOL CheckDAUKey(int DAUSerial, DAUSetupData& dauData);
+        BOOL CheckDAUKey(CString DAUSerial, DAUSetupData& dauData);
     CString m_port ;
     int m_mask ;
     int m_stop ;

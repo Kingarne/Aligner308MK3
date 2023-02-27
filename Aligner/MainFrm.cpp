@@ -221,10 +221,10 @@ LRESULT CMainFrame::OnDAUStatus( WPARAM wp, LPARAM lp)
 			}
 		}
 	
-		str.Format("%s Connected",GetDAUName());
+		str.Format("%s %s (sn:%d)",GetDAUName(), openResult ? "Connected" : "Invalid key", DAU::GetDAU().GetSerial());
 		m_wndStatusBar.SetPaneText(I_INDICATOR_DAU_STATUS, str);
 		m_wndStatusBar.SetPaneTextColor(I_INDICATOR_DAU_STATUS, RGB(0,0,0));				
-		m_wndStatusBar.SetPaneBGColor(I_INDICATOR_DAU_STATUS, DAU_PRESENT_COLOR);				
+		m_wndStatusBar.SetPaneBGColor(I_INDICATOR_DAU_STATUS, openResult ? DAU_PRESENT_COLOR: DAU_INVALID_COLOR);
 		
 		CAlignerDoc *pDoc = static_cast<CAlignerDoc *>(static_cast<CFrameWnd *>(theApp.m_pMainWnd)->GetActiveDocument());
 		pDoc->OpenConfig();

@@ -151,9 +151,12 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">true</LinkIncremental>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(IncludePath);.\</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(VC_ADO);$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">$(VC_ADO);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);.\</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Aligner 202 Debug|Win32'">
     <Midl>
@@ -467,6 +470,18 @@
     <ClCompile Include="GridCtrl\InPlaceEdit.cpp" />
     <ClCompile Include="GridCtrl\TitleTip.cpp" />
     <ClCompile Include="InfoDlg.cpp" />
+    <ClCompile Include="json_reader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="json_value.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="json_writer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="MQTT\MQTTLib.cpp" />
     <ClCompile Include="ProjectOpenCalibDlg.cpp" />
     <ClCompile Include="ProjectOpenDlg.cpp" />
@@ -680,6 +695,7 @@
     <ClInclude Include="GridDropTarget.h" />
     <ClInclude Include="InfoDlg.h" />
     <ClInclude Include="InPlaceEdit.h" />
+    <ClInclude Include="json_tool.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MQTT\MQTTLib.h" />
     <ClInclude Include="ProjectOpenDlg.h" />
@@ -940,6 +956,7 @@ makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\ProjectData\Schill\A308\splash.bmp" />
+    <None Include="json_valueiterator.inl" />
     <None Include="resource.hm" />
     <None Include="res\A202Splash.bmp" />
     <None Include="res\adapter_1.bmp" />

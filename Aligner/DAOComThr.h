@@ -145,7 +145,7 @@ public:
     void GetResolutions(int& a1, int& a2, int& b1, int& b2);
     CString GetFTDISerial() { return m_ftdSerial; }
 
-    int m_dauSN;    
+    int m_dauSN;  
     map<int, double> m_sampleRateMap;	
 	  ErrorHandler m_errorHandler;
 

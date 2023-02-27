@@ -75,7 +75,7 @@ struct LiveGraphInfo
 #define DF_DUMP_MINS	0x04
 
 //keep the variable names from the old pascal code
-typedef struct
+typedef struct GLO
 {
     double ACR[SIZE_OF_ARRAYS];
     double ACP[SIZE_OF_ARRAYS];

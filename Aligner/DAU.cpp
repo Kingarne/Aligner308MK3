@@ -23,6 +23,8 @@
 #include "CalibInfo.h"
 #include "Util.h"
 #include "SystemSetup.h"
+#include "Network.h"
+#include "json/json.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -126,11 +128,11 @@ BOOL DAU::Setup()
   Clear() ;
   ClearConfig() ;
 
-  LoadConfig();    
+  int res = LoadConfig();    
   
   m_stop = 0 ;
   
-  return TRUE ;
+  return res ;
 }
 
 void DAU::StatusCallback(WPARAM wp, LPARAM lp)
@@ -754,8 +756,41 @@ void MsgCB(void* pC, char* msg, char* top)
 	pObj->m_mqttMsg = atoi(msg);
 }
 
-BOOL DAU::CheckDAUKey(int DAUSerial, DAUSetupData& dauData)
+BOOL DAU::CheckDAUKey(CString DAUSerial, DAUSetupData& dauData)
 {
+  CString s = dauData.meta;
+  
+  Json::Value root;
+  Json::Reader read;
+  std::string meta(dauData.meta);
+  read.parse(meta, root);
+
+  Json::Value key = root["key"];
+  CString keyStr = "";
+
+  try
+  {
+    keyStr = key.asCString();
+ 
+  }
+  catch (Json::Exception e)
+  {
+    TRACE(e.what());
+    return FALSE;
+  }
+  
+  if (!Features::CheckString(DAUSerial, keyStr))
+  {
+    ::AfxMessageBox(_T("Invalid DAU Key!"));
+    return FALSE;
+  }
+
+  //std::ifstream f("test.json");
+  //json data = json::parse(f);
+  //json data;
+  //json data = json::parse((LPCTSTR)dauData.meta);
+
+  //std::string key = data["key"];
 
 
   return TRUE;
@@ -770,9 +805,10 @@ BOOL DAU::LoadConfig()
 #endif
   
   m_serial = m_comThr.m_dauSN ;
-  
+  m_dauDBData.Clear();
+
   DBInterface::Instance()->GetDAUData(m_serial, m_dauDBData);
-  if (!CheckDAUKey(m_serial, m_dauDBData))
+  if (!CheckDAUKey(m_comThr.GetFTDISerial(), m_dauDBData))
     return FALSE;
 
   SysSetup->SetDAUSerial(m_serial);

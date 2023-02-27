@@ -106,7 +106,7 @@ class SystemSetup
 {
 private:
     SystemSetup( void );
-    SystemSetup::~SystemSetup(void);
+    ~SystemSetup(void);
 public:
 	/**
 	*  @brief Encapsulation of System Setup data.

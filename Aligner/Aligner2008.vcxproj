@@ -151,7 +151,7 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">true</LinkIncremental>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(IncludePath);</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(IncludePath);.\</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(VC_ADO);$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">$(VC_ADO);$(LibraryPath)</LibraryPath>
   </PropertyGroup>

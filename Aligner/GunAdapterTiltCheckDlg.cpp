@@ -24,6 +24,9 @@ CGunAdapterTiltCheckDlg::~CGunAdapterTiltCheckDlg()
 void CGunAdapterTiltCheckDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_AZ_COMBO, m_azCombo);
+  DDX_Text(pDX, IDC_K_EDIT, m_Tao);
+  DDV_MinMaxDouble(pDX, m_Tao, 1.0, 50.0);
 }
 
 void CGunAdapterTiltCheckDlg::ShowSettingsForAxes()
@@ -67,6 +70,8 @@ BEGIN_MESSAGE_MAP(CGunAdapterTiltCheckDlg, CDialog)
   ON_WM_NCLBUTTONDOWN()
   ON_WM_NCRBUTTONDOWN()
   ON_WM_NCHITTEST()
+  ON_CBN_SELCHANGE(IDC_AZ_COMBO, &CGunAdapterTiltCheckDlg::OnCbnSelchangeAzCombo)
+  ON_EN_KILLFOCUS(IDC_K_EDIT, &CGunAdapterTiltCheckDlg::OnEnKillfocusKEdit)
 END_MESSAGE_MAP()
 
 // CGunAdapterTiltCheckDlg message handlers
@@ -125,6 +130,17 @@ BOOL CGunAdapterTiltCheckDlg::OnInitDialog()
 
 	ShowSetup();
 	ShowSettingsForAxes();
+
+  m_azCombo.AddString("0°");
+  m_azCombo.SetItemData(0, 0);
+  m_azCombo.AddString("90°");
+  m_azCombo.SetItemData(1, 90);
+  m_azCombo.AddString("-90°");
+  m_azCombo.SetItemData(2, 270);
+  m_azCombo.AddString("180°");
+  m_azCombo.SetItemData(3, 180);
+  m_azCombo.SelectString(0, "0°");
+
   UpdateData( FALSE );
 
   return TRUE;  // return TRUE  unless you set the focus to a control
@@ -171,6 +187,7 @@ void CGunAdapterTiltCheckDlg::OnBnClickedShowGraph()
   m_pGraph->ShowBarGraphWithText( &m_BarGraphParam );
 
   //Show live data
+  m_azCombo.EnableWindow(FALSE);
   GetDlgItem( IDC_SHOW_GRAPH )->EnableWindow( FALSE );
   GetDlgItem( IDOK )->EnableWindow( TRUE );
 }
@@ -302,4 +319,49 @@ void CGunAdapterTiltCheckDlg::OnNcRButtonDown(UINT nHitTest, CPoint point)
   {
     CDialog::OnNcRButtonDown(nHitTest, point);
   }
+}
+
+
+void CGunAdapterTiltCheckDlg::OnCbnSelchangeAzCombo()
+{
+  int index;
+  if ((index = m_azCombo.GetCurSel()) == CB_ERR)
+    return;
+
+  double azim = m_azCombo.GetItemData(index);
+  if (index >= 1 && index <= 2)
+     m_pGraph->m_barGraphUseRoll = false;
+  else
+     m_pGraph->m_barGraphUseRoll = true;
+
+  double az = azim * _PI / 180.0f;
+  SetAz(az);
+  
+}
+
+void CGunAdapterTiltCheckDlg::SetAz(double az)
+{
+  DAU* pDau = &(DAU::GetDAU());
+
+  int sI;
+  g_AlignerData.liveGraphMap.clear();
+  for (int i = 1; i <= g_AlignerData.NoOfCorr; i++)
+  {
+    CString chName = GetChannelName(g_AlignerData.ObjNo[i]);;
+    g_AlignerData.liveGraphMap[g_AlignerData.ObjNo[i]] = LiveGraphInfo(chName, g_AlignerData.ObjNo[i]);
+
+    if (IsSensor(g_AlignerData.ObjNo[i]) == TRUE)
+    {
+      sI = CONVERT_ARRAY_INDEX_TO_SENSOR_CHANNEL(g_AlignerData.ObjNo[i]);
+      pDau->GetSensor(sI)->SetCurrentAz(az);     
+    }
+  }
+}
+
+
+
+void CGunAdapterTiltCheckDlg::OnEnKillfocusKEdit()
+{
+  UpdateData(TRUE);
+  ResetAllFilters(m_pGraph->GetSource(), DAU::GetDAU().GetPeriod(), TETA, m_Tao);
 }

@@ -21,6 +21,7 @@ private:
   BarGraphInParam m_BarGraphParam;
 	double m_Tao;
 	unsigned int m_freqMode;
+  CComboBox m_azCombo;
 
 public:
 	CGunAdapterTiltCheckDlg(CWnd* pParent = NULL);   // standard constructor
@@ -37,6 +38,7 @@ protected:
   BOOL InitGraph();
 	void ShowSettingsForAxes();
 	void ShowSetup();
+  void SetAz(double az);
 
 	DECLARE_MESSAGE_MAP()
 private:
@@ -48,4 +50,8 @@ private:
 protected:
   virtual void OnOK();
   virtual void OnCancel();
+public:
+	
+  afx_msg void OnCbnSelchangeAzCombo();
+  afx_msg void OnEnKillfocusKEdit();
 };

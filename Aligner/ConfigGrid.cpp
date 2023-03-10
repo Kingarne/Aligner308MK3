@@ -25,13 +25,13 @@ void SensorGrid::Init()
     vector<Column> columns;
 	columns.push_back(Column("Channel",60));
 	columns.push_back(Column("Sensor",60));
-	columns.push_back(Column("Station",130));
+	columns.push_back(Column("Station",110));
 	columns.push_back(Column("Type",60));
 	columns.push_back(Column("Roll", 50));
 	columns.push_back(Column("Pitch", 50));
 	columns.push_back(Column("Tempr.", 50));
 	columns.push_back(Column("Nominal\nAzimuth",60));
-	columns.push_back(Column("Adapter",60));
+	columns.push_back(Column("Adapter",80));
 	columns.push_back(Column("Elev. Error\n[mrad]",60));
 	columns.push_back(Column("Azim. Error\n[mrad]",60));
   columns.push_back(Column("X",45));
@@ -181,7 +181,7 @@ void SensorGrid::UpdateGrid()
 			  SetItemText(row, SColRoll, text);
 			
 			  double pitch = -SysSetup->GetSignDef() * pSensor->GetPitch() * 1000.0f;
-			  text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? roll : MRADIANS_TO_ARCMIN(roll));
+			  text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? pitch : MRADIANS_TO_ARCMIN(roll));
 			  SetItemText(row, SColPitch, text);
 						
         int daysLeft = pSensor->DaysToCalibrationExp();
@@ -209,7 +209,7 @@ void SensorGrid::UpdateGrid()
 
         if( UnitType::TypeHasAdapter(pSensor->GetType()))
         {
-            SetItemText(row, SColAdapter, pSensor->GetAdapterSerialNumber() );                              
+            SetItemText(row, SColAdapter, pSensor->GetAdapterDesc() );                              
             double value = 1000 * pSensor->GetAdapterCalibrationData().m_elevation ;
             text.Format( _T("%+6.2f"), (SysSetup->GetUnits() == UNIT_ARCMIN) ? MRADIANS_TO_ARCMIN(value) : value );
             SetItemText(row, SColElevErr, text );                              

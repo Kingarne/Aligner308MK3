@@ -254,6 +254,8 @@ public:
     CResultTable* m_pLiveGraphResultTable;
 	DBTIMESTAMP m_LiveGraphStartTimeStamp;
     GraphFileManager m_LiveGraphFileManager;
+    BOOL m_barGraphUseRoll;
+   
 private:
     BOOL m_firstUpdate ;    
     BOOL m_UseCommonXValues;//the common x-value is taken from the serie 1
@@ -296,8 +298,8 @@ private:
     OLE_COLOR m_LineColors[MAX_NO_OF_SERIES+1];              //index [0] not used, serie 1 in index 1
     map<int, CString> m_dataTypeText;
 	
-    BOOL m_ShowBarGraph ;
-    BOOL m_barGraphUseRoll ;
+    BOOL m_ShowBarGraph ;    
+    
 	BarGraphInParam m_BarGraphParam ;
     int m_ClusterWidthForOneBar ;
 	int m_TimeUnit ;

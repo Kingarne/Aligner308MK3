@@ -1057,18 +1057,22 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,49,174,50,14,WS_DISABLED
     PUSHBUTTON      "Cancel",IDCANCEL,49,154,50,14
     LTEXT           "Graphical method to help adjusting the gun (boresight) adapter\nAdjust the gun (boresight) adapter around the gun barrel axis until deviation from the fixed plane is less than 10 [mrad]",IDC_TEXT_1,7,8,224,24
-    PUSHBUTTON      "Show Graph",IDC_SHOW_GRAPH,49,122,50,14
+    PUSHBUTTON      "Show Graph",IDC_SHOW_GRAPH,49,137,50,14
     PUSHBUTTON      "Change Setup",IDC_SETUP_MEASUREMENT,197,174,50,14
-    PUSHBUTTON      "Change Axes",IDC_SETUP_AXES,49,88,50,14
-    GROUPBOX        "Axes",IDC_STATIC,34,48,87,59
-    LTEXT           "Time:",IDC_STATIC,40,58,18,8,NOT WS_VISIBLE
-    LTEXT           "Y Min:",IDC_STATIC,40,78,20,8
-    LTEXT           "172800 [s]",IDC_AXIS_X_VALUE,65,58,30,8,NOT WS_VISIBLE
-    RTEXT           "859 [arcmin]",IDC_AXIS_Y_MIN_VALUE,65,78,46,8
-    LTEXT           "Configuration_Text",IDC_CONFIGURATION_TEXT,168,51,112,112
+    PUSHBUTTON      "Change Axes",IDC_SETUP_AXES,49,109,50,14
+    GROUPBOX        "Axes",IDC_STATIC,33,69,87,59
+    LTEXT           "Time:",IDC_STATIC,39,79,18,8,NOT WS_VISIBLE
+    LTEXT           "Y Min:",IDC_STATIC,39,99,20,8
+    LTEXT           "172800 [s]",IDC_AXIS_X_VALUE,65,79,30,8,NOT WS_VISIBLE
+    RTEXT           "859 [arcmin]",IDC_AXIS_Y_MIN_VALUE,65,99,46,8
+    LTEXT           "Configuration_Text",IDC_CONFIGURATION_TEXT,166,56,112,112
     GROUPBOX        "Setup",IDC_STATIC,160,36,125,160
-    LTEXT           "Y Max:",IDC_STATIC,40,68,23,8
-    RTEXT           "859 [arcmin]",IDC_AXIS_Y_MAX_VALUE,65,68,46,8
+    LTEXT           "Y Max:",IDC_STATIC,39,89,23,8
+    RTEXT           "859 [arcmin]",IDC_AXIS_Y_MAX_VALUE,65,89,46,8
+    COMBOBOX        IDC_AZ_COMBO,35,48,43,30,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Azimuth",IDC_STATIC,35,38,26,8
+    LTEXT           "Time Constants [s]",IDC_STATIC,86,40,66,8
+    EDITTEXT        IDC_K_EDIT,84,48,40,14,ES_AUTOHSCROLL
 END
 
 IDD_SETUP_TEST_PLANE DIALOGEX 0, 0, 322, 257
@@ -13849,6 +13853,11 @@ BEGIN
 END
 
 IDD_SENSORALIGNMENT_PROPERTYPAGE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_GUN_ADAPTER_TILT_CHECK_DLG AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

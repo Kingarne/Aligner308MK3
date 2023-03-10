@@ -998,9 +998,9 @@ BOOL CGraphView::InitCalibrationGraph( int noOfSeries, int innoOfSecondSeries )
 }
 
 BOOL CGraphView::InitDefaultBarGraph( int noOfSeries, BOOL useRoll )
-{
+{   
     m_barGraphUseRoll = useRoll;
-	theApp.SetLiveGraphViewActivated( FALSE );
+	  theApp.SetLiveGraphViewActivated( FALSE );
     m_NoOfSeriesY2 = 0;
     m_AxisY2Enabled = FALSE;
     m_AxisY2Min = 0.0;
@@ -2788,7 +2788,7 @@ BOOL CGraphView::UpdateSourceBarData( void )
     int i, serieCounter;
     double val, referenceVal, diffVal;
 
-	referenceVal = m_barGraphUseRoll ? GetRoll( g_AlignerData.RefObjNo, m_currentValues ): GetPitch( g_AlignerData.RefObjNo, m_currentValues );
+	  referenceVal = m_barGraphUseRoll ? GetRoll( g_AlignerData.RefObjNo, m_currentValues ): GetPitch( g_AlignerData.RefObjNo, m_currentValues );
 
     serieCounter = 1;
     double xPos;

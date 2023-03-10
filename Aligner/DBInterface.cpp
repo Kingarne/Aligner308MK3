@@ -597,7 +597,7 @@ BOOL DBInterface::GetCalibratedAdapters(UnitType::Types t, vector<CString>& adap
  
 	CString table = t == UnitType::Types::Gun ? "GunAdapterCalibration" : "TheoAdapterCalibration";
 	CString sql="";
-	sql.Format("SELECT DISTINCT serialNumber FROM %s ORDER BY serialNumber",table);	
+	sql.Format("SELECT * FROM %s ORDER BY serialNumber",table);	
  
 	int nVal;
 	CString strVal;
@@ -610,9 +610,16 @@ BOOL DBInterface::GetCalibratedAdapters(UnitType::Types t, vector<CString>& adap
 	{
 		while(!rs.IsEOF())
 		{
-			rs.GetFieldValue("serialNumber", serial);                    
-			adapters.push_back(serial);
- 
+			rs.GetFieldValue("serialNumber", serial);                    			
+      if (t == UnitType::Types::Gun)
+      {
+        double caliber;
+        CDBVariant val;
+        rs.GetFieldValue("Calibre", val);
+        CString calStr; calStr.Format(" - %.0fmm",val.m_dblVal);
+        serial += calStr;
+      }
+      adapters.push_back(serial);
 			rs.MoveNext();
 		}
 	}
@@ -943,6 +950,26 @@ BOOL DBInterface::GetStationParallaxes(CString station, ParallaxData &data)
          }
      }
     return TRUE;
+}
+
+BOOL DBInterface::UpdateTheoAdapterCalibration(CString serial, double el, double az)
+{
+  if (!m_db.IsOpen())
+    return FALSE;
+
+  CString sql = "";
+  sql.Format("SELECT * FROM TheoAdapterCalibration WHERE serialNumber='%s'", serial);
+
+  CRecordset rs(&m_db);
+  if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::executeDirect))
+  {
+    if (!rs.IsEOF())
+    {
+      sql.Format("UPDATE TheoAdapterCalibration SET azimuth = %10f, elevation = %.10f, [time] = '%s' WHERE serialNumber = '%s'", Chk(az), Chk(el), COleDateTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")), serial);
+      ExecuteSQL(sql);
+    }    
+  }
+  return TRUE;
 }
 
 BOOL DBInterface::UpdateAdapterCalibration(CString serial, double el, double az)

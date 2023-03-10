@@ -1164,7 +1164,7 @@ BOOL DAU::ConfigSensors( BOOL sensorsOnly )
         CString serialNumber = m_sensorPointers [i]->GetSerialNumber() ;
         pProperties->m_serialNumber = 0 == m_sensorPointers [i]->GetType() ? CString(_T("")) : serialNumber ; //Allow serialnumber 000, R2 050413
         //pProperties->m_serialNumber = "000" == serialNumber ? CString(_T("")) : serialNumber ;        
-        pProperties->m_adapterNumberString = m_sensorPointers[i]->GetAdapterSerialNumber();
+        pProperties->m_adapterNumberString = m_sensorPointers[i]->GetAdapterDesc();
         pProperties->m_description = m_sensorPointers [i]->m_description ;
         pProperties->m_overrangeDetection = m_sensorPointers [i]->GetOverrangeDetection() ;
         pProperties->m_type = m_sensorPointers [i]->GetType() ;
@@ -1210,7 +1210,7 @@ BOOL DAU::ConfigSensors( BOOL sensorsOnly )
         {
             SensorAlignmentPage *pProperties = static_cast<SensorAlignmentPage *>(sheet.GetPage( static_cast<int>((sensorsOnly ? i : m_syncroPointers.size()+i)))) ;
             m_sensorPointers[i]->SetSerialNumber( pProperties->m_serialNumber ) ;
-            m_sensorPointers[i]->SetAdapterSerialNumber( pProperties->m_adapterNumberString ) ;
+            m_sensorPointers[i]->SetAdapterDesc( pProperties->m_adapterNumberString ) ;
             m_sensorPointers[i]->m_description = pProperties->m_description ;
             m_sensorPointers[i]->SetOverrangeDetection(pProperties->m_overrangeDetection) ;
             m_sensorPointers[i]->SetType( static_cast<UnitType::Types>(pProperties->m_type) ) ;

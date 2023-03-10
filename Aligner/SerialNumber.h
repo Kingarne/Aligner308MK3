@@ -34,18 +34,35 @@ public:
   virtual ~AdapterSerialNumber( void ) ;
 public:
   BOOL SetAdapterSerialNumber( const CString &serialNumber ) ;
+  BOOL SetAdapterCaliber(const double cal) { m_caliber = cal; }
+  BOOL SetAdapterDesc(const CString desc);
+  BOOL SetCaliber(const CString& cal);
 public:
   CString GetAdapterSerialNumber( void ) const ;
+  double GetAdapterCaliber(void) { return m_caliber; }
+  CString GetAdapterDesc(void) const;
 private:
   CString m_serialNumber ;
+  double m_caliber;
 } ;
 
 inline
 AdapterSerialNumber::AdapterSerialNumber( void ) {
   m_serialNumber = _T("000") ;
+  m_caliber = 0;
 }
 
 inline
 CString AdapterSerialNumber::GetAdapterSerialNumber( void ) const {
   return m_serialNumber ;
 }
+
+
+inline
+CString AdapterSerialNumber::GetAdapterDesc(void) const {
+  CString serial = m_serialNumber;
+  CString calStr; calStr.Format(" - %.0fmm", m_caliber);
+  serial += calStr;
+  return serial;
+}
+

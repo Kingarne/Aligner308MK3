@@ -278,7 +278,7 @@ bool XMLHandler::AddChannel(TiXmlElement* node, Sensor* pSensor)
     attrib->SetAttribute("Offset", pSensor->GetOffset());
     attrib->SetDoubleAttribute("DefScale", pSensor->GetDefaultScale()*10000.0f);    
     attrib->SetAttribute("Serial", pSensor->GetSerialNumber());    
-    attrib->SetAttribute("AdapterSerial", pSensor->GetAdapterSerialNumber());    
+    attrib->SetAttribute("AdapterSerial", pSensor->GetAdapterDesc());    
     attrib->SetDoubleAttribute("NomAz", pSensor->GetNominalAzimuth());  
     attrib->SetAttribute("Type", (int)pSensor->GetType());  
     attrib->SetAttribute("ORDetect", (int)pSensor->GetOverrangeDetection());  
@@ -345,7 +345,7 @@ bool XMLHandler::LoadChannels(TiXmlElement* node)
                 if((p = pChItem->Attribute("AdapterSerial")) != NULL)
                 {
                     str = p;    
-                    pSens->SetAdapterSerialNumber(str);
+                    pSens->SetAdapterDesc(str);
                 }
                 if(pChItem->QueryDoubleAttribute("NomAz", &fVal) != TIXML_NO_ATTRIBUTE)
                 {

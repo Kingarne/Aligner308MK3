@@ -7,6 +7,6 @@
 //#import "C:\Windows\system32\olch2x7.ocx" implementation_only, rename( "EOF", "MyEOF" )
 
 //#import "C:\Program\ComponentOne\Chart7\Bin\olch2x7.ocx" implementation_only, rename( "EOF", "MyEOF" )
-#import "C:\WINDOWS\system32\olch2x8.ocx" implementation_only, rename( "EOF", "MyEOF" )
-#import "C:\Windows\system32\tdbg8.ocx" implementation_only, rename( "EOF", "MyEOF" )	//	stlo 090404 : added
+#import "C:\riar\Projects\Aligner308MK3\Aligner\Supplement\olch2x8.ocx" implementation_only, rename( "EOF", "MyEOF" )
+#import "C:\riar\Projects\Aligner308MK3\Aligner\Supplement\tdbg8.ocx" implementation_only, rename( "EOF", "MyEOF" )	//	stlo 090404 : added
 

@@ -78,6 +78,9 @@ void DAUDataPro::Init()
 	str.LoadString(IDS_SPERRY_MK39M3);
 	m_digChMap[str] = DigChTypeProSperryMk39M3;
 		
+  str.LoadString(IDS_SIGMA40_ICD);
+  m_digChMap[str] = DigChTypeProSigma40_ICD;
+
     m_digInterfaceMap[DigChTypeProUnused] = DigChSerialTypeProUart;
     m_digInterfaceMap[DigChTypeProSeapath] = DigChSerialTypeProUart;
     m_digInterfaceMap[DigChTypeProSigma40_03] = DigChSerialTypeProUart;
@@ -89,6 +92,7 @@ void DAUDataPro::Init()
 	m_digInterfaceMap[DigChTypeProPL40] = DigChSerialTypeProUart;
 	m_digInterfaceMap[DigChTypeProMinsNMEA] = DigChSerialTypeProUart;
 	m_digInterfaceMap[DigChTypeProSperryMk39M3] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProSigma40_ICD] = DigChSerialTypeProUart;
 }
 
 

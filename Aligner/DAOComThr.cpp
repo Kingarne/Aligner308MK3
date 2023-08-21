@@ -406,7 +406,7 @@ bool CheckFrameCRC(DAUFrame& frame)
         crc = crc_bits(crc, pData[i]);
     }
 
-    return (crc == frame.crc);    
+    return (crc == frame.crc[0]);    
 }
 
 void DumpDbgFifo(std::deque<char>& fifo, int error)
@@ -591,7 +591,7 @@ int DAOComThread::DeFrame(unsigned char* pData, int size)
 		newMsg.type = frameType;
         newMsg.seq = seqNum;
         newMsg.length = payloadLen;
-        newMsg.crc = crc;
+        newMsg.crc[0] = crc;
         char* pMsgData = (char*)&newMsg.HdlcMsg;
         memcpy(pMsgData, &payload[0], payload.size());
 		//TRACE("seq:%d\n",seqNum);
@@ -718,6 +718,11 @@ int DAOComThread::HandleUARTData(DAUFrame& msg, int type)
             return HandleSigmaUARTData(msg, type);
             break;
 
+    case DigChTypeProSigma40_ICD:
+      return HandleSigmaICDUARTDData(msg, type);
+      break;
+
+
 		case DigChTypeProSigma40_50:
 			return HandleSigma4050UARTData(msg, type);
 			break;
@@ -788,7 +793,7 @@ int DAOComThread::HandleMSIData(DAUFrame& msg, int type)
         newMsg.type = type;
         newMsg.seq = -1;//seqNum;
         newMsg.length = msgLen;
-        newMsg.crc = 0;
+        newMsg.crc[0] = 0;
         char* pMsgData = (char*)&newMsg.HdlcMsg;        
         memcpy(pMsgData, &payload[0], payload.size());       
 
@@ -844,7 +849,7 @@ int DAOComThread::HandleSigmaIXSEAData(DAUFrame& msg, int type)
         newMsg.type = type;
         newMsg.seq = -1;//seqNum;
         newMsg.length = msgLen;
-        newMsg.crc = payload[17];
+        newMsg.crc[0] = payload[17];
         char* pMsgData = (char*)&newMsg.HdlcMsg;        
         memcpy(pMsgData, &payload[0], payload.size());       
 
@@ -921,7 +926,7 @@ int DAOComThread::HandleSigmaNMEAUARTData(DAUFrame& msg, int type)
         newMsg.type = type; 
         newMsg.seq = -1;//seqNum;
         newMsg.length = frame.size();
-        newMsg.crc = 57;//crc;
+        newMsg.crc[0] = 57;//crc;
         char* pMsgData = (char*)&newMsg.HdlcMsg;
         memcpy(pMsgData, &frame[0], frame.size());
 
@@ -1001,7 +1006,7 @@ int DAOComThread::HandleMINSNMEAUARTData(DAUFrame& msg, int type)
 		newMsg.type = type;
 		newMsg.seq = -1;//seqNum;
 		newMsg.length = frame.size();
-		newMsg.crc = 57;//crc;
+		newMsg.crc[0] = 57;//crc;
 		char* pMsgData = (char*)&newMsg.HdlcMsg;
 		memcpy(pMsgData, &frame[0], frame.size());
 
@@ -1105,7 +1110,7 @@ int DAOComThread::HandlePL40UARTData(DAUFrame& msg, int type)
 		newMsg.type = type;
 		newMsg.seq = -1;//seqNum;
 		newMsg.length = msgLen;
-		newMsg.crc = 0;
+		newMsg.crc[0] = 0;
 		char* pMsgData = (char*)&newMsg.HdlcMsg;        
 		memcpy(pMsgData, &payload[0], payload.size());       
 
@@ -1163,7 +1168,7 @@ int DAOComThread::HandleSigma4050UARTData(DAUFrame& msg, int type)
 		newMsg.type = type;
 		newMsg.seq = -1;//seqNum;
 		newMsg.length = msgLen;
-		newMsg.crc = crc;
+		newMsg.crc[0] = crc;
 		char* pMsgData = (char*)&newMsg.HdlcMsg;
 		char* pP = &payload[0];
 		memcpy(pMsgData, &payload[0], payload.size());
@@ -1177,6 +1182,67 @@ int DAOComThread::HandleSigma4050UARTData(DAUFrame& msg, int type)
 	return 1;
 }
 
+
+int DAOComThread::HandleSigmaICDUARTDData(DAUFrame& msg, int type)
+{
+  std::deque<char>& fifo = (type == FRAME_TYPE_UART_A) ? m_UARTAFifo : m_UARTBFifo;
+
+  if (fifo.size() > 1000)
+    fifo.clear(); // purge if to large
+
+//  TRACE("Len:%d, seq:%d\n", msg.length, msg.seq);
+  unsigned char payloadLen, frameType, seqNum, crc;
+  unsigned char* pData = msg.HdlcMsg;
+  fifo.insert(fifo.end(), pData, pData + msg.length);
+
+  char startSeq[] = { 0x01, 0xAA };
+  while (1)
+  {
+
+    char* pFif = &fifo[0];
+    std::deque<char>::iterator startIt;
+    if ((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq + 2)) == fifo.end())
+    {
+      return 0;
+    }
+
+    if (distance(startIt, fifo.end()) < 10) // must be at least 10 bytes left 
+      return 0;
+
+    std::deque<char>::iterator it = startIt;
+    it += 2;
+    payloadLen = 16;
+
+    int bytesLeftInFifo = distance(it, fifo.end());
+
+    int msgLen = payloadLen + 2;
+
+    if (bytesLeftInFifo < payloadLen)
+      return 0;
+
+    std::vector<char> payload;
+    payload.reserve(msgLen);
+    copy(startIt, startIt + msgLen, back_inserter(payload));
+   
+    fifo.erase(fifo.begin(), startIt + msgLen);
+
+    DAUFrame newMsg;
+    newMsg.type = type;
+    newMsg.seq = -1;//seqNum;
+    newMsg.length = msgLen;
+    newMsg.crc[0] = payload[16];
+    newMsg.crc[1] = payload[17];
+    char* pMsgData = (char*)&newMsg.HdlcMsg;    
+    memcpy(pMsgData, &payload[0], payload.size());
+
+    m_recentDigFrame[type].received = TRUE;
+    m_recentDigFrame[type].frame = newMsg;
+    ::QueryPerformanceCounter(&m_recentDigFrame[type].stamp);
+    //         trace.Format("uart:%d",u++);
+//         sw.TraceTime(TRUE, TRUE, trace);
+  }
+  return 1;
+}
 
 int DAOComThread::HandleSigmaUARTData(DAUFrame& msg, int type)
 {
@@ -1225,7 +1291,7 @@ int DAOComThread::HandleSigmaUARTData(DAUFrame& msg, int type)
         newMsg.type = type;
         newMsg.seq = -1;//seqNum;
         newMsg.length = msgLen;
-        newMsg.crc = crc;
+        newMsg.crc[0] = crc;
         char* pMsgData = (char*)&newMsg.HdlcMsg;
         char* pP = &payload[0];
 		memcpy(pMsgData, &payload[0], payload.size());

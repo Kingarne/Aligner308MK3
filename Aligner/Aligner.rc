@@ -14656,6 +14656,7 @@ BEGIN
                             "Position the index arm according to the Graduated Arc value below."
     IDS_MINS_NMEA           "MINS NMEA"
     IDS_SPERRY_MK39M3       "SperryMK39M3"
+    IDS_SIGMA40_ICD         "Sigma 40-ICD"
 END
 
 #endif    // English (United States) resources

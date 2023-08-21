@@ -339,7 +339,7 @@ public:
 
 typedef enum DigDauChPro {DigDauChProA, DigDauChProB, DigDauChProCount} ;
 typedef enum DigChTypePro {DigChTypeProUnused, DigChTypeProSeapath, DigChTypeProSigma40_03, DigChTypeProSigma40_NMEA, DigChTypeProSigma40_01, DigChTypeProMins,
-	DigChTypeProIXSEA, DigChTypeProMSI, DigChTypeProPL40, DigChTypeProSigma40_50, DigChTypeProMinsNMEA, DigChTypeProSperryMk39M3, DigChTypeProCount} ;
+	DigChTypeProIXSEA, DigChTypeProMSI, DigChTypeProPL40, DigChTypeProSigma40_50, DigChTypeProMinsNMEA, DigChTypeProSperryMk39M3, DigChTypeProSigma40_ICD, DigChTypeProCount} ;
 typedef enum DigChSerialTypePro {DigChSerialTypeProHdlc, DigChSerialTypeProUart, DigChSerialTypeCount} ;
 typedef enum ParityPro {ParityNone, ParityEven, ParityOdd, ParityCount} ;
 
@@ -363,7 +363,7 @@ struct DAUFrame
     unsigned char type;
     unsigned char length;
     unsigned char seq;
-    unsigned char crc;	
+    unsigned char crc[2];	
 	union
     {
         unsigned char HdlcMsg[1000];

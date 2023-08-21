@@ -97,6 +97,7 @@ CString Digital::GetDigTypeText( )
 		case DigChTypeProPL40:          typeText = _T("PL-41");          break ; 
 		case DigChTypeProMinsNMEA:      typeText = _T("MINS-NMEA");    break;
 		case DigChTypeProSperryMk39M3:  typeText = _T("Sperry-MK39M3");    break;
+		case DigChTypeProSigma40_ICD:  typeText = _T("Sigma40-ICD");    break;
 		default:ASSERT(0); break ;
     }
     return typeText ;
@@ -142,7 +143,7 @@ void Shift( BYTE *pBuffer, UINT &length, UINT shift )
 }
 
 
-static double ToHeading(BYTE firstByte, BYTE secondByte, double scale)
+static double ToSigma40_180(BYTE firstByte, BYTE secondByte, double scale)
 {
 	union {
 		unsigned __int8  byte[2];
@@ -153,7 +154,7 @@ static double ToHeading(BYTE firstByte, BYTE secondByte, double scale)
 	return scale * 360.0 * ((double)angleUnion.angle) / 65536.0;
 }
 
-static double ToSigma40( BYTE firstByte, BYTE secondByte, double scale )
+static double ToSigma40_90( BYTE firstByte, BYTE secondByte, double scale )
 {
   union {
     __int8  byte [2] ;
@@ -516,7 +517,7 @@ void Digital::HandlePL40(DAUFrame &frame )
 
 		if (1)//checksumCalc == frame.HdlcMsg[30])
 		{
-			SetData( ToSigma40( frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0 ), ToSigma40( frame.HdlcMsg[8], frame.HdlcMsg[9], 1.0 ) );					
+			SetData( ToSigma40_90( frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0 ), ToSigma40_90( frame.HdlcMsg[8], frame.HdlcMsg[9], 1.0 ) );
 		}
 		else
 		{
@@ -578,6 +579,38 @@ void Digital::HandleSigma40_50(DAUFrame &frame )
 		TRACE("Wrong interface\n");
 	}
 }
+
+
+void Digital::HandleSigma40_ICD(DAUFrame& frame)
+{
+	if (frame.HdlcMsg[0] == 1 && frame.HdlcMsg[1] == 0xAA)
+	{
+		//Calculate CRC.
+		BYTE checksumCalc = 0;
+		for (int i = 2; i < 18; i++)
+		{
+			checksumCalc += frame.HdlcMsg[i];
+		}
+
+		if (true)//checksumCalc == frame.HdlcMsg[30])
+		{
+			SetData(ToSigma40_90(frame.HdlcMsg[4], frame.HdlcMsg[5], 1.0), ToSigma40_90(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0));
+		}
+		else
+		{
+			//Checksum incorrect
+			SetData(0, 0, 0, DS_CRC_ERR);
+			m_CRCError = TRUE;
+		}
+
+	}
+	else
+	{
+		TRACE("Wrong interface\n");
+	}
+
+}
+
 void Digital::HandleSigma40_01(DAUFrame &frame )
 {    
 	if(frame.HdlcMsg[3] == Sigma40_01Ident)
@@ -591,7 +624,7 @@ void Digital::HandleSigma40_01(DAUFrame &frame )
 
 		if (checksumCalc == frame.HdlcMsg[30])
 		{
-			SetData( ToSigma40( frame.HdlcMsg[8], frame.HdlcMsg[9], 1.0 ), ToSigma40( frame.HdlcMsg[10], frame.HdlcMsg[11], 1.0 ) );					
+			SetData( ToSigma40_90( frame.HdlcMsg[8], frame.HdlcMsg[9], 1.0 ), ToSigma40_90( frame.HdlcMsg[10], frame.HdlcMsg[11], 1.0 ) );
 		}
 		else
 		{ 
@@ -621,7 +654,7 @@ void Digital::HandleSperryMk39M3(DAUFrame &frame)
 
 		if (checksumCalc == frame.HdlcMsg[31])
 		{
-			SetData(ToSigma40(frame.HdlcMsg[8], frame.HdlcMsg[9], -1.0), ToSigma40(frame.HdlcMsg[10], frame.HdlcMsg[11], -1.0), ToHeading(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0));
+			SetData(ToSigma40_90(frame.HdlcMsg[8], frame.HdlcMsg[9], -1.0), ToSigma40_90(frame.HdlcMsg[10], frame.HdlcMsg[11], -1.0), ToSigma40_180(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0));
 		}
 		else
 		{
@@ -654,7 +687,7 @@ void Digital::HandleSigma40_03(DAUFrame &frame )
 
 		if (checksumCalc == frame.HdlcMsg[31])
 		{     
-			SetData( ToSigma40(frame.HdlcMsg[11], frame.HdlcMsg[12], 1.0 ), ToSigma40( frame.HdlcMsg[13], frame.HdlcMsg[14], 1.0 ), ToSigma40(frame.HdlcMsg[9], frame.HdlcMsg[10], 1.0 ) ) ;
+			SetData( ToSigma40_90(frame.HdlcMsg[11], frame.HdlcMsg[12], 1.0 ), ToSigma40_90( frame.HdlcMsg[13], frame.HdlcMsg[14], 1.0 ), ToSigma40_90(frame.HdlcMsg[9], frame.HdlcMsg[10], 1.0 ) ) ;
 		}
 		else
 		{
@@ -682,7 +715,7 @@ void Digital::HandleIXSEA(DAUFrame &frame )
             crc ^= data[i];
         }
 
-        if(crc == frame.crc)
+        if(crc == frame.crc[0])
         {
             double heading = (data[1]-48)*100 + (data[2]-48)*10 + (data[3]-48) + (double)(data[4]-48)/10.0f + (double)(data[5]-48)/100.0f;
             double roll = (data[7]-48)*10 + (data[8]-48) + (double)(data[9]-48)/10.0f + (double)(data[10]-48)/100.0f;
@@ -938,6 +971,10 @@ UINT Digital::HandleDataFrame(DAUFrame &frame)
         case DigChTypeProSigma40_03:
             HandleSigma40_03(frame) ;
         break ;
+
+				case DigChTypeProSigma40_ICD:
+					HandleSigma40_ICD(frame);
+					break;
 
         case DigChTypeProSigma40_NMEA:
             HandleSigma40_NMEA(frame) ;

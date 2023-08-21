@@ -222,6 +222,7 @@ protected:
 	int HandleSigmaIXSEAData(DAUFrame& msg, int type);
 	int HandleMSIData(DAUFrame& msg, int type);
 	int HandlePL40UARTData(DAUFrame& msg, int type);
+  int HandleSigmaICDUARTDData(DAUFrame& msg, int type);
 
     BOOL ParseNMEA(vector<char>& frame);
 

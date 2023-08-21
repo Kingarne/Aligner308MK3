@@ -769,8 +769,7 @@ int DAOComThread::HandleMSIData(DAUFrame& msg, int type)
 	char startSeq[] = {':'};
     while(1)
     {
-
-        BYTE* pFif = (BYTE*)&fifo[0];
+       // BYTE* pFif = (BYTE*)&fifo[0];
         std::deque<char>::iterator startIt;
         if((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq+1)) == fifo.end())
         {  
@@ -820,8 +819,7 @@ int DAOComThread::HandleSigmaIXSEAData(DAUFrame& msg, int type)
     char startSeq[] = {0x02};
     while(1)
     {
-
-        BYTE* pFif = (BYTE*)&fifo[0];
+        //BYTE* pFif = (BYTE*)&fifo[0];
         std::deque<char>::iterator startIt;
         if((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq+1)) == fifo.end())
         {  
@@ -878,8 +876,7 @@ int DAOComThread::HandleSigmaNMEAUARTData(DAUFrame& msg, int type)
     int esLen = strlen(endSeq);
     while(1)
     {
-
-        char* pFif = &fifo[0];
+       // char* pFif = &fifo[0];
         std::deque<char>::iterator startIt;
         if((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq+ssLen)) == fifo.end())
         {  
@@ -1086,8 +1083,7 @@ int DAOComThread::HandlePL40UARTData(DAUFrame& msg, int type)
 	char startSeq[] = {0xAA, 0x55};
 	while(1)
 	{
-
-		BYTE* pFif = (BYTE*)&fifo[0];
+		//BYTE* pFif = (BYTE*)&fifo[0];
 		std::deque<char>::iterator startIt;
 		if((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq+1)) == fifo.end())
 		{  
@@ -1136,8 +1132,7 @@ int DAOComThread::HandleSigma4050UARTData(DAUFrame& msg, int type)
 	char startSeq[] = {0x5A, 0xA5};
 	while(1)
 	{
-
-		char* pFif = &fifo[0];
+	//	char* pFif = &fifo[0];
 		std::deque<char>::iterator startIt;
 		if((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq+2)) == fifo.end())
 		{  
@@ -1194,12 +1189,13 @@ int DAOComThread::HandleSigmaICDUARTDData(DAUFrame& msg, int type)
   unsigned char payloadLen, frameType, seqNum, crc;
   unsigned char* pData = msg.HdlcMsg;
   fifo.insert(fifo.end(), pData, pData + msg.length);
+  if (fifo.size() < 2)
+      return 0;
 
   char startSeq[] = { 0x01, 0xAA };
   while (1)
   {
-
-    char* pFif = &fifo[0];
+    //char* pFif = &fifo[0];
     std::deque<char>::iterator startIt;
     if ((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq + 2)) == fifo.end())
     {
@@ -1259,8 +1255,7 @@ int DAOComThread::HandleSigmaUARTData(DAUFrame& msg, int type)
     char startSeq[] = {0x5A, 0xA5};
     while(1)
     {
-
-		char* pFif = &fifo[0];
+		//char* pFif = &fifo[0];
 		std::deque<char>::iterator startIt;
         if((startIt = std::search(fifo.begin(), fifo.end(), startSeq, startSeq+2)) == fifo.end())
         {  

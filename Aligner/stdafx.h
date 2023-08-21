@@ -93,8 +93,8 @@
 #define TrueDBGridVer TrueDBGrid80
 
 //#import "C:\Program\ComponentOne\Chart7\Bin\olch2x7.ocx" no_implementation, rename( "EOF", "MyEOF" )
-#import "C:\riar\Projects\Aligner308MK3\Aligner\Supplement\olch2x8.ocx" no_implementation, rename( "EOF", "MyEOF" )
-#import "C:\riar\Projects\Aligner308MK3\Aligner\Supplement\tdbg8.ocx" no_implementation, rename( "EOF", "MyEOF" )	
+#import "C:\Windows\System32\olch2x8.ocx" no_implementation, rename( "EOF", "MyEOF" )
+#import "C:\Windows\system32\tdbg8.ocx" no_implementation, rename( "EOF", "MyEOF" )	
 
 using namespace std ;
 using namespace C1Chart2D8 ;

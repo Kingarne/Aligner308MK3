@@ -309,6 +309,17 @@ void SystemSetup::LoadDigitalSyncroTypesFromRegistry( void )
 	   info.rate = 38400;
 	   m_validSyncroTypes[info.type] = info;
    }
+   if (SystemSetup::IsDigitalSyncroTypeEnabled(FEATURE_MASK_SIGMA_40_ICD) == TRUE)
+   {
+     str.LoadString(IDS_SIGMA40_ICD);
+     info.name = str;
+     info.type = DigChTypeProSigma40_ICD;
+     info.serialType = DigChSerialTypeProUart;
+     info.bits = 8;
+     info.parity = 1;
+     info.rate = 115200;
+     m_validSyncroTypes[info.type] = info;
+   }
 
     ReadDigitalSettings();
 

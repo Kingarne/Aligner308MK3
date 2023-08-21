@@ -594,7 +594,7 @@ void Digital::HandleSigma40_ICD(DAUFrame& frame)
 
 		if (true)//checksumCalc == frame.HdlcMsg[30])
 		{
-			SetData(ToSigma40_90(frame.HdlcMsg[4], frame.HdlcMsg[5], 1.0), ToSigma40_90(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0));
+			SetData(ToSigma40_90(frame.HdlcMsg[4], frame.HdlcMsg[5], 1.0), ToSigma40_90(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0), ToSigma40_180(frame.HdlcMsg[2], frame.HdlcMsg[3], 1.0));
 		}
 		else
 		{
@@ -687,7 +687,7 @@ void Digital::HandleSigma40_03(DAUFrame &frame )
 
 		if (checksumCalc == frame.HdlcMsg[31])
 		{     
-			SetData( ToSigma40_90(frame.HdlcMsg[11], frame.HdlcMsg[12], 1.0 ), ToSigma40_90( frame.HdlcMsg[13], frame.HdlcMsg[14], 1.0 ), ToSigma40_90(frame.HdlcMsg[9], frame.HdlcMsg[10], 1.0 ) ) ;
+			SetData( ToSigma40_90(frame.HdlcMsg[11], frame.HdlcMsg[12], 1.0 ), ToSigma40_90( frame.HdlcMsg[13], frame.HdlcMsg[14], 1.0 ), ToSigma40_180(frame.HdlcMsg[9], frame.HdlcMsg[10], 1.0 ) ) ;
 		}
 		else
 		{

@@ -15007,8 +15007,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,7,0
- PRODUCTVERSION 3,0,7,0
+ FILEVERSION 3,0,8,0
+ PRODUCTVERSION 3,0,8,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -15025,11 +15025,11 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Schill Reglerteknik AB"
             VALUE "FileDescription", "Aligner 202/308 Application"
-            VALUE "FileVersion", "3.0.7.0"
+            VALUE "FileVersion", "3.0.8.0"
             VALUE "InternalName", "Aligner 202/308"
             VALUE "LegalCopyright", "Copyright (C) 2017"
             VALUE "ProductName", "Aligner 202/308 Application"
-            VALUE "ProductVersion", "3.0.7.0"
+            VALUE "ProductVersion", "3.0.8.0"
         END
     END
     BLOCK "VarFileInfo"

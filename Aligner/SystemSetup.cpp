@@ -445,7 +445,7 @@ void SystemSetup::SaveUnitsToRegistry( void )
  void SystemSetup::LoadProjectPathFromRegistry( void )
 {
     Registry reg;
-    m_projectPath = reg.GetStringValue("ProjectPath", "C:\\").TrimRight("\\");//::AfxGetApp() -> GetProfileString( PROJECT_PATH_REGISTER_SECTION, PROJECT_PATH_REGISTER_NAME, PROJECT_PATH_DEFAULT_VALUE ) ;
+    m_projectPath = reg.GetStringValue("ProjectPath", "C:\\AlignerProj").TrimRight("\\");//::AfxGetApp() -> GetProfileString( PROJECT_PATH_REGISTER_SECTION, PROJECT_PATH_REGISTER_NAME, PROJECT_PATH_DEFAULT_VALUE ) ;
 
 	if (!::CreateDirectory(m_projectPath, NULL))
 	{

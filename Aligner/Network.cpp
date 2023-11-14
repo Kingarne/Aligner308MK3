@@ -237,7 +237,7 @@ BOOL Features::CheckNetwork( void )
     return TRUE ;
 //#error dd
 #endif    
-	ULONG length ;
+	/*ULONG length;
     DWORD error = ::GetAdaptersInfo( NULL, &length ) ;
     if (ERROR_NO_DATA == error || ERROR_NOT_SUPPORTED == error)
     {     
@@ -263,5 +263,5 @@ BOOL Features::CheckNetwork( void )
         }
         pNextAdapter = pNextAdapter -> Next ;
     }
-    return FALSE ;
+    return FALSE ;*/
 }

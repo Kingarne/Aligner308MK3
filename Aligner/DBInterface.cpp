@@ -634,24 +634,31 @@ BOOL DBInterface::GetShip(CString name, Ship& ship)
 	CString sql;
 	sql.Format("SELECT * FROM Ship WHERE ShipName='%s'",name);
 	
+  try
+  {
+    CRecordset rs(&m_db);
+    if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+    {
+      if (!rs.IsEOF())
+      {
+        CDBVariant val;
+        rs.GetFieldValue("ShipID", val);
+        ship.m_ID = val.m_iVal;
+        rs.GetFieldValue("ShipName", ship.m_name);
+        rs.GetFieldValue("ClassID", val);
+        ship.m_classID = val.m_iVal;
+      }
+      else
+      {
+        return FALSE;
+      }
+    }
+  }
+  catch (...)
+  {
+    return FALSE;
+  }
 
-	CRecordset rs(&m_db);
-	if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
-	{
-		if(!rs.IsEOF())
-		{
-			CDBVariant val;
-			rs.GetFieldValue("ShipID", val);
-			ship.m_ID = val.m_iVal;
-			rs.GetFieldValue("ShipName", ship.m_name);
-			rs.GetFieldValue("ClassID", val);
-			ship.m_classID = val.m_iVal;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
 	return TRUE;
 }
 

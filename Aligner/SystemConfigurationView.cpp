@@ -85,18 +85,19 @@ void SystemConfigurationView::ShowGeneralConfiguration( int nCmdShow )
 	GetDlgItem( IDC_SYSTEM_CONFIG_GENERAL_DATE_TEXT )->ShowWindow( nCmdShow );
 	GetDlgItem( IDC_SYSTEM_CONFIG_GENERAL_PLACE_TEXT )->ShowWindow( nCmdShow );
 
-	if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_ALIGNMENT)
-	{
-		GetDlgItem(IDC_SYSTEM_CONFIG_GENERAL_SHIP_TEXT)->SetWindowText("Ship:");
-	}
-	else if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_CALIBRATION)
-	{
-		GetDlgItem(IDC_SYSTEM_CONFIG_GENERAL_SHIP_TEXT)->SetWindowText("Platform:");
-	}
+  if (theApp.IsAligner202Enabled() == FALSE)
+  {
+      if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_ALIGNMENT)
+	    {
+		    GetDlgItem(IDC_SYSTEM_CONFIG_GENERAL_SHIP_TEXT)->SetWindowText("Ship:");
+	    }
+	    else if (SysSetup->GetMode() == SYSTEM_SETUP_MODE_CALIBRATION)
+	    {
+		    GetDlgItem(IDC_SYSTEM_CONFIG_GENERAL_SHIP_TEXT)->SetWindowText("Platform:");
+	    }
 
 
-    if( theApp.IsAligner202Enabled() == FALSE )
-    {
+   
 	    GetDlgItem( IDC_SYSTEM_CONFIG_GENERAL_LATITUDE_TEXT )->ShowWindow( nCmdShow );
         GetDlgItem( IDC_SYSTEM_CONFIG_GENERAL_UNIT_TEXT )->ShowWindow( nCmdShow );    
         m_GeneralLatitude.ShowWindow( nCmdShow );
@@ -117,7 +118,11 @@ void SystemConfigurationView::ShowGeneralConfiguration( int nCmdShow )
 
 void SystemConfigurationView::ShowInfo(int show)
 {
- 
+  if (theApp.IsAligner202Enabled() == TRUE)
+  {
+    return;
+  }
+
   CWnd* pInfo = GetDlgItem(IDC_SYSTEM_INFO_BOUNDARY);
   pInfo->ShowWindow(show);
   m_descBox1.ShowWindow(show);
@@ -337,8 +342,8 @@ void SystemConfigurationView::OnActivateView(BOOL bActivate, CView* pActivateVie
 
 void SystemConfigurationView::OnTimer( UINT nIDEvent )
 {
-	//m_GeneralDate.SetWindowText( COleDateTime::GetCurrentTime().Format( _T("%Y-%m-%d %H:%M:%S") ) );
-	m_sensorGrid.UpdateGrid();
+  UpdateSensorConfiguration();
+  
 }
 
 void SystemConfigurationView::OnShowWindow(BOOL bShow, UINT nStatus)

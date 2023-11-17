@@ -56,11 +56,16 @@ BOOL SystemSetupDialog::OnInitDialog(void)
 
 	if (theApp.IsAligner202Enabled())
 	{
-		GetDlgItem(IDC_LATITUDE_BOUNDARY)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_EDIT_LATITUDE)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_MODE_BOUNDARY)->ShowWindow(SW_HIDE);		
-		GetDlgItem(IDC_UNITS_BOUNDARY)->ShowWindow(SW_HIDE);
+	//	GetDlgItem(IDC_LATITUDE_BOUNDARY)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_EDIT_LATITUDE)->ShowWindow(SW_HIDE); 
+		//GetDlgItem(IDC_MODE_BOUNDARY)->ShowWindow(SW_HIDE);		
+		//GetDlgItem(IDC_UNITS_BOUNDARY)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_SYSTEM_SETUP_UNITS)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_SHIP_COMBO)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_SYSTEM_SETUP_UNITS)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_EDIT_LATITUDE)->ShowWindow(SW_HIDE);
+		
+						
 		CString str;
 		str.LoadString(IDS_OBJECT);
 		SetDlgItemText(IDC_SHIP_BOUNDARY, str);

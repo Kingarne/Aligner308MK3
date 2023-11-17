@@ -595,7 +595,7 @@ BOOL CAlignerDoc::OnSetupSystem( int mode, BOOL showDialog )
 	}
 
 	SysSetup->SetMode(mode);
- 	if (!SysSetup->IsValid() && theApp.m_DAUPresent /*&& !theApp.IsAligner202Enabled()*/)
+ 	if (!SysSetup->IsValid() && theApp.m_DAUPresent && !theApp.IsAligner202Enabled())
 	{
 		::AfxMessageBox( _T("Software mismatch!") ) ;
 		DAU::GetDAU().Clear();

@@ -1,32 +1,31 @@
 !addplugindir ".\plugins"
+!define AVer 202
 
-!define DEF_INSTDIR "c:\Schill Reglerteknik AB\Aligner308"
+!define DEF_INSTDIR "c:\Schill Reglerteknik AB\Aligner ${AVer} MK3"
 !define PROJDIR "..\Aligner"
 !define PROJBIN "..\release"
 !define REPORTBIN "..\ReporterLib\ReporterLib\bin\Release"
 
-!searchparse /file  ${PROJDIR}\Aligner.rc `FILEVERSION` VER_MAJOR `.` VER_MINOR1 `.` VER_MINOR2 `.` VER_MINOR3 ``
+!searchparse /file ${PROJDIR}\Aligner.rc `FILEVERSION` VER_MAJOR `,` VER_MINOR1 `,` VER_MINOR2 `,` VER_MINOR3
 !define ALIGNERVERSION "${VER_MAJOR}.${VER_MINOR1}.${VER_MINOR2}.${VER_MINOR3}"
 
-Name "Aligner 308"
+Name "Aligner ${AVer}"
 
-VIAddVersionKey "ProductName" "Aligner 308 Installation"
-VIAddVersionKey "Comments" "Aligner 308 Application"
+VIAddVersionKey "ProductName" "Aligner ${AVer}Installation"
+VIAddVersionKey "Comments" "Aligner ${AVer} Application"
 VIAddVersionKey "CompanyName" "Schill Reglerteknik AB"
 VIAddVersionKey "LegalTrademarks" "Schill Reglerteknik AB"
 VIAddVersionKey "LegalCopyright" "Schill Reglerteknik AB"
 VIAddVersionKey "FileDescription" ""
 VIAddVersionKey "FileVersion" ${ALIGNERVERSION}
-VIAddVersionKey "ProductVersion" "1.2.0.0"
-VIAddVersionKey "PrivateBuild" "1.2.0.0 ${__DATE__} ${__TIME__}"
+VIAddVersionKey "ProductVersion" ${ALIGNERVERSION}
+VIAddVersionKey "PrivateBuild" "${ALIGNERVERSION} ${__DATE__} ${__TIME__}"
 
-VIProductVersion "1.2.0.0"
+VIProductVersion ${ALIGNERVERSION}
 
 !include "MUI.nsh"
 
-;Name "AT ODEN ${ATGVERSION}"
-OutFile ".\Aligner308_Install.exe"
-;Icon "${NSISDIR}\Contrib\Graphics\Icons\modern-install-colorful.ico"
+OutFile ".\Aligner${AVer}_Install.exe"
 !define MUI_ICON "${PROJDIR}\res\Aligner.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP ".\Align-logo.bmp"
@@ -37,7 +36,6 @@ OutFile ".\Aligner308_Install.exe"
 !define MUI_WELCOMEPAGE_TEXT "Install Aligner-software"
 !insertmacro MUI_PAGE_WELCOME
 ;!insertmacro MUI_PAGE_COMPONENTS
-;Page custom ODENSelect
 !define MUI_DIRECTORYPAGE_VARIABLE $INSTDIR
 !define MUI_DIRECTORYPAGE_TEXT_DESTINATION "Select Installation Directory"
 !insertmacro MUI_PAGE_DIRECTORY
@@ -56,11 +54,6 @@ Function un.onInit
 
 FunctionEnd
 
-Function ODENSelect
-  !insertmacro INSTALLOPTIONS_DISPLAY "instdlg.ini"
-FunctionEnd
-
-
 Function .onInit
  ; DetailPrint ${ALIGNERVERSION}
   !insertmacro INSTALLOPTIONS_EXTRACT "instdlg.ini"
@@ -69,24 +62,17 @@ FunctionEnd
  
 
 Section "MainSection" SEC01
-	 ;!insertmacro INSTALLOPTIONS_READ $1 "instdlg.ini" "Field 2" "State"
-; $2 = DS
- 
-;  SetOutPath "${ATGDIR}\ATG"
-    
-;  ${If} $1 == "ODEN"
-  
-  ;SetOutPath "$LocalAppdata\Air Target\Ontin" 
-  ;File "${PROJDIR}\Install Files\torini.xml"
+	
   SetOutPath $INSTDIR
-  File "${PROJBIN}\*.exe"
-  File "${REPORTBIN}\*.dll"
+  File "${PROJBIN}\Aligner ${AVer}.exe"
+  ;File "${REPORTBIN}\*.dll"
+  File ".\dep\olch2d8.dll"
+
+  File ".\a${AVer}.reg"        
+  ExecWait '"regedit.exe" /s "$OUTDIR\a${AVer}.reg"' 
   
-
-
-  ;CreateShortCut "$SMSTARTUP\Ontin-Scoring.lnk" "${ATGDIR}\Ontin-Scoring.exe"        
- 
-;	${EndIf} 
+  CreateShortCut "$DESKTOP\Aligner${AVer}.lnk" "$INSTDIR\Aligner${AVer}.exe"  
+  WriteRegStr HKCU "SOFTWARE\Schill Reglerteknik AB\Aligner ${AVer} MK3" "ConnectionString" "$INSTDIR\Aligner${AVer}.mdb"
 
 
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -99,8 +85,8 @@ SectionEnd
 
 Section "Uninstall"
 
-     Processes::KillProcess "aligner.exe"
-     Delete "$SMSTARTUP\aligner.lnk"   
+     Processes::KillProcess "aligner${AVer}.exe"
+     Delete "$SMSTARTUP\aligner${AVer}.lnk"   
      
    RMDir /R  /REBOOTOK  "$INSTDIR"
 

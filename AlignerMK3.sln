@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Aligner", "Aligner\Aligner2008.vcxproj", "{9A570571-46B0-45F4-99B7-161E58D5030B}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup308", "Setup308\Setup308.vdproj", "{458440B3-C51A-4E14-9157-7C39A345918B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReporterLib", "ReporterLib\ReporterLib\ReporterLib.csproj", "{88EDF932-E93E-40CD-B7D8-6699268386F4}"
 EndProject
 Global
@@ -50,30 +48,6 @@ Global
 		{9A570571-46B0-45F4-99B7-161E58D5030B}.Release|Any CPU.Build.0 = Template|Win32
 		{9A570571-46B0-45F4-99B7-161E58D5030B}.Release|Win32.ActiveCfg = Aligner 308 Release|Win32
 		{9A570571-46B0-45F4-99B7-161E58D5030B}.Release|Win32.Build.0 = Aligner 308 Release|Win32
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Debug|Any CPU.ActiveCfg = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Debug|Any CPU.Build.0 = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Debug|Win32.ActiveCfg = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Release|Any CPU.ActiveCfg = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Release|Any CPU.Build.0 = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Release|Win32.ActiveCfg = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 202 Release|Win32.Build.0 = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 308 Debug|Any CPU.ActiveCfg = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 308 Debug|Any CPU.Build.0 = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 308 Debug|Win32.ActiveCfg = Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 308 Release|Any CPU.ActiveCfg = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 308 Release|Any CPU.Build.0 = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner 308 Release|Win32.ActiveCfg = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner202 Debug|Any CPU.ActiveCfg = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner202 Debug|Any CPU.Build.0 = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner202 Debug|Win32.ActiveCfg = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Aligner202 Debug|Win32.Build.0 = Aligner202 Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Debug|Any CPU.ActiveCfg = Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Debug|Any CPU.Build.0 = Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Debug|Win32.ActiveCfg = Debug
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Release|Any CPU.ActiveCfg = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Release|Any CPU.Build.0 = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Release|Win32.ActiveCfg = Release
-		{458440B3-C51A-4E14-9157-7C39A345918B}.Release|Win32.Build.0 = Release
 		{88EDF932-E93E-40CD-B7D8-6699268386F4}.Aligner 202 Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{88EDF932-E93E-40CD-B7D8-6699268386F4}.Aligner 202 Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88EDF932-E93E-40CD-B7D8-6699268386F4}.Aligner 202 Debug|Win32.ActiveCfg = Debug|Any CPU

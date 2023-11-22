@@ -234,6 +234,8 @@ void SystemSetupDialog::OnBnClickedOk()
 
 	OnCbnSelchangeShipName();
 
+	if (theApp.IsAligner202Enabled())
+		m_proj.m_shipName = "-";
 
 	CDialog::OnOK();
 }

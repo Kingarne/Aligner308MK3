@@ -135,6 +135,15 @@ void DebugGrid::UpdateHeader()
 }
 
 void DebugGrid::UpdateGrid()
+{
+  if (theApp.IsAligner308Enabled())
+    UpdateGrid308();
+  else
+    UpdateGrid202();
+
+}
+
+void DebugGrid::UpdateGrid308()
 {	
     Clear();
     
@@ -215,6 +224,89 @@ void DebugGrid::UpdateGrid()
     }
 
 	Invalidate();
+}
+
+void DebugGrid::UpdateGrid202()
+{
+  Clear();
+
+  UpdateHeader();
+
+  map<CString, int> chIndexMap;
+  chIndexMap[J3] = 6;
+  chIndexMap[J4] = 5;
+  chIndexMap[J5] = 4;
+  chIndexMap[J6] = 3;
+  chIndexMap[J7] = 2;
+  chIndexMap[J8] = 1;
+  chIndexMap[J9] = 0;
+
+  for (int i = 0; i < min(6, DAU::GetDAU().GetSyncroCount()); i++)
+  {
+    int pos;
+    CString name;
+    Syncro* pSync = DAU::GetDAU().GetSyncro(i);
+    name = pSync->GetName();
+    pos = chIndexMap[name];
+    int row = i + 1;
+
+    SetRowBGColor(row, (pSync->GetType() != UnitType::Unused) ? USED_COLOR : UNUSED_COLOR);
+
+    SetItemText(row, DColCh, name);
+    CString text;
+
+    text.Format("%d", pSync->GetOverrangeDetection());
+    SetItemText(row, DColOD, text);
+
+    text.Format("%d", pSync->GetOverrangeDetectionActive());
+    SetItemText(row, DColODA, text);
+
+    text.Format("%d", pSync->IsSelected());
+    SetItemText(row, DColSelect, text);
+
+    double roll = -g_AlignerData.SignDef * pSync->GetRoll() * 1000.0f;
+    text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? roll : MRADIANS_TO_ARCMIN(roll));
+    SetItemText(row, DColRo, text);
+
+    double pitch = -g_AlignerData.SignDef * pSync->GetPitch() * 1000.0f;
+    text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? pitch : MRADIANS_TO_ARCMIN(pitch));
+    SetItemText(row, DColPi, text);
+    /*
+    text.Format("%.2f", pSync->GetCurrentAz());
+    SetItemText(row, DColCurrAz, text);
+
+    text.Format("%.2f", pSync->GetRotateBackAng());
+    SetItemText(row, DColCurrAzBack, text);
+
+    double eal = pSync->m_elevData.elevAlong;
+    text.Format("%.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? RADIANS_TO_MRADIANS(eal) : MRADIANS_TO_ARCMIN(eal));
+    SetItemText(row, DColEal, text);
+
+    //         double ealS = pSensor->m_elevData.elevAlongSum;
+    //         text.Format( "%.2f", (SysSetup->GetUnits() == UNIT_MRAD) ? RADIANS_TO_MRADIANS(ealS) : MRADIANS_TO_ARCMIN(ealS)) ;
+    //         SetItemText(row, DColEalS, text);       
+
+    double ealAbs = pSync->m_elevData.elevAlongAbs;
+    text.Format("%.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? RADIANS_TO_MRADIANS(ealAbs) : MRADIANS_TO_ARCMIN(ealAbs));
+    SetItemText(row, DColEalAbs, text);
+
+    double eac = pSync->m_elevData.elevAcross;
+    text.Format("%.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? RADIANS_TO_MRADIANS(eac) : MRADIANS_TO_ARCMIN(eac));
+    SetItemText(row, DColEac, text);
+
+    double zPar = pSync->m_zParCorr;
+    text.Format("%.3f", zPar);
+    SetItemText(row, DColZPar, text);
+
+    text.Format("%d/%d", ElevationData::elevErrorExist, ElevationData::useElev);
+    SetItemText(row, DColEOn, text);
+
+    text.Format("%d", pSync->m_elevData.mode);
+    SetItemText(row, DColMode, text);
+    */
+  }
+
+  Invalidate();
 }
 
 

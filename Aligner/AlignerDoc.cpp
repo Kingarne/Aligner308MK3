@@ -764,7 +764,7 @@ void CAlignerDoc::OnUpdateCalibDataImport( CCmdUI *pCmdUI )
 
 BOOL CAlignerDoc::GetCanSetupA202Channels( void ) const
 {
-  return (theApp.IsAligner202Enabled() == TRUE) && DAU::GetDAU().IsOpen() && (0 < SysSetup->GetShipName().GetLength()) && (0 < SysSetup->GetOperatorName().GetLength()) ;
+  return (theApp.IsAligner202Enabled() == TRUE) && DAU::GetDAU().IsOpen();// && (0 < SysSetup->GetShipName().GetLength()) && (0 < SysSetup->GetOperatorName().GetLength());
 }
 
 void CAlignerDoc::OnSetupA202EditChannels( void )
@@ -772,7 +772,10 @@ void CAlignerDoc::OnSetupA202EditChannels( void )
   BOOL result = DAU::GetDAU().ConfigSensors( FALSE ) ;
   if(result)
   {
-      SaveProject();
+      CString xml;
+      m_XMLHandler.GetConfigXML(xml);
+      SysSetup->UpdateConfig(xml);
+      //SaveProject();
   }
   InitGlobalSensorStrings( TRUE ) ;
   static_cast<LiveDataViewA202 *>(theApp.m_pLiveDataView) -> SetShowOnlySelected( FALSE ) ;

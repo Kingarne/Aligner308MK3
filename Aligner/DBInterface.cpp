@@ -308,9 +308,6 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 			rs.MoveNext();
 		}
 
-		
-		
-
 		for (auto iter = projects.begin(); iter != projects.end(); iter++)
 		{
 			sql.Format("SELECT COUNT(*) from Measurement where projectID = %d",iter->m_projectID);
@@ -332,10 +329,83 @@ BOOL DBInterface::GetProjects(vector<ProjectData>& projects)
 
 	}
 
-
-	return true;
+  return true;
 }
 
+
+BOOL DBInterface::GetProjects202(vector<ProjectData>& projects)
+{
+  projects.clear();
+
+  if (!m_db.IsOpen())
+    return FALSE;
+
+  CString sql = "";
+  sql.Format("SELECT * FROM Project");
+
+  ProjectData data;
+
+  CRecordset rs(&m_db);
+  if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+  {
+    TRACE("count: %d, %d\n", rs.GetRecordCount(), rs.GetODBCFieldCount());
+    for (int i = 0; i < rs.GetODBCFieldCount(); i++)
+    {
+      CODBCFieldInfo info;
+      rs.GetODBCFieldInfo(i, info);
+      TRACE("%d, %s\n", i, info.m_strName);
+    }
+
+    while (!rs.IsEOF())
+    {
+      CDBVariant val;
+      rs.GetFieldValue("ID", val);
+      data.m_projectID = val.m_iVal;
+      rs.GetFieldValue("name", data.m_projectName);
+      rs.GetFieldValue("projTime", val);//oleTime);
+      data.m_time = ToDBTimestamp(val.m_pdate);
+      rs.GetFieldValue("operator", data.m_operatorName);
+      rs.GetFieldValue("location", data.m_location);
+      rs.GetFieldValue("latitude", val);
+      data.m_latitude = val.m_dblVal;
+      rs.GetFieldValue("unit", val);
+      data.m_unit = val.m_iVal;
+      rs.GetFieldValue("signDef", val);
+      data.m_signDef = val.m_iVal;
+      CString str;
+      rs.GetFieldValue("config", data.m_config);
+      rs.GetFieldValue("imgIdx", val);
+      data.m_imgIdx = val.m_iVal;
+      data.m_mode = SYSTEM_SETUP_MODE_ALIGNMENT;
+      data.m_shipName = "-";
+      projects.push_back(data);
+
+      rs.MoveNext();
+    }
+
+    for (auto iter = projects.begin(); iter != projects.end(); iter++)
+    {
+      sql.Format("SELECT COUNT(*) from Measurement where projectID = %d", iter->m_projectID);
+      CRecordset crs(&m_db);
+      if (crs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+      {
+        for (int i = 0; i < crs.GetODBCFieldCount(); i++)
+        {
+          CODBCFieldInfo info;
+          crs.GetODBCFieldInfo(i, info);
+          TRACE("%d, %s\n", i, info.m_strName);
+        }
+
+        CDBVariant val;
+        crs.GetFieldValue((short)0, val, DEFAULT_FIELD_TYPE);
+        iter->m_numMeasurements = val.m_iVal;
+      }
+    }
+
+  }
+
+  return true;
+}
 BOOL DBInterface::GetDAUData(int DAUSerial, DAUSetupData& dauData)
 {
     if(!m_db.IsOpen())

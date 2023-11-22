@@ -64,7 +64,14 @@ BOOL ProjectOpenDlg::OnInitDialog()
 
 void ProjectOpenDlg::InitProjList()
 {
-	DBInterface::Instance()->GetProjects(m_projects);
+	if (theApp.IsAligner308Enabled())
+	{
+		DBInterface::Instance()->GetProjects(m_projects);
+	}
+	else
+	{
+		DBInterface::Instance()->GetProjects202(m_projects);
+	}
 
 	m_projList.DeleteAllItems();
 	int i = 0;

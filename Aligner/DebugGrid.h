@@ -28,6 +28,10 @@ public:
 //	int StoreToFile();
 	
 private:
+
+	void UpdateGrid308();
+	void UpdateGrid202();
+
 	int m_cols;
 	int m_rows;
     BOOL m_initialized;

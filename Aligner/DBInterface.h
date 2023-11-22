@@ -37,6 +37,7 @@ public:
     BOOL GetSensorCalibTime(CString se, DBTIMESTAMP& time);
 	
 	BOOL GetProjects(vector<ProjectData>& projects);
+  BOOL GetProjects202(vector<ProjectData>& projects);
 	BOOL GetCalibrationProjects(vector<ProjectData>& projects);
 	
     BOOL UpdateAdapterCalibration(CString serial, double el, double az);

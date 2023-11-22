@@ -64,8 +64,12 @@ BOOL SystemSetupDialog::OnInitDialog(void)
 		GetDlgItem(IDC_SHIP_COMBO)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_SYSTEM_SETUP_UNITS)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_EDIT_LATITUDE)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_STATIC_SHIP)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_STATIC_UNITS)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_STATIC_LAT)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_STATIC_DEG)->ShowWindow(SW_HIDE);
 		
-						
+
 		CString str;
 		str.LoadString(IDS_OBJECT);
 		SetDlgItemText(IDC_SHIP_BOUNDARY, str);

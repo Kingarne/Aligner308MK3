@@ -66,7 +66,7 @@ Section "MainSection" SEC01
   SetOutPath $INSTDIR
   File "${PROJBIN}\Aligner ${AVer}.exe"
   ;File "${REPORTBIN}\*.dll"
-  File ".\dep\olch2d8.dll"
+  File ".\dep\olch2x8.ocx"
 
   File ".\a${AVer}.reg"        
   ExecWait '"regedit.exe" /s "$OUTDIR\a${AVer}.reg"' 
@@ -74,6 +74,9 @@ Section "MainSection" SEC01
   CreateShortCut "$DESKTOP\Aligner${AVer}.lnk" "$INSTDIR\Aligner${AVer}.exe"  
   WriteRegStr HKCU "SOFTWARE\Schill Reglerteknik AB\Aligner ${AVer} MK3" "ConnectionString" "$INSTDIR\Aligner${AVer}.mdb"
 
+  RegDLL $OUTDIR\olch2x8.ocx
+
+  Delete ".\a${AVer}.reg"
 
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 

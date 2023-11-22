@@ -1027,6 +1027,10 @@
 #define IDC_VIRT_DAU_BUTTON             1668
 #define IDC_AZ_COMBO                    1669
 #define IDC_K_EDIT                      1670
+#define IDC_STATIC_SHIP                 1671
+#define IDC_STATIC_UNITS                1672
+#define IDC_STATIC_LAT                  1673
+#define IDC_STATIC_DEG                  1674
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1448,7 +1452,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        579
 #define _APS_NEXT_COMMAND_VALUE         32826
-#define _APS_NEXT_CONTROL_VALUE         1671
+#define _APS_NEXT_CONTROL_VALUE         1675
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

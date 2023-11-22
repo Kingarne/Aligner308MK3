@@ -1317,10 +1317,10 @@ BEGIN
     LTEXT           "Name",IDC_STATIC,26,10,19,8
     LTEXT           "Operator",IDC_STATIC,15,28,30,8
     LTEXT           "Place",IDC_STATIC,26,46,18,8
-    LTEXT           "Ship",IDC_STATIC,29,64,14,8
-    LTEXT           "Latitude",IDC_STATIC,17,99,27,8
-    LTEXT           "[deg]",IDC_STATIC,91,98,18,8
-    LTEXT           "Units",IDC_STATIC,25,81,17,8
+    LTEXT           "Ship",IDC_STATIC_SHIP,29,64,14,8
+    LTEXT           "Latitude",IDC_STATIC_LAT,17,99,27,8
+    LTEXT           "[deg]",IDC_STATIC_DEG,91,98,18,8
+    LTEXT           "Units",IDC_STATIC_UNITS,25,81,17,8
     LTEXT           "Time",IDC_STATIC,28,117,16,8
     LTEXT           "Project Root",IDC_STATIC,4,136,41,8
 END
@@ -15007,8 +15007,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,8,0
- PRODUCTVERSION 3,0,8,0
+ FILEVERSION 3,0,9,0
+ PRODUCTVERSION 3,0,9,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -15025,11 +15025,11 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Schill Reglerteknik AB"
             VALUE "FileDescription", "Aligner 202/308 Application"
-            VALUE "FileVersion", "3.0.8.0"
+            VALUE "FileVersion", "3.0.9.0"
             VALUE "InternalName", "Aligner 202/308"
-            VALUE "LegalCopyright", "Copyright (C) 2017"
+            VALUE "LegalCopyright", "Copyright (C) 2023"
             VALUE "ProductName", "Aligner 202/308 Application"
-            VALUE "ProductVersion", "3.0.8.0"
+            VALUE "ProductVersion", "3.0.9.0"
         END
     END
     BLOCK "VarFileInfo"

@@ -644,6 +644,13 @@ void CAlignerApp::OnFileOpen( void )
 		d->OpenConfig();
 		d->SetPathName(dlg.m_selectedProj.m_projectName);
 
+    //Ensure file structure
+    string directory = SysSetup->GetProjectPath();
+    ::CreateDirectory(directory.c_str(), NULL);
+    directory = SysSetup->GetProjectPath() + _T("\\Images");
+    ::CreateDirectory(directory.c_str(), NULL);
+
+
 		g_AlignerData.Init();
 
 		TRACE("Proj: %s\n",dlg.m_selectedProj.m_projectName);

@@ -73,6 +73,7 @@ void ProjectOpenDlg::InitProjList()
 		DBInterface::Instance()->GetProjects202(m_projects);
 	}
 
+	string directory = SysSetup->GetProjectPath();
 	m_projList.DeleteAllItems();
 	int i = 0;
 	for (auto iter = m_projects.begin(); iter != m_projects.end(); iter++)

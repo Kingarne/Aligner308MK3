@@ -1,5 +1,5 @@
 !addplugindir ".\plugins"
-!define AVer 202
+!define AVer 308
 
 !define DEF_INSTDIR "c:\Schill Reglerteknik AB\Aligner ${AVer} V3"
 !define PROJDIR "..\Aligner"
@@ -65,14 +65,16 @@ Section "MainSection" SEC01
 	
   SetOutPath $INSTDIR
   File "${PROJBIN}\Aligner ${AVer}.exe"
-  ;File "${REPORTBIN}\*.dll"
-  File ".\dep\olch2x8.ocx"
+  File "${REPORTBIN}\*.dll"
+  File ".\dep\*.ocx"
+
 
   File ".\a${AVer}.reg"        
   ExecWait '"regedit.exe" /s "$OUTDIR\a${AVer}.reg"' 
   
   CreateShortCut "$DESKTOP\Aligner${AVer}.lnk" "$INSTDIR\Aligner${AVer}.exe"  
   WriteRegStr HKCU "SOFTWARE\Schill Reglerteknik AB\Aligner ${AVer} V3" "ConnectionString" "$INSTDIR\Aligner${AVer}.mdb"
+  WriteRegStr HKCU "SOFTWARE\Schill Reglerteknik AB\Aligner ${AVer} V3" "Directory" "$INSTDIR"
 
   RegDLL $OUTDIR\olch2x8.ocx
 

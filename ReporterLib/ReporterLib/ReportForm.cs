@@ -923,8 +923,10 @@ namespace ReporterLib
             {
                 int item = reportList.SelectedItems[0].Index;
                 int measId = (int)reportList.Items[item].Tag;
+                string time = reportList.Items[item].SubItems[1].Text;
 
-                DialogResult res = MessageBox.Show("Delete measurement?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                string msg = $"Delete measurement '{reportList.Items[item].Text}' ({time})";
+                DialogResult res = MessageBox.Show(msg, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if(res == DialogResult.Yes)
                 {
                     DBI.DeleteMeasurement(measId);

@@ -23,7 +23,7 @@ public:
 	BOOL GetShip(CString name, Ship& ship);
 	BOOL GetShips(vector<Ship>& ships);
     BOOL GetStationsOnShip(vector<CString>& ships, CString ship);
-    BOOL GetAdapterCalibration(CString adaperSN, AdapterCalibrationData &data);
+    BOOL GetAdapterCalibration(CString adaperSN, UnitType::Types t, AdapterCalibrationData &data);
     BOOL GetSensorCalibrationData(CString calibName, CString SN, SensorTemperatureCalibrationData &data);
     BOOL GetSensorData(CString table, CString SN, vector<SelectedData>& data, CString projName);
     BOOL GetStationParallaxes(CString station, ParallaxData &data);        

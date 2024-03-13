@@ -257,11 +257,11 @@ BOOL Sensor::LoadCalibration( void )
     m_adapterCalibration = AdapterCalibrationData() ;
 
     if (UnitType::TypeHasAdapter(m_type))
-	  {
-        AdapterCalibrationData data;
-        DBInterface::Instance()->GetAdapterCalibration(GetAdapterSerialNumber(), data);        
-        m_adapterCalibration = AdapterCalibrationData( MilliUnitsToUnits( data.m_elevation ), MilliUnitsToUnits( data.m_azimuth ), data.m_time, data.m_elevCorrOffset ) ;
-	  }
+    {
+      AdapterCalibrationData data;
+      DBInterface::Instance()->GetAdapterCalibration(GetAdapterSerialNumber(), m_type, data);
+      m_adapterCalibration = AdapterCalibrationData(MilliUnitsToUnits(data.m_elevation), MilliUnitsToUnits(data.m_azimuth), data.m_time, data.m_elevCorrOffset);
+    }
 	
     ParallaxData defaultParallax = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
     m_parallaxData = defaultParallax;

@@ -840,14 +840,17 @@ BOOL DBInterface::GetStationsOnShip(vector<CString>& stations, CString ship)
     return TRUE;
 }
 
-BOOL DBInterface::GetAdapterCalibration(CString adaperSN, AdapterCalibrationData &data)
+BOOL DBInterface::GetAdapterCalibration(CString adaperSN, UnitType::Types t, AdapterCalibrationData &data)
 {
      if(!m_db.IsOpen())
          return FALSE;
  
-     CString sql="";
-     sql.Format("SELECT * FROM GunAdapterCalibration WHERE serialNumber = '%s'",adaperSN);	
-	 CString serial;
+     CString table = t == UnitType::Types::Gun ? "GunAdapterCalibration" : "TheoAdapterCalibration";
+
+     CString sql="";     
+     //sql.Format("SELECT * FROM %s ORDER BY serialNumber", table);
+     sql.Format("SELECT * FROM %s WHERE serialNumber = '%s'",table, adaperSN);	
+     CString serial;
      int id;
      
 	 CRecordset rs(&m_db);
@@ -863,11 +866,9 @@ BOOL DBInterface::GetAdapterCalibration(CString adaperSN, AdapterCalibrationData
             data.m_azimuth = val.m_dblVal;
             rs.GetFieldValue("time", val);
             data.m_time = ToDBTimestamp(val.m_pdate);
-
          }
      }
  
-
     return TRUE;
 }
 

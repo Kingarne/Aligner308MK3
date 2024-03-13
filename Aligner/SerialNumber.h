@@ -61,7 +61,9 @@ CString AdapterSerialNumber::GetAdapterSerialNumber( void ) const {
 inline
 CString AdapterSerialNumber::GetAdapterDesc(void) const {
   CString serial = m_serialNumber;
-  CString calStr; calStr.Format(" - %.0fmm", m_caliber);
+  CString calStr="";
+  if(m_caliber > 0)
+   calStr.Format(" - %.0fmm", m_caliber);
   serial += calStr;
   return serial;
 }

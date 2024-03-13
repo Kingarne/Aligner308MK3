@@ -322,7 +322,7 @@ namespace ReporterLib
         {
             Connection = new OdbcConnection();
 
-            string file = path;//"C:\\ProgramData\\Schill Reglerteknik AB\\Aligner 308 MK3\\Aligner308.mdb";
+            string file = path; 
 
             string myConnectionString = @"Driver={Microsoft Access Driver (*.mdb)};" + "Dbq="+file+";Uid=Admin;Pwd=;";
             Connection.ConnectionString = myConnectionString;

@@ -94,11 +94,7 @@ BOOL GainCalibrationPage0::OnInitDialog( void )
     // TODO: General Failure should handle this!
     ASSERT(0) ;
   }
-
-  CalibrationSheet *pSheet = static_cast<CalibrationSheet *>(GetParent());
-  pSheet->m_alpha = 0.0f;
-  g_AlignerData.PlatformSN = 0;
-  
+    
   CWnd* pWnd = GetDlgItem(IDC_TIME_CONST_EDIT);
   CString tcStr; tcStr.Format("%.1f", g_AlignerData.TaoTilt);
   pWnd->SetWindowText(tcStr);

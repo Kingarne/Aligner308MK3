@@ -4,11 +4,11 @@
 
 #include "stdafx.h"
 #include "DAUData.h"
-#include "SerialNumber.h"
 #include "Type.h"
 #include "Sensor.h"
 #include "CalibInfo.h"
 #include <algorithm>
+#include <sstream>
 
 double Sensor::sm_latitudeCompensation = 1.0 ;
 
@@ -26,7 +26,7 @@ static double SensorScaleFromChannelType( int channelType )
 	return scale ;
 }
 
-Sensor::Sensor( const CString &name , int channelType ) : Name( name ),
+Sensor::Sensor( const CString &name , int channelType ) : 
   m_defaultScale( SensorScaleFromChannelType( channelType ) ), 
   m_rollOffsetTemperatureCalibration( 0, 0, 0, 0),
 	m_rollGainTemperatureCalibration( 1.0, 0, 0, 0),
@@ -45,6 +45,7 @@ Sensor::Sensor( const CString &name , int channelType ) : Name( name ),
     m_zParCorr = 0.0f;
     m_centrifugRollComp = 0.0f;
     m_centrifugPitchComp = 0.0f;    
+    m_name = name;
     SetData( SensorData() ) ;
     SetTemperatureData( TemperatureData() ) ;
 }
@@ -52,6 +53,70 @@ Sensor::Sensor( const CString &name , int channelType ) : Name( name ),
 Sensor::~Sensor( void )
 {
   // Empty
+}
+
+BOOL Sensor::SetSerialNumber(const CString& serialNumber)
+{
+  if (3 == serialNumber.GetLength() || 0 == serialNumber.GetLength())
+  {
+    m_serialNumber = serialNumber;
+    return TRUE;
+  }
+  return FALSE;
+}
+
+BOOL Sensor::SetAdapterDesc(const CString desc)
+{
+  if (!SetAdapterSerialNumber(desc))
+    return FALSE;
+
+  BOOL b = true;
+  if (m_type != UnitType::Types::Theo)
+    b = SetCaliber(desc.Right(desc.GetLength() - 6));
+
+  return b;
+}
+
+CString Sensor::GetAdapterDesc(void) const
+{
+  CString serial = m_adapterData.m_serialNumber;
+  CString calStr = "";
+  if (m_type != UnitType::Types::Theo)
+    calStr.Format(" - %.0fmm", m_adapterData.m_caliber);
+  serial += calStr;
+  return serial;
+}
+
+BOOL Sensor::SetCaliber(const CString& cal)
+{
+  if (cal.GetLength() > 0)
+  {
+    double d;
+    stringstream ss((LPCTSTR)cal, std::stringstream::in);
+    ss >> d;
+
+    m_adapterData.m_caliber = d;
+    return TRUE;
+  }
+  return FALSE;
+}
+
+
+BOOL Sensor::SetAdapterSerialNumber(const CString& serialNumber)
+{
+  if (serialNumber.GetLength() >= 3 || 0 == serialNumber.GetLength())
+  {
+    if (isdigit(serialNumber.GetAt(0)));
+    {            
+      m_adapterData.m_serialNumber = serialNumber.Left(3);
+      if (m_type == UnitType::Types::Theo)
+      {
+        DBInterface::Instance()->GetTheoAdapterType(m_adapterData.m_serialNumber, m_adapterData.m_type);
+      }
+      return TRUE;
+    }
+  }
+  return FALSE;
 }
 
 void Sensor::ResetFilter( void )

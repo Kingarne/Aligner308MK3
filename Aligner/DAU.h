@@ -57,7 +57,7 @@ struct ErrorEventInfo
 [
   event_source(native)
 ]
-class DAU : public SerialNumber
+class DAU
 {
 public:
   DAU( void ) ;
@@ -103,7 +103,8 @@ public:
     void SetResolutionsToDAU();
     void UpdateResolutionsFromDAU();    
 
-	void DumpSensorStates();
+	  void DumpSensorStates();
+   
 
 public:
 
@@ -154,8 +155,10 @@ public:
     bool IsBuddyChannelUsed(CString str);
     set<CString> m_usedBuddyChannelSet;	    
     Syncro* GetHighSeaCompGyro();
-	Sensor *GetSensorFromSN(const CString &sn);
-  int GetSerial() { return m_serial; }
+	  Sensor *GetSensorFromSN(const CString &sn);
+    int GetSerial() { return m_serial; }
+    BOOL SetSerialNumber(const CString& serialNumber);
+    CString GetSerialNumber(void) const { return m_serialNumber; }
 
 	int m_timerIntervall;
 	BOOL CheckDataRate(int numframesHandled);
@@ -190,7 +193,7 @@ private:
     CString m_port ;
     int m_mask ;
     int m_stop ;
-      
+    CString m_serialNumber;
     BOOL m_isCalibrated ;
     int m_serial ;
     double m_period ;

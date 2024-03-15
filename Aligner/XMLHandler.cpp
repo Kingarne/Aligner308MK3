@@ -342,6 +342,10 @@ bool XMLHandler::LoadChannels(TiXmlElement* node)
                     str = p;    
                     pSens->SetSerialNumber(str);
                 }
+                if (pChItem->QueryIntAttribute("Type", &iVal) != TIXML_NO_ATTRIBUTE)
+                {
+                  pSens->SetType((UnitType::Types)iVal);
+                }
                 if((p = pChItem->Attribute("AdapterSerial")) != NULL)
                 {
                     str = p;    
@@ -350,10 +354,6 @@ bool XMLHandler::LoadChannels(TiXmlElement* node)
                 if(pChItem->QueryDoubleAttribute("NomAz", &fVal) != TIXML_NO_ATTRIBUTE)
                 {
                     pSens->SetNominalAzimuth(fVal);
-                }
-                if(pChItem->QueryIntAttribute("Type", &iVal) != TIXML_NO_ATTRIBUTE)
-                {
-                    pSens->SetType((UnitType::Types)iVal);
                 }
                 if(pChItem->QueryIntAttribute("ORDetect", &iVal) != TIXML_NO_ATTRIBUTE)
                 {

@@ -840,6 +840,32 @@ BOOL DBInterface::GetStationsOnShip(vector<CString>& stations, CString ship)
     return TRUE;
 }
 
+BOOL DBInterface::GetTheoAdapterType(CString adaperSN, AdapterData::Type& type)
+{
+  if (!m_db.IsOpen())
+    return FALSE;
+
+  CString sql = "";
+
+  sql.Format("SELECT type FROM TheoAdapterCalibration WHERE serialNumber = '%s'",adaperSN);
+  CString serial;
+  int id;
+
+  type = AdapterData::Type::Adj;
+  CRecordset rs(&m_db);
+  if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+  {
+    if (!rs.IsEOF())
+    {
+      CDBVariant val;
+      rs.GetFieldValue("type", val);
+      type = (AdapterData::Type)val.m_iVal;
+    }
+  }
+
+  return TRUE;
+}
+
 BOOL DBInterface::GetAdapterCalibration(CString adaperSN, UnitType::Types t, AdapterCalibrationData &data)
 {
      if(!m_db.IsOpen())

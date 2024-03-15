@@ -12,22 +12,22 @@ public:
   enum Types {
     Unused = 0,
     Fixed = 1,
-    Platform = 2,
-    Gun = 3,
+    Platform = 2,    
+    Gun = 3,        
     Coarse = 4,
     Fine = 5,
     Composite = 6,
-	Theo = 7
+    Theo = 7,	  
   } ;
+
 public:
-	static CString GetUnitText( Types type ) ;
-    static bool TypeHasAdapter( Types type ) ;
-public:
+
+  static CString GetUnitText( Types type ) ;
+  static bool TypeHasAdapter( Types type ) ;
+
   UnitType( void ) ;
   virtual ~UnitType( void ) ;
-public:
   static void Rotate( double &rotatedX, double &rotatedY, double angle, double x, double y );
-public:
   void SetType( Types type ) ;
   Types GetType( void ) const ;
   void SetOverrangeDetection( BOOL overrangeDetection ) ;
@@ -37,33 +37,13 @@ public:
   void SetIsSelected( BOOL selectionStatus = TRUE ) ;
   BOOL IsSelected( void ) const ;
   BOOL ShallDoOverrangeDetection();
+
 protected:
+
   Types m_type ;
   BOOL m_overrangeDetection ;
   BOOL m_activeOverrangeDetection ;
   BOOL m_isSelected ;
 } ;
 
-class Offset
-{
-public:
-  Offset( void ) ;
-  virtual ~Offset( void ) ;
-public:
-  int GetOffset( void ) const ;
-  void SetOffset( int offset ) ;
-private:
-  int m_offset ;
-} ;
 
-inline
-int Offset::GetOffset( void ) const
-{
-  return m_offset ;
-}
-
-inline
-void Offset::SetOffset( int offset )
-{
-  m_offset = offset ;
-}

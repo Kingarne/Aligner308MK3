@@ -8,7 +8,6 @@
 #include "Filter.h"
 #include "Type.h"
 #include "NominalAzimuth.h"
-#include "SerialNumber.h"
 #include "DAUData.h"
 #include "GlobalData.h"
 
@@ -34,6 +33,20 @@ public:
     m_time = ts;
   }
 } ;
+
+
+
+struct AdapterData
+{
+  enum Type {
+    Adj = 0,
+    Fix = 1    
+  };
+
+  CString m_serialNumber;
+  double m_caliber;
+  AdapterData::Type m_type;
+};
 
 struct ParallaxData
 {
@@ -117,7 +130,7 @@ struct ElevationData
  *  A Sensor instance represents a physical Sensor Unit. A Sensor Unit consists
  *  of a temperature sensor and two inclination sensors.
  */
-class Sensor : public SerialNumber, public AdapterSerialNumber, public Name, public NominalAzimuth, public UnitType, public Offset
+class Sensor : public NominalAzimuth, public UnitType
 {
 public:
   Sensor( const CString &name, int type = 0 ) ;
@@ -159,7 +172,22 @@ public:
     void SetCentrifugPitchComp(double compVal);
     void SetCentrifugRollComp(double compVal);
 	  void Dump(ofstream& dump);
-    int DaysToCalibrationExp();    
+    int DaysToCalibrationExp();   
+
+    int GetOffset(void) const { return m_offset; }
+    void SetOffset(int offset) { m_offset = offset; }
+    CString GetName(void) const { return m_name; }
+    void SetName(const CString& name) { m_name = name; }
+    BOOL SetSerialNumber(const CString& serialNumber);
+    CString GetSerialNumber(void) const { return m_serialNumber; }
+    
+    BOOL SetAdapterSerialNumber(const CString& serialNumber);
+    BOOL SetAdapterCaliber(const double cal) { m_adapterData.m_caliber = cal; }
+    BOOL SetAdapterDesc(const CString desc);
+    BOOL SetCaliber(const CString& cal);
+    CString GetAdapterSerialNumber(void) const { return m_adapterData.m_serialNumber; }
+    double GetAdapterCaliber(void) { return m_adapterData.m_caliber; }
+    CString GetAdapterDesc(void) const;
 
     SensorTemperatureCalibrationData m_rollOffsetTemperatureCalibration ;
     SensorTemperatureCalibrationData m_rollGainTemperatureCalibration ;
@@ -181,8 +209,8 @@ private:
     DataFilter m_uncalibratedPitch ;
     TemperatureData m_temperatureData ;
     double m_temperature ;
-	AdapterCalibrationData m_adapterCalibration ;
-	double m_defaultScale ;
+	  AdapterCalibrationData m_adapterCalibration ;
+	  double m_defaultScale ;
     BOOL m_ignoreElevation ;
     ParallaxData m_parallaxData;
     double m_currentAz;
@@ -190,6 +218,10 @@ private:
     double m_centrifugPitchComp;
     double m_rotateBackAng;
     BOOL m_doRotateBack;
+    int m_offset;
+    CString m_name;
+    CString m_serialNumber;
+    AdapterData m_adapterData;
 
 public:
     BOOL m_invertPitch ; //TODO:Refactor please!

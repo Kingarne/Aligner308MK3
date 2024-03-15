@@ -92,13 +92,3 @@ void UnitType::Rotate( double &rotatedX, double &rotatedY, double angle, double 
   rotatedY = y * cos( angle ) - x * sin( angle ) ;
 }
 
-Offset::Offset( void )
-{
-  m_offset = 0 ;
-}
-
-Offset::~Offset( void )
-{
-  // Empty
-}
-

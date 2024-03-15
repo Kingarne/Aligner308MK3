@@ -6,7 +6,7 @@
 #include "Aligner.h"
 #include "Syncro.h"
 
-Syncro::Syncro( const CString &name ) : Name( name )
+Syncro::Syncro( const CString &name ) 
 {
     if( theApp.IsAligner202Enabled() == TRUE )
     {
@@ -22,6 +22,8 @@ Syncro::Syncro( const CString &name ) : Name( name )
     m_digConverterType = "";
     m_status = DS_OK;
     m_highSeaComp = FALSE;
+    m_offset = 0;
+    m_name = name;
 }
 
 Syncro::~Syncro( void )

@@ -609,7 +609,6 @@
     <ClCompile Include="Name.cpp" />
     <ClCompile Include="NominalAzimuth.cpp" />
     <ClCompile Include="Sensor.cpp" />
-    <ClCompile Include="SerialNumber.cpp" />
     <ClCompile Include="SerialPort.cpp" />
     <ClCompile Include="Syncro.cpp" />
     <ClCompile Include="Type.cpp" />
@@ -962,7 +961,6 @@ makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\
     <ClInclude Include="Name.h" />
     <ClInclude Include="NominalAzimuth.h" />
     <ClInclude Include="Sensor.h" />
-    <ClInclude Include="SerialNumber.h" />
     <ClInclude Include="SerialPort.h" />
     <ClInclude Include="Syncro.h" />
     <ClInclude Include="Type.h" />

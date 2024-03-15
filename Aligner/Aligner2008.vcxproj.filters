@@ -283,9 +283,6 @@
     <ClCompile Include="Sensor.cpp">
       <Filter>Source Files\InData</Filter>
     </ClCompile>
-    <ClCompile Include="SerialNumber.cpp">
-      <Filter>Source Files\InData</Filter>
-    </ClCompile>
     <ClCompile Include="SerialPort.cpp">
       <Filter>Source Files\InData</Filter>
     </ClCompile>
@@ -946,9 +943,6 @@
       <Filter>Header Files\InData</Filter>
     </ClInclude>
     <ClInclude Include="Sensor.h">
-      <Filter>Header Files\InData</Filter>
-    </ClInclude>
-    <ClInclude Include="SerialNumber.h">
       <Filter>Header Files\InData</Filter>
     </ClInclude>
     <ClInclude Include="SerialPort.h">

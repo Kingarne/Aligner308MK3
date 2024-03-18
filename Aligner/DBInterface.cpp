@@ -473,13 +473,14 @@ BOOL DBInterface::GetSensorCalibTime(CString se, DBTIMESTAMP& time)
 }
 
 
-BOOL DBInterface::GetAdapterCalibTime(CString ad, DBTIMESTAMP& time)
+BOOL DBInterface::GetAdapterCalibTime(CString ad, DBTIMESTAMP& time, UnitType::Types t)
 {
     if(!m_db.IsOpen())
         return FALSE;
 
+    CString table = t == UnitType::Types::Gun ? "GunAdapterCalibration" : "TheoAdapterCalibration";
     CString sql="";
-    sql.Format("SELECT [time] FROM GunAdapterCalibration WHERE serialNumber = '%s'",ad);	
+    sql.Format("SELECT [time] FROM %s WHERE serialNumber = '%s'", table, ad);
 
     COleDateTime oleTime;   
 
@@ -658,6 +659,37 @@ BOOL DBInterface::GetCalibratedSensors(vector<CString>& sensors)
          }
      }
     return TRUE;
+}
+
+BOOL DBInterface::GetTheoAdapters(AdapterData::Type type, vector<CString>& adapters)
+{
+  if (!m_db.IsOpen())
+    return FALSE;
+
+  CString sql;
+  sql.Format("SELECT * FROM TheoAdapterCalibration ORDER BY serialNumber");
+
+  int nVal;
+  CString strVal;
+    CString serial;
+
+  CRecordset rs(&m_db);
+  if (rs.Open(CRecordset::forwardOnly, sql, CRecordset::readOnly))
+  {
+    while (!rs.IsEOF())
+    {
+      rs.GetFieldValue("serialNumber", serial);
+    
+      CDBVariant t;
+      rs.GetFieldValue("type", t);
+      if (type == t.m_iVal)
+      {
+        adapters.push_back(serial);
+      }
+      rs.MoveNext();
+    }
+  }
+  return TRUE;
 }
 
 BOOL DBInterface::GetCalibratedAdapters(UnitType::Types t, vector<CString>& adapters)

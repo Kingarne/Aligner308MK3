@@ -571,6 +571,9 @@
     <ClCompile Include="json_writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FixTheoAdapterDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorStatic.h">
@@ -1039,6 +1042,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="json_tool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FixTheoAdapterDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

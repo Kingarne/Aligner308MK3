@@ -103,4 +103,5 @@ public:
 
   BOOL OpenConfig();
   afx_msg void OnProjectOpencalibration();
+  afx_msg void OnUtilitiesFixtheoadaptercalibration();
 } ;

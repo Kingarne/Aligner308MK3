@@ -472,6 +472,7 @@
     <ClCompile Include="DBInterface.cpp" />
     <ClCompile Include="DebugDlg.cpp" />
     <ClCompile Include="DebugGrid.cpp" />
+    <ClCompile Include="FixTheoAdapterDlg.cpp" />
     <ClCompile Include="FTD2Api.cpp" />
     <ClCompile Include="GainCalibrationPage6.cpp" />
     <ClCompile Include="GridCtrl\GridCell.cpp" />
@@ -711,6 +712,7 @@
     <ClInclude Include="DBInterface.h" />
     <ClInclude Include="DebugDlg.h" />
     <ClInclude Include="DebugGrid.h" />
+    <ClInclude Include="FixTheoAdapterDlg.h" />
     <ClInclude Include="FTD2Api.h" />
     <ClInclude Include="GainCalibrationPage6.h" />
     <ClInclude Include="GridCell.h" />

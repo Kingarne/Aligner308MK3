@@ -217,6 +217,7 @@
 #define IDB_SPLASH_MK3                  567
 #define IDB_BITMAP2                     576
 #define IDB_QR                          576
+#define IDD_THEO_FIX_ADAPTER_CAL_DIALOG 579
 #define IDC_BROWSE                      1000
 #define IDC_DAU_CAL_PRINT               1000
 #define IDC_LIVE_CLOSE                  1000
@@ -1031,6 +1032,9 @@
 #define IDC_STATIC_UNITS                1672
 #define IDC_STATIC_LAT                  1673
 #define IDC_STATIC_DEG                  1674
+#define IDC_ADAPTER_COMBO               1675
+#define IDC_UPDATE_CAL_BUTTON           1676
+#define IDC_STATIC_CAL                  1677
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1445,14 +1449,15 @@
 #define ID_UTILITIES_COMSETUP           32819
 #define ID_CALIBRATION_THEOADAPTER      32821
 #define ID_PROJECT_OPENCALIBRATION      32822
+#define ID_UTILITIES_FIXTHEOADAPTERCALIBRATION 32826
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        579
-#define _APS_NEXT_COMMAND_VALUE         32826
-#define _APS_NEXT_CONTROL_VALUE         1675
+#define _APS_NEXT_RESOURCE_VALUE        581
+#define _APS_NEXT_COMMAND_VALUE         32827
+#define _APS_NEXT_CONTROL_VALUE         1678
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

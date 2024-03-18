@@ -25,6 +25,7 @@
 #include "ComSettingsDlg.h"
 #include "ReportManager.h"
 #include "ProjectOpenCalibDlg.h"
+#include "FixTheoAdapterDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -78,6 +79,7 @@ BEGIN_MESSAGE_MAP(CAlignerDoc, CDocument)
   ON_COMMAND(ID_CALIBRATION_THEOADAPTER, &CAlignerDoc::OnCalibrationTheoadapter)
   ON_UPDATE_COMMAND_UI(ID_CALIBRATION_THEOADAPTER, &CAlignerDoc::OnUpdateCalibrationTheoadapter)
 	ON_COMMAND(ID_PROJECT_OPENCALIBRATION, &CAlignerDoc::OnProjectOpencalibration)
+  ON_COMMAND(ID_UTILITIES_FIXTHEOADAPTERCALIBRATION, &CAlignerDoc::OnUtilitiesFixtheoadaptercalibration)
 END_MESSAGE_MAP()
 
 CAlignerDoc::CAlignerDoc( void )
@@ -1072,6 +1074,14 @@ void CAlignerDoc::OnUpdateCalibrationAdapter( CCmdUI *pCmdUI )
 }
 
 
+void CAlignerDoc::OnUtilitiesFixtheoadaptercalibration()
+{
+  FixTheoAdapterDlg dlg;
+  dlg.DoModal();
+
+}
+
+
 void CAlignerDoc::OnCalibrationTheoadapter()
 {
 	TheoAdapterCalibration wizard( IDS_ADAPTER_CALIBRATION_TITLE ) ;
@@ -1137,6 +1147,8 @@ void CAlignerDoc::OnUtilitiesComsetup()
         DAU::GetDAU().UpdateSyncroSettings();
     }
 }
+
+
 
 
 

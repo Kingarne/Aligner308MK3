@@ -38,6 +38,7 @@ private:
     void SetRowBGColor(int row, COLORREF col);
     void UpdateHeader();
 	CString GetCalibrationInfo(Sensor& sensor);
+  CString GetAdapterCalibrationInfo(Sensor& sensor);
 
 public:
 	DECLARE_MESSAGE_MAP()

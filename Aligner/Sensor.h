@@ -172,7 +172,8 @@ public:
     void SetCentrifugPitchComp(double compVal);
     void SetCentrifugRollComp(double compVal);
 	  void Dump(ofstream& dump);
-    int DaysToCalibrationExp();   
+    int DaysToCalibrationExp(int& limit);
+    int DaysToAdapterCalibrationExp(int& limit);
 
     int GetOffset(void) const { return m_offset; }
     void SetOffset(int offset) { m_offset = offset; }
@@ -187,6 +188,7 @@ public:
     BOOL SetCaliber(const CString& cal);
     CString GetAdapterSerialNumber(void) const { return m_adapterData.m_serialNumber; }
     double GetAdapterCaliber(void) { return m_adapterData.m_caliber; }
+    AdapterData::Type GetAdapterType(void) { return m_adapterData.m_type; }
     CString GetAdapterDesc(void) const;
 
     SensorTemperatureCalibrationData m_rollOffsetTemperatureCalibration ;

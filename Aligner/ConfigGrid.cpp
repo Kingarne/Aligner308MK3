@@ -184,11 +184,13 @@ void SensorGrid::UpdateGrid()
 			  text.Format("%+7.3f", (SysSetup->GetUnits() == UNIT_MRAD) ? pitch : MRADIANS_TO_ARCMIN(roll));
 			  SetItemText(row, SColPitch, text);
 						
-        int daysLeft = pSensor->DaysToCalibrationExp();
+        int sensWarn = 0, adaptWarn=0;
+        int sensDaysLeft = pSensor->DaysToCalibrationExp(sensWarn);
+        int adaptDaysLeft = pSensor->DaysToAdapterCalibrationExp(adaptWarn);
 
 			if (pSensor->GetTemperature() < 68.4f)
 			{
-        if(daysLeft < 0)
+        if(sensDaysLeft < 0 || adaptDaysLeft < 0)
           SetRowBGColor(row, UNCALIBRATED_COLOR);
         
         text.Format(_T("%.1f°"), pSensor->GetTemperature());
@@ -240,12 +242,12 @@ void SensorGrid::UpdateGrid()
         text.Format("%+.1f",parallaxdata.dz);
         SetItemText(row, SColPlxdZ, text );  
        
-        if (daysLeft > 30)
+        if (sensDaysLeft > sensWarn && adaptDaysLeft> adaptWarn)
           text = "OK";
-        else if (daysLeft < 0)
+        else if (sensDaysLeft < 0 || adaptDaysLeft < 0)
           text = "Expired!";
         else
-          text.Format("Exp. %dd", daysLeft);
+          text.Format("Exp. %dd", min(sensDaysLeft, adaptDaysLeft));
         
         SetItemText(row, SCCalib, text);
         }
@@ -1147,11 +1149,12 @@ void SensorGrid::OnMouseMove(UINT nFlags, CPoint point)
 	pCell->GetTipTextRect(&TextRect);
 	GetCellRect(idCurrentCell.row, idCurrentCell.col, CellRect);
 
-	if (idCurrentCell.col != 1 || idCurrentCell.row == 0)
+	if (idCurrentCell.row == 0)
 		return;
 
 	TextRect.right = TextRect.left + 2; //So that we allways display tip.
-	CString str = pCell->GetText();
+  CGridCellBase* pSensorCell = GetCell(idCurrentCell.row, 1);
+  CString str = pSensorCell->GetText();
 	if (str == "")
 		return;
 
@@ -1159,13 +1162,41 @@ void SensorGrid::OnMouseMove(UINT nFlags, CPoint point)
 	if (!pSensor)
 		return;
 
-	CString info = GetCalibrationInfo(*pSensor);
+  if (idCurrentCell.col == 1)
+  {
+    CString info = GetCalibrationInfo(*pSensor);
 
-	m_TitleTip.Show(TextRect, info, 0, CellRect,
-		pCell->GetFont(), GetTitleTipTextClr(), GetTitleTipBackClr());
-
+    m_TitleTip.Show(TextRect, info, 0, CellRect,
+    pCell->GetFont(), GetTitleTipTextClr(), GetTitleTipBackClr());
+  }
+  else if (idCurrentCell.col == 8)
+  {
+    CString info = GetAdapterCalibrationInfo(*pSensor);
+    if (info != "")
+    {
+      m_TitleTip.Show(TextRect, info, 0, CellRect, pCell->GetFont(), GetTitleTipTextClr(), GetTitleTipBackClr());
+    }
+  }
 	TRACE("Move:%d,%d\n", idCurrentCell.row, idCurrentCell.col);
 
+}
+
+CString SensorGrid::GetAdapterCalibrationInfo(Sensor& sensor)
+{
+  if (!UnitType::TypeHasAdapter(sensor.GetType()))
+    return "";
+
+  CString info, str;
+  str.Format("Adapter:%s\n\n", sensor.GetAdapterSerialNumber());
+  info += str;
+  str.Format("                           Az               El                Date\n");
+  info += str;
+  AdapterCalibrationData cal = sensor.GetAdapterCalibrationData();
+  str.Format("Calibration: %.5f,  %.2e,  (%02d/%02d/%02d %02d:%02d:%02d) \n", cal.m_azimuth, cal.m_elevation,
+    cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
+  info += str;
+
+  return info;
 }
 
 CString SensorGrid::GetCalibrationInfo(Sensor& sensor)
@@ -1177,32 +1208,32 @@ CString SensorGrid::GetCalibrationInfo(Sensor& sensor)
 	info += str;
 
 	SensorTemperatureCalibrationData cal = sensor.m_rollOffsetTemperatureCalibration;
-	str.Format(" Roll Offset: %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+	str.Format(" Roll Offset: %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d) \n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
 		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 	cal = sensor.m_rollGainTemperatureCalibration;
-	str.Format(" Roll Scale:   %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+	str.Format(" Roll Scale:   %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d) \n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
 		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 	cal = sensor.m_rollAzimuthTemperatureCalibration;
-	str.Format(" Roll Azim:    %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+	str.Format(" Roll Azim:    %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d) \n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
 		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str + "\n";
 
 	cal = sensor.m_pitchOffsetTemperatureCalibration;
-	str.Format(" Pitch Offset:  %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+	str.Format(" Pitch Offset:  %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d) \n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
 		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 	cal = sensor.m_pitchGainTemperatureCalibration;
-	str.Format(" Pitch Scale:    %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+	str.Format(" Pitch Scale:    %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d) \n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
 		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 
 	cal = sensor.m_pitchAzimuthTemperatureCalibration;
-	str.Format(" Pitch Azim:     %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d)\n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
+	str.Format(" Pitch Azim:     %.5f,  %.2e,  %.2e,  %.2e  (%02d/%02d/%02d %02d:%02d:%02d) \n", cal.m_offset, cal.m_linear, cal.m_quadratic, cal.m_cubic,
 		cal.m_time.year - 2000, cal.m_time.month, cal.m_time.day, cal.m_time.hour, cal.m_time.minute, cal.m_time.second);
 	info += str;
 

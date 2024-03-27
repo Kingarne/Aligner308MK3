@@ -235,18 +235,41 @@ COleDateTime Sensor::GetTempCalTime()
   //Sensor calibration time
   vec.push_back(COleDateTime(m_rollChannelCalibration.m_time).m_dt);
 
-  if (UnitType::TypeHasAdapter(m_type))
-  {
-    vec.push_back(COleDateTime(m_adapterCalibration.m_time).m_dt);    
-  }
+  
 
   COleDateTime ts(*std::min_element(vec.begin(), vec.end()));
  
   return ts;
 }
 
+int Sensor::DaysToAdapterCalibrationExp(int& limit)
+{
 
-int Sensor::DaysToCalibrationExp()
+  if (!UnitType::TypeHasAdapter(GetType()))
+  {
+    limit = 30;
+    return CAL_TIME_LIMIT;
+  }
+
+  COleDateTime now = COleDateTime::GetCurrentTime();
+  COleDateTime fixTime = COleDateTime(m_adapterCalibration.m_time).m_dt;
+  COleDateTimeSpan ts = now - fixTime; 
+  int left = 0;
+  if (m_type == Theo && m_adapterData.m_type == AdapterData::Type::Fix)
+  {   
+    left = CAL_THEO_FIX_TIME_LIMIT - ts.GetDays();   
+    limit = 3;
+  }
+  else
+  {
+    left = CAL_TIME_LIMIT - ts.GetDays();
+    limit = 30;
+  }
+  
+  return left;
+}
+
+int Sensor::DaysToCalibrationExp(int &limit)
 {
   bool valid = true;
   TRACE("HasValidCalibration %s\n", GetSerialNumber());
@@ -254,7 +277,10 @@ int Sensor::DaysToCalibrationExp()
   COleDateTime now = COleDateTime::GetCurrentTime();
 
   COleDateTimeSpan ts = now - calTime;
-  return CAL_TIME_LIMIT - ts.GetDays();
+  int left = CAL_TIME_LIMIT - ts.GetDays();
+  limit = 30;
+
+  return left;
 }
 
 void Sensor::SetCentrifugPitchComp(double compVal)

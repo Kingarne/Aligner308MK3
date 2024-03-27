@@ -128,7 +128,8 @@ public:
     Sensor *GetSensor( const CString &name ) ;
     int GetSensorCount( void ) const ;
     int GetConnectedSensorCount( void ) const ;
-	int GetConnectedSensorCount( UnitType::Types t ) const ;
+    int GetConnectedAdapterCount(UnitType::Types t, AdapterData::Type at) const;
+    int GetConnectedSensorCount( UnitType::Types t ) const ;
     Syncro *GetSyncro( int i ) ;
     Syncro *GetSyncro( const CString &name ) ;
     Syncro *GetFirstSelectedSyncro();
@@ -290,6 +291,20 @@ int DAU::GetConnectedSensorCount( void ) const {
   }
   return connected ;
 }
+
+inline
+int DAU::GetConnectedAdapterCount(UnitType::Types t, AdapterData::Type at) const {
+  int connected = 0;
+  for (vector<Sensor*>::const_iterator i = m_sensorPointers.begin(); i != m_sensorPointers.end(); i++)
+  {
+    if ((*i)->GetType() == t && (*i)->GetAdapterType() == at)
+    {
+      connected++;
+    }
+  }
+  return connected;
+}
+
 
 inline
 int DAU::GetConnectedSensorCount( UnitType::Types t ) const {

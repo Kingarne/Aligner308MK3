@@ -79,7 +79,7 @@ BOOL TheoAdapterCalibrationPage1::InitSensorAdapter( void )
 	for (int i = 0 ; i < DAU::GetDAU().GetSensorCount()  ; i++)
 	{
 		Sensor *pCurrent = DAU::GetDAU().GetSensor( i ) ;
-		if (pCurrent->GetType() == UnitType::Theo)
+		if (pCurrent->GetType() == UnitType::Theo && pCurrent->GetAdapterType() == AdapterData::Type::Adj)
 		{
 			CString item = pCurrent->GetSerialNumber() ;
 			item += "/" ;

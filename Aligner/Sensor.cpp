@@ -255,9 +255,9 @@ int Sensor::DaysToAdapterCalibrationExp(int& limit)
   COleDateTime fixTime = COleDateTime(m_adapterCalibration.m_time).m_dt;
   COleDateTimeSpan ts = now - fixTime; 
   int left = 0;
-  if (m_type == Theo && m_adapterData.m_type == AdapterData::Type::Fix)
+  if (m_type == Theo && m_adapterData.m_type == AdapterData::Type::Adj)
   {   
-    left = CAL_THEO_FIX_TIME_LIMIT - ts.GetDays();   
+    left = CAL_THEO_ADJ_TIME_LIMIT - ts.GetDays();   
     limit = 3;
   }
   else

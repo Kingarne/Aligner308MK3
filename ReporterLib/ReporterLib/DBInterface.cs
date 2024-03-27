@@ -306,6 +306,16 @@ namespace ReporterLib
             public double azimuth { get; set; }
         }
 
+        public class TheoAdaptCalib
+        {
+            public bool done = false;
+            public string sn { get; set; }
+            public DateTime time { get; set; }
+            public double elevation { get; set; }
+            public double azimuth { get; set; }
+            public int type { get; set; }
+        }
+
         public class PlatformCorrection
         {
             public bool done = false;
@@ -1452,6 +1462,33 @@ namespace ReporterLib
                         ga.elevation = (double)dr["elevation"];
 
                         adapters.Add(ga);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool GetTheoAdapter(ref List<TheoAdaptCalib> adapters)
+        {
+            if (Connection.State != System.Data.ConnectionState.Open)
+                return false;
+
+            using (OdbcCommand command = new OdbcCommand("SELECT * FROM TheoAdapterCalibration", Connection))
+            {
+                using (OdbcDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        TheoAdaptCalib ta = new TheoAdaptCalib();
+
+                        ta.sn = (string)dr["serialNumber"];
+                        ta.time = (DateTime)dr["time"];
+                        ta.azimuth = (double)dr["azimuth"];
+                        ta.elevation = (double)dr["elevation"];
+                        ta.type = (int)dr["type"];
+
+                        adapters.Add(ta);
                     }
                 }
             }

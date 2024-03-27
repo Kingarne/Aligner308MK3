@@ -48,6 +48,7 @@ namespace ReporterLib
         private List<DBInterface.SensorCalibrationInfo> SensorCalib;
         private List<DBInterface.DAUData> DAUCalib;
         private List<DBInterface.GunAdaptCalib> GunAdapterCalib;
+        private List<DBInterface.TheoAdaptCalib> TheoAdapterCalib;
         private List<DBInterface.PlatformCorrection> PlatformCalib;
         public Dictionary<DBInterface.CalType, string> CalTypeMap { get; set; }
 
@@ -2015,6 +2016,9 @@ namespace ReporterLib
                 GunAdapterCalib = new List<DBInterface.GunAdaptCalib>();
                 DBI.GetGunAdapter(ref GunAdapterCalib);
 
+                TheoAdapterCalib = new List<DBInterface.TheoAdaptCalib>();
+                DBI.GetTheoAdapter(ref TheoAdapterCalib);
+
                 PlatformCalib = new List<DBInterface.PlatformCorrection>();
                 DBI.GetPlatformCorrections(ref PlatformCalib);
 
@@ -2037,6 +2041,9 @@ namespace ReporterLib
                 return false;
 
             if (!DrawGunAdapterCalib())
+                return false;
+
+            if (!DrawTheoAdapterCalib())
                 return false;
 
             if (!DrawPlatformCalib())
@@ -2256,6 +2263,68 @@ namespace ReporterLib
             }
 
             gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);          
+
+            m_yPos += MargY;
+
+            return true;
+        }
+
+        private bool DrawTheoAdapterCalib()
+        {
+            if (!TheoAdapterCalib.Any(e => !e.done))
+            {
+                return true;
+            }
+
+            if (!EnoughSpace(100))
+                return false;
+
+            Graphics gr = PrintArgs.Graphics;
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            sf.LineAlignment = StringAlignment.Center;
+
+            Rectangle rect = new Rectangle(new Point(HeadRect.Left, m_yPos), new Size(PrintArgs.MarginBounds.Width, 40));
+            gr.FillRectangle(new SolidBrush(HeadBGColor), rect);
+            gr.DrawString("Theo Adapter", CalibHeadFont, new SolidBrush(Color.Black), rect, sf);
+
+            m_yPos += rect.Height + MargY;
+
+            int wPerc = 20;
+            List<TableItem> table = new List<TableItem>();
+            table.Add(new TableItem("S/N", 2, wPerc, Color.Black, StringAlignment.Near));
+            table.Add(new TableItem("Elevation\n[mrad]", -1, wPerc));
+            table.Add(new TableItem("Azimuth\n[mrad]", -1, wPerc));
+            table.Add(new TableItem("Type", -1, wPerc));
+            table.Add(new TableItem("Date", -1, wPerc));
+
+            m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+            m_yPos += SmalMarg;
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
+            m_yPos += SmalMarg;
+
+            foreach (DBInterface.TheoAdaptCalib ta in TheoAdapterCalib)
+            {
+                if (!EnoughSpace(10))
+                    return false;
+
+                if (ta.done)
+                    continue;
+
+                table = new List<TableItem>();
+                table.Add(new TableItem(ta.sn.ToString(), 2, wPerc, Color.Black, StringAlignment.Near));
+                table.Add(new TableItem(ta.elevation.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(ta.azimuth.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(ta.type==0?"Adjustable":"Fix", -1, wPerc));
+                table.Add(new TableItem(ta.time.ToString("yyyy/MM/dd HH:mm:ss"), -1, wPerc));
+
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
+
+                m_yPos += SmalMarg;
+                ta.done = true;
+            }
+
+            gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
 
             m_yPos += MargY;
 

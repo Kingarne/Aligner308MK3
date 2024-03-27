@@ -103,4 +103,6 @@ public:
 
   BOOL OpenConfig();
   afx_msg void OnProjectOpencalibration();
+  afx_msg void OnUtilitiesFixtheoadaptercalibration();
+  afx_msg void OnUpdateUtilitiesFixtheoadaptercalibration(CCmdUI* pCmdUI);
 } ;

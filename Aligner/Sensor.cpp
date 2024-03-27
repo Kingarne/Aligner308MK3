@@ -4,11 +4,11 @@
 
 #include "stdafx.h"
 #include "DAUData.h"
-#include "SerialNumber.h"
 #include "Type.h"
 #include "Sensor.h"
 #include "CalibInfo.h"
 #include <algorithm>
+#include <sstream>
 
 double Sensor::sm_latitudeCompensation = 1.0 ;
 
@@ -26,7 +26,7 @@ static double SensorScaleFromChannelType( int channelType )
 	return scale ;
 }
 
-Sensor::Sensor( const CString &name , int channelType ) : Name( name ),
+Sensor::Sensor( const CString &name , int channelType ) : 
   m_defaultScale( SensorScaleFromChannelType( channelType ) ), 
   m_rollOffsetTemperatureCalibration( 0, 0, 0, 0),
 	m_rollGainTemperatureCalibration( 1.0, 0, 0, 0),
@@ -45,6 +45,7 @@ Sensor::Sensor( const CString &name , int channelType ) : Name( name ),
     m_zParCorr = 0.0f;
     m_centrifugRollComp = 0.0f;
     m_centrifugPitchComp = 0.0f;    
+    m_name = name;
     SetData( SensorData() ) ;
     SetTemperatureData( TemperatureData() ) ;
 }
@@ -52,6 +53,70 @@ Sensor::Sensor( const CString &name , int channelType ) : Name( name ),
 Sensor::~Sensor( void )
 {
   // Empty
+}
+
+BOOL Sensor::SetSerialNumber(const CString& serialNumber)
+{
+  if (3 == serialNumber.GetLength() || 0 == serialNumber.GetLength())
+  {
+    m_serialNumber = serialNumber;
+    return TRUE;
+  }
+  return FALSE;
+}
+
+BOOL Sensor::SetAdapterDesc(const CString desc)
+{
+  if (!SetAdapterSerialNumber(desc))
+    return FALSE;
+
+  BOOL b = true;
+  if (m_type != UnitType::Types::Theo)
+    b = SetCaliber(desc.Right(desc.GetLength() - 6));
+
+  return b;
+}
+
+CString Sensor::GetAdapterDesc(void) const
+{
+  CString serial = m_adapterData.m_serialNumber;
+  CString calStr = "";
+  if (m_type != UnitType::Types::Theo)
+    calStr.Format(" - %.0fmm", m_adapterData.m_caliber);
+  serial += calStr;
+  return serial;
+}
+
+BOOL Sensor::SetCaliber(const CString& cal)
+{
+  if (cal.GetLength() > 0)
+  {
+    double d;
+    stringstream ss((LPCTSTR)cal, std::stringstream::in);
+    ss >> d;
+
+    m_adapterData.m_caliber = d;
+    return TRUE;
+  }
+  return FALSE;
+}
+
+
+BOOL Sensor::SetAdapterSerialNumber(const CString& serialNumber)
+{
+  if (serialNumber.GetLength() >= 3 || 0 == serialNumber.GetLength())
+  {
+    if (isdigit(serialNumber.GetAt(0)));
+    {            
+      m_adapterData.m_serialNumber = serialNumber.Left(3);
+      if (m_type == UnitType::Types::Theo)
+      {
+        DBInterface::Instance()->GetTheoAdapterType(m_adapterData.m_serialNumber, m_adapterData.m_type);
+      }
+      return TRUE;
+    }
+  }
+  return FALSE;
 }
 
 void Sensor::ResetFilter( void )
@@ -170,18 +235,41 @@ COleDateTime Sensor::GetTempCalTime()
   //Sensor calibration time
   vec.push_back(COleDateTime(m_rollChannelCalibration.m_time).m_dt);
 
-  if (UnitType::TypeHasAdapter(m_type))
-  {
-    vec.push_back(COleDateTime(m_adapterCalibration.m_time).m_dt);    
-  }
+  
 
   COleDateTime ts(*std::min_element(vec.begin(), vec.end()));
  
   return ts;
 }
 
+int Sensor::DaysToAdapterCalibrationExp(int& limit)
+{
 
-int Sensor::DaysToCalibrationExp()
+  if (!UnitType::TypeHasAdapter(GetType()))
+  {
+    limit = 30;
+    return CAL_TIME_LIMIT;
+  }
+
+  COleDateTime now = COleDateTime::GetCurrentTime();
+  COleDateTime fixTime = COleDateTime(m_adapterCalibration.m_time).m_dt;
+  COleDateTimeSpan ts = now - fixTime; 
+  int left = 0;
+  if (m_type == Theo && m_adapterData.m_type == AdapterData::Type::Fix)
+  {   
+    left = CAL_THEO_FIX_TIME_LIMIT - ts.GetDays();   
+    limit = 3;
+  }
+  else
+  {
+    left = CAL_TIME_LIMIT - ts.GetDays();
+    limit = 30;
+  }
+  
+  return left;
+}
+
+int Sensor::DaysToCalibrationExp(int &limit)
 {
   bool valid = true;
   TRACE("HasValidCalibration %s\n", GetSerialNumber());
@@ -189,7 +277,10 @@ int Sensor::DaysToCalibrationExp()
   COleDateTime now = COleDateTime::GetCurrentTime();
 
   COleDateTimeSpan ts = now - calTime;
-  return CAL_TIME_LIMIT - ts.GetDays();
+  int left = CAL_TIME_LIMIT - ts.GetDays();
+  limit = 30;
+
+  return left;
 }
 
 void Sensor::SetCentrifugPitchComp(double compVal)
@@ -257,11 +348,11 @@ BOOL Sensor::LoadCalibration( void )
     m_adapterCalibration = AdapterCalibrationData() ;
 
     if (UnitType::TypeHasAdapter(m_type))
-	  {
-        AdapterCalibrationData data;
-        DBInterface::Instance()->GetAdapterCalibration(GetAdapterSerialNumber(), data);        
-        m_adapterCalibration = AdapterCalibrationData( MilliUnitsToUnits( data.m_elevation ), MilliUnitsToUnits( data.m_azimuth ), data.m_time, data.m_elevCorrOffset ) ;
-	  }
+    {
+      AdapterCalibrationData data;
+      DBInterface::Instance()->GetAdapterCalibration(GetAdapterSerialNumber(), m_type, data);
+      m_adapterCalibration = AdapterCalibrationData(MilliUnitsToUnits(data.m_elevation), MilliUnitsToUnits(data.m_azimuth), data.m_time, data.m_elevCorrOffset);
+    }
 	
     ParallaxData defaultParallax = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
     m_parallaxData = defaultParallax;

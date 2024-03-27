@@ -4,14 +4,13 @@
 
 #pragma once
 
-#include "Name.h"
 #include "Type.h"
 #include "NominalAzimuth.h"
 #include "Filter.h"
 #include "DAUData.h"
 
 // TODO Add resolution setting, now hard coded to 16 bits.
-class Syncro : public Name, public NominalAzimuth, public UnitType, public Offset
+class Syncro : public NominalAzimuth, public UnitType
 {
 public:
     Syncro( const CString &name ) ;
@@ -43,9 +42,13 @@ public:
     int GetStatus(){return m_status;}
     BOOL GetHighSeaComp(){return m_highSeaComp;}
     void SetHighSeaComp(BOOL b){m_highSeaComp=b;}
+    int GetOffset(void) const { return m_offset; }
+    void SetOffset(int offset) { m_offset = offset; }
+    CString GetName(void) const { return m_name; }
+    void SetName(const CString& name) { m_name = name; }
+  
+    CString m_description ;
 
-public:
-  CString m_description ;
 protected:
     SyncroData m_data ;
     DataFilter m_roll ;
@@ -60,6 +63,8 @@ protected:
     int m_resolution;
     int m_status;
     BOOL m_highSeaComp;
+    int m_offset;
+    CString m_name;
 } ;
 
 inline

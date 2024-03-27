@@ -283,9 +283,6 @@
     <ClCompile Include="Sensor.cpp">
       <Filter>Source Files\InData</Filter>
     </ClCompile>
-    <ClCompile Include="SerialNumber.cpp">
-      <Filter>Source Files\InData</Filter>
-    </ClCompile>
     <ClCompile Include="SerialPort.cpp">
       <Filter>Source Files\InData</Filter>
     </ClCompile>
@@ -572,6 +569,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="json_writer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FixTheoAdapterDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -948,9 +948,6 @@
     <ClInclude Include="Sensor.h">
       <Filter>Header Files\InData</Filter>
     </ClInclude>
-    <ClInclude Include="SerialNumber.h">
-      <Filter>Header Files\InData</Filter>
-    </ClInclude>
     <ClInclude Include="SerialPort.h">
       <Filter>Header Files\InData</Filter>
     </ClInclude>
@@ -1045,6 +1042,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="json_tool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FixTheoAdapterDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

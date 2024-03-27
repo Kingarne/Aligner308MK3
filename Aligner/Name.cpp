@@ -5,7 +5,3 @@
 #include "StdAfx.h"
 #include "Name.h"
 
-Name::~Name( void )
-{
-  /* Empty */
-}

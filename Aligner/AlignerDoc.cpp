@@ -25,6 +25,7 @@
 #include "ComSettingsDlg.h"
 #include "ReportManager.h"
 #include "ProjectOpenCalibDlg.h"
+#include "FixTheoAdapterDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -78,6 +79,8 @@ BEGIN_MESSAGE_MAP(CAlignerDoc, CDocument)
   ON_COMMAND(ID_CALIBRATION_THEOADAPTER, &CAlignerDoc::OnCalibrationTheoadapter)
   ON_UPDATE_COMMAND_UI(ID_CALIBRATION_THEOADAPTER, &CAlignerDoc::OnUpdateCalibrationTheoadapter)
 	ON_COMMAND(ID_PROJECT_OPENCALIBRATION, &CAlignerDoc::OnProjectOpencalibration)
+  ON_COMMAND(ID_UTILITIES_FIXTHEOADAPTERCALIBRATION, &CAlignerDoc::OnUtilitiesFixtheoadaptercalibration)
+  ON_UPDATE_COMMAND_UI(ID_UTILITIES_FIXTHEOADAPTERCALIBRATION, &CAlignerDoc::OnUpdateUtilitiesFixtheoadaptercalibration)
 END_MESSAGE_MAP()
 
 CAlignerDoc::CAlignerDoc( void )
@@ -1072,6 +1075,16 @@ void CAlignerDoc::OnUpdateCalibrationAdapter( CCmdUI *pCmdUI )
 }
 
 
+void CAlignerDoc::OnUtilitiesFixtheoadaptercalibration()
+{
+  FixTheoAdapterDlg dlg;
+  dlg.DoModal();
+
+  LoadSensorCalibration();
+
+}
+
+
 void CAlignerDoc::OnCalibrationTheoadapter()
 {
 	TheoAdapterCalibration wizard( IDS_ADAPTER_CALIBRATION_TITLE ) ;
@@ -1089,10 +1102,15 @@ void CAlignerDoc::OnCalibrationTheoadapter()
 	UpdateAllViews( NULL ) ;
 }
 
+void CAlignerDoc::OnUpdateUtilitiesFixtheoadaptercalibration(CCmdUI* pCmdUI)
+{
+  //pCmdUI->Enable(!theApp.GetCanCalibrate() && DAU::GetDAU().GetConnectedSensorCount(UnitType::Theo) >= 1 && DAU::GetDAU().GetConnectedAdapterCount(UnitType::Theo, AdapterData::Fix) >= 1);
+}
 
 void CAlignerDoc::OnUpdateCalibrationTheoadapter(CCmdUI *pCmdUI)
 {
-	pCmdUI -> Enable( !theApp.GetCanCalibrate() && DAU::GetDAU().GetConnectedSensorCount( UnitType::Theo )  >= 1 && DAU::GetDAU().GetConnectedSensorCount( UnitType::Fixed ) >= 1) ;
+	pCmdUI -> Enable( !theApp.GetCanCalibrate() && DAU::GetDAU().GetConnectedSensorCount( UnitType::Theo )  >= 1 && DAU::GetDAU().GetConnectedAdapterCount(UnitType::Theo, AdapterData::Adj) >= 1
+    && DAU::GetDAU().GetConnectedSensorCount( UnitType::Fixed ) >= 1) ;
 }
 
 
@@ -1137,6 +1155,11 @@ void CAlignerDoc::OnUtilitiesComsetup()
         DAU::GetDAU().UpdateSyncroSettings();
     }
 }
+
+
+
+
+
 
 
 

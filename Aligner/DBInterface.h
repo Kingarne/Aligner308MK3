@@ -23,7 +23,9 @@ public:
 	BOOL GetShip(CString name, Ship& ship);
 	BOOL GetShips(vector<Ship>& ships);
     BOOL GetStationsOnShip(vector<CString>& ships, CString ship);
-    BOOL GetAdapterCalibration(CString adaperSN, AdapterCalibrationData &data);
+    BOOL GetAdapterCalibration(CString adaperSN, UnitType::Types t, AdapterCalibrationData &data);
+    BOOL GetTheoAdapterType(CString adaperSN, AdapterData::Type& type);
+    BOOL GetTheoAdapters(AdapterData::Type type, vector<CString>& adapters);
     BOOL GetSensorCalibrationData(CString calibName, CString SN, SensorTemperatureCalibrationData &data);
     BOOL GetSensorData(CString table, CString SN, vector<SelectedData>& data, CString projName);
     BOOL GetStationParallaxes(CString station, ParallaxData &data);        
@@ -33,7 +35,7 @@ public:
 	BOOL GetLastCounter(int& id);
 
     BOOL GetChannelCalibTime(CString ch, int dauId, DBTIMESTAMP& time);
-    BOOL GetAdapterCalibTime(CString ad, DBTIMESTAMP& time);
+    BOOL GetAdapterCalibTime(CString ad, DBTIMESTAMP& time, UnitType::Types t= UnitType::Types::Gun);
     BOOL GetSensorCalibTime(CString se, DBTIMESTAMP& time);
 	
 	BOOL GetProjects(vector<ProjectData>& projects);

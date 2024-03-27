@@ -57,7 +57,7 @@ struct ErrorEventInfo
 [
   event_source(native)
 ]
-class DAU : public SerialNumber
+class DAU
 {
 public:
   DAU( void ) ;
@@ -103,7 +103,8 @@ public:
     void SetResolutionsToDAU();
     void UpdateResolutionsFromDAU();    
 
-	void DumpSensorStates();
+	  void DumpSensorStates();
+   
 
 public:
 
@@ -127,7 +128,8 @@ public:
     Sensor *GetSensor( const CString &name ) ;
     int GetSensorCount( void ) const ;
     int GetConnectedSensorCount( void ) const ;
-	int GetConnectedSensorCount( UnitType::Types t ) const ;
+    int GetConnectedAdapterCount(UnitType::Types t, AdapterData::Type at) const;
+    int GetConnectedSensorCount( UnitType::Types t ) const ;
     Syncro *GetSyncro( int i ) ;
     Syncro *GetSyncro( const CString &name ) ;
     Syncro *GetFirstSelectedSyncro();
@@ -154,8 +156,10 @@ public:
     bool IsBuddyChannelUsed(CString str);
     set<CString> m_usedBuddyChannelSet;	    
     Syncro* GetHighSeaCompGyro();
-	Sensor *GetSensorFromSN(const CString &sn);
-  int GetSerial() { return m_serial; }
+	  Sensor *GetSensorFromSN(const CString &sn);
+    int GetSerial() { return m_serial; }
+    BOOL SetSerialNumber(const CString& serialNumber);
+    CString GetSerialNumber(void) const { return m_serialNumber; }
 
 	int m_timerIntervall;
 	BOOL CheckDataRate(int numframesHandled);
@@ -190,7 +194,7 @@ private:
     CString m_port ;
     int m_mask ;
     int m_stop ;
-      
+    CString m_serialNumber;
     BOOL m_isCalibrated ;
     int m_serial ;
     double m_period ;
@@ -287,6 +291,20 @@ int DAU::GetConnectedSensorCount( void ) const {
   }
   return connected ;
 }
+
+inline
+int DAU::GetConnectedAdapterCount(UnitType::Types t, AdapterData::Type at) const {
+  int connected = 0;
+  for (vector<Sensor*>::const_iterator i = m_sensorPointers.begin(); i != m_sensorPointers.end(); i++)
+  {
+    if ((*i)->GetType() == t && (*i)->GetAdapterType() == at)
+    {
+      connected++;
+    }
+  }
+  return connected;
+}
+
 
 inline
 int DAU::GetConnectedSensorCount( UnitType::Types t ) const {

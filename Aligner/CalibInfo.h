@@ -5,6 +5,7 @@
 #pragma once
 
 #define CAL_TIME_LIMIT 365
+#define CAL_THEO_FIX_TIME_LIMIT 7
 
 class CalibrationInfo
 {

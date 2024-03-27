@@ -111,6 +111,15 @@ BOOL DAU::StartDAUComThread()
     return TRUE;
 }
 
+BOOL DAU::SetSerialNumber(const CString& serialNumber)
+{
+  if (3 == serialNumber.GetLength() || 0 == serialNumber.GetLength())
+  {
+    m_serialNumber = serialNumber;
+    return TRUE;
+  }
+  return FALSE;
+}
 
 void DAU::ResetSensorCompensations()
 {

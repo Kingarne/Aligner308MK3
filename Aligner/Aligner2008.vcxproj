@@ -472,6 +472,7 @@
     <ClCompile Include="DBInterface.cpp" />
     <ClCompile Include="DebugDlg.cpp" />
     <ClCompile Include="DebugGrid.cpp" />
+    <ClCompile Include="FixTheoAdapterDlg.cpp" />
     <ClCompile Include="FTD2Api.cpp" />
     <ClCompile Include="GainCalibrationPage6.cpp" />
     <ClCompile Include="GridCtrl\GridCell.cpp" />
@@ -609,7 +610,6 @@
     <ClCompile Include="Name.cpp" />
     <ClCompile Include="NominalAzimuth.cpp" />
     <ClCompile Include="Sensor.cpp" />
-    <ClCompile Include="SerialNumber.cpp" />
     <ClCompile Include="SerialPort.cpp" />
     <ClCompile Include="Syncro.cpp" />
     <ClCompile Include="Type.cpp" />
@@ -712,6 +712,7 @@
     <ClInclude Include="DBInterface.h" />
     <ClInclude Include="DebugDlg.h" />
     <ClInclude Include="DebugGrid.h" />
+    <ClInclude Include="FixTheoAdapterDlg.h" />
     <ClInclude Include="FTD2Api.h" />
     <ClInclude Include="GainCalibrationPage6.h" />
     <ClInclude Include="GridCell.h" />
@@ -962,7 +963,6 @@ makehm /h /a afxhh.h IDW_,HIDW_,0x50000 "%(Filename)%(Extension)" &gt;&gt; "hlp\
     <ClInclude Include="Name.h" />
     <ClInclude Include="NominalAzimuth.h" />
     <ClInclude Include="Sensor.h" />
-    <ClInclude Include="SerialNumber.h" />
     <ClInclude Include="SerialPort.h" />
     <ClInclude Include="Syncro.h" />
     <ClInclude Include="Type.h" />

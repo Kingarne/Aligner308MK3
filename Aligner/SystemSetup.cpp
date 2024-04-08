@@ -128,6 +128,12 @@ void SystemSetup::LoadUnitsFromRegistry( void )
 
 void SystemSetup::LoadSignFromRegistry(void)
 {
+  if (theApp.IsAligner202Enabled())
+  {
+    SetSignDef(-1);
+    return;
+  }
+
 	Registry reg;
 	CString signdefText = reg.GetStringValue("SignDef", "0");//::AfxGetApp() -> GetProfileString( SIGNDEF_REGISTER_SECTION, SIGNDEF_REGISTER_NAME, SIGNDEF_DEFAULT_VALUE ) ;
 	int def = atoi(signdefText) ? -1 : 1;

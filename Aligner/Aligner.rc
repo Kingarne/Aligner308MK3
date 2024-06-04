@@ -1840,6 +1840,7 @@ BEGIN
     CTEXT           "Caption : Next desired azimuth direction for index arm",IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE,6,13,305,8
     LTEXT           "ROUND 1 of 2",IDC_ROUND_NUM_TEXT,146,0,46,8
     CTEXT           "Caption : Achieved azimuth direction for index arm",IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL,12,99,305,8
+    PUSHBUTTON      "<< Back",IDC_BACK,90,134,40,14
 END
 
 IDD_SETUP_FOUNDATION_MEASURE DIALOGEX 0, 0, 310, 235
@@ -1847,10 +1848,10 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSM
 CAPTION "Setup"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    EDITTEXT        IDC_ANGLE_CH_1,181,91,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
-    EDITTEXT        IDC_LENGTH_CH_1,182,123,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
-    CONTROL         "Measure Warping",IDC_MEASURE_WARPING,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,181,138,72,10
-    EDITTEXT        IDC_LENGTH_ARM_2,181,163,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_ANGLE_CH_1,180,104,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    EDITTEXT        IDC_LENGTH_CH_1,181,136,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    CONTROL         "Measure Warping",IDC_MEASURE_WARPING,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,180,151,72,10
+    EDITTEXT        IDC_LENGTH_ARM_2,180,176,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
     DEFPUSHBUTTON   "OK",IDOK,96,213,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,164,213,50,14
     LTEXT           "Text_1",IDC_TEXT_1,10,22,97,8
@@ -1879,10 +1880,10 @@ BEGIN
     LTEXT           "TextCh_9",IDC_TEXT_CH_9,53,153,125,8,NOT WS_VISIBLE | WS_DISABLED
     LTEXT           "TextCh_10",IDC_TEXT_CH_10,53,166,125,8,NOT WS_VISIBLE | WS_DISABLED
     LTEXT           "TextCh_11",IDC_TEXT_CH_11,53,179,125,8,NOT WS_VISIBLE | WS_DISABLED
-    LTEXT           "Length of Index Arm [mm]",IDC_INDEX_ARM_LENGTH_TEXT,182,111,95,12,NOT WS_VISIBLE
-    CTEXT           "Angle Text",IDC_AZI_REF_ANGLE_TEXT,166,62,70,28,NOT WS_VISIBLE
+    LTEXT           "Length of Index Arm [mm]",IDC_INDEX_ARM_LENGTH_TEXT,181,124,95,12,NOT WS_VISIBLE
+    LTEXT           "Angle Text",IDC_AZI_REF_ANGLE_TEXT,181,81,98,24,NOT WS_VISIBLE
     LTEXT           "Text_5",IDC_TEXT_5,8,199,79,28
-    CTEXT           "Text_2 only for FOUNDATION",IDC_TEXT_2,125,29,153,34,NOT WS_VISIBLE
+    CTEXT           "Text_2 only for FOUNDATION",IDC_TEXT_2,148,22,153,15,NOT WS_VISIBLE
     CONTROL         "Check1",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_DISABLED | WS_TABSTOP,249,209,39,10
     CONTROL         "",IDC_RB_TEST_CH1,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE | WS_DISABLED | WS_GROUP,33,50,16,8
     CONTROL         "",IDC_RB_TEST_CH2,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE | WS_DISABLED,33,63,16,8
@@ -1896,7 +1897,9 @@ BEGIN
     CONTROL         "",IDC_RB_TEST_CH10,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE | WS_DISABLED,34,167,16,8
     CONTROL         "",IDC_RB_TEST_CH11,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE | WS_DISABLED,34,180,16,8
     CTEXT           "NOTE! This test requires a Foundation Test Adapter.",IDC_STATIC,11,5,289,8
-    CTEXT           "Length of Second Index Arm [mm]",IDC_INDEX_ARM_2_TEXT,181,151,112,12,NOT WS_VISIBLE
+    CTEXT           "Length of Second Index Arm [mm]",IDC_INDEX_ARM_2_TEXT,180,164,112,12,NOT WS_VISIBLE
+    COMBOBOX        IDC_FOUND_TYPE_COMBO,198,39,69,71,CBS_DROPDOWN | CBS_SORT | NOT WS_VISIBLE | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Type",IDC_TYPE_STATIC,180,40,17,8,NOT WS_VISIBLE
 END
 
 IDD_DAU_SIMUL DIALOGEX 0, 0, 236, 183
@@ -13863,6 +13866,11 @@ BEGIN
     0
 END
 
+IDD_SETUP_FOUNDATION_MEASURE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -14200,7 +14208,7 @@ BEGIN
     IDS_INTERNAL_MEASURE_PAGE_FAULT_CANT_CONTINUE 
                             "Internal page fault occured,\ncannot continue the measurement"
     IDS_INFORMATION_CAPTION "Information"
-    IDS_SETUP_MEASURE_INFO  "Install the Foundation Test Adapter\n\nFill in the values below"
+    IDS_SETUP_MEASURE_INFO  "Install the Foundation Test Adapter"
     IDS_MRAD_UNIT           "[mrad]"
     IDS_MIN_UNIT            "[min]"
     IDS_SPECIFY_OPERATOR    "Operator"
@@ -14617,7 +14625,7 @@ BEGIN
     IDS_SETUP_FOUNDATION_MEASURE_DEFINE_A_FIXED_REF 
                             "Please define a fixed reference station in Alignment Setup"
     IDS_SETUP_FOUNDATION_MEASURE_ANGLE 
-                            "Az angle of\nstraight-edge\n0.0-359.9 [deg]"
+                            "Az angle of straight edge\n0.0-359.9 [deg]"
     IDS_SETUP_FOUNDATION_MEASURE_LENGTH "Length of Index Arm [mm]"
     IDS_SETUP_FOUNDATION_MEASURE_SELECT_A_FIXED_REF 
                             "Select a fixed plane to be the reference station"

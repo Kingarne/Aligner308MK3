@@ -56,14 +56,26 @@ void CTiltFlatnessFoundationTestPage1::ShowSetup()
     }
 	EnableDisableSperry();
 
-    m_armLength1 = GetIndexArmLength( 1 );
-    m_armLength2 = GetIndexArmLength( 2 );
-    m_refAngle = GetZeroRef( 1 );
+    m_refAngle = GetZeroRef(1);
+    if (g_AlignerData.FoundationType == FoundationT::Circular)
+    {
+      m_armLength1 = GetIndexArmLength(1);
+      m_armLength2 = GetIndexArmLength(2);
 
-    BOOL measureWarp = (m_armLength2 > 0);
-    GetDlgItem(IDC_INDEX_ARM2_LENGTH_TEXT)->ShowWindow(measureWarp ? SW_SHOW : SW_HIDE);     
-    GetDlgItem(IDC_ARM2_LENGTH)->ShowWindow(measureWarp ? SW_SHOW : SW_HIDE);             
-    
+      BOOL measureWarp = (m_armLength2 > 0);
+      GetDlgItem(IDC_INDEX_ARM2_LENGTH_TEXT)->ShowWindow(measureWarp ? SW_SHOW : SW_HIDE);
+      GetDlgItem(IDC_ARM2_LENGTH)->ShowWindow(measureWarp ? SW_SHOW : SW_HIDE);
+    }
+    else
+    {
+      GetDlgItem(IDC_INDEX_ARM_LENGTH_TEXT)->ShowWindow(SW_HIDE);
+      GetDlgItem(IDC_LENGTH_CH_1)->ShowWindow(SW_HIDE);
+      GetDlgItem(IDC_INDEX_ARM2_LENGTH_TEXT)->ShowWindow(SW_HIDE);
+      GetDlgItem(IDC_ARM2_LENGTH)->ShowWindow(SW_HIDE);
+
+    }
+
+
     UpdateData( FALSE );
 	UpdateData( TRUE );
 }

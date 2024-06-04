@@ -17,20 +17,20 @@ class CTiltFlatnessFoundationTestPage3 : public CPropertyPage
     DECLARE_DYNAMIC(CTiltFlatnessFoundationTestPage3)
 
 private:
-    CTiltFlatnessTestWizard* m_pParent;
-    CString m_MsgCaption;
-    CString m_Text;
-    double m_AzimuthAngle;
-    double m_ArcAngle;
-	double m_ArcAngleReal;
-	double m_AzimuthAngleReal;
+  CTiltFlatnessTestWizard* m_pParent;
+  CString m_MsgCaption;
+  CString m_Text;
+  double m_AzimuthAngle;
+  double m_ArcAngle;
+  double m_ArcAngleReal;
+  double m_AzimuthAngleReal;
 
-    CString m_TimeStamp;
-    CString m_DateStamp;
+  CString m_TimeStamp;
+  CString m_DateStamp;
 	BOOL m_Repeat;
-    BOOL m_measureWarping;
-    int m_measureRound;
-    int m_measurmentNum;
+  BOOL m_measureWarping;
+  int m_measureRound;
+  int m_measurmentNum;
 
 public:
 	CTiltFlatnessFoundationTestPage3();

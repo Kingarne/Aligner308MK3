@@ -114,11 +114,10 @@ BOOL CTiltFlatnessFoundationTestPage3::OnInitDialog()
 	tmpStr.Format( _T("%.1f"), 0.0f);
 	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->SetWindowText(tmpStr);
 
-	OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
+  OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
 
-    m_measureWarping = (GetIndexArmLength(2) != 0);
+  m_measureWarping = (GetIndexArmLength(2) != 0);
 	
-
 	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -145,7 +144,7 @@ BOOL CTiltFlatnessFoundationTestPage3::OnSetActive()
     m_pParent->m_EnableMoveOfWizard = TRUE;
     m_pParent->SetWizardButtons( PSWIZB_DISABLEDFINISH );
     HideAll();
-	m_Repeat = FALSE;
+	  m_Repeat = FALSE;
     MeasureRollPathInit();
 
     m_pParent->m_Measure.m_InParam.Break = FALSE;
@@ -599,7 +598,7 @@ BOOL CTiltFlatnessFoundationTestPage3::CallMeasure( double *pRoll, double *pPitc
 
     memcpy( pRoll, m_pParent->m_Measure.m_OutParam.DeltaRoll, SIZE_OF_ARRAYS * sizeof( double ) );
     memcpy( pPitch, m_pParent->m_Measure.m_OutParam.DeltaPitch, SIZE_OF_ARRAYS * sizeof( double ) );
-	CopyTemperature( m_pParent->m_Measure.m_OutParam.TempT );
+	  CopyTemperature( m_pParent->m_Measure.m_OutParam.TempT );
 
     return TRUE;
 }

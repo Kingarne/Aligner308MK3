@@ -578,6 +578,8 @@
 #define IDC_SHOW_GROUP                  1276
 #define IDC_FINISH_MEASURE              1276
 #define IDC_SHOW_RESULT_GRAPH           1277
+#define IDC_START_MEASURE2              1277
+#define IDC_BACK                        1277
 #define IDC_SHOW_RESULT_TABLE           1278
 #define IDC_SHOW_GRAPH                  1280
 #define IDC_APPROXIMATION_ORDER         1281
@@ -1035,6 +1037,8 @@
 #define IDC_ADAPTER_COMBO               1675
 #define IDC_UPDATE_CAL_BUTTON           1676
 #define IDC_STATIC_CAL                  1677
+#define IDC_FOUND_TYPE_COMBO            1678
+#define IDC_TYPE_STATIC                 1679
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1455,9 +1459,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        581
+#define _APS_NEXT_RESOURCE_VALUE        582
 #define _APS_NEXT_COMMAND_VALUE         32827
-#define _APS_NEXT_CONTROL_VALUE         1678
+#define _APS_NEXT_CONTROL_VALUE         1680
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

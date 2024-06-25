@@ -17,6 +17,7 @@ CTiltFlatnessFoundationTestPage3::CTiltFlatnessFoundationTestPage3()
 	, m_ArcAngle(0.0f)
 	, m_ArcAngleReal(0)
 	, m_AzimuthAngleReal(0)
+  , m_armLen(0)
 {
     m_measureRound = 1;
     m_measurmentNum = 0;
@@ -28,12 +29,13 @@ CTiltFlatnessFoundationTestPage3::~CTiltFlatnessFoundationTestPage3()
 
 void CTiltFlatnessFoundationTestPage3::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT, m_AzimuthAngle);
-	DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT, m_ArcAngle);
-	//DDV_MinMaxDouble(pDX, m_ArcAngle, 0, 360);
-	DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_REAL_TEDIT, m_ArcAngleReal);
-	DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL_TEDIT, m_AzimuthAngleReal);
+  CPropertyPage::DoDataExchange(pDX);
+  DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT, m_AzimuthAngle);
+  DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT, m_ArcAngle);
+  //DDV_MinMaxDouble(pDX, m_ArcAngle, 0, 360);
+  DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_REAL_TEDIT, m_ArcAngleReal);
+  DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL_TEDIT, m_AzimuthAngleReal);
+  DDX_Text(pDX, IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT, m_armLen);
 }
 
 void CTiltFlatnessFoundationTestPage3::ShowGraphButtons()
@@ -88,6 +90,9 @@ BEGIN_MESSAGE_MAP(CTiltFlatnessFoundationTestPage3, CPropertyPage)
     ON_BN_CLICKED(IDC_FINISH_MEASURE, OnBnClickedFinishMeasure)
 	ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT, &CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit)
 	ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_REAL_TEDIT, &CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleRealTedit)
+  ON_BN_CLICKED(IDC_BACK, &CTiltFlatnessFoundationTestPage3::OnBnClickedBack)
+  ON_BN_CLICKED(IDC_FWD, &CTiltFlatnessFoundationTestPage3::OnBnClickedFwd)
+    ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT, &CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3ArmLenTedit)
 END_MESSAGE_MAP()
 
 
@@ -149,6 +154,12 @@ BOOL CTiltFlatnessFoundationTestPage3::OnSetActive()
 
     m_pParent->m_Measure.m_InParam.Break = FALSE;
 
+    ZeroMemory(m_pParent->m_XAngle, sizeof(m_pParent->m_XAngle));
+    ZeroMemory(m_pParent->m_ArmLen, sizeof(m_pParent->m_ArmLen));
+
+
+    UpdateGUIStates();
+
     UpdateData( FALSE );
 
     return CPropertyPage::OnSetActive();
@@ -164,24 +175,24 @@ BOOL CTiltFlatnessFoundationTestPage3::OnQueryCancel()
     m_Text.LoadString( IDS_EXIT_WITHOUT_SAVE );
 
     if( IDYES == MessageBox( m_Text, m_MsgCaption, MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 ) )
-	{
-		return( TRUE );
-	}
-	else
-	{
-		m_Text.LoadString( IDS_MEASUREMENT_RUNNING );
-		CString tmpStr;
-		GetDlgItemText( IDC_INFO_TEXT, tmpStr );
-		if( tmpStr == m_Text )
-		{
-			//HideAllText();
-			m_pParent->SetWizardButtons( PSWIZB_DISABLEDFINISH );
-			GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
-			GetDlgItem( IDC_INTRO_TEXT )->ShowWindow( SW_HIDE );
-			m_pParent->m_Measure.m_InParam.Break = TRUE; 
-		}
-		return( FALSE );
-	}
+	  {
+		  return( TRUE );
+	  }
+	  else
+	  {
+		  m_Text.LoadString( IDS_MEASUREMENT_RUNNING );
+		  CString tmpStr;
+		  GetDlgItemText( IDC_INFO_TEXT, tmpStr );
+		  if( tmpStr == m_Text )
+		  {
+			  //HideAllText();
+			  m_pParent->SetWizardButtons( PSWIZB_DISABLEDFINISH );
+			  GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
+			  GetDlgItem( IDC_INTRO_TEXT )->ShowWindow( SW_HIDE );
+			  m_pParent->m_Measure.m_InParam.Break = TRUE; 
+		  }
+		  return( FALSE );
+	  }
 }
 
 LRESULT CTiltFlatnessFoundationTestPage3::OnWizardBack() 
@@ -249,7 +260,7 @@ void CTiltFlatnessFoundationTestPage3::MeasureRollPathInitRound2()
 
     int num = m_measurmentNum+1;
 
-    tmpStr.Format( _T("Next: Measurment no. %d (%d)"), num, m_pParent->m_N);
+    tmpStr.Format( _T("Measurment no. % d(% d)"), num, m_pParent->m_N);
     SetDlgItemText( IDC_NEXT_MEAS_NO_TEXT, tmpStr );
     GetDlgItem( IDC_NEXT_MEAS_NO_TEXT )->ShowWindow( SW_SHOW );
 
@@ -427,124 +438,164 @@ void CTiltFlatnessFoundationTestPage3::StartMeasureRound2()
 
 }
 
+void CTiltFlatnessFoundationTestPage3::RestoreValues()
+{
+  m_AzimuthAngleReal = m_pParent->m_XAngle[m_measurmentNum + 1];
+  m_armLen = m_pParent->m_ArmLen[m_measurmentNum + 1];
+  
+  double fi = m_AzimuthAngleReal - FoundationStraightEdgeAngle;
+  if (fi < 0)
+    fi += 360;
+
+  m_ArcAngleReal = fi;
+   
+  UpdateData(FALSE);
+}
+
+
+void CTiltFlatnessFoundationTestPage3::UpdateGUIStates()
+{
+  CWnd* pWnd = GetDlgItem(IDC_BACK);
+  pWnd->EnableWindow(m_measurmentNum > 0);
+
+  pWnd = GetDlgItem(IDC_FWD);
+  pWnd->EnableWindow(m_measurmentNum < m_pParent->m_N);  
+  
+  CString str;
+  str.Format(_T("%d"), m_measurmentNum + 1);
+  AfxFormatString1(m_Text, IDS_TILT_FLATNESS_TEST_MEAS_NO, str);
+  SetDlgItemText(IDC_NEXT_MEAS_NO_TEXT, m_Text);
+  GetDlgItem(IDC_NEXT_MEAS_NO_TEXT)->ShowWindow(SW_SHOW);
+
+  SetStartButtState();   
+}
+
+
 void CTiltFlatnessFoundationTestPage3::StartMeasureRound1()
 {
-    CString tmpStr, tmpStr1;
-    m_pParent->SetWizardButtons( PSWIZB_DISABLEDFINISH );
-    m_Text.LoadString( IDS_BREAK );
-    GetDlgItemText( IDC_START_MEASURE, tmpStr );   
+  UpdateData(TRUE);
 
-    if( tmpStr == m_Text )
+  CString tmpStr, tmpStr1;
+  m_pParent->SetWizardButtons(PSWIZB_DISABLEDFINISH);
+  m_Text.LoadString(IDS_BREAK);
+  GetDlgItemText(IDC_START_MEASURE, tmpStr);
+
+  if (tmpStr == m_Text)
+  {
+    GetDlgItem(IDC_START_MEASURE)->EnableWindow(FALSE);
+    GetDlgItem(IDC_INTRO_TEXT)->ShowWindow(SW_HIDE);
+    m_pParent->m_Measure.m_InParam.Break = TRUE;
+    return;
+  }
+
+  GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT)->GetWindowText(tmpStr);
+  if ((m_ArcAngle < 0) || (m_ArcAngle > 360) || (tmpStr == ""))
+  {
+    m_MsgCaption.LoadString(IDS_ERROR_CAPTION);
+    tmpStr1.LoadString(IDS_INVALID_AZIMUTH_ANGLE);
+    tmpStr.LoadString(IDS_TILT_FLATNESS_TEST_ENTER_ANGLE);
+    MessageBox(tmpStr1 + tmpStr, m_MsgCaption, MB_ICONERROR | MB_OK);
+    return;
+  }
+
+  if (IsAlreadyMeasured(m_AzimuthAngleReal) == TRUE)
+  {
+    m_MsgCaption.LoadString(IDS_WARNING_CAPTION);
+    tmpStr.Format(_T("%.1f"), m_AzimuthAngleReal);
+    AfxFormatString1(tmpStr1, IDS_ANGLE_ALREADY_MEASURED_AGAIN, tmpStr);
+
+    if (IDCANCEL == MessageBox(tmpStr1, m_MsgCaption, MB_ICONEXCLAMATION | MB_OKCANCEL))
+      return;
+  }
+
+  GetDlgItem(IDC_FINISH_MEASURE)->ShowWindow(SW_HIDE);
+
+  MoveDlgToRightSideOfApp(m_pParent);
+  HideGraphButtons();
+  GetDlgItem(IDC_TILT_FLATNESS_TEST_PAGE3_AZIMUTH_ANGLE)->EnableWindow(FALSE);
+  GetDlgItem(IDC_INTRO_TEXT)->ShowWindow(SW_HIDE);
+  SetDlgItemText(IDC_START_MEASURE, m_Text);
+  SetWindowProp(IDC_INFO_TEXT, true, IDS_MEASUREMENT_RUNNING);
+  m_pParent->m_EnableMoveOfWizard = FALSE;
+
+  
+
+  g_AlignerData.Bear = m_AzimuthAngleReal;
+  m_pParent->m_Xn = DEGREES_TO_RADIANS(m_AzimuthAngleReal);
+
+  m_pParent->m_Measure.m_InParam.FiRef = IsFixed(g_AlignerData.RefObjNo) ? 0 : m_pParent->m_Xn;
+  m_pParent->m_Measure.m_InParam.rotateBackRef = m_pParent->m_Xn;
+
+  //Only one object in foundation measurement
+  m_pParent->m_Measure.m_InParam.FiObj[1] = IsFixed(g_AlignerData.ObjNo[1]) ? 0 : m_pParent->m_Xn;
+  m_pParent->m_Measure.m_InParam.rotateBack[1] = m_pParent->m_Xn;
+
+  if (CallMeasure(m_pParent->m_dR, m_pParent->m_dP) == FALSE)
+  {
+    if (m_Repeat == TRUE)
     {
-        GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
-        GetDlgItem( IDC_INTRO_TEXT )->ShowWindow( SW_HIDE );
-        m_pParent->m_Measure.m_InParam.Break = TRUE; 
-        return;
-    }
-
-	GetDlgItem( IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT )->GetWindowText(tmpStr);
-	if(( m_ArcAngle < 0 ) || ( m_ArcAngle > 360 ) || ( tmpStr == "" ))
-    {
-        m_MsgCaption.LoadString( IDS_ERROR_CAPTION );
-        tmpStr1.LoadString( IDS_INVALID_AZIMUTH_ANGLE );
-        tmpStr.LoadString( IDS_TILT_FLATNESS_TEST_ENTER_ANGLE );
-        MessageBox( tmpStr1 + tmpStr, m_MsgCaption, MB_ICONERROR|MB_OK );    
-        return;
-    }
-
-	if( IsAlreadyMeasured( m_AzimuthAngleReal ) == TRUE )
-	{
-		m_MsgCaption.LoadString( IDS_WARNING_CAPTION );
-		tmpStr.Format( _T("%.1f"), m_AzimuthAngleReal );
-		AfxFormatString1( tmpStr1, IDS_ANGLE_ALREADY_MEASURED_PROCEED, tmpStr );
-
-		if( IDOK == MessageBox( tmpStr1, m_MsgCaption, MB_ICONEXCLAMATION|MB_OK ) )
-			return ;
-	}
-
-    GetDlgItem( IDC_FINISH_MEASURE )->ShowWindow( SW_HIDE );
-
-    MoveDlgToRightSideOfApp(m_pParent );    
-    HideGraphButtons();
-    GetDlgItem( IDC_TILT_FLATNESS_TEST_PAGE3_AZIMUTH_ANGLE )->EnableWindow( FALSE );
-    GetDlgItem( IDC_INTRO_TEXT )->ShowWindow( SW_HIDE );
-    SetDlgItemText( IDC_START_MEASURE, m_Text );
-    SetWindowProp(IDC_INFO_TEXT, true, IDS_MEASUREMENT_RUNNING);
-    m_pParent->m_EnableMoveOfWizard = FALSE;
-    
-    tmpStr.Format( _T("%d"), m_pParent->m_N+1 );
-	AfxFormatString1( m_Text, IDS_TILT_FLATNESS_TEST_MEAS_NO, tmpStr );
-    SetDlgItemText( IDC_NEXT_MEAS_NO_TEXT, m_Text );
-    GetDlgItem( IDC_NEXT_MEAS_NO_TEXT )->ShowWindow( SW_SHOW );
-
-    g_AlignerData.Bear = m_AzimuthAngleReal;
-    m_pParent->m_Xn = DEGREES_TO_RADIANS( m_AzimuthAngleReal );
-
-    m_pParent->m_Measure.m_InParam.FiRef = IsFixed( g_AlignerData.RefObjNo ) ?  0 : m_pParent->m_Xn;
-    m_pParent->m_Measure.m_InParam.rotateBackRef = m_pParent->m_Xn;
-
-    //Only one object in foundation measurement
-    m_pParent->m_Measure.m_InParam.FiObj[1] = IsFixed( g_AlignerData.ObjNo[1] ) ? 0 : m_pParent->m_Xn;
-    m_pParent->m_Measure.m_InParam.rotateBack[1] = m_pParent->m_Xn;
-
-    if( CallMeasure( m_pParent->m_dR, m_pParent->m_dP ) == FALSE )
-    {
-		if( m_Repeat == TRUE )
-		{			
-            MeasureRollPathInit();
-		}
-		else
-		{
-			RestoreGlobals();
-			GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
-
-			m_Text.LoadString( IDS_MEASUREMENT_INTERRUPTED );
-			SetDlgItemText( IDC_INFO_TEXT, m_Text );
-			GetDlgItem( IDC_INFO_TEXT )->ShowWindow( SW_SHOW );
-			m_pParent->m_EnableMoveOfWizard = TRUE;
-		}
-        return;
-    }
-    m_pParent->m_N++;
-    m_pParent->m_XAngle[m_pParent->m_N] = m_AzimuthAngleReal;
-    
-	CString graphFileName;
-	m_pParent->m_pGraph->SaveGraphToUniqueFileName(graphFileName);
-
-	m_Text.LoadString( IDS_MEASUREMENT_READY );
-    SetDlgItemText( IDC_INFO_TEXT, m_Text );
-    GetDlgItem( IDC_INFO_TEXT )->ShowWindow( SW_SHOW );
-    m_pParent->m_EnableMoveOfWizard = TRUE;
-
-    m_pParent->m_Y[1][m_pParent->m_N] = m_pParent->m_dP[1];    
-
-    tmpStr.Format( _T("%d"), m_pParent->m_N );
-    AfxFormatString1( m_Text, IDS_TILT_FLATNESS_TEST_N_MEAS_COMPLETED, tmpStr );
-
-    if( (m_pParent->m_N >= MIN_NO_OF_FLATNESS_MEASUREMENTS) && (m_pParent->m_N < MAX_NO_OF_FLATNESS_MEASUREMENTS) )
-    {        
-        SetDlgItemText( IDC_FINISH_MEASURE, GetFinishButtonText() );
-        GetDlgItem(IDC_FINISH_MEASURE)->ShowWindow(SW_SHOW);       
-    }
-    else if( m_pParent->m_N >= MAX_NO_OF_FLATNESS_MEASUREMENTS  )
-    {
-        m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
-        tmpStr.LoadString( IDS_TILT_FLATNESS_TEST_NO_MORE_MEASUREMENTS );
-        m_Text += tmpStr;
-        MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
-        m_pParent->m_Leave = TRUE;
-    }
-
-    if( m_pParent->m_Leave == FALSE )
-    {
-        MeasureRollPathInit();
+      MeasureRollPathInit();
     }
     else
     {
-        RestoreGlobals();
-        GetDlgItem( IDC_START_MEASURE )->EnableWindow( FALSE );
-        MeasureRollPathContinue();
+      RestoreGlobals();
+      GetDlgItem(IDC_START_MEASURE)->EnableWindow(FALSE);
+
+      m_Text.LoadString(IDS_MEASUREMENT_INTERRUPTED);
+      SetDlgItemText(IDC_INFO_TEXT, m_Text);
+      GetDlgItem(IDC_INFO_TEXT)->ShowWindow(SW_SHOW);
+      m_pParent->m_EnableMoveOfWizard = TRUE;
     }
+    return;
+  }
+ 
+  m_measurmentNum++;
+  if (m_measurmentNum > m_pParent->m_N)
+    m_pParent->m_N = m_measurmentNum;
+
+  m_pParent->m_XAngle[m_measurmentNum] = m_AzimuthAngleReal;
+  m_pParent->m_ArmLen[m_measurmentNum] = m_armLen;
+
+ 
+  CString graphFileName;
+  m_pParent->m_pGraph->SaveGraphToUniqueFileName(graphFileName);
+
+  m_Text.LoadString(IDS_MEASUREMENT_READY);
+  SetDlgItemText(IDC_INFO_TEXT, m_Text);
+  GetDlgItem(IDC_INFO_TEXT)->ShowWindow(SW_SHOW);
+  m_pParent->m_EnableMoveOfWizard = TRUE;
+
+  m_pParent->m_Y[1][m_measurmentNum] = m_pParent->m_dP[1];
+
+  tmpStr.Format(_T("%d"), m_measurmentNum);
+  AfxFormatString1(m_Text, IDS_TILT_FLATNESS_TEST_N_MEAS_COMPLETED, tmpStr);
+
+  if ((m_measurmentNum >= MIN_NO_OF_FLATNESS_MEASUREMENTS) && (m_measurmentNum < MAX_NO_OF_FLATNESS_MEASUREMENTS))
+  {
+    SetDlgItemText(IDC_FINISH_MEASURE, GetFinishButtonText());
+    GetDlgItem(IDC_FINISH_MEASURE)->ShowWindow(SW_SHOW);
+  }
+  else if (m_measurmentNum >= MAX_NO_OF_FLATNESS_MEASUREMENTS)
+  {
+    m_MsgCaption.LoadString(IDS_INFORMATION_CAPTION);
+    tmpStr.LoadString(IDS_TILT_FLATNESS_TEST_NO_MORE_MEASUREMENTS);
+    m_Text += tmpStr;
+    MessageBox(m_Text, m_MsgCaption, MB_ICONINFORMATION | MB_OK);
+    m_pParent->m_Leave = TRUE;
+  }
+
+  if (m_pParent->m_Leave == FALSE)
+  {
+    MeasureRollPathInit();
+  }
+  else
+  {
+    RestoreGlobals();
+    GetDlgItem(IDC_START_MEASURE)->EnableWindow(FALSE);
+    MeasureRollPathContinue();
+  }
+
+  UpdateGUIStates();
 }
 
 void CTiltFlatnessFoundationTestPage3::RestoreGlobals()
@@ -694,87 +745,6 @@ void CTiltFlatnessFoundationTestPage3::MeasureRollPathContinue()
     
     double bottomVal = min(minR1, minR2);
     m_pParent->m_HBottom = bottomVal;
-
-    
-    //     for( int i=1; i<=m_measureRound; i++ )
-//     {
-//         for( int j=1; j<=m_pParent->m_N; j++ )
-//         {            
-//             Y = m_pParent->m_Y[i][j] ;
-//             
-//         
-//         }
-//     }
-
-    /*for( int i=1; i<=m_measureRound; i++ )
-    {
-        SineFit( m_pParent->m_XAngle, m_pParent->m_Y, i, m_pParent->m_N, &(g_AlignerData.ACR[i]), &(g_AlignerData.ACP[i]), &(m_pParent->m_MeanSineFit[i]) );
-        CartToVec( g_AlignerData.ACR[i], g_AlignerData.ACP[i], &(g_AlignerData.VecAmp[i]), &(g_AlignerData.VecArg[i]) );
-        m_pParent->m_Fi[i] = DEGREES_TO_RADIANS( g_AlignerData.VecArg[i] );
-        for( int j=1; j<=m_pParent->m_N; j++ )
-        {
-			//	The clumsy code below works
-			Y = m_pParent->m_Y[i][j] ;
-			MeanSineFit = m_pParent->m_MeanSineFit[i] ;
-			VecAmp = g_AlignerData.VecAmp[i] ;
-			XAngleDeg = m_pParent->m_XAngle[j] ;
-			XAngleRad = DEGREES_TO_RADIANS(XAngleDeg) ;
-			Fi = m_pParent->m_Fi[i] ;
-
-			XAngleMinFi = XAngleRad - Fi ;
-			CosXAngleMinFi = cos(XAngleMinFi) ;
-			VecAmp_Mul_CosXAngleMinFi = VecAmp * CosXAngleMinFi ;
-			SineFitError = Y - (MeanSineFit + VecAmp_Mul_CosXAngleMinFi) ;
-
-			//	The elegant line below doesn't work if the code above is not executed !
-			m_pParent->m_SineFitError[i][j] = m_pParent->m_Y[i][j] - ( m_pParent->m_MeanSineFit[i] + g_AlignerData.VecAmp[i] * cos( DEGREES_TO_RADIANS( m_pParent->m_XAngle[j] ) - m_pParent->m_Fi[i] ) );
-			//	Let the line below do the job as the results can differ sometimes
-			m_pParent->m_SineFitError[i][j] = SineFitError ;
-
-            if( g_AlignerData.Found == TRUE )
-            {	//	mrad -> mm 
-                m_pParent->m_SineFitError[i][j] = ( m_pParent->m_SineFitError[i][j] * GetIndexArmLength(1) ) / 1000;
-            }
-
-            if( fabs( m_pParent->m_SineFitError[i][j] ) > fabs( m_pParent->m_MaxSineFitError[i] ) )
-            {
-                m_pParent->m_MaxSineFitError[i] = m_pParent->m_SineFitError[i][j];
-                m_pParent->m_XAngleForMaxSineFitError[i] = m_pParent->m_XAngle[j];
-            }
-            m_pParent->m_Eave[i] += m_pParent->m_SineFitError[i][j];
-            m_pParent->m_Esquare[i] += SQUARE( m_pParent->m_SineFitError[i][j] );
-
-			        //	Set max and min
-			if( fabs( m_pParent->m_MaxSineFitError[i]) > m_pParent->m_ERan )
-            {
-                m_pParent->m_ERan = fabs( m_pParent->m_MaxSineFitError[i] );
-            }
-            if( m_pParent->m_Y[i][j] > m_pParent->m_Ymax )
-            {
-                m_pParent->m_Ymax = m_pParent->m_Y[i][j];
-            }
-            if( m_pParent->m_Y[i][j] < m_pParent->m_Ymin )
-            {
-                m_pParent->m_Ymin = m_pParent->m_Y[i][j];
-            }
-			//	**********
-		}
-        g_AlignerData.Sigma[i] = sqrt( m_pParent->m_Esquare[i] / ( m_pParent->m_N - 1 ) );
-
-        for( int j=1; j<=360; j++ )
-        {
-            m_pParent->m_F = m_pParent->m_MeanSineFit[i] + g_AlignerData.VecAmp[i] * cos( DEGREES_TO_RADIANS( j ) - m_pParent->m_Fi[i] );
-
-            if( m_pParent->m_F > m_pParent->m_Ymax )
-            {
-                m_pParent->m_Ymax = m_pParent->m_F;
-            }
-            else if( m_pParent->m_F < m_pParent->m_Ymin )
-            {
-                m_pParent->m_Ymin = m_pParent->m_F;
-            }
-        }
-    }*/
 
     
       GetDlgItem( IDC_FINISH_MEASURE )->ShowWindow( SW_HIDE );
@@ -1112,6 +1082,8 @@ void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3
 
 void CTiltFlatnessFoundationTestPage3::SetStartButtState()
 {
+  UpdateData(TRUE);
+
 	bool enable = true;
 	CString tmpStr;
 
@@ -1123,7 +1095,16 @@ void CTiltFlatnessFoundationTestPage3::SetStartButtState()
 	if (tmpStr == "")
 		enable = false;
 
+  if(m_armLen <= 0)
+    enable = false;
+
+
 	GetDlgItem(IDC_START_MEASURE)->EnableWindow(enable);
+}
+
+void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3ArmLenTedit()
+{
+  SetStartButtState();
 }
 
 void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit()
@@ -1146,8 +1127,9 @@ void CTiltFlatnessFoundationTestPage3::OnEnChangeTiltFlatnessFoundationTestPage3
 	
 	if ((m_AzimuthAngle < 0) || (m_AzimuthAngle >= 360))
 		return;
+
 	double fi = m_AzimuthAngle- FoundationStraightEdgeAngle;
-	if (fi <= 0)
+	if (fi < 0)
 		fi = fi + 360.0;
 	
 	tmpStr.Format(_T("%.1f"), fi);
@@ -1170,6 +1152,7 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedFinishMeasure()
         if(m_measureWarping && m_measureRound == 1)
         {                        
             m_measureRound = 2;
+            m_measurmentNum = 0;
             MeasureRollPathInitRound2();
         
             ((CEdit*)GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARC_ANGLE_TEDIT ))->SetReadOnly(TRUE);
@@ -1187,6 +1170,29 @@ void CTiltFlatnessFoundationTestPage3::OnBnClickedFinishMeasure()
     }
 }
 
+
+void CTiltFlatnessFoundationTestPage3::OnBnClickedBack()
+{
+  if (m_measurmentNum <= 0)
+    return;
+  
+  m_measurmentNum--;
+
+  RestoreValues();
+  UpdateGUIStates();
+}
+
+
+void CTiltFlatnessFoundationTestPage3::OnBnClickedFwd()
+{
+  if (m_measurmentNum >= m_pParent->m_N)
+    return;
+
+  m_measurmentNum++;
+  
+  RestoreValues();
+  UpdateGUIStates();
+}
 
 
 

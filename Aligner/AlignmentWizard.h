@@ -102,6 +102,7 @@ public:
     double m_Ymin;    
     BOOL m_Leave;
     double m_XAngle[SIZE_OF_X_ARRAY]; // index [0] not used
+    int m_ArmLen[SIZE_OF_X_ARRAY]; // index [0] not used
     double m_SineFitError[SIZE_OF_YT_MATRIX_X_SIZE][SIZE_OF_YT_MATRIX_Y_SIZE]; // index [0][0] not used
     double m_MaxSineFitError[SIZE_OF_ARRAYS];
     double m_XAngleForMaxSineFitError[SIZE_OF_ARRAYS];

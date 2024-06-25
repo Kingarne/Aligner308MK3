@@ -24,6 +24,7 @@ private:
   double m_ArcAngle;
   double m_ArcAngleReal;
   double m_AzimuthAngleReal;
+  int m_armLen;
 
   CString m_TimeStamp;
   CString m_DateStamp;
@@ -67,6 +68,7 @@ protected:
     void StartMeasureRound2();
     void SetWindowProp(int ctrl, BOOL show, CString text="");
     void SetWindowProp(int ctrl, BOOL show, int strId=-1);
+    void UpdateGUIStates();
 
 	DECLARE_MESSAGE_MAP()
 private:
@@ -77,9 +79,15 @@ private:
     void ShowErrorGraph();
     void ShowResultGraph();
 	void SetStartButtState();
+  void RestoreValues();
+
 public:
 	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit();
     afx_msg void OnBnClickedFinishMeasure();
 	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
 	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleRealTedit();	
+  afx_msg void OnBnClickedBack();
+  afx_msg void OnBnClickedFwd();
+  
+  afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArmLenTedit();
 };

@@ -578,9 +578,9 @@
 #define IDC_SHOW_GROUP                  1276
 #define IDC_FINISH_MEASURE              1276
 #define IDC_SHOW_RESULT_GRAPH           1277
-#define IDC_START_MEASURE2              1277
 #define IDC_BACK                        1277
 #define IDC_SHOW_RESULT_TABLE           1278
+#define IDC_FWD                         1278
 #define IDC_SHOW_GRAPH                  1280
 #define IDC_APPROXIMATION_ORDER         1281
 #define IDC_AXIS                        1282
@@ -952,8 +952,11 @@
 #define ID_DIG_CH_CHANGE                1592
 #define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL 1592
 #define IDC_COMBO_ASYNC_DATABITS        1593
+#define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT2 1593
+#define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT 1593
 #define IDC_COMBO_ASYNC_PARITY          1594
 #define IDC_DAU_ACQ_ON                  1594
+#define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN 1594
 #define IDC_LOOP_TEST_BUTT              1595
 #define IDC_BUTTON3                     1596
 #define IDC_TEST_DATA                   1597

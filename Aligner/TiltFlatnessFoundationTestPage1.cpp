@@ -68,6 +68,8 @@ void CTiltFlatnessFoundationTestPage1::ShowSetup()
     }
     else
     {
+      m_armLength1 = 1;
+      m_armLength2 = 1;
       GetDlgItem(IDC_INDEX_ARM_LENGTH_TEXT)->ShowWindow(SW_HIDE);
       GetDlgItem(IDC_LENGTH_CH_1)->ShowWindow(SW_HIDE);
       GetDlgItem(IDC_INDEX_ARM2_LENGTH_TEXT)->ShowWindow(SW_HIDE);

@@ -582,26 +582,29 @@ BOOL CResultTable::InitiateReport( InParam* pInParam )
 			//***  Azimuth is in deg and should not be scaled with arcmin factor (.Kh)
 			m_TiltAndFlatnessFoChannel[1].m_azimuth = m_pParent->m_XAngleForMaxSineFitError[1];
 			
+			BOOL isCircular = g_AlignerData.FoundationType == FoundationT::Circular; // othewise rectangular
 			BOOL measureWarping = (GetIndexArmLength(2) != 0);
             
-          //  m_TiltAndFlatnessFoItem[0].m_IndexArmLength = GetIndexArmLength(1) ;
-          //  m_TiltAndFlatnessFoItem[0].m_IndexArm2Length = GetIndexArmLength(2) ;
-
-
-		    ZeroMemory(&(m_TiltAndFlatnessFoChannelErr), sizeof(m_TiltAndFlatnessFoChannelErr)); 
+   
+		  ZeroMemory(&(m_TiltAndFlatnessFoChannelErr), sizeof(m_TiltAndFlatnessFoChannelErr)); 
+			
 			for( int j=1; j<=m_pParent->m_N; j++ )
 			{
 				m_TiltAndFlatnessFoChannelErr[j].m_azimuth = m_pParent->m_XAngle[j] ;
 				m_TiltAndFlatnessFoChannelErr[j].m_error = m_pParent->m_SineFitError[1][j] ;
-				m_TiltAndFlatnessFoChannelErr[j].m_indexArmLength1 = GetIndexArmLength(1);
-				
+				m_TiltAndFlatnessFoChannelErr[j].m_indexArmLength1 = isCircular ? GetIndexArmLength(1): m_pParent->m_armLen[j];
+								
 				if(measureWarping)
-                {
+        {
 					m_TiltAndFlatnessFoChannelErr[j].m_error2 = m_pParent->m_SineFitError[2][j] ;
 					m_TiltAndFlatnessFoChannelErr[j].m_dh = m_TiltAndFlatnessFoChannelErr[j].m_error2 - m_TiltAndFlatnessFoChannelErr[j].m_error;
 					m_TiltAndFlatnessFoChannelErr[j].m_indexArmLength2 = GetIndexArmLength(2) ;
 				}
-            }
+
+				if (!isCircular)
+					m_TiltAndFlatnessFoChannelErr[j].m_indexArmLength2 = -1;// -1 for arm length 2 indicates rectangular foundation
+
+      }
 			//Get calibration status
 			calibInfo.SetCalibrationTime(m_TiltAndFlatnessFo.m_time);
 			for (int i = 0; i <= g_AlignerData.NoOfCorr; i++)

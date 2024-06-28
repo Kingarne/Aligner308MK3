@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Printing;
 using System.Globalization;
+using System.Runtime.ConstrainedExecution;
 
 namespace ReporterLib
 {
@@ -1343,28 +1344,33 @@ namespace ReporterLib
                 DrawText("Measurements:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
                 xPerc = xPerc + 15;
                 DrawText(m.numMeas.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                bool warping = false;               
                 if (ChannelErrList[0].Count > 0)
                 {
                     DBInterface.TiltFlatnessFoChErr chErr = ChannelErrList[0][0] as DBInterface.TiltFlatnessFoChErr;
-                   
-                    if (chErr.indexArmL1 > 0)
-                    {
-                        yPerc += yHeadSpace;
-                        xPerc = 60;
-                        DrawText("Ix Arm Lengt 1:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-                        xPerc = xPerc + 15;
-                        DrawText(chErr.indexArmL1.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
 
-                    }
-                    if (chErr.indexArmL2 > 0)
+                    if (chErr.indexArmL2 != -1) // -1 indicates rectangular foundation
                     {
-                        yPerc += yHeadSpace;
-                        xPerc = 60;
-                        DrawText("Ix Arm Lengt 2:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-                        xPerc = xPerc + 15;
-                        DrawText(chErr.indexArmL2.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
-                        yPerc += yHeadSpace;
-                    }
+                        if (chErr.indexArmL1 > 0)
+                        {
+                            yPerc += yHeadSpace;
+                            xPerc = 60;
+                            DrawText("Ix Arm Length 1:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                            xPerc = xPerc + 15;
+                            DrawText(chErr.indexArmL1.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+
+                        }
+                        if (chErr.indexArmL2 > 0)
+                        {
+                            warping = true;
+                            yPerc += yHeadSpace;
+                            xPerc = 60;
+                            DrawText("Ix Arm Length 2:", gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                            xPerc = xPerc + 15;
+                            DrawText(chErr.indexArmL2.ToString(), gr, HeadFont, MainBr, HeadRect, xPerc, yPerc);
+                            yPerc += yHeadSpace;
+                        }
+                    }                    
                 }
                 else
                     return true;
@@ -1409,8 +1415,7 @@ namespace ReporterLib
                 table.Add(new TableItem("Roll\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Pitch\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Tilt\n" + Project.UnitText, -1, wPerc));
-                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));
-                table.Add(new TableItem("Elev.\n" + Project.UnitText, -1, wPerc));
+                table.Add(new TableItem("Angle\n[deg]", -1, wPerc));               
                 table.Add(new TableItem("Std dev\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Max dev\n" + Project.UnitText, -1, wPerc));
                 table.Add(new TableItem("Azim\n[deg]", -1, wPerc));
@@ -1426,29 +1431,39 @@ namespace ReporterLib
                 table.Add(new TableItem(measCh.roll.ToString("0.00"), -1, wPerc));
                 table.Add(new TableItem(measCh.pitch.ToString("0.00"), -1, wPerc));
                 table.Add(new TableItem(measCh.tilt.ToString("0.00"), -1, wPerc));
-                table.Add(new TableItem(measCh.angle.ToString("0.00"), -1, wPerc));
-                table.Add(new TableItem(measCh.elevation.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(measCh.angle.ToString("0.00"), -1, wPerc));               
                 table.Add(new TableItem(measCh.stdDev.ToString("0.00"), -1, wPerc));
                 table.Add(new TableItem(measCh.maxDev.ToString("0.00"), -1, wPerc));
                 table.Add(new TableItem(measCh.azimuth.ToString("0.00"), -1, wPerc));
                 table.Add(new TableItem(measCh.elevation.ToString("0.00"), -1, wPerc));
-                table.Add(new TableItem(measCh.elevation2.ToString("0.00"), -1, wPerc));
+                table.Add(new TableItem(warping ?measCh.elevation2.ToString("0.00"):"-", -1, wPerc));
 
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left, m_yPos, HeadRect.Right, m_yPos);
-                m_yPos += MargY * 2;
+                m_yPos += MargY * 1;
 
                 Images = new List<DBInterface.ImageInfo>();
                 DBI.GetImages(Measurement.ID, ref Images);
 
             }
 
+            
             //Print error table
             if (ChannelErrList[0].Any(e => !e.done))
             {
+                DBInterface.TiltFlatnessFoChErr chErr = ChannelErrList[0][0] as DBInterface.TiltFlatnessFoChErr;
+                bool isCircular = chErr.indexArmL2 != -1;
+
+                table = new List<TableItem>();
+                table.Add(new TableItem(isCircular ? "Circular" : "Rectangular" + " Foundation", 40, 24));
+                m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, H1TextFont);
+                m_yPos += MargY;
+
                 table = new List<TableItem>();
                 table.Add(new TableItem("Azim\n[deg]", 20, wPerc));
+                if(!isCircular)
+                    table.Add(new TableItem("Arm\n[mm]", -1, wPerc));
                 table.Add(new TableItem("Err1\n[mm]", -1, wPerc));
                 table.Add(new TableItem("Err2\n[mm]", -1, wPerc));
                 table.Add(new TableItem("h1\n[mm]", -1, wPerc));
@@ -1457,7 +1472,7 @@ namespace ReporterLib
 
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += SmalMarg;
-                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.1f, m_yPos);
                 m_yPos += SmalMarg;
 
 
@@ -1472,9 +1487,11 @@ namespace ReporterLib
                         return false;
                     }
 
-                    bool MultiArms = MultiArms = err.indexArmL2 > 0;
+                    bool MultiArms = err.indexArmL2 > 0;
                     table = new List<TableItem>();
                     table.Add(new TableItem(err.azimuth.ToString("0.00"), 20, wPerc));
+                    if (!isCircular)
+                        table.Add(new TableItem(err.indexArmL1.ToString(), -1, wPerc));
                     table.Add(new TableItem(err.error.ToString("0.00"), -1, wPerc));
                     table.Add(new TableItem(MultiArms ? err.error2.ToString("0.00") : "-", -1, wPerc));
                     table.Add(new TableItem((err.error - measCh.bottomErr).ToString("0.00"), -1, wPerc));
@@ -1486,7 +1503,7 @@ namespace ReporterLib
                     m_yPos += SmalMarg;
                 }
 
-                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.2f, m_yPos);
+                gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.1f, m_yPos);
             }
 
             if (m_yPos + 50 > PrintArgs.MarginBounds.Bottom)

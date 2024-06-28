@@ -139,7 +139,7 @@ BOOL CTiltFlatnessFoundationTestPage3::OnSetActive()
     }
 	
     GetDlgItem(IDC_ROUND_NUM_TEXT)->ShowWindow(m_measureWarping ? SW_SHOW: SW_HIDE);
-        
+    
     if( m_pParent->m_pResultTable == NULL )
 	{
 		m_pParent->m_pResultTable = new CResultTable( m_pParent );
@@ -155,7 +155,7 @@ BOOL CTiltFlatnessFoundationTestPage3::OnSetActive()
     m_pParent->m_Measure.m_InParam.Break = FALSE;
 
     ZeroMemory(m_pParent->m_XAngle, sizeof(m_pParent->m_XAngle));
-    ZeroMemory(m_pParent->m_ArmLen, sizeof(m_pParent->m_ArmLen));
+    ZeroMemory(m_pParent->m_armLen, sizeof(m_pParent->m_armLen));
 
 
     UpdateGUIStates();
@@ -295,7 +295,18 @@ void CTiltFlatnessFoundationTestPage3::MeasureRollPathInit()
     GetDlgItem( IDC_NEXT_MEAS_NO_TEXT )->ShowWindow( SW_SHOW );
     
     EnableStartButton();
-	::PostMessage(m_hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->m_hWnd, TRUE);
+    if (g_AlignerData.FoundationType == FoundationT::Circular)
+    {
+      GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT)->ShowWindow(SW_HIDE);
+      GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN)->ShowWindow(SW_HIDE);
+      
+      ::PostMessage(m_hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->m_hWnd, TRUE);
+    }
+    else
+    {
+      ::PostMessage(m_hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT)->m_hWnd, TRUE);
+      
+    }
 }
 
 void CTiltFlatnessFoundationTestPage3::EnableStartButton()
@@ -441,7 +452,7 @@ void CTiltFlatnessFoundationTestPage3::StartMeasureRound2()
 void CTiltFlatnessFoundationTestPage3::RestoreValues()
 {
   m_AzimuthAngleReal = m_pParent->m_XAngle[m_measurmentNum + 1];
-  m_armLen = m_pParent->m_ArmLen[m_measurmentNum + 1];
+  m_armLen = m_pParent->m_armLen[m_measurmentNum + 1];
   
   double fi = m_AzimuthAngleReal - FoundationStraightEdgeAngle;
   if (fi < 0)
@@ -554,7 +565,7 @@ void CTiltFlatnessFoundationTestPage3::StartMeasureRound1()
     m_pParent->m_N = m_measurmentNum;
 
   m_pParent->m_XAngle[m_measurmentNum] = m_AzimuthAngleReal;
-  m_pParent->m_ArmLen[m_measurmentNum] = m_armLen;
+  m_pParent->m_armLen[m_measurmentNum] = m_armLen;
 
  
   CString graphFileName;
@@ -662,8 +673,9 @@ void CTiltFlatnessFoundationTestPage3::MeasureRollPathContinue()
     m_pParent->m_Ymin = 10000;
     ZeroMemory(&(m_pParent->m_MeanSineFit), sizeof(m_pParent->m_MeanSineFit)); 
 
-    double meanSinFit;
+    double meanSinFit,meanSinFit2;
     SineFitFo( m_pParent->m_XAngle, g_AlignerData.IA_Len, m_pParent->m_Y, m_measureRound, m_pParent->m_N, &(g_AlignerData.ACR[1]), &(g_AlignerData.ACP[1]), &meanSinFit );
+    SineFit(m_pParent->m_XAngle, m_pParent->m_Y, m_measureRound, m_pParent->m_N, &(g_AlignerData.ACR[1]), &(g_AlignerData.ACP[1]), &meanSinFit2);
     CartToVec( g_AlignerData.ACR[1], g_AlignerData.ACP[1], &(g_AlignerData.VecAmp[1]), &(g_AlignerData.VecArg[1]) );
     m_pParent->m_Fi[1] = DEGREES_TO_RADIANS( g_AlignerData.VecArg[1] );
     
@@ -672,7 +684,8 @@ void CTiltFlatnessFoundationTestPage3::MeasureRollPathContinue()
 
     for( int i=1; i<=m_measureRound; i++ )
     {
-        m_pParent->m_MeanSineFit[i] = meanSinFit / (GetIndexArmLength(i) / 1000.0f);        
+        int armL = g_AlignerData.FoundationType == FoundationT::Circular ? GetIndexArmLength(i) : m_pParent->m_armLen[i];
+        m_pParent->m_MeanSineFit[i] = meanSinFit2;// / (GetIndexArmLength(i) / 1000.0f);
         for( int j=1; j<=m_pParent->m_N; j++ )
         {            
             Y = m_pParent->m_Y[i][j] ;
@@ -682,12 +695,12 @@ void CTiltFlatnessFoundationTestPage3::MeasureRollPathContinue()
             XAngleMinFi = XAngleRad - Fi ;
             CosXAngleMinFi = cos(XAngleMinFi) ;
             VecAmp_Mul_CosXAngleMinFi = VecAmp * CosXAngleMinFi ;
-            SineFitError = Y - (m_pParent->m_MeanSineFit[i] + VecAmp_Mul_CosXAngleMinFi) ;
+            SineFitError = Y - (meanSinFit2 + VecAmp_Mul_CosXAngleMinFi) ;
 
             //	The elegant line below doesn't work if the code above is not executed !
             //??? m_pParent->m_SineFitError[i][j] = m_pParent->m_Y[i][j] - ( m_pParent->m_MeanSineFit[i] + g_AlignerData.VecAmp[i] * cos( DEGREES_TO_RADIANS( m_pParent->m_XAngle[j] ) - m_pParent->m_Fi[i] ) );
             //	Let the line below do the job as the results can differ sometimes
-            m_pParent->m_SineFitError[i][j] = (SineFitError * GetIndexArmLength(i) ) / 1000.0f;
+            m_pParent->m_SineFitError[i][j] = (SineFitError * armL) / 1000.0f;
            // m_pParent->m_H[i][j] = (Y * GetIndexArmLength(i)) / 1000.0f;
             //m_pParent->m_SineFitError[i][j] = ( m_pParent->m_SineFitError[i][j] * GetIndexArmLength(i) ) / 1000;
 
@@ -1095,7 +1108,7 @@ void CTiltFlatnessFoundationTestPage3::SetStartButtState()
 	if (tmpStr == "")
 		enable = false;
 
-  if(m_armLen <= 0)
+  if(m_armLen <= 0 && g_AlignerData.FoundationType == FoundationT::Rectangular)
     enable = false;
 
 

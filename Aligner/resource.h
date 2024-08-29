@@ -76,6 +76,10 @@
 #define IDS_MINS_NMEA                   171
 #define IDS_SPERRY_MK39M3               172
 #define IDS_SIGMA40_ICD                 173
+#define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_SET_INDEX_ARM 174
+#define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_AZIMUTH_ANGLE 175
+#define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_AZIMUTH_ANGLE_REAL 176
+#define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_ARC_ANGLE 177
 #define ID_UTILITIES_DATACONVERSION     201
 #define IDD_TILT_ALIGNMENT_PAGE_1       201
 #define IDD_TILT_ALIGNMENT_PAGE_2       202
@@ -218,6 +222,7 @@
 #define IDB_BITMAP2                     576
 #define IDB_QR                          576
 #define IDD_THEO_FIX_ADAPTER_CAL_DIALOG 579
+#define IDD_TILT_FLATNESS_FOUNDATION_TEST_PAGE_4 580
 #define IDC_BROWSE                      1000
 #define IDC_DAU_CAL_PRINT               1000
 #define IDC_LIVE_CLOSE                  1000
@@ -652,6 +657,7 @@
 #define IDC_SENOR_LIST                  1345
 #define IDC_GYRO_LIST                   1345
 #define IDC_PROJECT_LIST                1345
+#define IDC_MEAS_LIST                   1345
 #define IDC_IMAGE                       1346
 #define IDC_IMAGE_1                     1346
 #define IDC_AVAILABLE                   1346
@@ -952,7 +958,6 @@
 #define ID_DIG_CH_CHANGE                1592
 #define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL 1592
 #define IDC_COMBO_ASYNC_DATABITS        1593
-#define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT2 1593
 #define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT 1593
 #define IDC_COMBO_ASYNC_PARITY          1594
 #define IDC_DAU_ACQ_ON                  1594

@@ -229,6 +229,7 @@ BOOL CAlignerApp::InitInstance( void )
 		return FALSE;
 	}
 
+    CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2007));
 	if(CheckExpired())
 	{
 		::AfxMessageBox( _T("Aligner 308 has expired.") ) ;

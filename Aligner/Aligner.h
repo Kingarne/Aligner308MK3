@@ -8,7 +8,10 @@
 // 	#error include 'stdafx.h' before including this file for PCH
 // #endif
 
-
+//#include <afxvisualmanager.h>
+#include <afxvisualmanagerwindows.h>
+#include <afxvisualmanagerwindows7.h>
+#include <afxvisualmanageroffice2007.h>
 #include "ProgressWnd.h"
 #include "resource.h"
 #include "Singleton.h"

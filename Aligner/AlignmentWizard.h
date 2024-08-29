@@ -36,6 +36,7 @@ class CAlignmentWizard : public CPropertySheet, public DataRecepient
     friend class CTiltFlatnessFoundationTestPage1;
     friend class CTiltFlatnessFoundationTestPage2;
     friend class CTiltFlatnessFoundationTestPage3;
+    friend class CTiltFlatnessFoundationTestPage4;
     friend class CTiltAlignmentWizard;
     friend class CTiltAlignmentPage1;
     friend class CTiltAlignmentPage2;

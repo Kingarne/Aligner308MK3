@@ -263,6 +263,7 @@ void CTiltFlatnessFoundationTestPage1::OnBnClickedTiltFlatnessTestSetupMeasureme
 {
     CSetupFoundationMeasureDlg setupMeasDlg( FALSE, g_AlignerData.Found, TRUE );
     setupMeasDlg.DoModal();
+    m_pParent->ChangeType();
     ShowSetup();
 }
 

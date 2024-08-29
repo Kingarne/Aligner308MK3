@@ -35,7 +35,7 @@ CTiltFlatnessTestWizard::CTiltFlatnessTestWizard( CWnd* pWndParent )
 
 		    //	This is the order !!!
         AddPage( &m_TiltFlatnessFoundationTestPage1 );
-		AddPage( &m_TiltFlatnessFoundationTestPage2 );
+		    AddPage( &m_TiltFlatnessFoundationTestPage2 );
         AddPage( &m_TiltFlatnessFoundationTestPage3 );
 
     }
@@ -62,6 +62,20 @@ END_MESSAGE_MAP()
 
 
 // CTiltFlatnessTestWizard message handlers
+void CTiltFlatnessTestWizard::ChangeType()
+{
+  RemovePage(2);
+  if (g_AlignerData.FoundationType == FoundationT::Rectangular)
+  {    
+    AddPage(&m_TiltFlatnessFoundationTestPage4);
+  }
+  else
+  {
+    AddPage(&m_TiltFlatnessFoundationTestPage3);
+  }
+  
+}
+
 
 BOOL CTiltFlatnessTestWizard::OnInitDialog()
 {
@@ -80,3 +94,5 @@ BOOL CTiltFlatnessTestWizard::OnInitDialog()
   }
   return TRUE ;
 }
+
+

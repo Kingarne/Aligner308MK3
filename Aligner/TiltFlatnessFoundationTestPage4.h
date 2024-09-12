@@ -20,10 +20,8 @@ private:
   CTiltFlatnessTestWizard* m_pParent;
   CString m_MsgCaption;
   CString m_Text;
+  
   double m_AzimuthAngle;
-  double m_ArcAngle;
-  double m_ArcAngleReal;
-  double m_AzimuthAngleReal;
   int m_armLen;
 
   CString m_TimeStamp;
@@ -82,14 +80,15 @@ private:
   void RestoreValues();
 
 public:
-	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit();
-    afx_msg void OnBnClickedFinishMeasure();
-	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
-	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleRealTedit();	
+	
+  
+  afx_msg void OnBnClickedFinishMeasure();
+	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit();	
   afx_msg void OnBnClickedBack();
   afx_msg void OnBnClickedFwd();
   
   afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArmLenTedit();
   void UpdateMeasureList();
   CListCtrl m_measList;
+  CString m_measInfo;
 };

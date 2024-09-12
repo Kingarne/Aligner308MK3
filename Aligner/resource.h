@@ -619,6 +619,7 @@
 #define IDC_NEXT_MEAS_NO_TEXT           1311
 #define IDC_INFO_TEXT                   1312
 #define IDC_INTRO_TEXT                  1313
+#define IDC_INFO_TEXT2                  1314
 #define IDC_ENTER_ANGLE_TEXT            1315
 #define IDC_SHOW_TEXT                   1316
 #define IDC_FILTER_ON                   1317

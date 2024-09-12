@@ -298,6 +298,79 @@ void SineFit( double* pAzim, double pTilt[SIZE_OF_YT_MATRIX_X_SIZE][SIZE_OF_YT_M
   *pC0 = ( C - A*(*pC1) - B*(*pC2) ) / N;
 }
 
+void SineFitFo2(double* pAzim, double* pIndexArmLen, double pTilt[SIZE_OF_YT_MATRIX_X_SIZE][SIZE_OF_YT_MATRIX_Y_SIZE], double C0, int JC, int N, double* pC2, double* pC1, double* pC0, double* pU)
+{
+  int K;
+  double A, B, C, D, E, F, G, H, X, Y, T, Help1;
+  A = B = C = D = E = F = G = H = 0;
+  *pC0 = *pC1 = *pC2 = 0;
+
+  if (N <= 0)
+  {
+    return;
+  }
+
+  for (int i = 1; i <= JC; i++)
+  {
+    //	  double armLen = ((double)pIndexArmLen[i] / 1000.0f);
+    //	  for (K = 1; K <= N; K++)
+    for (K = 0; K < N; K++)
+    {
+      //		X = cos(DEGREES_TO_RADIANS(pAzim[K])) * armLen;
+      //		Y = -sin(DEGREES_TO_RADIANS(pAzim[K])) * armLen;
+      //     double armLen = ((double)pIndexArmLen[K] / 1000.0f);
+      double armLen = ((double)pIndexArmLen[K] / 1.0f);
+      X = cos(DEGREES_TO_RADIANS(pAzim[K]));
+      Y = -sin(DEGREES_TO_RADIANS(pAzim[K]));
+      T = pTilt[i][K] * armLen;
+      if (C0 != 0) {
+        T = pTilt[i][K] - C0 / armLen;
+      }
+      pU[K] = T;
+      A += X;
+      B += Y;
+      C += T;
+      D += SQUARE(X);
+      E += X * Y;
+      F += T * X;
+      G += SQUARE(Y);
+      H += T * Y;
+    }
+  }
+
+  int num = N * JC;
+  Help1 = 2 * E * A * B - num * SQUARE(E) + D * G * num - D * SQUARE(B) - G * SQUARE(A);
+
+  if (fabs(Help1) < 1E-20)
+  {
+    if (Help1 > 0)
+    {
+      Help1 = 1E-20;
+    }
+    else
+    {
+      Help1 = -1E-20;
+    }
+  }
+
+  *pC2 = (H * D * num - H * SQUARE(A) - B * C * D - E * F * num + E * A * C + B * A * F) / Help1;
+  Help1 = num * D - SQUARE(A);
+
+  if (fabs(Help1) < 1E-20)
+  {
+    if (Help1 > 0)
+    {
+      Help1 = 1E-20;
+    }
+    else
+    {
+      Help1 = -1E-20;
+    }
+  }
+  *pC1 = (num * F - A * C - (num * E - A * B) * (*pC2)) / Help1;
+  *pC0 = (C - A * (*pC1) - B * (*pC2)) / num;
+}
+
 void SineFitFo( double* pAzim, int *pIndexArmLen, double pTilt[SIZE_OF_YT_MATRIX_X_SIZE][SIZE_OF_YT_MATRIX_Y_SIZE], int JC, int N, double* pC2, double* pC1, double* pC0 )
 {
     int K;

@@ -364,6 +364,9 @@
 #define IDC_FILTER_TYPE                 1083
 #define IDC_SYSTEM_SETUP_MODE           1083
 #define IDC_INDEX_ARM2_LENGTH_TEXT      1083
+#define IDC_INDEX_ARM_LENGTH_TEXT2      1083
+#define IDC_INDEX_DIM_TEXT              1083
+#define IDC_DIM_TEXT                    1083
 #define IDC_COMMENT_BOX                 1084
 #define IDC_FILE_NAME                   1084
 #define IDC_SENSOR_CHANNEL_7_DESCRIPTION 1084
@@ -622,6 +625,7 @@
 #define IDC_INFO_TEXT2                  1314
 #define IDC_ENTER_ANGLE_TEXT            1315
 #define IDC_SHOW_TEXT                   1316
+#define IDC_INFO_TEXT3                  1316
 #define IDC_FILTER_ON                   1317
 #define IDC_FILTER_OFF                  1318
 #define IDC_DATA_STORAGE_ON             1319
@@ -964,7 +968,9 @@
 #define IDC_DAU_ACQ_ON                  1594
 #define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN 1594
 #define IDC_LOOP_TEST_BUTT              1595
+#define IDC_MARGIN_TEDIT                1595
 #define IDC_BUTTON3                     1596
+#define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN2 1596
 #define IDC_TEST_DATA                   1597
 #define IDC_REC_TEST_DATA               1598
 #define IDC_REC_DAC_DATA                1599
@@ -1048,6 +1054,9 @@
 #define IDC_STATIC_CAL                  1677
 #define IDC_FOUND_TYPE_COMBO            1678
 #define IDC_TYPE_STATIC                 1679
+#define IDC_DIM_X                       1680
+#define IDC_DIM_X2                      1681
+#define IDC_DIM_Y                       1681
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1470,7 +1479,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        582
 #define _APS_NEXT_COMMAND_VALUE         32827
-#define _APS_NEXT_CONTROL_VALUE         1680
+#define _APS_NEXT_CONTROL_VALUE         1681
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

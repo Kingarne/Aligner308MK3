@@ -88,4 +88,6 @@ public:
     afx_msg void OnBnClickedMeasureWarping();
     CComboBox m_typeCombo;
     afx_msg void OnCbnSelchangeFoundTypeCombo();
+    int m_PFDimW;
+    int m_PFDimL;
 };

@@ -135,6 +135,7 @@ typedef struct GLO
     map<int, LiveGraphInfo> liveGraphMap;
 	  int PlatformSN;
     FoundationT FoundationType;
+    CSize FoundDim;
 
 public:
 

@@ -14,6 +14,8 @@
 IMPLEMENT_DYNAMIC(CSetupFoundationMeasureDlg, CDialog)
 CSetupFoundationMeasureDlg::CSetupFoundationMeasureDlg( BOOL CommonFlatTest /*= FALSE*/, BOOL Found /*=FALSE*/, BOOL Flatness /*= FALSE*/, CWnd* pParent /*=NULL*/)
 	: CDialog(CSetupFoundationMeasureDlg::IDD, pParent)
+  , m_PFDimW(0)
+  , m_PFDimL(0)
 {
     m_CommonFlatTest = CommonFlatTest;
     //m_Fou = Found;
@@ -40,6 +42,8 @@ void CSetupFoundationMeasureDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Text(pDX, IDC_ANGLE_CH_1, m_refAngle);
   DDV_MinMaxInt(pDX, m_refAngle, MIN_ANGLE, MAX_ANGLE);
   DDX_Control(pDX, IDC_FOUND_TYPE_COMBO, m_typeCombo);
+  DDX_Text(pDX, IDC_DIM_X, m_PFDimW);
+  DDX_Text(pDX, IDC_DIM_Y, m_PFDimL);
 }
 
 void CSetupFoundationMeasureDlg::SetObjectData()
@@ -343,12 +347,17 @@ void CSetupFoundationMeasureDlg::TestEnabled()
     GetDlgItem( IDC_FOUND_TYPE_COMBO)->ShowWindow(SW_SHOW);
     GetDlgItem( IDC_TYPE_STATIC)->ShowWindow(SW_SHOW);
     
-    int showLength = (type == FoundationT::Circular) ? SW_SHOW : SW_HIDE;    
+    int showCircular = (type == FoundationT::Circular) ? SW_SHOW : SW_HIDE;    
+    int showRectangular = (type == FoundationT::Rectangular) ? SW_SHOW : SW_HIDE;
     
     GetDlgItem(IDC_ANGLE_CH_1)->ShowWindow(SW_SHOW);
-    GetDlgItem(IDC_LENGTH_CH_1)->ShowWindow(showLength);    
-    GetDlgItem(IDC_INDEX_ARM_LENGTH_TEXT)->ShowWindow(showLength);    
-    GetDlgItem(IDC_MEASURE_WARPING)->ShowWindow(showLength);
+    GetDlgItem(IDC_LENGTH_CH_1)->ShowWindow(showCircular);
+    GetDlgItem(IDC_INDEX_ARM_LENGTH_TEXT)->ShowWindow(showCircular);
+    GetDlgItem(IDC_MEASURE_WARPING)->ShowWindow(showCircular);
+    GetDlgItem(IDC_DIM_TEXT)->ShowWindow(showRectangular);
+    GetDlgItem(IDC_DIM_X)->ShowWindow(showRectangular);
+    GetDlgItem(IDC_DIM_Y)->ShowWindow(showRectangular);
+    
 
     CButton* pButt = (CButton*)GetDlgItem(IDC_MEASURE_WARPING);
     m_bMeasureWarping = pButt->GetCheck() && (type == FoundationT::Circular);
@@ -467,6 +476,8 @@ void CSetupFoundationMeasureDlg::OnBnClickedOk()
     SetZeroRef( 1, m_refAngle );
     FoundationStraightEdgeAngle = m_refAngle;
     g_AlignerData.FoundationType = (FoundationT)type;
+    g_AlignerData.FoundDim.cx = m_PFDimW;
+    g_AlignerData.FoundDim.cy = m_PFDimL;
 
 	if (!CheckAllSensorsConnected())
 	{

@@ -22,7 +22,7 @@ private:
   CString m_Text;
   
   double m_AzimuthAngle;
-  int m_armLen;
+  double m_armLen;
 
   CString m_TimeStamp;
   CString m_DateStamp;
@@ -91,4 +91,7 @@ public:
   void UpdateMeasureList();
   CListCtrl m_measList;
   CString m_measInfo;
+  CString m_topInfo;
+  double m_edgeDist;
+  afx_msg void OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
 };

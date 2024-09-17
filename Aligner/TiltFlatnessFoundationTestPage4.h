@@ -67,11 +67,12 @@ protected:
     void SetWindowProp(int ctrl, BOOL show, CString text="");
     void SetWindowProp(int ctrl, BOOL show, int strId=-1);
     void UpdateGUIStates();
+    double GetArmLength(double az);
 
 	DECLARE_MESSAGE_MAP()
 private:
     afx_msg void OnBnClickedStartMeasure();
-    afx_msg void OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngle();
+    
     
 	void ShowPolarGraph();
     void ShowErrorGraph();

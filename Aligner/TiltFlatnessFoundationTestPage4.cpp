@@ -96,10 +96,8 @@ BOOL CTiltFlatnessFoundationTestPage4::IsAlreadyMeasured( double newAngle )
 }
 
 BEGIN_MESSAGE_MAP(CTiltFlatnessFoundationTestPage4, CPropertyPage)
-    ON_BN_CLICKED(IDC_START_MEASURE, OnBnClickedStartMeasure)
-    //ON_EN_KILLFOCUS(IDC_TILT_FLATNESS_TEST_PAGE3_AZIMUTH_ANGLE, OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngle)   
-    ON_BN_CLICKED(IDC_FINISH_MEASURE, OnBnClickedFinishMeasure)
-	ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT, &CTiltFlatnessFoundationTestPage4::OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit)	
+    ON_BN_CLICKED(IDC_START_MEASURE, OnBnClickedStartMeasure)    
+    ON_BN_CLICKED(IDC_FINISH_MEASURE, OnBnClickedFinishMeasure)	
   ON_BN_CLICKED(IDC_BACK, &CTiltFlatnessFoundationTestPage4::OnBnClickedBack)
   ON_BN_CLICKED(IDC_FWD, &CTiltFlatnessFoundationTestPage4::OnBnClickedFwd)
     ON_EN_CHANGE(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT, &CTiltFlatnessFoundationTestPage4::OnEnChangeTiltFlatnessFoundationTestPage3ArmLenTedit)
@@ -127,8 +125,7 @@ BOOL CTiltFlatnessFoundationTestPage4::OnInitDialog()
 	//GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->SetWindowText(tmpStr);
 
     m_AzimuthAngle = 0.0f;
-
-  OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
+    m_armLen = GetArmLength(m_AzimuthAngle);
 
   m_measureWarping = (GetIndexArmLength(2) != 0);
 	
@@ -142,8 +139,14 @@ BOOL CTiltFlatnessFoundationTestPage4::OnInitDialog()
   CWnd* pWnd = GetDlgItem(IDC_INFO_TEXT2);
   pWnd->ShowWindow(SW_SHOW);
 
-  m_Text.Format("Rectangular Foundation (%d,%d) ",g_AlignerData.FoundDim.cx, g_AlignerData.FoundDim.cy);
+  m_Text.Format("Rectangular Foundation: (%d,%d) [mm]\r\nStraight edge angle offset: %.1f [deg]",g_AlignerData.FoundDim.cx, g_AlignerData.FoundDim.cy, FoundationStraightEdgeAngle);
   SetDlgItemText(IDC_INFO_TEXT2, m_Text);
+  
+  pWnd = GetDlgItem(IDC_INFO_TEXT3);
+  pWnd->ShowWindow(SW_SHOW);
+  m_topInfo = m_Text;
+
+  UpdateData(FALSE);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -305,18 +308,9 @@ void CTiltFlatnessFoundationTestPage4::MeasureRollPathInit()
     GetDlgItem( IDC_NEXT_MEAS_NO_TEXT )->ShowWindow( SW_SHOW );
     
     EnableStartButton();
-    if (g_AlignerData.FoundationType == FoundationT::Circular)
-    {
-      GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT)->ShowWindow(SW_HIDE);
-      GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN)->ShowWindow(SW_HIDE);
-      
-      ::PostMessage(m_hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->m_hWnd, TRUE);
-    }
-    else
-    {
-      ::PostMessage(m_hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT)->m_hWnd, TRUE);
-      
-    }
+   
+    ::PostMessage(m_hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->m_hWnd, TRUE); 
+   
 }
 
 void CTiltFlatnessFoundationTestPage4::EnableStartButton()
@@ -814,10 +808,6 @@ void CTiltFlatnessFoundationTestPage4::MeasureRollPathContinue()
     m_pParent->SetWizardButtons( PSWIZB_FINISH );
 }
 
-void CTiltFlatnessFoundationTestPage4::OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngle()
-{
-    UpdateData( TRUE );	
-}
 
 void CTiltFlatnessFoundationTestPage4::HideAllText()
 {
@@ -1109,42 +1099,29 @@ void CTiltFlatnessFoundationTestPage4::OnEnChangeTiltFlatnessFoundationTestPage3
 }
 
 
+double CTiltFlatnessFoundationTestPage4::GetArmLength(double az)
+{
+  double lengthY = g_AlignerData.FoundDim.cy / 2 - m_edgeDist;
+  double lengthX = g_AlignerData.FoundDim.cx / 2 - m_edgeDist;
+
+  double armY = fabs(lengthY / cos(DEGREES_TO_RADIANS(az)));
+  double armX = fabs(lengthX / cos(DEGREES_TO_RADIANS(90.0f-az)));
+
+  TRACE("az: %.1f, armY:%.2f, armX:%.2f ->",az,  armY, armX);
+
+  return min(armY, armX);
+}
+
 void CTiltFlatnessFoundationTestPage4::OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngleTedit()
 {
   UpdateData(TRUE);
   SetStartButtState();
+  
+  m_armLen = std::round(GetArmLength(m_AzimuthAngle));
+  TRACE("(%d) Real arm Length:%.1f\n", m_AzimuthAngle, m_armLen);
 
-  m_armLen = g_AlignerData.FoundDim.cy / 2 - m_edgeDist;
+     
   UpdateData(FALSE);
-}
-
-void CTiltFlatnessFoundationTestPage4::OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit()
-{
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CPropertyPage::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
-
-	// TODO:  Add your control notification handler code here
-  UpdateData(TRUE);
-  SetStartButtState();
-
-	CString tmpStr;
-
-	GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->GetWindowText(tmpStr);
-	if (tmpStr == "")
-		return;
-
-	
-	if ((m_AzimuthAngle < 0) || (m_AzimuthAngle >= 360))
-		return;
-
-	double fi = m_AzimuthAngle- FoundationStraightEdgeAngle;
-	if (fi < 0)
-		fi = fi + 360.0;
-		
-//	UpdateData(TRUE);
-	
 }
 
 

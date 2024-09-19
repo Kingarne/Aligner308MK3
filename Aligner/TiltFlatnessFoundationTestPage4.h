@@ -95,4 +95,6 @@ public:
   CString m_topInfo;
   double m_edgeDist;
   afx_msg void OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
+
+  void SimulData();
 };

@@ -314,7 +314,7 @@ void SineFitFo2(double* pAzim, double* pIndexArmLen, double pTilt[SIZE_OF_YT_MAT
   {
     //	  double armLen = ((double)pIndexArmLen[i] / 1000.0f);
     //	  for (K = 1; K <= N; K++)
-    for (K = 0; K < N; K++)
+    for (K = 1; K <= N; K++)
     {
       //		X = cos(DEGREES_TO_RADIANS(pAzim[K])) * armLen;
       //		Y = -sin(DEGREES_TO_RADIANS(pAzim[K])) * armLen;

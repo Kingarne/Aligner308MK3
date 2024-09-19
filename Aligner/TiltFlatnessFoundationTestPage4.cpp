@@ -623,7 +623,7 @@ void CTiltFlatnessFoundationTestPage4::StartMeasureRound1()
   tmpStr.Format(_T("%d"), m_measurmentNum);
   AfxFormatString1(m_Text, IDS_TILT_FLATNESS_TEST_N_MEAS_COMPLETED, tmpStr);
 
-  if ((m_measurmentNum >= MIN_NO_OF_FLATNESS_MEASUREMENTS) && (m_measurmentNum < MAX_NO_OF_FLATNESS_MEASUREMENTS))
+  if ((m_measurmentNum >= MIN_NO_OF_FLATNESS_MEASUREMENTS) && (m_measurmentNum < MAX_NO_OF_FLATNESS_MEASUREMENTS) && m_measurmentNum%2==0)
   {
     SetDlgItemText(IDC_FINISH_MEASURE, GetFinishButtonText());
     GetDlgItem(IDC_FINISH_MEASURE)->ShowWindow(SW_SHOW);
@@ -707,6 +707,54 @@ BOOL CTiltFlatnessFoundationTestPage4::CallMeasure( double *pRoll, double *pPitc
     return TRUE;
 }
 
+void CTiltFlatnessFoundationTestPage4::SimulData()
+{
+  m_pParent->m_XAngle[0] = 0; //Not used
+  m_pParent->m_XAngle[1] = 0;
+  m_pParent->m_XAngle[2] = 30;
+  m_pParent->m_XAngle[3] = 60;
+  m_pParent->m_XAngle[4] = 90;
+  m_pParent->m_XAngle[5] = 120;
+  m_pParent->m_XAngle[6] = 150;
+  m_pParent->m_XAngle[7] = 180;
+  m_pParent->m_XAngle[8] = 210;
+  m_pParent->m_XAngle[9] = 240;
+  m_pParent->m_XAngle[10] = 270;
+  m_pParent->m_XAngle[11] = 300;
+  m_pParent->m_XAngle[12] = 330;
+
+  m_pParent->m_armLen[0] = 0;
+  m_pParent->m_armLen[1] = 500.00;
+  m_pParent->m_armLen[2] = 577.35;
+  m_pParent->m_armLen[3] = 1154.70;
+  m_pParent->m_armLen[4] = 1000.00;
+  m_pParent->m_armLen[5] = 1154.70;
+  m_pParent->m_armLen[6] = 577.35;
+  m_pParent->m_armLen[7] = 500.00;
+  m_pParent->m_armLen[8] = 577.35;
+  m_pParent->m_armLen[9] = 1154.70;
+  m_pParent->m_armLen[10] = 1000.00;
+  m_pParent->m_armLen[11] = 1154.70;
+  m_pParent->m_armLen[12] = 577.35;
+     
+  m_pParent->m_Y[1][0] = 0;
+  m_pParent->m_Y[1][1] = -0.00800000;
+  m_pParent->m_Y[1][2] = -0.00366025;
+  m_pParent->m_Y[1][3] = 0.00366025;
+  m_pParent->m_Y[1][4] = 0.01100000;
+  m_pParent->m_Y[1][5] = 0.01366025;
+  m_pParent->m_Y[1][6] = 0.01366025;
+  m_pParent->m_Y[1][7] = 0.01200000;
+  m_pParent->m_Y[1][8] = 0.00366025;
+  m_pParent->m_Y[1][9] = -0.00366025;
+  m_pParent->m_Y[1][10] = -0.00900000;
+  m_pParent->m_Y[1][11] = -0.01366025;
+  m_pParent->m_Y[1][12] = -0.01366025;
+
+  m_pParent->m_N = 12;
+}
+
+
 void CTiltFlatnessFoundationTestPage4::MeasureRollPathContinue()
 {
 	double Y, MeanSineFit, VecAmp, CosXAngleMinFi, VecAmp_Mul_CosXAngleMinFi, XAngleDeg, XAngleRad, Fi, XAngleMinFi, SineFitError ;
@@ -714,6 +762,8 @@ void CTiltFlatnessFoundationTestPage4::MeasureRollPathContinue()
   m_pParent->m_Ymax = -10000;
   m_pParent->m_Ymin = 10000;
   ZeroMemory(&(m_pParent->m_MeanSineFit), sizeof(m_pParent->m_MeanSineFit)); 
+
+  //SimulData();
 
   double meanSinFit;// , meanSinFit2;
   SineFitFo2(m_pParent->m_XAngle, m_pParent->m_armLen, m_pParent->m_Y, 0, 1, m_pParent->m_N, &(g_AlignerData.ACR[1]), &(g_AlignerData.ACP[1]), &meanSinFit, &(m_U[0]));
@@ -727,7 +777,7 @@ void CTiltFlatnessFoundationTestPage4::MeasureRollPathContinue()
 
   for( int i=1; i<=m_measureRound; i++ )
   {
-      int armL = g_AlignerData.FoundationType == FoundationT::Circular ? GetIndexArmLength(i) : m_pParent->m_armLen[i];
+     // int armL = g_AlignerData.FoundationType == FoundationT::Circular ? GetIndexArmLength(i) : m_pParent->m_armLen[i];
         m_pParent->m_MeanSineFit[i] = meanSinFit;// / (GetIndexArmLength(i) / 1000.0f);
         for( int j=1; j<=m_pParent->m_N; j++ )
         {            
@@ -743,7 +793,7 @@ void CTiltFlatnessFoundationTestPage4::MeasureRollPathContinue()
             //	The elegant line below doesn't work if the code above is not executed !
             //??? m_pParent->m_SineFitError[i][j] = m_pParent->m_Y[i][j] - ( m_pParent->m_MeanSineFit[i] + g_AlignerData.VecAmp[i] * cos( DEGREES_TO_RADIANS( m_pParent->m_XAngle[j] ) - m_pParent->m_Fi[i] ) );
             //	Let the line below do the job as the results can differ sometimes
-            m_pParent->m_SineFitError[i][j] = (SineFitError * armL) / 1000.0f;
+            m_pParent->m_SineFitError[i][j] = (SineFitError * m_pParent->m_armLen[i]) / 1000.0f;
            // m_pParent->m_H[i][j] = (Y * GetIndexArmLength(i)) / 1000.0f;
             //m_pParent->m_SineFitError[i][j] = ( m_pParent->m_SineFitError[i][j] * GetIndexArmLength(i) ) / 1000;
 

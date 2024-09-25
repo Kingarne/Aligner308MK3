@@ -1465,11 +1465,14 @@ namespace ReporterLib
                 if(!isCircular)
                     table.Add(new TableItem("Arm\n[mm]", -1, wPerc));
                 table.Add(new TableItem("Err1\n[mm]", -1, wPerc));
-                table.Add(new TableItem("Err2\n[mm]", -1, wPerc));
+                if (isCircular)
+                    table.Add(new TableItem("Err2\n[mm]", -1, wPerc));
                 table.Add(new TableItem("h1\n[mm]", -1, wPerc));
-                table.Add(new TableItem("h2\n[mm]", -1, wPerc));
-                table.Add(new TableItem("dh\n[mm]", -1, wPerc));
-
+                if (isCircular)
+                {
+                    table.Add(new TableItem("h2\n[mm]", -1, wPerc));
+                    table.Add(new TableItem("dh\n[mm]", -1, wPerc));
+                }
                 m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);
                 m_yPos += SmalMarg;
                 gr.DrawLine(new Pen(Color.Black, LineWidth), HeadRect.Left + HeadRect.Width * 0.2f, m_yPos, HeadRect.Right - HeadRect.Width * 0.1f, m_yPos);
@@ -1493,10 +1496,14 @@ namespace ReporterLib
                     if (!isCircular)
                         table.Add(new TableItem(err.indexArmL1.ToString(), -1, wPerc));
                     table.Add(new TableItem(err.error.ToString("0.00"), -1, wPerc));
-                    table.Add(new TableItem(MultiArms ? err.error2.ToString("0.00") : "-", -1, wPerc));
+                    if (isCircular)
+                        table.Add(new TableItem(MultiArms ? err.error2.ToString("0.00") : "-", -1, wPerc));
                     table.Add(new TableItem((err.error - measCh.bottomErr).ToString("0.00"), -1, wPerc));
-                    table.Add(new TableItem(MultiArms ? (err.error2 - measCh.bottomErr).ToString("0.00") : "-", -1, wPerc));
-                    table.Add(new TableItem(MultiArms ? err.dh.ToString("0.00") : "-", -1, wPerc));
+                    if (isCircular)
+                    {
+                        table.Add(new TableItem(MultiArms ? (err.error2 - measCh.bottomErr).ToString("0.00") : "-", -1, wPerc));
+                        table.Add(new TableItem(MultiArms ? err.dh.ToString("0.00") : "-", -1, wPerc));
+                    }
                     err.done = true;
 
                     m_yPos += DrawTableLine(gr, table, new Point(HeadRect.Left, m_yPos), HeadRect.Width, TextFont);

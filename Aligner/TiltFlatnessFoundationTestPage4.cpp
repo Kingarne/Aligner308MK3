@@ -179,7 +179,7 @@ BOOL CTiltFlatnessFoundationTestPage4::OnSetActive()
   m_pParent->m_Measure.m_InParam.Break = FALSE;
 
   ZeroMemory(m_pParent->m_XAngle, sizeof(m_pParent->m_XAngle));
-  ZeroMemory(m_pParent->m_armLen, sizeof(m_pParent->m_armLen));
+  ZeroMemory(m_pParent->m_armLen, sizeof(m_pParent->m_armLen));  
 
   UpdateGUIStates();
     
@@ -489,7 +489,7 @@ void CTiltFlatnessFoundationTestPage4::UpdateGUIStates()
   {
     m_measInfo.Format("Measure opposite side from Az: %.1f", GetLocalAz(m_pParent->m_XAngle[m_measurmentNum]));
     m_armLen = m_pParent->m_armLen[m_measurmentNum];
-    m_AzimuthAngle = m_pParent->m_XAngle[m_measurmentNum]+180.0f;
+    m_AzimuthAngle = GetLocalAz(m_pParent->m_XAngle[m_measurmentNum])+180.0f;
     //SetDlgItemText(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT, m_Text);
   }
 
@@ -757,7 +757,7 @@ void CTiltFlatnessFoundationTestPage4::SimulData()
 
 void CTiltFlatnessFoundationTestPage4::MeasureRollPathContinue()
 {
-	double Y, MeanSineFit, VecAmp, CosXAngleMinFi, VecAmp_Mul_CosXAngleMinFi, XAngleDeg, XAngleRad, Fi, XAngleMinFi, SineFitError ;
+	double Y, MeanSineFit, VecAmp, VecArg, CosXAngleMinFi, VecAmp_Mul_CosXAngleMinFi, XAngleDeg, XAngleRad, Fi, XAngleMinFi, SineFitError ;
   double m_U[SIZE_OF_YT_MATRIX_Y_SIZE];
   m_pParent->m_Ymax = -10000;
   m_pParent->m_Ymin = 10000;
@@ -765,44 +765,25 @@ void CTiltFlatnessFoundationTestPage4::MeasureRollPathContinue()
 
   //SimulData();
 
-  double meanSinFit;// , meanSinFit2;
+  double meanSinFit;
   SineFitFo2(m_pParent->m_XAngle, m_pParent->m_armLen, m_pParent->m_Y, 0, 1, m_pParent->m_N, &(g_AlignerData.ACR[1]), &(g_AlignerData.ACP[1]), &meanSinFit, &(m_U[0]));
-  SineFitFo2(m_pParent->m_XAngle, m_pParent->m_armLen, m_pParent->m_Y, meanSinFit, 1, m_pParent->m_N, &(g_AlignerData.ACR[1]), &(g_AlignerData.ACP[1]), &meanSinFit, &(m_U[0]));
-  //SineFit(m_pParent->m_XAngle, m_pParent->m_Y, m_measureRound, m_pParent->m_N, &(g_AlignerData.ACR[1]), &(g_AlignerData.ACP[1]), &meanSinFit2);
+  SineFitFo2(m_pParent->m_XAngle, m_pParent->m_armLen, m_pParent->m_Y, meanSinFit, 1, m_pParent->m_N, &(g_AlignerData.ACR[1]), &(g_AlignerData.ACP[1]), &meanSinFit, &(m_U[0]));  
   CartToVec( g_AlignerData.ACR[1], g_AlignerData.ACP[1], &(g_AlignerData.VecAmp[1]), &(g_AlignerData.VecArg[1]) );
   m_pParent->m_Fi[1] = DEGREES_TO_RADIANS( g_AlignerData.VecArg[1] );
     
-  VecAmp = g_AlignerData.VecAmp[1] ;
+  VecAmp = g_AlignerData.VecAmp[1];
+  VecArg = g_AlignerData.VecArg[1];
   Fi = m_pParent->m_Fi[1] ;
 
   for( int i=1; i<=m_measureRound; i++ )
   {
-     // int armL = g_AlignerData.FoundationType == FoundationT::Circular ? GetIndexArmLength(i) : m_pParent->m_armLen[i];
         m_pParent->m_MeanSineFit[i] = meanSinFit;// / (GetIndexArmLength(i) / 1000.0f);
         for( int j=1; j<=m_pParent->m_N; j++ )
-        {            
-            Y = m_pParent->m_Y[i][j] ;
-            XAngleDeg = m_pParent->m_XAngle[j] ;
-            XAngleRad = DEGREES_TO_RADIANS(XAngleDeg) ;
+        {   
+         
+            double G = VecAmp * cos(M_PI / 180 * m_pParent->m_XAngle[j] - M_PI / 180 * VecArg);
+            m_pParent->m_SineFitError[i][j] = (m_pParent->m_armLen[j] * (m_U[j] - G))/1000.0f;
 
-            XAngleMinFi = XAngleRad - Fi ;
-            CosXAngleMinFi = cos(XAngleMinFi) ;
-            VecAmp_Mul_CosXAngleMinFi = VecAmp * CosXAngleMinFi ;
-            SineFitError = Y - (meanSinFit + VecAmp_Mul_CosXAngleMinFi) ;
-
-            //	The elegant line below doesn't work if the code above is not executed !
-            //??? m_pParent->m_SineFitError[i][j] = m_pParent->m_Y[i][j] - ( m_pParent->m_MeanSineFit[i] + g_AlignerData.VecAmp[i] * cos( DEGREES_TO_RADIANS( m_pParent->m_XAngle[j] ) - m_pParent->m_Fi[i] ) );
-            //	Let the line below do the job as the results can differ sometimes
-            m_pParent->m_SineFitError[i][j] = (SineFitError * m_pParent->m_armLen[i]) / 1000.0f;
-           // m_pParent->m_H[i][j] = (Y * GetIndexArmLength(i)) / 1000.0f;
-            //m_pParent->m_SineFitError[i][j] = ( m_pParent->m_SineFitError[i][j] * GetIndexArmLength(i) ) / 1000;
-
-            //             if( g_AlignerData.Found == TRUE )
-//             {	//	mrad -> mm 
-//                 m_pParent->m_SineFitError[i][j] = ( m_pParent->m_SineFitError[i][j] * GetIndexArmLength(1) ) / 1000;
-//             }
-
-            
             if( fabs( m_pParent->m_SineFitError[i][j] ) > fabs( m_pParent->m_MaxSineFitError[i] ) )
             {
                 m_pParent->m_MaxSineFitError[i] = m_pParent->m_SineFitError[i][j];
@@ -816,44 +797,15 @@ void CTiltFlatnessFoundationTestPage4::MeasureRollPathContinue()
             {
                 m_pParent->m_ERan = fabs( m_pParent->m_MaxSineFitError[i] );
             }
-//                 if( m_pParent->m_Y[i][j] > m_pParent->m_Ymax )
-//                 {
-//                     m_pParent->m_Ymax = m_pParent->m_Y[i][j];
-//                 }
-//                 if( m_pParent->m_Y[i][j] < m_pParent->m_Ymin )
-//                 {
-//                     m_pParent->m_Ymin = m_pParent->m_Y[i][j];
-//                 }
-        
-            //	**********
         }     
-
-//             for( int j=1; j<=360; j++ )
-//             {
-//                 m_pParent->m_F = m_pParent->m_MeanSineFit[1] + g_AlignerData.VecAmp[1] * cos( DEGREES_TO_RADIANS( j ) - m_pParent->m_Fi[1] );
-
-//                 if( m_pParent->m_F > m_pParent->m_Ymax )
-//                 {
-//                     m_pParent->m_Ymax = m_pParent->m_F;
-//                 }
-//                 else if( m_pParent->m_F < m_pParent->m_Ymin )
-//                 {
-//                     m_pParent->m_Ymin = m_pParent->m_F;
-//                 }
-//            }
-        
     }
         
     g_AlignerData.Sigma[1] = sqrt( m_pParent->m_Esquare[1] / ( (m_pParent->m_N*m_measureRound) - 1 ) );
     
-    double minR1 = *min_element(&m_pParent->m_SineFitError[1][1], &m_pParent->m_SineFitError[1][m_pParent->m_N+1]);
-    double minR2 = (m_measureRound > 1) ? *min_element(&m_pParent->m_SineFitError[2][1], &m_pParent->m_SineFitError[2][m_pParent->m_N+1]) : DBL_MAX;
+    double minR1 = *min_element(&m_pParent->m_SineFitError[1][1], &m_pParent->m_SineFitError[1][m_pParent->m_N+1]);        
+    m_pParent->m_HBottom = minR1;
     
-    double bottomVal = min(minR1, minR2);
-    m_pParent->m_HBottom = bottomVal;
-
-    
-      GetDlgItem( IDC_FINISH_MEASURE )->ShowWindow( SW_HIDE );
+    GetDlgItem( IDC_FINISH_MEASURE )->ShowWindow( SW_HIDE );
     
     m_pParent->SetWizardButtons( PSWIZB_FINISH );
 }

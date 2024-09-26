@@ -484,6 +484,8 @@ void CTiltFlatnessFoundationTestPage4::UpdateGUIStates()
   GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT)->EnableWindow(!opposite);
   GetDlgItem(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_TEDIT)->EnableWindow(!opposite);  
 
+  SetStartButtState();
+
   m_measInfo = "";
   if (opposite)
   {
@@ -1117,11 +1119,10 @@ double CTiltFlatnessFoundationTestPage4::GetArmLength(double az)
 void CTiltFlatnessFoundationTestPage4::OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngleTedit()
 {
   UpdateData(TRUE);
-  SetStartButtState();
-  
+    
   m_armLen = std::round(GetArmLength(m_AzimuthAngle));
-  TRACE("(%d) Real arm Length:%.1f\n", m_AzimuthAngle, m_armLen);
-
+  
+  SetStartButtState();
      
   UpdateData(FALSE);
 }

@@ -8,23 +8,21 @@
 
 class CTiltFlatnessTestWizard ;
 
-class CTiltFlatnessFoundationTestPage3 : public CPropertyPage
+class CTiltFlatnessFoundationTestPage4 : public CPropertyPage
 {
     friend class CTiltFlatnessTestWizard;
     friend class CTiltFlatnessTestPage1;
     friend class CTiltFlatnessTestPage2;
 
-    DECLARE_DYNAMIC(CTiltFlatnessFoundationTestPage3)
+    DECLARE_DYNAMIC(CTiltFlatnessFoundationTestPage4)
 
 private:
   CTiltFlatnessTestWizard* m_pParent;
   CString m_MsgCaption;
   CString m_Text;
+  
   double m_AzimuthAngle;
-  double m_ArcAngle;
-  double m_ArcAngleReal;
-  double m_AzimuthAngleReal;
-  int m_armLen;
+  double m_armLen;
 
   CString m_TimeStamp;
   CString m_DateStamp;
@@ -34,11 +32,11 @@ private:
   int m_measurmentNum;
 
 public:
-	CTiltFlatnessFoundationTestPage3();
-	virtual ~CTiltFlatnessFoundationTestPage3();
+	CTiltFlatnessFoundationTestPage4();
+	virtual ~CTiltFlatnessFoundationTestPage4();
 
 // Dialog Data
-	enum { IDD = IDD_TILT_FLATNESS_FOUNDATION_TEST_PAGE_3 };
+	enum { IDD = IDD_TILT_FLATNESS_FOUNDATION_TEST_PAGE_4 };
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -69,11 +67,12 @@ protected:
     void SetWindowProp(int ctrl, BOOL show, CString text="");
     void SetWindowProp(int ctrl, BOOL show, int strId=-1);
     void UpdateGUIStates();
+    double GetArmLength(double az);
 
 	DECLARE_MESSAGE_MAP()
 private:
     afx_msg void OnBnClickedStartMeasure();
-    afx_msg void OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngle();
+    
     
 	void ShowPolarGraph();
     void ShowErrorGraph();
@@ -82,12 +81,20 @@ private:
   void RestoreValues();
 
 public:
-	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleTedit();
-    afx_msg void OnBnClickedFinishMeasure();
-	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
-	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArcAngleRealTedit();	
+	
+  
+  afx_msg void OnBnClickedFinishMeasure();
+	afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3AzimuthAngleTedit();	
   afx_msg void OnBnClickedBack();
   afx_msg void OnBnClickedFwd();
   
   afx_msg void OnEnChangeTiltFlatnessFoundationTestPage3ArmLenTedit();
+  void UpdateMeasureList();
+  CListCtrl m_measList;
+  CString m_measInfo;
+  CString m_topInfo;
+  double m_edgeDist;
+  afx_msg void OnEnKillfocusTiltFlatnessFoundationTestPage3AzimuthAngleTedit();
+
+  void SimulData();
 };

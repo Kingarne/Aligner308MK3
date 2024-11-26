@@ -181,6 +181,7 @@
 #define HIDD_SYSTEM_SETUP_CALIBRATION           0x20233
 #define HIDD_PROJECT_CALIB_OPEN_DLG             0x20234
 #define HIDD_THEO_FIX_ADAPTER_CAL_DIALOG        0x20243
+#define HIDD_TILT_FLATNESS_FOUNDATION_TEST_PAGE_4	0x20244
  
 // Frame Controls (IDW_*) 
 // This is a part of the Microsoft Foundation Classes C++ library.

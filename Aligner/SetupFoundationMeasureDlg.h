@@ -12,6 +12,7 @@
 #define MIN_LENGTH  0
 #define MAX_LENGTH  100000  //[mm]
 
+
 class CSetupFoundationMeasureDlg : public CDialog
 {
 	DECLARE_DYNAMIC(CSetupFoundationMeasureDlg)
@@ -85,4 +86,8 @@ public:
 	afx_msg void OnBnClickedRbTestCh11();
 
     afx_msg void OnBnClickedMeasureWarping();
+    CComboBox m_typeCombo;
+    afx_msg void OnCbnSelchangeFoundTypeCombo();
+    int m_PFDimW;
+    int m_PFDimL;
 };

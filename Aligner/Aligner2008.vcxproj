@@ -43,7 +43,7 @@
     <ProjectGuid>{9A570571-46B0-45F4-99B7-161E58D5030B}</ProjectGuid>
     <RootNamespace>Aligner</RootNamespace>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'" Label="Configuration">
@@ -522,6 +522,7 @@
     <ClCompile Include="TheoAdapterCalibrationPageFinish.cpp" />
     <ClCompile Include="TheoAdapterCalibrationPageSpace.cpp" />
     <ClCompile Include="TheoAdapterCalibrationPageStart.cpp" />
+    <ClCompile Include="TiltFlatnessFoundationTestPage4.cpp" />
     <ClCompile Include="tinystr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">NotUsing</PrecompiledHeader>
@@ -778,6 +779,7 @@
     <ClInclude Include="TiltCalibrationPage2.h" />
     <ClInclude Include="TiltCalibrationPage3.h" />
     <ClInclude Include="TiltCalibrationPage4.h" />
+    <ClInclude Include="TiltFlatnessFoundationTestPage4.h" />
     <ClInclude Include="TiltOffsetCalibration.h" />
     <ClInclude Include="Aligner.h" />
     <ClInclude Include="AlignerControls.h" />

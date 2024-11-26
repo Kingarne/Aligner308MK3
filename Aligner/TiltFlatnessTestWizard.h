@@ -11,6 +11,7 @@
 #include "TiltFlatnessFoundationTestPage1.h"
 #include "TiltFlatnessFoundationTestPage2.h"
 #include "TiltFlatnessFoundationTestPage3.h"
+#include "TiltFlatnessFoundationTestPage4.h"
 
 // CTiltFlatnessTestWizard
 
@@ -23,14 +24,18 @@ class CTiltFlatnessTestWizard : public CAlignmentWizard
   friend class CTiltFlatnessFoundationTestPage1 ;
   friend class CTiltFlatnessFoundationTestPage2 ;
   friend class CTiltFlatnessFoundationTestPage3 ;
+  friend class CTiltFlatnessFoundationTestPage4;
 
 	friend class CSetupFoundationMeasureDlg ;
 
   DECLARE_DYNAMIC(CTiltFlatnessTestWizard)
 
+
 public:
   CTiltFlatnessTestWizard( CWnd* pWndParent = NULL );
 	virtual ~CTiltFlatnessTestWizard();
+  
+  void ChangeType();
 
 private:
   BOOL OnInitDialog();
@@ -41,6 +46,7 @@ private:
   CTiltFlatnessFoundationTestPage1 m_TiltFlatnessFoundationTestPage1;
   CTiltFlatnessFoundationTestPage2 m_TiltFlatnessFoundationTestPage2;
   CTiltFlatnessFoundationTestPage3 m_TiltFlatnessFoundationTestPage3;
+  CTiltFlatnessFoundationTestPage4 m_TiltFlatnessFoundationTestPage4;
   
 protected:
 	DECLARE_MESSAGE_MAP()

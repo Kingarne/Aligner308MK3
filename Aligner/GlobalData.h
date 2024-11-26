@@ -24,6 +24,7 @@ typedef enum { mr, ur, arcmin, arcsec, mm, um } UnitModeT;
 typedef enum { None, OnlyRange, Both, OnlyBear } RBTypeT;
 typedef enum { Sine, Linear, Normal } PLModeT;
 typedef enum { NormAzi, BenchAzi, StabAzi, FlatAzi } AziModeT;
+typedef enum { Circular, Rectangular} FoundationT;
 
 struct LogDataT
 {
@@ -113,7 +114,7 @@ typedef struct GLO
     BOOL Reject;
     double RExc;
     long int RX;
-	BOOL ContinousGraph;
+	  BOOL ContinousGraph;
     int RY;
     double Sigma[SIZE_OF_ARRAYS];
     int SignDef;
@@ -123,18 +124,18 @@ typedef struct GLO
     double TaoAz;
     double TaoFlat;
     BOOL TestNotSetup;
-    double Tsens[SIZE_OF_ARRAYS];
-    //double Ts;
+    double Tsens[SIZE_OF_ARRAYS];    
     BOOL UseElevError;
     BOOL UseParallax;
     double VecAmp[SIZE_OF_ARRAYS];
-    double VecArg[SIZE_OF_ARRAYS];
-    //  int ZeroRef[SIZE_OF_ARRAYS];
+    double VecArg[SIZE_OF_ARRAYS];    
     double ZeroRef[SIZE_OF_ARRAYS];
     double ZPar[SIZE_OF_ARRAYS];
-	int debugFlag;
+	  int debugFlag;
     map<int, LiveGraphInfo> liveGraphMap;
-	int PlatformSN;
+	  int PlatformSN;
+    FoundationT FoundationType;
+    CSize FoundDim;
 
 public:
 
@@ -275,6 +276,7 @@ public:
         {
             ZPar[i] = 0.0;
         }
+        FoundationType = FoundationT::Circular;
 
     }
 	

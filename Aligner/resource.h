@@ -76,6 +76,10 @@
 #define IDS_MINS_NMEA                   171
 #define IDS_SPERRY_MK39M3               172
 #define IDS_SIGMA40_ICD                 173
+#define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_SET_INDEX_ARM 174
+#define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_AZIMUTH_ANGLE 175
+#define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_AZIMUTH_ANGLE_REAL 176
+#define IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_ARC_ANGLE 177
 #define ID_UTILITIES_DATACONVERSION     201
 #define IDD_TILT_ALIGNMENT_PAGE_1       201
 #define IDD_TILT_ALIGNMENT_PAGE_2       202
@@ -218,6 +222,7 @@
 #define IDB_BITMAP2                     576
 #define IDB_QR                          576
 #define IDD_THEO_FIX_ADAPTER_CAL_DIALOG 579
+#define IDD_TILT_FLATNESS_FOUNDATION_TEST_PAGE_4 580
 #define IDC_BROWSE                      1000
 #define IDC_DAU_CAL_PRINT               1000
 #define IDC_LIVE_CLOSE                  1000
@@ -359,6 +364,9 @@
 #define IDC_FILTER_TYPE                 1083
 #define IDC_SYSTEM_SETUP_MODE           1083
 #define IDC_INDEX_ARM2_LENGTH_TEXT      1083
+#define IDC_INDEX_ARM_LENGTH_TEXT2      1083
+#define IDC_INDEX_DIM_TEXT              1083
+#define IDC_DIM_TEXT                    1083
 #define IDC_COMMENT_BOX                 1084
 #define IDC_FILE_NAME                   1084
 #define IDC_SENSOR_CHANNEL_7_DESCRIPTION 1084
@@ -578,7 +586,9 @@
 #define IDC_SHOW_GROUP                  1276
 #define IDC_FINISH_MEASURE              1276
 #define IDC_SHOW_RESULT_GRAPH           1277
+#define IDC_BACK                        1277
 #define IDC_SHOW_RESULT_TABLE           1278
+#define IDC_FWD                         1278
 #define IDC_SHOW_GRAPH                  1280
 #define IDC_APPROXIMATION_ORDER         1281
 #define IDC_AXIS                        1282
@@ -612,8 +622,10 @@
 #define IDC_NEXT_MEAS_NO_TEXT           1311
 #define IDC_INFO_TEXT                   1312
 #define IDC_INTRO_TEXT                  1313
+#define IDC_INFO_TEXT2                  1314
 #define IDC_ENTER_ANGLE_TEXT            1315
 #define IDC_SHOW_TEXT                   1316
+#define IDC_INFO_TEXT3                  1316
 #define IDC_FILTER_ON                   1317
 #define IDC_FILTER_OFF                  1318
 #define IDC_DATA_STORAGE_ON             1319
@@ -650,6 +662,7 @@
 #define IDC_SENOR_LIST                  1345
 #define IDC_GYRO_LIST                   1345
 #define IDC_PROJECT_LIST                1345
+#define IDC_MEAS_LIST                   1345
 #define IDC_IMAGE                       1346
 #define IDC_IMAGE_1                     1346
 #define IDC_AVAILABLE                   1346
@@ -950,10 +963,14 @@
 #define ID_DIG_CH_CHANGE                1592
 #define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_AZIMUTH_ANGLE_REAL 1592
 #define IDC_COMBO_ASYNC_DATABITS        1593
+#define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT 1593
 #define IDC_COMBO_ASYNC_PARITY          1594
 #define IDC_DAU_ACQ_ON                  1594
+#define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN 1594
 #define IDC_LOOP_TEST_BUTT              1595
+#define IDC_MARGIN_TEDIT                1595
 #define IDC_BUTTON3                     1596
+#define IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN2 1596
 #define IDC_TEST_DATA                   1597
 #define IDC_REC_TEST_DATA               1598
 #define IDC_REC_DAC_DATA                1599
@@ -1035,6 +1052,11 @@
 #define IDC_ADAPTER_COMBO               1675
 #define IDC_UPDATE_CAL_BUTTON           1676
 #define IDC_STATIC_CAL                  1677
+#define IDC_FOUND_TYPE_COMBO            1678
+#define IDC_TYPE_STATIC                 1679
+#define IDC_DIM_X                       1680
+#define IDC_DIM_X2                      1681
+#define IDC_DIM_Y                       1681
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1455,9 +1477,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        581
+#define _APS_NEXT_RESOURCE_VALUE        582
 #define _APS_NEXT_COMMAND_VALUE         32827
-#define _APS_NEXT_CONTROL_VALUE         1678
+#define _APS_NEXT_CONTROL_VALUE         1681
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

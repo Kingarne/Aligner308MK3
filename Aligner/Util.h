@@ -114,6 +114,7 @@ double GetRange0ToPlusMinus180( double angleIn );
 double GetRange0ToPlus360( double angleIn );
 void SineFit( double* pAzim, double pTilt[SIZE_OF_YT_MATRIX_X_SIZE][SIZE_OF_YT_MATRIX_Y_SIZE], int JC, int N, double* pC2, double* pC1, double* pC0 );
 void SineFitFo( double* pAzim, int *pIndexArmLen, double pTilt[SIZE_OF_YT_MATRIX_X_SIZE][SIZE_OF_YT_MATRIX_Y_SIZE], int JC, int N, double* pC2, double* pC1, double* pC0 );
+void SineFitFo2(double* pAzim, double* pIndexArmLen, double pTilt[SIZE_OF_YT_MATRIX_X_SIZE][SIZE_OF_YT_MATRIX_Y_SIZE], double C0, int JC, int N, double* pC2, double* pC1, double* pC0, double* pU);
 void CAdjText( CString* pDum, int Inc );
 void RAdjText( CString* pDum, int Inc );
 void LAdjText( CString* pDum, int Inc );

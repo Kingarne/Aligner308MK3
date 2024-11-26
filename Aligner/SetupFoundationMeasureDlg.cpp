@@ -14,6 +14,8 @@
 IMPLEMENT_DYNAMIC(CSetupFoundationMeasureDlg, CDialog)
 CSetupFoundationMeasureDlg::CSetupFoundationMeasureDlg( BOOL CommonFlatTest /*= FALSE*/, BOOL Found /*=FALSE*/, BOOL Flatness /*= FALSE*/, CWnd* pParent /*=NULL*/)
 	: CDialog(CSetupFoundationMeasureDlg::IDD, pParent)
+  , m_PFDimW(0)
+  , m_PFDimL(0)
 {
     m_CommonFlatTest = CommonFlatTest;
     //m_Fou = Found;
@@ -32,13 +34,16 @@ CSetupFoundationMeasureDlg::~CSetupFoundationMeasureDlg()
 
 void CSetupFoundationMeasureDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-    DDX_Text(pDX, IDC_LENGTH_CH_1, m_lengthArm1);
-    DDV_MinMaxInt(pDX, m_lengthArm1, MIN_LENGTH, MAX_LENGTH);
-    DDX_Text(pDX, IDC_LENGTH_ARM_2, m_lengthArm2);
-    DDV_MinMaxInt(pDX, m_lengthArm2, MIN_LENGTH, MAX_LENGTH);
-    DDX_Text(pDX, IDC_ANGLE_CH_1, m_refAngle);
-    DDV_MinMaxInt(pDX, m_refAngle, MIN_ANGLE, MAX_ANGLE);  
+  CDialog::DoDataExchange(pDX);
+  DDX_Text(pDX, IDC_LENGTH_CH_1, m_lengthArm1);
+  DDV_MinMaxInt(pDX, m_lengthArm1, MIN_LENGTH, MAX_LENGTH);
+  DDX_Text(pDX, IDC_LENGTH_ARM_2, m_lengthArm2);
+  DDV_MinMaxInt(pDX, m_lengthArm2, MIN_LENGTH, MAX_LENGTH);
+  DDX_Text(pDX, IDC_ANGLE_CH_1, m_refAngle);
+  DDV_MinMaxInt(pDX, m_refAngle, MIN_ANGLE, MAX_ANGLE);
+  DDX_Control(pDX, IDC_FOUND_TYPE_COMBO, m_typeCombo);
+  DDX_Text(pDX, IDC_DIM_X, m_PFDimW);
+  DDX_Text(pDX, IDC_DIM_Y, m_PFDimL);
 }
 
 void CSetupFoundationMeasureDlg::SetObjectData()
@@ -50,45 +55,18 @@ void CSetupFoundationMeasureDlg::SetObjectData()
         m_NoOfCorr=1;
         m_ObjNo[1] = m_testCh;    
     }
-    	
-//   for( int i=FIRST_ARRAY_INDEX_SYNCRO; i<=LAST_ARRAY_INDEX_SENSOR; i++ )
-// 	{
-// 		if( m_TestCh[i] == TRUE )
-// 		{
-// 			m_NoOfCorr++;
-// 			m_ObjNo[m_NoOfCorr] = i;
-// 		}
-// 	}
+    
 }
 
 int CSetupFoundationMeasureDlg::GetNoOfToBeTested()
 {
     return (m_testCh == -1) ? 0 : 1;
-//     int noOfToBeTested = 0;
-//     
-// 	for( int i=FIRST_ARRAY_INDEX_SYNCRO; i<=LAST_ARRAY_INDEX_SENSOR; i++ )
-// 	{
-// 		if( m_TestCh[i] == TRUE )
-// 		{
-// 			noOfToBeTested++;
-//     }
-//     }
-//     return( noOfToBeTested );
+
 }
 
 void CSetupFoundationMeasureDlg::CommonFlatTestCheck( int channelNo )
 {
-//   if( m_CommonFlatTest == TRUE )
-//   {
-//     if( GetNoOfToBeTested() > MAX_NO_OF_TO_BE_TESTED_IN_COMMON_FLAT_TEST )
-//     {
-//       m_TestCh[ channelNo ] = FALSE;
-//       m_Text.LoadString( IDS_TO_MANY_CHANNELS_SELECTED_FOR_COMMON_FLAT_TEST );
-//       m_MsgCaption.LoadString( IDS_INFORMATION_CAPTION );
-//       MessageBox( m_Text, m_MsgCaption, MB_ICONINFORMATION|MB_OK );
-//     }
-//     UpdateData( FALSE );
-//   }
+
 }
 
 BEGIN_MESSAGE_MAP(CSetupFoundationMeasureDlg, CDialog)
@@ -120,6 +98,7 @@ BEGIN_MESSAGE_MAP(CSetupFoundationMeasureDlg, CDialog)
 	ON_BN_CLICKED(IDC_RB_TEST_CH10, OnBnClickedRbTestCh10)
 	ON_BN_CLICKED(IDC_RB_TEST_CH11, OnBnClickedRbTestCh11)
     ON_BN_CLICKED(IDC_MEASURE_WARPING, OnBnClickedMeasureWarping)
+  ON_CBN_SELCHANGE(IDC_FOUND_TYPE_COMBO, &CSetupFoundationMeasureDlg::OnCbnSelchangeFoundTypeCombo)
 END_MESSAGE_MAP()
 
 void CSetupFoundationMeasureDlg::InitMaps()
@@ -180,39 +159,21 @@ BOOL CSetupFoundationMeasureDlg::OnInitDialog()
 
     int NoOfObjects, NoOfFix;
 
-    //memset( m_TestCh, FALSE, SIZE_OF_ARRAYS * sizeof( BOOL ) );
-  //  memset( m_LengthCh, 0, SIZE_OF_ARRAYS * sizeof( int ) );
-  //  memset( m_AngleCh, 0, SIZE_OF_ARRAYS * sizeof( int ) );
 
     SetDlgItemText( IDC_TEXT_1, g_AlignerData.AlignMode );
 
-//     if( m_CommonFlatTest == TRUE )
-// 	{
-//         m_Text.LoadString( IDC_CONNECTED_SENSORS_TEXT );
-//         SetDlgItemText( IDC_CONNECTED_TEXT, m_Text );
-// 	}
 
     NoOfObjects = 0;
     NoOfFix = 0;
 
     int startChannel = FIRST_ARRAY_INDEX_SYNCRO;
-//     if( m_CommonFlatTest == TRUE )
-//     {
-//         startChannel = FIRST_ARRAY_INDEX_SENSOR;
-//     }
+
     TRACE("max:%d",LAST_ARRAY_INDEX_SENSOR);
     for( int i=startChannel; i<=LAST_ARRAY_INDEX_SENSOR; i++ )
     {
-// 		if( m_CommonFlatTest == TRUE )
-// 		{
-// 			CString sensorSN;
-// 			AfxFormatString1( sensorSN, IDS_SN_XXX, GetSensorSerialNumber( i ) );
-// 			AfxFormatString2( m_ChText[i], IDS_SENSOR_NAME_TO_DEVICE, sensorSN, (GetUnitTypeDescription( i )).Left( MAX_NO_OF_CHAR_IN_LEGEND_LABEL ) );
-// 		}
-// 		else
-// 		{
+
 			AfxFormatString2( m_ChText[i], IDS_SENSOR_NAME_TO_DEVICE, GetChannelName( i ), (GetUnitTypeDescription( i )).Left( MAX_NO_OF_CHAR_IN_LEGEND_LABEL ) );
-//		}
+
 
         GetDlgItem( m_textMap[i] )->ShowWindow( SW_SHOW );
         GetDlgItem( m_refChMap[i])->ShowWindow( SW_SHOW );
@@ -228,26 +189,12 @@ BOOL CSetupFoundationMeasureDlg::OnInitDialog()
             //Enable text for the connected channels
             GetDlgItem( m_textMap[i] )->EnableWindow( TRUE );
            
-//             if( m_Fou == FALSE )
-//             { 
-//                 if (IsFixed(i))
-//                 {
-// 	                //enable the radio buttons for selection of the reference channel
-// 	                GetDlgItem( m_refChMap[i] )->EnableWindow( TRUE );           
-//                 }
-//             }	
-
             //check which channels are fix
             if( IsFixed( i ) == TRUE )
             {
                 NoOfFix++;
                 GetDlgItem( m_refChMap[i] )->EnableWindow( TRUE );   
-//                 if( m_Fou == TRUE )
-//                 {
-                //enable the radio button for selection of the fix reference channel
-                    
-                    
-//                }
+
             }
         }
     }
@@ -268,14 +215,9 @@ BOOL CSetupFoundationMeasureDlg::OnInitDialog()
 	// At least one ref and one test channel must be defined
     if( NoOfObjects <= 1 )		
     {
-//         if( m_CommonFlatTest == TRUE )
-//         {
-//             m_Text.LoadString( IDS_SETUP_MEASURE_SPECIFY_AT_LEAST_TWO_SENSORS );
-//         }
-//         else
-//         {
-            m_Text.LoadString( IDS_SETUP_MEASURE_SPECIFY_AT_LEAST_TWO );
-//        }
+
+        m_Text.LoadString( IDS_SETUP_MEASURE_SPECIFY_AT_LEAST_TWO );
+
         SetDlgItemText( IDC_TEXT_5, m_Text );
         GetDlgItem( IDOK )->EnableWindow( FALSE );
         return TRUE;
@@ -289,12 +231,10 @@ BOOL CSetupFoundationMeasureDlg::OnInitDialog()
         return TRUE;
     }
   
-//     if( m_Fou == TRUE )
-//     {
-//
+
     m_Text.LoadString(IDS_SETUP_FOUNDATION_MEASURE_SELECT_A_FIXED_REF) ;
     SetDlgItemText( IDC_TEXT_5, m_Text );
-//    }
+
 
     for( int i=1; i<=g_AlignerData.NoOfCorr; i++ )
     {
@@ -321,6 +261,11 @@ BOOL CSetupFoundationMeasureDlg::OnInitDialog()
         m_SelectedReference = -1;
     }
   
+
+    m_typeCombo.AddString("Circular");
+    m_typeCombo.AddString("Rectangular");
+    m_typeCombo.SelectString(0, "Circular");
+
     CheckRadioButton( IDC_REF_CH_1, IDC_REF_CH_11, m_refChMap[m_SelectedReference] );
   
     UpdateData( FALSE );
@@ -352,14 +297,9 @@ void CSetupFoundationMeasureDlg::ReferenceSelected()
     {
         // check which channels can be selected to be tested
         int firstArrayIndex;
-//         if( m_CommonFlatTest == TRUE )
-//         {
-//             firstArrayIndex = FIRST_ARRAY_INDEX_SENSOR;
-//         }
-//         else
-//         {
-            firstArrayIndex = FIRST_ARRAY_INDEX_SYNCRO;
-//        }
+
+        firstArrayIndex = FIRST_ARRAY_INDEX_SYNCRO;
+
 
         for( int i=firstArrayIndex; i<=LAST_ARRAY_INDEX_SENSOR; i++ )
         {
@@ -383,13 +323,7 @@ void CSetupFoundationMeasureDlg::TestEnabled()
 {
     UpdateData( TRUE );
 
-//     if( IsValidChannel( m_SelectedReference ) == TRUE )
-//     {
-//         //the selected reference channel cannot be selected to be tested
-//         m_TestCh[m_SelectedReference] = FALSE;
-//     }
-
-  		    // Disable select ref and ch text
+    // Disable select ref and ch text
     GetDlgItem( IDC_TEXT_5 )->ShowWindow( SW_HIDE );
 
 		// Foundation Test Adapter instructions
@@ -400,26 +334,49 @@ void CSetupFoundationMeasureDlg::TestEnabled()
     GetDlgItem( IDC_INDEX_ARM_LENGTH_TEXT )->ShowWindow( SW_SHOW );
 
     //set text above the edit box for angle
-//    m_Text.LoadString( IDS_SETUP_MEASURE_ANGLE );
     m_Text.LoadString( IDS_SETUP_FOUNDATION_MEASURE_ANGLE );
     SetDlgItemText( IDC_AZI_REF_ANGLE_TEXT, m_Text );
     GetDlgItem( IDC_AZI_REF_ANGLE_TEXT )->ShowWindow( SW_SHOW );
 
     //show the edit boxes for length and angle
-    GetDlgItem( IDC_LENGTH_CH_1 )->ShowWindow( SW_SHOW );   
-    GetDlgItem( IDC_ANGLE_CH_1 )->ShowWindow( SW_SHOW );
-    GetDlgItem( IDC_MEASURE_WARPING )->ShowWindow( SW_SHOW );
+   
+    int type;
+    if ((type = m_typeCombo.GetCurSel()) == CB_ERR)
+      return;
+
+    GetDlgItem( IDC_FOUND_TYPE_COMBO)->ShowWindow(SW_SHOW);
+    GetDlgItem( IDC_TYPE_STATIC)->ShowWindow(SW_SHOW);
     
+    int showCircular = (type == FoundationT::Circular) ? SW_SHOW : SW_HIDE;    
+    int showRectangular = (type == FoundationT::Rectangular) ? SW_SHOW : SW_HIDE;
+    
+    GetDlgItem(IDC_ANGLE_CH_1)->ShowWindow(SW_SHOW);
+    GetDlgItem(IDC_LENGTH_CH_1)->ShowWindow(showCircular);
+    GetDlgItem(IDC_INDEX_ARM_LENGTH_TEXT)->ShowWindow(showCircular);
+    GetDlgItem(IDC_MEASURE_WARPING)->ShowWindow(showCircular);
+    GetDlgItem(IDC_DIM_TEXT)->ShowWindow(showRectangular);
+    GetDlgItem(IDC_DIM_X)->ShowWindow(showRectangular);
+    GetDlgItem(IDC_DIM_Y)->ShowWindow(showRectangular);
+    
+
+    CButton* pButt = (CButton*)GetDlgItem(IDC_MEASURE_WARPING);
+    m_bMeasureWarping = pButt->GetCheck() && (type == FoundationT::Circular);
+    
+    CWnd* pWnd = GetDlgItem(IDC_LENGTH_ARM_2);
+    pWnd->ShowWindow(m_bMeasureWarping ? SW_SHOW : SW_HIDE);
+    pWnd = GetDlgItem(IDC_INDEX_ARM_2_TEXT);
+    pWnd->ShowWindow(m_bMeasureWarping ? SW_SHOW : SW_HIDE);
+
 
     //for all channels selected to be tested, enable the edit boxes for length and angle
     BOOL boxEnabled = FALSE;
-    if(m_testCh != -1)
-    //if( m_TestCh[1] == TRUE )
+    if (m_testCh != -1)
     {
-        boxEnabled = TRUE;
-        GetDlgItem( IDC_LENGTH_CH_1 )->EnableWindow( TRUE );
-        GetDlgItem( IDC_ANGLE_CH_1 )->EnableWindow( TRUE );
+      boxEnabled = TRUE;
+      GetDlgItem(IDC_LENGTH_CH_1)->EnableWindow(TRUE);
+      GetDlgItem(IDC_ANGLE_CH_1)->EnableWindow(TRUE);
     }
+    
     
     UpdateData( FALSE );
 }
@@ -479,31 +436,48 @@ void CSetupFoundationMeasureDlg::OnBnClickedOk()
         }
     }
 
-    if (m_lengthArm1 <= 0) 
+    int type;
+    if ((type = m_typeCombo.GetCurSel()) == CB_ERR)
+      return;
+
+    if (type == FoundationT::Circular)
     {
-        m_MsgCaption.LoadString( IDS_ERROR_CAPTION );
-        m_Text.LoadString( IDS_SETUP_MEASURE_ENTER_LENGTH_ERROR );
-        MessageBox( m_Text, m_MsgCaption, MB_ICONERROR|MB_OK );    
+      SetIndexArmLength(1, m_lengthArm1);
+
+      if (m_lengthArm1 <= 0)
+      {
+        m_MsgCaption.LoadString(IDS_ERROR_CAPTION);
+        m_Text.LoadString(IDS_SETUP_MEASURE_ENTER_LENGTH_ERROR);
+        MessageBox(m_Text, m_MsgCaption, MB_ICONERROR | MB_OK);
         return;
-    }
-    
-    if(m_bMeasureWarping && m_lengthArm2 <= 0)
-    {
-        m_MsgCaption.LoadString( IDS_ERROR_CAPTION );
-        m_Text.LoadString( IDS_SETUP_MEASURE_ENTER_LENGTH2_ERROR );
-        MessageBox( m_Text, m_MsgCaption, MB_ICONERROR|MB_OK );    
-        return;
+      }
+
+      if (m_bMeasureWarping)
+      {
+        if (m_lengthArm2 <= 0)
+        {
+          m_MsgCaption.LoadString(IDS_ERROR_CAPTION);
+          m_Text.LoadString(IDS_SETUP_MEASURE_ENTER_LENGTH2_ERROR);
+          MessageBox(m_Text, m_MsgCaption, MB_ICONERROR | MB_OK);
+          return;
+        }
+        else
+        {
+          SetIndexArmLength(2, m_lengthArm2);
+        }
+      }     
     }
 
     //store the channels to be tested
     g_AlignerData.RefObjNo = m_SelectedReference;
     g_AlignerData.NoOfCorr = m_NoOfCorr;
     memcpy( g_AlignerData.ObjNo, m_ObjNo, SIZE_OF_ARRAYS * sizeof( int ) );
-      
-    SetIndexArmLength( 1, m_lengthArm1 );
-    SetIndexArmLength( 2, m_lengthArm2 );
+    
     SetZeroRef( 1, m_refAngle );
     FoundationStraightEdgeAngle = m_refAngle;
+    g_AlignerData.FoundationType = (FoundationT)type;
+    g_AlignerData.FoundDim.cx = m_PFDimW;
+    g_AlignerData.FoundDim.cy = m_PFDimL;
 
 	if (!CheckAllSensorsConnected())
 	{
@@ -655,12 +629,13 @@ void CSetupFoundationMeasureDlg::OnBnClickedRbTestCh11()
 
 void CSetupFoundationMeasureDlg::OnBnClickedMeasureWarping()
 {
-    CButton* pButt = (CButton*)GetDlgItem(IDC_MEASURE_WARPING);
-    m_bMeasureWarping = pButt->GetCheck();
-    CWnd* pWnd = GetDlgItem(IDC_LENGTH_ARM_2);
-    pWnd->ShowWindow(m_bMeasureWarping ? SW_SHOW : SW_HIDE);
-    pWnd = GetDlgItem(IDC_INDEX_ARM_2_TEXT);
-    pWnd->ShowWindow(m_bMeasureWarping ? SW_SHOW : SW_HIDE);
-    
+    TestEnabled();
+
+}
+
+
+void CSetupFoundationMeasureDlg::OnCbnSelchangeFoundTypeCombo()
+{
+  TestEnabled();
 
 }

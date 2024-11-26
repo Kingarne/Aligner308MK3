@@ -574,6 +574,9 @@
     <ClCompile Include="FixTheoAdapterDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TiltFlatnessFoundationTestPage4.cpp">
+      <Filter>Source Files\Alignment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorStatic.h">
@@ -1046,6 +1049,9 @@
     </ClInclude>
     <ClInclude Include="FixTheoAdapterDlg.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TiltFlatnessFoundationTestPage4.h">
+      <Filter>Header Files\Alignment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

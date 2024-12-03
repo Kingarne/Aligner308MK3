@@ -491,8 +491,7 @@ void CTiltFlatnessFoundationTestPage4::UpdateGUIStates()
   {
     m_measInfo.Format("Measure opposite side from Az: %.1f", GetLocalAz(m_pParent->m_XAngle[m_measurmentNum]));
     m_armLen = m_pParent->m_armLen[m_measurmentNum];
-    m_AzimuthAngle = GetLocalAz(m_pParent->m_XAngle[m_measurmentNum])+180.0f;
-    //SetDlgItemText(IDC_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_ARM_LEN_TEDIT, m_Text);
+    m_AzimuthAngle = fmod(GetLocalAz(m_pParent->m_XAngle[m_measurmentNum]) + 180.0f, 360.0f);    
   }
 
 

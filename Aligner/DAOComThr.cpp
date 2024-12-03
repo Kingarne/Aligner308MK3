@@ -4,12 +4,13 @@
 #include "Registry.h"
 #include <algorithm>
 #include <iterator>
+#include <fstream>
 #include "ProgressWnd.h"
 #include "SystemSetup.h"
 #include "Network.h"
 
- NStopWatch sw;
- CString trace;
+NStopWatch sw;
+CString trace;
 int u=0;
 int f=0;
 

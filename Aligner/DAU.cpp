@@ -24,6 +24,7 @@
 #include "Util.h"
 #include "SystemSetup.h"
 #include "Network.h"
+#include "DataRecepient.h"
 #include "json/json.h"
 
 #ifdef _DEBUG

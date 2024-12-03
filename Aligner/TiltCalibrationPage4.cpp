@@ -5,6 +5,8 @@
 #include "stdafx.h"
 #include "CalibrationSheet.h"
 #include "TiltCalibrationPage4.h"
+#include "Util.h"
+#include "DBInterface.h"
 
 IMPLEMENT_DYNAMIC(TiltCalibrationPage4, CPropertyPage)
 

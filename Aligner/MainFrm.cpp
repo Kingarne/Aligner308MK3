@@ -6,6 +6,7 @@
 #include "Aligner.h"
 #include "MainFrm.h"
 #include "Splash.h"
+#include "UserMessages.h"
 #include ".\mainfrm.h"
 #include "AlignerDoc.h"
 #ifdef _DEBUG

@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "TheoAdapterCalibrationPage1.h"
 #include "CalibrationSheet.h"
+#include "util.h"
 
 IMPLEMENT_DYNAMIC(TheoAdapterCalibrationPage1, CPropertyPage)
 

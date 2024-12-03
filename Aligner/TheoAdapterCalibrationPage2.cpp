@@ -7,7 +7,7 @@
 #include "TheoAdapterCalibrationPage2.h"
 #include "CalibrationSheet.h"
 #include "GlobalData.h"
-//#include "LiveDataView.h"
+#include "util.h"
 
 IMPLEMENT_DYNAMIC(TheoAdapterCalibrationPage2, CPropertyPage)
 

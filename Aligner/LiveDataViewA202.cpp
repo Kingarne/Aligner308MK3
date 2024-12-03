@@ -9,7 +9,9 @@
 #include "Defines.h"
 #include "UserMessages.h"
 #include "ResultTable.h"
+#include <fstream>
 #include ".\livedataviewa202.h"
+
 
 IMPLEMENT_DYNCREATE(LiveDataViewA202, CFormView)
 

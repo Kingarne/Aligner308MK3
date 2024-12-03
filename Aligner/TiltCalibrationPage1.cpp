@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "tiltcalibrationpage1.h"
 #include "CalibrationSheet.h"
+#include "util.h"
 
 IMPLEMENT_DYNAMIC(TiltCalibrationPage1, CPropertyPage)
 

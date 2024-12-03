@@ -7,6 +7,7 @@
 #include "Measure.h"
 #include "PresentDialog.h"
 #include "DataRecepient.h"
+#include "history.h"
 
 class CAlignmentWizard ;
 

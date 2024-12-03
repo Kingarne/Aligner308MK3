@@ -9,6 +9,8 @@
 #include "CalibInfo.h"
 #include <algorithm>
 #include <sstream>
+#include <fstream>
+//#include <iostream>
 
 double Sensor::sm_latitudeCompensation = 1.0 ;
 

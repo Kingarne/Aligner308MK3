@@ -3,6 +3,9 @@
 
 #include "tinyxml.h"
 
+class Sensor;
+class Syncro;
+
 #define XML_VERSION 1
 
 class XmlSerializerException

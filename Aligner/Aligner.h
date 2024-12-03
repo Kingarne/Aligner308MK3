@@ -15,6 +15,7 @@
 #include "ProgressWnd.h"
 #include "resource.h"
 #include "Singleton.h"
+#include "Registry.h"
 
 #define SA_AZIMUTH  1
 #define SA_GUN		2

@@ -6,6 +6,7 @@
 
 #include "resource.h"
 #include "AlignerControls.h"
+#include "daudata.h"
 
 #define BENGT_CRYPTO_1      33
 #define BENGT_CRYPTO_2      17

@@ -1,6 +1,11 @@
 #include "StdAfx.h"
 #include "XMLHandler.h"
 #include "AlignerDoc.h"
+#include "SystemSetup.h"
+#include "dau.h"
+#include "digital.h"
+#include "sensor.h"
+
 
 XMLHandler::XMLHandler(void)
 {

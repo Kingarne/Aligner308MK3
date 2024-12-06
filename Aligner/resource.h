@@ -223,6 +223,8 @@
 #define IDB_QR                          576
 #define IDD_THEO_FIX_ADAPTER_CAL_DIALOG 579
 #define IDD_TILT_FLATNESS_FOUNDATION_TEST_PAGE_4 580
+#define IDB_BITMAP3                     582
+#define IDB_RECT_FOUND                  582
 #define IDC_BROWSE                      1000
 #define IDC_DAU_CAL_PRINT               1000
 #define IDC_LIVE_CLOSE                  1000
@@ -376,8 +378,12 @@
 #define IDC_INDEX_ARM_2_TEXT            1084
 #define IDC_SENSOR_CHANNEL_6_DESCRIPTION 1085
 #define IDC_SYSTEM_SETUP_SHIP           1085
+#define IDC_DIM_TEXT2                   1085
+#define IDC_DESC_TEXT_4                 1085
 #define IDC_SENSOR_CHANNEL_5_DESCRIPTION 1086
 #define IDC_SYSTEM_SETUP_DATE           1086
+#define IDC_DIM_TEXT3                   1086
+#define IDC_DESC_TEXT_1                 1086
 #define IDC_REF_CH_1                    1087
 #define IDC_SENSOR_CHANNEL_4_DESCRIPTION 1087
 #define IDC_SYSTEM_SETUP_PLACE          1087
@@ -395,6 +401,8 @@
 #define IDC_DAU_CAL_CHANNEL_TEXT_6      1093
 #define IDC_SYNCRO_CHANNEL_3_DESCRIPTION 1093
 #define IDC_TEXT_6                      1093
+#define IDC_DIM_TEXT4                   1093
+#define IDC_DESC_TEXT_2                 1093
 #define IDC_REF_CH_6                    1094
 #define IDC_SYNCRO_CHANNEL_6_DESCRIPTION 1094
 #define IDC_TEXT_7                      1094
@@ -414,6 +422,8 @@
 #define IDC_SYNCRO_CHANNEL_4_HEADING_TEXT 1098
 #define IDC_TEXT_12                     1099
 #define IDC_SYNCRO_CHANNEL_4_HEADING_TEXT2 1099
+#define IDC_DIM_TEXT5                   1099
+#define IDC_DESC_TEXT_3                 1099
 #define IDC_TEXT_13                     1100
 #define IDC_TEXT_CH_1                   1100
 #define IDC_TEXT_14                     1101
@@ -1057,6 +1067,7 @@
 #define IDC_DIM_X                       1680
 #define IDC_DIM_X2                      1681
 #define IDC_DIM_Y                       1681
+#define IDC_RECT_FO_IMG                 1682
 #define IDS_INVALID_DATA_DIRECTORY      3000
 #define IDS_DAUCREATEFAILED             3001
 #define IDS_CONNECT_AT_LEAST_ONE_P_G_STATION 3002
@@ -1477,9 +1488,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        582
+#define _APS_NEXT_RESOURCE_VALUE        583
 #define _APS_NEXT_COMMAND_VALUE         32827
-#define _APS_NEXT_CONTROL_VALUE         1681
+#define _APS_NEXT_CONTROL_VALUE         1683
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

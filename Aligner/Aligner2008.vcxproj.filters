@@ -1247,5 +1247,11 @@
     <Image Include="res\qr.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\Project Data\schill\rect-foundation.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\rect-foundation.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

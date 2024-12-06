@@ -1107,8 +1107,8 @@ double CTiltFlatnessFoundationTestPage4::GetArmLength(double az)
   double lengthY = g_AlignerData.FoundDim.cy / 2 - m_edgeDist;
   double lengthX = g_AlignerData.FoundDim.cx / 2 - m_edgeDist;
 
-  double armY = fabs(lengthY / cos(DEGREES_TO_RADIANS(az)));
-  double armX = fabs(lengthX / cos(DEGREES_TO_RADIANS(90.0f-az)));
+  double armY = fabs(lengthY / cos(DEGREES_TO_RADIANS(90.0f-az)));
+  double armX = fabs(lengthX / cos(DEGREES_TO_RADIANS(az)));
 
   TRACE("az: %.1f, armY:%.2f, armX:%.2f ->",az,  armY, armX);
 

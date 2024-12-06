@@ -59,6 +59,8 @@ IDB_ADAPTER_5           BITMAP                  "res\\adapter_5.bmp"
 
 IDB_ADAPTER_6           BITMAP                  "res\\adapter_6.bmp"
 
+IDB_RECT_FOUND          BITMAP                  "D:\\Work\\Projects\\Schill\\Aligner308MK3\\Aligner\\res\\rect-foundation.bmp"
+
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1884,7 +1886,7 @@ BEGIN
     LTEXT           "TextCh_10",IDC_TEXT_CH_10,53,166,125,8,NOT WS_VISIBLE | WS_DISABLED
     LTEXT           "TextCh_11",IDC_TEXT_CH_11,53,179,125,8,NOT WS_VISIBLE | WS_DISABLED
     LTEXT           "Length of Index Arm [mm]",IDC_INDEX_ARM_LENGTH_TEXT,181,124,95,12,NOT WS_VISIBLE
-    LTEXT           "Angle Text",IDC_AZI_REF_ANGLE_TEXT,181,83,98,24,NOT WS_VISIBLE
+    LTEXT           "Angle Text",IDC_AZI_REF_ANGLE_TEXT,181,87,98,20,NOT WS_VISIBLE
     LTEXT           "Text_5",IDC_TEXT_5,8,199,79,28
     CTEXT           "Text_2 only for FOUNDATION",IDC_TEXT_2,148,22,153,15,NOT WS_VISIBLE
     CONTROL         "Check1",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_DISABLED | WS_TABSTOP,249,209,39,10
@@ -1904,8 +1906,13 @@ BEGIN
     COMBOBOX        IDC_FOUND_TYPE_COMBO,198,39,69,71,CBS_DROPDOWN | CBS_SORT | NOT WS_VISIBLE | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Type",IDC_TYPE_STATIC,180,40,17,8,NOT WS_VISIBLE
     EDITTEXT        IDC_DIM_X,181,68,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
-    EDITTEXT        IDC_DIM_Y,225,68,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
-    LTEXT           "Dimensions [mm]",IDC_DIM_TEXT,183,57,95,12,NOT WS_VISIBLE
+    EDITTEXT        IDC_DIM_Y,250,68,40,12,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    LTEXT           "Amid [mm]",IDC_DIM_TEXT,183,57,62,12,NOT WS_VISIBLE
+    CONTROL         IDB_BITMAP3,IDC_RECT_FO_IMG,"Static",SS_BITMAP | NOT WS_VISIBLE,180,132,114,75
+    LTEXT           "Athwart [mm]",IDC_DESC_TEXT_4,252,57,46,12,NOT WS_VISIBLE
+    LTEXT           "A",IDC_DESC_TEXT_1,173,70,9,12,NOT WS_VISIBLE
+    LTEXT           "B",IDC_DESC_TEXT_2,243,70,9,12,NOT WS_VISIBLE
+    LTEXT           "C",IDC_DESC_TEXT_3,172,108,9,12,NOT WS_VISIBLE
 END
 
 IDD_DAU_SIMUL DIALOGEX 0, 0, 236, 183

@@ -154,7 +154,7 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Aligner202 Debug|Win32'">true</LinkIncremental>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(IncludePath);.\</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Debug|Win32'">$(VC_ADO);$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Aligner 308 Release|Win32'">$(VC_ADO);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -1126,9 +1126,11 @@ echo.
     <ResourceCompile Include="Aligner.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Project Data\schill\rect-foundation.bmp" />
     <Image Include="C:\Users\rarne\Downloads\Schill.bmp" />
     <Image Include="C:\Users\rarne\Downloads\Schill.png" />
     <Image Include="res\qr.bmp" />
+    <Image Include="res\rect-foundation.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

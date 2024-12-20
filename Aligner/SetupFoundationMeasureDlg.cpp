@@ -358,9 +358,6 @@ void CSetupFoundationMeasureDlg::TestEnabled()
     GetDlgItem(IDC_DIM_X)->ShowWindow(showRectangular);
     GetDlgItem(IDC_DIM_Y)->ShowWindow(showRectangular);
     GetDlgItem(IDC_RECT_FO_IMG)->ShowWindow(showRectangular);
-    GetDlgItem(IDC_DESC_TEXT_1)->ShowWindow(showRectangular);
-    GetDlgItem(IDC_DESC_TEXT_2)->ShowWindow(showRectangular);
-    GetDlgItem(IDC_DESC_TEXT_3)->ShowWindow(showRectangular);
     GetDlgItem(IDC_DESC_TEXT_4)->ShowWindow(showRectangular);
 
     

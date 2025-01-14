@@ -59,7 +59,7 @@ IDB_ADAPTER_5           BITMAP                  "res\\adapter_5.bmp"
 
 IDB_ADAPTER_6           BITMAP                  "res\\adapter_6.bmp"
 
-IDB_RECT_FOUND          BITMAP                  "D:\\Work\\Projects\\Schill\\Aligner308MK3\\Aligner\\res\\rect-foundation.bmp"
+IDB_RECT_FOUND          BITMAP                  "res\\rect-foundation.bmp"
 
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////

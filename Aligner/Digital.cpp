@@ -95,7 +95,7 @@ CString Digital::GetDigTypeText( )
         case DigChTypeProIXSEA:         typeText = _T("IXSEA");          break ;        
         case DigChTypeProMSI:           typeText = _T("MSI");          break ;      
 		case DigChTypeProPL40:          typeText = _T("PL-41");          break ; 
-		case DigChTypeProMinsNMEA:      typeText = _T("MINS-NMEA");    break;
+		case DigChTypeProMinsNMEA:      typeText = _T("Sperry-NMEA");    break;
 		case DigChTypeProSperryMk39M3:  typeText = _T("Sperry-MK39M3");    break;
 		case DigChTypeProSigma40_ICD:  typeText = _T("Sigma40-ICD");    break;
 		default:ASSERT(0); break ;
@@ -349,7 +349,8 @@ BOOL Digital::ParseNMEA(vector<char>& frame, double& roll, double& pitch, double
 
     return TRUE;
 }
-
+/*
+Matz stole this gyro 
 BOOL Digital::ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK)
 {
 	std::vector<char>::iterator pos = find(frame.begin(), frame.end(), '*');
@@ -425,6 +426,89 @@ BOOL Digital::ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, do
 	heading = atof(field[2]);
 	roll = atof(field[3]);
 	pitch = atof(field[4]);
+
+	return TRUE;
+}
+*/
+
+BOOL Digital::ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK)
+{
+	std::vector<char>::iterator pos = find(frame.begin(), frame.end(), '*');
+	if (pos == frame.end())
+		return FALSE;
+
+	CString checkSumStr;
+	checkSumStr += *(pos + 1);
+	checkSumStr += *(pos + 2);
+
+	unsigned int x;
+	std::stringstream ss;
+	ss << std::hex << checkSumStr;
+	ss >> x;
+
+	std::vector<char>::iterator p1 = pos + 1;
+	std::vector<char>::iterator p2 = pos + 2;
+	frame.erase(pos, pos + 3);
+	//frame.push_back('*');
+	//calc checksum
+	BYTE checkSum = 0;
+	BYTE test = 0;
+	for (int i = 0; i < frame.size(); i++)
+	{
+		test = frame[i];
+		checkSum ^= frame[i];
+		//  TRACE("%c",frame[i]);
+	}
+
+	checksumOK = m_checkMINSCRC ? (x == checkSum) : TRUE;
+	if (!checksumOK)
+	{
+		return TRUE;
+	}
+
+	vector<CString> field;
+	CString str;
+	std::vector<char>::iterator start = frame.begin();
+	pos = find(frame.begin(), frame.end(), ',');
+	while (pos != frame.end())
+	{
+		str = "";
+		std::vector<char>::iterator it;
+		for (it = start; it != pos; it++)
+		{
+			str += *it;
+		}
+
+		start = pos + 1;
+		pos = find(start, frame.end(), ',');
+		field.push_back(str);
+	}
+
+	str = "";
+	std::vector<char>::iterator it;
+	for (it = start; it != frame.end(); it++)
+	{
+		str += *it;
+	}
+	field.push_back(str);
+
+	//     vector<CString>::iterator fIt;
+	//     for(fIt = field.begin();fIt!=field.end();fIt++)
+	//     {
+	//         TRACE("field:%s\n",*fIt);
+	//     }
+
+	//if (field.size() != 10)
+	//	return FALSE;
+
+	//Matz why is $ cut by HandleMINSNMEAUARTData???
+	if (field[0] != "INXDR")
+		return FALSE;
+
+
+	heading = atof(field[2]);
+	roll = atof(field[6])*-1;
+	pitch = atof(field[10])*-1;
 
 	return TRUE;
 }
@@ -652,7 +736,7 @@ void Digital::HandleSperryMk39M3(DAUFrame &frame)
 		}
 	
 
-		if (checksumCalc == frame.HdlcMsg[31])
+		if (checksumCalc == frame.HdlcMsg[30])  //This was [31] in v3.0.8
 		{
 			SetData(ToSigma40_90(frame.HdlcMsg[8], frame.HdlcMsg[9], -1.0), ToSigma40_90(frame.HdlcMsg[10], frame.HdlcMsg[11], -1.0), ToSigma40_180(frame.HdlcMsg[6], frame.HdlcMsg[7], 1.0));
 		}

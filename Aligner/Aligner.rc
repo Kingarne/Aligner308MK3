@@ -14707,7 +14707,7 @@ BEGIN
                             "Achieved azimuth direction for index arm"
     IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE3_SET_INDEX_ARM_R2 
                             "Position the index arm according to the Graduated Arc value below."
-    IDS_MINS_NMEA           "Sperry-NMEA"
+    IDS_MINS_NMEA           "MINS-NMEA"
     IDS_SPERRY_MK39M3       "SperryMK39M3"
     IDS_SIGMA40_ICD         "Sigma 40-ICD"
     IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_SET_INDEX_ARM 
@@ -14722,6 +14722,7 @@ BEGIN
                             "Achieved azimuth for index arm"
     IDS_TILT_FLATNESS_FOUNDATION_TEST_PAGE4_ARC_ANGLE 
                             "Graduated Arc desired value"
+    IDS_SPERRY_NMEA         "Sperry-NMEA"
 END
 
 #endif    // English (United States) resources

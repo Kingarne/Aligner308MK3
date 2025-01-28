@@ -81,18 +81,22 @@ void DAUDataPro::Init()
   str.LoadString(IDS_SIGMA40_ICD);
   m_digChMap[str] = DigChTypeProSigma40_ICD;
 
-    m_digInterfaceMap[DigChTypeProUnused] = DigChSerialTypeProUart;
-    m_digInterfaceMap[DigChTypeProSeapath] = DigChSerialTypeProUart;
-    m_digInterfaceMap[DigChTypeProSigma40_03] = DigChSerialTypeProUart;
-    m_digInterfaceMap[DigChTypeProSigma40_NMEA] = DigChSerialTypeProUart;
-    m_digInterfaceMap[DigChTypeProSigma40_01] = DigChSerialTypeProUart;
-	m_digInterfaceMap[DigChTypeProSigma40_50] = DigChSerialTypeProUart;
-    m_digInterfaceMap[DigChTypeProMins] = DigChSerialTypeProHdlc;
-    m_digInterfaceMap[DigChTypeProIXSEA] = DigChSerialTypeProUart;
-	m_digInterfaceMap[DigChTypeProPL40] = DigChSerialTypeProUart;
-	m_digInterfaceMap[DigChTypeProMinsNMEA] = DigChSerialTypeProUart;
+  str.LoadString(IDS_SPERRY_NMEA);
+  m_digChMap[str] = DigChTypeProSperryNMEA;
+
+  m_digInterfaceMap[DigChTypeProUnused] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProSeapath] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProSigma40_03] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProSigma40_NMEA] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProSigma40_01] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProSigma40_50] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProMins] = DigChSerialTypeProHdlc;
+  m_digInterfaceMap[DigChTypeProIXSEA] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProPL40] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProMinsNMEA] = DigChSerialTypeProUart;
 	m_digInterfaceMap[DigChTypeProSperryMk39M3] = DigChSerialTypeProUart;
   m_digInterfaceMap[DigChTypeProSigma40_ICD] = DigChSerialTypeProUart;
+  m_digInterfaceMap[DigChTypeProSperryNMEA] = DigChSerialTypeProUart;
 }
 
 

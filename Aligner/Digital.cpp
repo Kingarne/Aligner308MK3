@@ -88,16 +88,17 @@ CString Digital::GetDigTypeText( )
         case DigChTypeProUnused:        typeText = _T("Unused");        break ;
         case DigChTypeProSeapath:       typeText = _T("Seapath");       break ;
         case DigChTypeProSigma40_03:    typeText = _T("Sigma40-03");    break ;
-        case DigChTypeProSigma40_NMEA:  typeText = _T("Sigma40-NMEA");    break ;
+        case DigChTypeProSigma40_NMEA:  typeText = _T("Sigma40-NMEA");  break ;
         case DigChTypeProSigma40_01:    typeText = _T("Sigma40-01");    break ;
-		case DigChTypeProSigma40_50:    typeText = _T("Sigma40-50");    break ;
+				case DigChTypeProSigma40_50:    typeText = _T("Sigma40-50");    break ;
         case DigChTypeProMins:          typeText = _T("MINS");          break ;        
-        case DigChTypeProIXSEA:         typeText = _T("IXSEA");          break ;        
+        case DigChTypeProIXSEA:         typeText = _T("IXSEA");         break ;        
         case DigChTypeProMSI:           typeText = _T("MSI");          break ;      
 		case DigChTypeProPL40:          typeText = _T("PL-41");          break ; 
-		case DigChTypeProMinsNMEA:      typeText = _T("Sperry-NMEA");    break;
-		case DigChTypeProSperryMk39M3:  typeText = _T("Sperry-MK39M3");    break;
-		case DigChTypeProSigma40_ICD:  typeText = _T("Sigma40-ICD");    break;
+		case DigChTypeProMinsNMEA:      typeText = _T("MINS-NMEA");      break;
+		case DigChTypeProSperryMk39M3:  typeText = _T("Sperry-MK39M3");  break;
+		case DigChTypeProSigma40_ICD:   typeText = _T("Sigma40-ICD");    break;
+		case DigChTypeProSperryNMEA:    typeText = _T("Sperry-NMEA");    break;
 		default:ASSERT(0); break ;
     }
     return typeText ;
@@ -349,8 +350,7 @@ BOOL Digital::ParseNMEA(vector<char>& frame, double& roll, double& pitch, double
 
     return TRUE;
 }
-/*
-Matz stole this gyro 
+
 BOOL Digital::ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK)
 {
 	std::vector<char>::iterator pos = find(frame.begin(), frame.end(), '*');
@@ -429,9 +429,9 @@ BOOL Digital::ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, do
 
 	return TRUE;
 }
-*/
 
-BOOL Digital::ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK)
+
+BOOL Digital::ParseSperryNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK)
 {
 	std::vector<char>::iterator pos = find(frame.begin(), frame.end(), '*');
 	if (pos == frame.end())
@@ -587,6 +587,30 @@ void Digital::HandleMINSNMEA(DAUFrame &frame)
 	}
 }
 
+
+void Digital::HandleSperryNMEA(DAUFrame& frame)
+{
+	vector<char> vec;
+	vec.insert(vec.begin(), frame.HdlcMsg, frame.HdlcMsg + frame.length);
+
+	double roll = 0, pitch = 0, heading = 0;
+	BOOL checksumOK = FALSE;
+	//TRACE("r:%f, p:%f\n",roll,pitch);
+
+	if (ParseSperryNMEA(vec, roll, pitch, heading, checksumOK))
+	{
+		if (checksumOK)
+		{
+			SetData(roll, pitch, heading);
+		}
+		else
+		{
+			//Checksum incorrect
+			SetData(0, 0, 0, DS_CRC_ERR);
+			m_CRCError = TRUE;
+		}
+	}
+}
 
 void Digital::HandlePL40(DAUFrame &frame )
 {    
@@ -1068,9 +1092,9 @@ UINT Digital::HandleDataFrame(DAUFrame &frame)
             HandleSigma40_01(frame) ;
         break ;
 
-		case DigChTypeProMinsNMEA:
-			HandleMINSNMEA(frame);
-			break;
+				case DigChTypeProMinsNMEA:
+					HandleMINSNMEA(frame);
+					break;
 
         case DigChTypeProMins:
             HandleMINS(frame) ;
@@ -1092,6 +1116,9 @@ UINT Digital::HandleDataFrame(DAUFrame &frame)
 			HandleSperryMk39M3(frame);
 			break;
 
+		case DigChTypeProSperryNMEA:
+			HandleSperryNMEA(frame);
+			break;
 
         case 0:
         default:

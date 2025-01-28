@@ -326,6 +326,17 @@ void SystemSetup::LoadDigitalSyncroTypesFromRegistry( void )
      info.rate = 115200;
      m_validSyncroTypes[info.type] = info;
    }
+   if (SystemSetup::IsDigitalSyncroTypeEnabled(FEATURE_MASK_SPERRY_NMEA) == TRUE)
+   {
+     str.LoadString(IDS_SPERRY_NMEA);
+     info.name = str;
+     info.type = DigChTypeProSperryNMEA;
+     info.serialType = DigChSerialTypeProUart;
+     info.bits = 8;
+     info.parity = 1;
+     info.rate = 38400;
+     m_validSyncroTypes[info.type] = info;
+   }
 
     ReadDigitalSettings();
 

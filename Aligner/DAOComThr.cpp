@@ -736,17 +736,21 @@ int DAOComThread::HandleUARTData(DAUFrame& msg, int type)
 			return HandleMINSNMEAUARTData(msg, type);
 			break;
 
-        case DigChTypeProIXSEA:
-            return HandleSigmaIXSEAData(msg, type);
-            break;
+    case DigChTypeProIXSEA:
+      return HandleSigmaIXSEAData(msg, type);
+      break;
 
 		case DigChTypeProMSI:
-            return HandleMSIData(msg, type);
-            break;
+      return HandleMSIData(msg, type);
+      break;
 
 		case DigChTypeProPL40:
 			return HandlePL40UARTData(msg, type);
 			break;
+
+    case DigChTypeProSperryNMEA:
+      return HandleSperryNMEAUARTData(msg, type);
+      break;
 
         default:break;
     }
@@ -934,11 +938,9 @@ int DAOComThread::HandleSigmaNMEAUARTData(DAUFrame& msg, int type)
     }
     return 1;
 }
-/*
 
-Matz stole the MINS-NMEA gyro
 
-int DAOComThread::HandleMINSNMEAUARTDataORG(DAUFrame& msg, int type)
+int DAOComThread::HandleMINSNMEAUARTData(DAUFrame& msg, int type)
 {
     std::deque<char>& fifo = (type == FRAME_TYPE_UART_A) ? m_UARTAFifo : m_UARTBFifo;
 
@@ -1017,9 +1019,9 @@ int DAOComThread::HandleMINSNMEAUARTDataORG(DAUFrame& msg, int type)
     }
     return 1;
 }
-*/
 
-int DAOComThread::HandleMINSNMEAUARTData(DAUFrame& msg, int type)
+
+int DAOComThread::HandleSperryNMEAUARTData(DAUFrame& msg, int type)
 {
     std::deque<char>& fifo = (type == FRAME_TYPE_UART_A) ? m_UARTAFifo : m_UARTBFifo;
 

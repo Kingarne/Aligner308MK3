@@ -68,12 +68,14 @@ private:
 	void HandlePL40(DAUFrame &frame );
 	void HandleSperryMk39M3(DAUFrame &frame);
   void HandleSigma40_ICD(DAUFrame& frame);
+  void HandleSperryNMEA(DAUFrame& frame);
 
-    BOOL ParseNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK);
+  BOOL ParseNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK);
 	BOOL ParseMINSNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK);
-    BOOL ParseMSI(vector<char>& frame, double& roll, double& pitch, double& heading);
+  BOOL ParseSperryNMEA(vector<char>& frame, double& roll, double& pitch, double& heading, BOOL& checksumOK);
+  BOOL ParseMSI(vector<char>& frame, double& roll, double& pitch, double& heading);
 	void DumpHDLCFrame(HDLCFrameData *frameData);
-    void DumpDigFrame(BYTE* pData, int len, int crc);
+  void DumpDigFrame(BYTE* pData, int len, int crc);
 
 private:
      	
